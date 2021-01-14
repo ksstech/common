@@ -44,13 +44,13 @@ extern "C" {
 
 typedef union {
 	struct {
-		uint16_t	CurX ;
-		uint16_t	CurY ;
-		uint16_t	MaxX ;
-		uint16_t	MaxY ;
+		uint8_t	CurX ;
+		uint8_t	CurY ;
+		uint8_t	MaxX ;
+		uint8_t	MaxY ;
 	} ;
-	uint16_t	x16[4] ;
-	uint64_t	x64 ;
+	uint8_t		x8[4] ;
+	uint32_t	x32 ;
 } terminfo_t ;
 
 // ###################################### Global variables #########################################
