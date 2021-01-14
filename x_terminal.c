@@ -35,18 +35,8 @@ terminfo_t	TermInfo = { .CurX=0, .CurY=0, .MaxX=TERMINAL_DEFAULT_MAX_X, .MaxY=TE
 
 // ################################# Terminal (VT100) support routines #############################
 
-bool	bTerminalConnected(uart_port_t eChan) {
-	if (halUART_RxFifoUsed(eChan)) {						// character(s) to read?
-		return true ;										// MUST be connected to read something
-	}
-
-	halUART_Flush(eChan) ;								// nothing to read, ensure TX buffer is empty
-	halUART_PutChar(CHR_ENQ, eChan) ;					// send ENQ to illicit a response
-
-	for (int32_t Count = 0; Count < 5; ++Count) {
 		vTaskDelay(pdMS_TO_TICKS(1)) ;					// wait a short while for a response
 		if (halUART_GetChar(eChan) == CHR_ENQ) {
-			return true ;
 		}
 	}
 	return false ;
