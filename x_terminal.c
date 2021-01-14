@@ -175,8 +175,30 @@ uint32_t	i ;
 
 // ##################################### functional tests ##########################################
 
-void	testcode(void) {
-	vTerminalClearHome() ;
-	vTerminalLocate(10,10) ;
-	puts("text at 10,10 on clear screen") ;
+void	vANSItestcode(void) {
+	vANSIputs("Waiting to clear the screen...") ;
+
+	vTaskDelay(5000) ;
+
+	vANSIclearhome() ;
+	vANSIlocate(5, 5) ;
+	vANSIputs("Normal text at 5,5") ;
+
+	vANSIlocate(7, 7) ;
+	vANSIattrib(colourFG_WHITE, colourBG_BLACK) ;
+	vANSIputs("White text on Black background at 7,7") ;
+
+	vANSIlocate(9, 9) ;
+	vANSIattrib(attrREV_ON, attrULINE_ON) ;
+	vANSIputs("Normal underlined text at 9,9") ;
+
+	vTaskDelay(5000) ;
+	vANSIlocate(9, 19) ;
+	vANSIputs("!!! OVERPRINTED TEXT !!!") ;
+
+	vTaskDelay(5000) ;
+	vANSIlocate(9, 25) ;
+	vANSIclear2EOL() ;
+
+	vANSIattrib(attrRESET, 0) ;
 }
