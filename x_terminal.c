@@ -7,6 +7,7 @@
 #include	"x_terminal.h"
 #include	"x_definitions.h"
 #include	"x_values_to_string.h"
+#include	"x_stdio.h"
 
 #include	"hal_config.h"
 #include	"hal_usart.h"
@@ -32,62 +33,47 @@ void 	vANSIclearline(void)	{ vANSIputs("\033[2K") ; }
 void  	vANSIclearscreen(void)	{ vANSIputs("\033[2J") ; }
 void 	vANSIhome(void) 		{ vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
 void 	vANSIclearhome(void)	{ vANSIclearscreen() ; vANSIhome() ; }
+
+char *	pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
+	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
+		*pBuf++	= CHR_ESC ;
+		*pBuf++	= CHR_L_SQUARE ;
+		pBuf 	+= xU32ToDecStr(a1, pBuf) ;
+		if (a2) {
+			*pBuf++ = CHR_SEMICOLON ;
+			pBuf 	+= xU32ToDecStr(a2, pBuf) ;
 		}
+		*pBuf++ = CHR_m ;
 	}
-	return false ;
+	*pBuf = CHR_NUL ;									// terminate
+	return pBuf ;
 }
 
-void	vTermSetForeground(uint8_t Colour) {
+char *	pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) {
+	if (Row > 0 && Col > 0) {
+		*pBuf++	= CHR_ESC ;
+		*pBuf++	= CHR_L_SQUARE ;
+		pBuf	+= xU32ToDecStr(Row, pBuf) ;
+		*pBuf++	= CHR_SEMICOLON ;
+		pBuf	+= xU32ToDecStr(Col, pBuf) ;
+		*pBuf++ = CHR_H ;
+		sTI.CurX = (Col %= sTI.MaxX) ;
+		sTI.CurY = (Row %= sTI.MaxY) ;
+	}
+	*pBuf	= CHR_NUL ;									// terminate
+	return pBuf ;
+}
+
+void	vANSIattrib(uint8_t a1, uint8_t a2) {
 	char	Buffer[12] ;
-	char * pTmp = Buffer ;
-	*pTmp++	= CHR_ESC ;
-	*pTmp++	= CHR_L_SQUARE ;
-	pTmp += xU32ToDecStr(Colour + colourFOREGND, pTmp) ;
-	*pTmp++ = CHR_m ;
-	*pTmp = CHR_NUL ;									// terminate
-	puts(Buffer) ;
+	if (pcANSIattrib(Buffer, a1, a2) != Buffer)
+		vANSIputs(Buffer) ;
 }
 
-void	vTermSetBackground(uint8_t Colour) {
-char	Buffer[12] ;
-char * pTmp = Buffer ;
-	*pTmp++	= CHR_ESC ;
-	*pTmp++	= CHR_L_SQUARE ;
-	pTmp += xU32ToDecStr(Colour + colourBACKGND, pTmp) ;
-	*pTmp++ = CHR_m ;
-	*pTmp = CHR_NUL ;									// terminate
-	puts(Buffer) ;
-}
-
-void	vTermSetForeBackground(uint8_t ColFG, uint8_t ColBG) {
-char	Buffer[12] ;
-char * pTmp = Buffer ;
-	*pTmp++	= CHR_ESC ;
-	*pTmp++	= CHR_L_SQUARE ;
-	pTmp 	+= xU32ToDecStr(ColFG + colourFOREGND, pTmp) ;
-	*pTmp++ = CHR_SEMICOLON ;
-	pTmp 	+= xU32ToDecStr(ColBG + colourBACKGND, pTmp) ;
-	*pTmp++ = CHR_m ;
-	*pTmp = CHR_NUL ;									// terminate
-	puts(Buffer) ;
-}
-
-//              1           2
-//	0  12345678901234  567890
-//	Esc[yyyyy;xxxxxHNul
-void 	vTerminalLocate(uint16_t x, uint16_t y) {
-char	Buffer[16] ;
-char * pTmp = Buffer ;
-	*pTmp++	= CHR_ESC ;
-	*pTmp++	= CHR_L_SQUARE ;
-	TermInfo.CurX = (x %= TermInfo.MaxX) ;
-	TermInfo.CurY = (y %= TermInfo.MaxY) ;
-	pTmp += xU32ToDecStr(y + 1, pTmp) ;
-	*pTmp++ = ';' ;
-	pTmp += xU32ToDecStr(x + 1, pTmp) ;
-	*pTmp++ = 'H' ;
-	*pTmp = 0 ;					// terminate
-	puts(Buffer) ;
+void 	vANSIlocate(uint8_t Row, uint8_t Col) {
+	char	Buffer[16] ;								//	"E[yyy;xxxH0"
+	if (pcANSIlocate(Buffer, Row, Col) != Buffer)
+		vANSIputs(Buffer) ;
 }
 
 /**
