@@ -22,6 +22,16 @@ terminfo_t	sTI = {
 
 // ################################# Terminal (VT100) support routines #############################
 
+void	vANSIputs(char * pStr) { while (*pStr) putcx(*pStr++, configSTDIO_UART_CHAN) ; }
+
+void	vANSIcursorsave(void)	{ vANSIputs("\033[s") ; }
+void	vANSIcursorback(void)	{ vANSIputs("\033[u") ; }
+void 	vANSIclear2EOL(void)	{ vANSIputs("\033[0K") ; }
+void 	vANSIclear2BOL(void)	{ vANSIputs("\033[1K") ; }
+void 	vANSIclearline(void)	{ vANSIputs("\033[2K") ; }
+void  	vANSIclearscreen(void)	{ vANSIputs("\033[2J") ; }
+void 	vANSIhome(void) 		{ vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
+void 	vANSIclearhome(void)	{ vANSIclearscreen() ; vANSIhome() ; }
 		}
 	}
 	return false ;
@@ -79,18 +89,6 @@ char * pTmp = Buffer ;
 	*pTmp = 0 ;					// terminate
 	puts(Buffer) ;
 }
-
-void 	vTerminalClear(void) { puts("\033[2J") ; }
-
-void 	vTerminalHome(void) { puts("\033[1;1H" ) ; TermInfo.CurX = TermInfo.CurY = 0 ; }
-
-void 	vTerminalClear2EOL(void) { puts("\033[s\033[0K\033[u" ) ; }			// save cursor, then erase to EOL & restore cursor
-
-void 	vTerminalClear2BOL(void) { puts("\033[1K" ) ; }
-
-void 	vTerminalClearLine(void) { puts("\033[2K" ) ; }
-
-void 	vTerminalClearHome(void) { vTerminalClear() ; vTerminalHome() ; }
 
 /**
  * vTerminalSetSize() - set terminal row & column size (0 = reset to default)
