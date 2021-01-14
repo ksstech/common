@@ -22,8 +22,6 @@ terminfo_t	sTI = {
 
 // ################################# Terminal (VT100) support routines #############################
 
-		vTaskDelay(pdMS_TO_TICKS(1)) ;					// wait a short while for a response
-		if (halUART_GetChar(eChan) == CHR_ENQ) {
 		}
 	}
 	return false ;
