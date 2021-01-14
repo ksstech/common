@@ -183,12 +183,12 @@ int32_t	xStdioBufGetC(void) {
 // ######################################## global functions #######################################
 
 /**
- * x_putchar() - Output a single character to the (possibly redirected) STDOUT
+ * putcharx() - Output a single character to the (possibly redirected) STDOUT
  * @brief		non-blocking behaviour, return immediately
  * @param[in]	cChr - char to output
  * @return		if successful, character sent, else EOF
  */
-int		x_putchar(int cChr) {
+int		putcharx(int cChr) {
 #if		(retargetSTDOUT == retargetUART)
 	while(!halUART_TxFifoSpace(configSTDIO_UART_CHAN)) ;
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
@@ -210,7 +210,7 @@ int		x_putchar(int cChr) {
 #endif
 }
 
-int		x_getchar(void) {
+int		getcharx(void) {
 #if		(retargetSTDIN == retargetUART)
 	return halUART_GetChar(configSTDIO_UART_CHAN) ;
 
@@ -229,21 +229,21 @@ int		x_getchar(void) {
 #endif
 }
 
-int		x_uputc(int ud, int cChr) {
+int		putcx(int cChr, int ud) {
 	if (ud == configSTDIO_UART_CHAN) {
 #if		(CONFIG_IRMACS_UART_REDIR == 1)
 		return xStdioBufPutC(cChr) ;
 #else
-		return x_putchar(cChr) ;
+		return putcharx(cChr) ;
 #endif
 	}
 	while(!halUART_TxFifoSpace(ud)) ;
 	return halUART_PutChar(cChr, ud) ;
 } __attribute__((alias("uart_tx_char"), unused))
 
-int		x_ugetc(int ud) {
+int		getcx(int ud) {
 	if (ud == configSTDIO_UART_CHAN)
-		return x_getchar() ;
+		return getcharx() ;
 	return halUART_GetChar((uart_port_t) ud) ;
 }
 
@@ -284,7 +284,7 @@ int		__fgetc (FILE * stream) {
 			return ch_saved ;						// and re-return last character
 		}
 		ch_saved = getchar_stdin() ; 				// nothing there, read & save as last char
-    	x_putchar(ch_saved) ;					// echo to STDOUT
+    	putcharx(ch_saved) ;					// echo to STDOUT
     	return ch_saved ;							// and return...
 	}
 #if		(buildSTDIO_FILEIO == 1)
@@ -405,7 +405,7 @@ int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
     		return ((int)(len | 0x80000000U)) ;
     	}
     	*buf++ = (uint8_t) ch ;
-    	x_putchar(ch);
+    	putcharx(ch);
     	len--;
     	return ((int)(len)) ;
     case FH_STDOUT:

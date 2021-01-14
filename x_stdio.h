@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-20 Andre M Maree / KSS Technologies (Pty) Ltd.
+ * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -111,10 +111,11 @@ int32_t	xStdioBufUnLock(void) ;
 int32_t	xStdioBufPutC(int cChr) ;
 int32_t	xStdioBufGetC(void) ;
 
-int		x_putchar(int cChr) ;
-int		x_getchar(void) ;
-int		x_uputc(int ud, int cChr) ;
-int		x_ugetc(int ud) ;
+int		putcharx(int cChr) ;
+int		getcharx(void) ;
+int		putcx(int cChr, int ud) ;
+int		getcx(int ud) ;
+int		putsx(char * pStr, int ud) ;
 
 void	fDiags(void) ;
 

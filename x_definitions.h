@@ -253,12 +253,18 @@ enum {
 	attrBRIGHT			= 1,
 	attrDIM				= 2,
 	atrITALICS			= 3,
-	attrUNDERSCORE		= 4,
+	attrULINE_ON		= 4,
 	attrSLOW_BLINK		= 5,
 	attrRAPID_BLINK		= 6,
-	attrREVERSE			= 7,
+	attrREV_ON			= 7,
 	attrHIDDEN			= 8,
-	attrSTRIKEOUT		= 9,
+	attrSTRIKE_ON		= 9,
+
+	attrULINE_OFF		= 24,
+	attrREV_OF			= 27,
+	attrREVEAL			= 28,
+	attrSTRIKE_OFF		= 29,
+
 // foreground colors
 	colourFOREGND		= 30,
 	colourFG_BLACK 		= colourFOREGND,
