@@ -13,7 +13,12 @@
 
 // #################################### Global/public variables ####################################
 
-terminfo_t	TermInfo = { .CurX=0, .CurY=0, .MaxX=TERMINAL_DEFAULT_MAX_X, .MaxY=TERMINAL_DEFAULT_MAX_Y } ;
+terminfo_t	sTI = {
+	.CurX=0,
+	.CurY=0,
+	.MaxX=TERMINAL_DEFAULT_MAX_X,
+	.MaxY=TERMINAL_DEFAULT_MAX_Y
+} ;
 
 // ################################# Terminal (VT100) support routines #############################
 
@@ -95,13 +100,11 @@ void 	vTerminalClearHome(void) { vTerminalClear() ; vTerminalHome() ; }
  * @param y		rows
  */
 void	vTerminalSetSize(uint16_t x, uint16_t y) {
-	TermInfo.MaxX = x ? x : TERMINAL_DEFAULT_MAX_X ;
-	TermInfo.MaxY = y ? y : TERMINAL_DEFAULT_MAX_Y ;
+	sTI.MaxX = x ? x : TERMINAL_DEFAULT_MAX_X ;
+	sTI.MaxY = y ? y : TERMINAL_DEFAULT_MAX_Y ;
 }
 
-void	vTerminalGetInfo(terminfo_t * psTermInfo) {
-	psTermInfo->x64 = TermInfo.x64 ;
-}
+void	vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32 ; }
 
 #if 0
 // ###################################### terminal IO related ######################################
