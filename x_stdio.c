@@ -247,6 +247,13 @@ int		getcx(int ud) {
 	return halUART_GetChar((uart_port_t) ud) ;
 }
 
+int		putsx(char * pStr, int ud) {
+	int32_t iRV = 0 ;
+	while (*pStr) { putcx(*pStr++, ud) ; ++iRV ; }
+	if (iRV) { putcx(CHR_LF, ud) ; ++iRV ; }
+	return iRV ;
+}
+
 #if 0
 #if		defined(__ARM_CC)
 
