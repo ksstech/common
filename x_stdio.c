@@ -239,7 +239,7 @@ int		putcx(int cChr, int ud) {
 	}
 	while(!halUART_TxFifoSpace(ud)) ;
 	return halUART_PutChar(cChr, ud) ;
-} __attribute__((alias("uart_tx_char"), unused))
+}
 
 int		getcx(int ud) {
 	if (ud == configSTDIO_UART_CHAN)
