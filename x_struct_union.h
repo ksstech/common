@@ -95,6 +95,7 @@ typedef union x64_u {
 
 typedef union p32_u {
 	void *		pvoid ;
+	void * *	pPVoid ;
 // pointers to x64
 	x64_t * 	px64 ;
 	uint64_t *	pu64 ;
@@ -367,7 +368,7 @@ typedef union alert_u {
 	uint64_t		Value ;
 } alert_t ;
 
-typedef struct complex_s {										// vtCOMPLEX handlers
+typedef struct complex_s {								// vtCOMPLEX handlers
 	ep_work_t * (* work) (int32_t) ;
 	void	(* reset) (ep_work_t *, ep_work_t *) ;
 	void	(* sense) (ep_work_t *, ep_work_t *) ;
