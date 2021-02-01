@@ -189,6 +189,24 @@ void	xGenerateUUID(char * pBuf) {
 	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
 }
 
+const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ;
+
+void	vBuildRandomBuffer(uint8_t * pu8, int32_t len) {
+	if (len && pu8) {
+		for (int n = 0; n < len; ++n) {
+			int key = rand() % sizeof(charset) ;          // per-iteration instantiation
+			pu8[n] = charset[key] ;
+	    }
+	}
+}
+
+void	vBuildRandomString(uint8_t * pu8, int32_t len) {
+	if (len && pu8) {
+		vBuildRandomBuffer(pu8, --len) ;
+		pu8[len] = CHR_NUL ;
+	}
+}
+
 uint32_t u32pow(uint32_t base, uint32_t exp) {
 	uint32_t res ;
 	for(res = 1; exp > 0; res *= base, --exp) ;

@@ -25,6 +25,7 @@
 #pragma once
 
 #include	"stddef.h"
+#include	"stdbool.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,6 +47,10 @@ int32_t	xDigitsInU32(uint32_t U32, bool grouping) ;
 int32_t	xDigitsInU64(uint64_t U64, bool grouping) ;
 
 void	xGenerateUUID(char * pBuf) ;
+
+void	vBuildRandomBuffer(uint8_t * pu8, int32_t len) ;
+void	vBuildRandomString(uint8_t * pu8, int32_t len) ;
+
 uint32_t u32pow(uint32_t base, uint32_t exp) ;
 
 #ifdef __cplusplus
