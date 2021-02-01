@@ -61,9 +61,7 @@ DUMB_STATIC_ASSERT(sizeof(x8_t) == 1) ;
 typedef union x16_u {
 	uint16_t	u16 ;
 	int16_t		i16 ;
-	uint8_t		u8[2] ;
-	int8_t		i8[2] ;
-	char		c8[2] ;
+	x8_t		x8[2] ;
 } x16_t ;
 DUMB_STATIC_ASSERT(sizeof(x16_t) == 2) ;
 
@@ -73,13 +71,8 @@ typedef union x32_u {
 	uint32_t	u32 ;
 	int32_t		i32 ;
 	float		f32 ;
-
-	uint16_t	u16[2] ;
-	int16_t		i16[2] ;
-
-	uint8_t		u8[4] ;
-	int8_t		i8[4] ;
-	char		c8[4] ;
+	x16_t		x16[2] ;
+	x8_t		x8[4] ;
 	char *		pc8 ;
 	const char *pcc8 ;
 } x32_t ;
@@ -91,22 +84,10 @@ typedef union x64_u {
 	uint64_t	u64 ;
 	int64_t		i64 ;
  	double		f64 ;
-
- 	uint32_t	u32[2] ;
- 	int32_t		i32[2] ;
- 	float		f32[2] ;
  	x32_t		x32[2] ;
-
-    uint16_t    u16[4] ;
-    int16_t		i16[4] ;
-    x16_t		x16[4] ;
-
-    uint8_t     u8[8] ;
-    int8_t		i8[8] ;
-    x8_t		x8[8] ;
-    char		c8[8] ;
+	x16_t		x16[4] ;
+	x8_t		x8[8] ;
 } x64_t ;
-DUMB_STATIC_ASSERT(sizeof(x64_t) == 8) ;
 
 // ########################################## p32 pointer types ####################################
 
@@ -135,7 +116,6 @@ typedef union p32_u {
 	char *		pc8 ;
 	char **		ppc8 ;
 } p32_t ;
-DUMB_STATIC_ASSERT(sizeof(p32_t) == 4) ;
 
 // ################################## Structure pointer container ##################################
 
@@ -148,7 +128,6 @@ typedef union ps_u {
 	struct	complex_s * psCX ;
 	union	ow_rom_u *	pOW_ROM ;
 } ps_t ;
-DUMB_STATIC_ASSERT(sizeof(ps_t) == 4) ;
 
 // #################################### All-In-One container #######################################
 
@@ -158,7 +137,6 @@ typedef	union z32_u {
 	p32_t	p32 ;
 	ps_t	ps ;
 } z32_t ;
-DUMB_STATIC_ASSERT(sizeof(z32_t) == 4) ;
 
 typedef	union z64_u {
 	x32_t		x32[2] ;
@@ -167,7 +145,6 @@ typedef	union z64_u {
 	ps_t		ps[2] ;
 	x64_t		x64 ;
 } z64_t ;
-DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
 
 // ##################################### CLI related structures ####################################
 
@@ -183,13 +160,11 @@ typedef struct __attribute__((packed)) cli_s {
 	uint8_t			bEcho	: 1 ;
 	uint8_t			bForce	: 1 ;						// force flags display
 } cli_t ;
-DUMB_STATIC_ASSERT( sizeof(cli_t) == 27) ;
 
 typedef	struct	cmnd_s {
 	char	cmnd[4] ;
 	int32_t	(* hdlr) (cli_t *) ;
 } cmnd_t ;
-DUMB_STATIC_ASSERT( sizeof(cmnd_t) == 8) ;
 
 enum {													// {flags}{counter}
 	maskCOUNT	= 0x000FFFFF,							// counter value or mask
@@ -303,7 +278,6 @@ typedef	union var_u {
 	} ;
 	uint64_t		varValue ;
 } var_t ;
-DUMB_STATIC_ASSERT(sizeof(var_t) == 8) ;
 
 typedef	union x64var_u {
 	struct __attribute__((packed)) {
@@ -312,7 +286,6 @@ typedef	union x64var_u {
 	} ;
 	uint32_t		varValues[3] ;
 } x64var_t ;
-DUMB_STATIC_ASSERT(sizeof(x64var_t) == 12) ;
 
 // ##################################### endpoint related structures ###############################
 
@@ -350,7 +323,6 @@ typedef union event_u {
 	} ;
 	uint64_t		val ;
 } event_t ;
-DUMB_STATIC_ASSERT(sizeof(event_t) == 8) ;
 
 /*
  * Definition of a table entry containing all the DYNAMIC (SRAM based)
@@ -381,7 +353,6 @@ typedef	struct __attribute__((__packed__)) ep_work_s {
 		uint8_t		eChan ;
 	} ;
 } ep_work_t ;
-DUMB_STATIC_ASSERT(sizeof(ep_work_t) == 36) ;
 
 typedef union alert_u {
 	struct {
@@ -393,7 +364,6 @@ typedef union alert_u {
 	} ;
 	uint64_t		Value ;
 } alert_t ;
-DUMB_STATIC_ASSERT(sizeof(alert_t) == 8) ;
 
 typedef struct complex_s {										// vtCOMPLEX handlers
 	ep_work_t * (* work) (int32_t) ;
