@@ -27,8 +27,10 @@
 #if		defined(ESP_PLATFORM)
 	#include	"sdkconfig.h"
 	#include	"hal_timer.h"
+#elif	defined(HAL_OSX)
+	#include	"hal_config.h"
 #else
-	#include	"alt_config.h"
+	#error	"Unknown/undefined HW/SW platform"
 #endif
 
 #include	"x_definitions.h"							// no nested includes

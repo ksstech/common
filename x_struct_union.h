@@ -73,8 +73,10 @@ typedef union x32_u {
 	float		f32 ;
 	x16_t		x16[2] ;
 	x8_t		x8[4] ;
+#ifdef ESP_PLATFORM
 	char *		pc8 ;
 	const char *pcc8 ;
+#endif
 } x32_t ;
 DUMB_STATIC_ASSERT(sizeof(x32_t) == 4) ;
 
