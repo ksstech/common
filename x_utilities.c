@@ -167,15 +167,19 @@ void	xGenerateUUID(char * pBuf) {
 	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
 }
 
-const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ;
+//const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ;
+
+const char charset[] = {
+	'0','1','2','3','4','5','6','7','8','9',
+	'A','B','C','D','E','F','G','H','I','J','K','L','M',
+	'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+	'a','b','c','d','e','f','g','h','i','j','k','l','m',
+	'n','o','p','q','r','s','t','u','v','w','x','y','z',
+} ;
 
 void	vBuildRandomBuffer(uint8_t * pu8, int32_t len) {
-	if (len && pu8) {
-		for (int n = 0; n < len; ++n) {
-			int key = rand() % sizeof(charset) ;          // per-iteration instantiation
-			pu8[n] = charset[key] ;
-	    }
-	}
+	if (len && pu8)
+		for (int n = 0; n < len; ++n) pu8[n] = charset[rand() % sizeof(charset)] ;
 }
 
 void	vBuildRandomString(uint8_t * pu8, int32_t len) {
