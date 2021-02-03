@@ -207,6 +207,31 @@ void	vBuildRandomString(uint8_t * pu8, int32_t len) {
 	}
 }
 
+x8_t	xBuildRandomX8(void) {
+	int8_t I8 = rand() >> 23 ;
+	return (x8_t) I8 ;
+}
+
+x16_t	xBuildRandomX16(void) {
+	int16_t I16 = rand() >> 7 ;
+	return (x16_t) I16 ;
+}
+
+x32_t	xBuildRandomX32(void) {
+	x32_t	X32 ;
+	X32.i32 = rand() ;
+	if (rand() %  2)
+		X32.i32 *= -1 ;
+	return X32 ;
+}
+
+x64_t	xBuildRandomX64(void) {
+	x64_t	X64 ;
+	X64.x32[0] = xBuildRandomX32() ;
+	X64.x32[1] = xBuildRandomX32() ;
+	return X64 ;
+}
+
 uint32_t u32pow(uint32_t base, uint32_t exp) {
 	uint32_t res ;
 	for(res = 1; exp > 0; res *= base, --exp) ;

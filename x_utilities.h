@@ -51,6 +51,11 @@ void	xGenerateUUID(char * pBuf) ;
 void	vBuildRandomBuffer(uint8_t * pu8, int32_t len) ;
 void	vBuildRandomString(uint8_t * pu8, int32_t len) ;
 
+x8_t	xBuildRandomX8(void) ;
+x16_t	xBuildRandomX16(void) ;
+x32_t	xBuildRandomX32(void) ;
+x64_t	xBuildRandomX64(void) ;
+
 uint32_t u32pow(uint32_t base, uint32_t exp) ;
 
 #ifdef __cplusplus
