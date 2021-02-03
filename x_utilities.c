@@ -5,12 +5,8 @@
  */
 
 #include 	"printfx.h"
-
-#if		defined(ESP_PLATFORM)
-	#include	"hal_config.h"
-#else
-	#include	"alt_config.h"
-#endif
+#include	"x_struct_union.h"
+#include	"hal_config.h"
 
 #include	<limits.h>
 #include	<stdint.h>
