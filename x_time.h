@@ -146,32 +146,6 @@
 
 #endif
 
-// ################################## MCU clock & timing macros ####################################
-
-#define	halMS_TO_CLOCKS(a)						( ( a ) * configCLOCKS_PER_MSEC )
-#define	halUS_TO_CLOCKS(a)						( ( a ) * configCLOCKS_PER_USEC )
-
-#if		(CONFIG_FREERTOS_HZ < MILLIS_IN_SECOND)
-	#define	myTICKS_TO_MS(x,c)					(((c) x ) * ((c) MILLIS_IN_SECOND / (c) CONFIG_FREERTOS_HZ))
-#elif	(CONFIG_FREERTOS_HZ > MILLIS_IN_SECOND)
-	#define	myTICKS_TO_MS(x,c)					((((c) x ) * (c) MILLIS_IN_SECOND) / (c) CONFIG_FREERTOS_HZ)
-#else
-	#define	myTICKS_TO_MS(x,c)					( (c) x )
-	#define	myTICKS_TO_SEC(x,c)					( (c) x / MILLIS_IN_SECOND)
-#endif
-
-#define	myCLOCKS_TO_SEC(x,c)					((c) x ) / ((c) configCLOCKS_PER_SEC)
-#define	myCLOCKS_TO_MS(x,c)						((c) x ) / ((c) configCLOCKS_PER_MSEC)
-#define	myCLOCKS_TO_US(x,c)						((c) x ) / ((c) configCLOCKS_PER_USEC)
-
-#define	mySEC_TO_TICKS(x)						( x ) * CONFIG_FREERTOS_HZ
-#define	myMS_TO_TICKS(x)						(( x ) * CONFIG_FREERTOS_HZ) / MILLIS_IN_SECOND
-#define	myUS_TO_TICKS(x)						(( x ) * CONFIG_FREERTOS_HZ) / MICROS_IN_SECOND
-
-#define	mySEC_TO_CLOCKS(x)						( x ) * configCLOCKS_PER_SEC
-#define	myMS_TO_CLOCKS(x)						( x ) * configCLOCKS_PER_MSEC
-#define	myUS_TO_CLOCKS(x)						( x ) * configCLOCKS_PER_USEC
-
 // ############################### fractional seconds manipulation #################################
 
 #define		FRACTIONS_PER_MILLISEC			( 0x0000000100000000ULL / 1000ULL)
@@ -239,7 +213,7 @@ seconds_t xTimeCalcLocalTimeSeconds(TSZ_t * psTSZ) ;
 inline uint32_t xTimeStampAsSeconds(uint64_t Timestamp) { return (uint32_t) (Timestamp / (uint64_t) MICROS_IN_SECOND) ; }
 inline uint64_t xTimeMakeTimestamp(uint32_t Seconds, uint32_t Micros) { return ((uint64_t) Seconds * (uint64_t) MICROS_IN_SECOND) + (uint64_t) Micros ; }
 
-void		xTime_Test(void) ;
+void	xTime_Test(void) ;
 
 #ifdef __cplusplus
 }
