@@ -332,41 +332,40 @@ enum {
 
 #define	SWAP(v1, v2, t)					{t vx = v1 ; v1 = v2 ; v2 = vx ; }
 
-#define	TABLE_ENTRY_INT(x,y,z)			{ .iVal1=x , .iVal2=y , .pMess=z } ,
-#define	TABLE_ENTRY(x,y,z)				{ .uVal1=x , .uVal2=y , .pMess=z },
+#define	TABLE_ENTRY_INT(x,y,z)		{ .iVal1=x , .iVal2=y , .pMess=z } ,
+#define	TABLE_ENTRY(x,y,z)			{ .uVal1=x , .uVal2=y , .pMess=z },
 
-#define	IF_ELSE(T,t,f)							if (T) t else f
-#define	IF_EXEC(t, c)							if (t) { do { c; } while (0); }
-#define	IF_EXEC_0(t, f)							if (t) { do { f(); } while (0); }
-#define	IF_EXEC_1(t, f, p1)						if (t) { do { f(p1); } while (0); }
-#define	IF_EXEC_2(t, f, p1, p2)					if (t) { do { f(p1,p2); } while (0); }
-#define	IF_EXEC_3(t, f, p1, p2, p3)				if (t) { do { f(p1,p2,p3); } while (0); }
-#define	IF_EXEC_4(t, f, p1, p2, p3, p4)			if (t) { do { f(p1,p2,p3,p4); } while (0); }
-#define	IF_EXEC_5(t, f, p1, p2, p3, p4, p5)		if (t) { do { f(p1,p2,p3,p4,p5); } while (0); }
-#define	IF_EXEC_6(t, f, p1, p2, p3, p4, p5, p6)	if (t) { do { f(p1,p2,p3,p4,p5,p6); } while (0); }
+#define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
+#define	IF_EXEC_0(T,F)				if (T) { do { F(); } while (0); }
+#define	IF_EXEC_1(T,F,a)			if (T) { do { F(a); } while (0); }
+#define	IF_EXEC_2(T,F,a,b)			if (T) { do { F(a,b); } while (0); }
+#define	IF_EXEC_3(T,F,a,b,c)		if (T) { do { F(a,b,c); } while (0); }
+#define	IF_EXEC_4(T,F,a,b,c,d)		if (T) { do { F(a,b,c,d); } while (0); }
+#define	IF_EXEC_5(T,F,a,b,c,d,e)	if (T) { do { F(a,b,c,d,e); } while (0); }
+#define	IF_EXEC_6(T,F,a,b,c,d,e,f)	if (T) { do { F(a,b,c,d,e,f); } while (0); }
 
 // ###################### macros to create variable width 32 & 64 bit masks ########################
 
-#define 	BIT_MASK32(a, b)	((uint32_t) ( ( (uint32_t) -1L >> (31 - (b)) ) & ~( (1U << (a) )  - 1) ))
+#define BIT_MASK32(a, b)			((uint32_t) (((uint32_t)-1L >> (31-(b))) & ~((1U << (a))-1)))
 
-#define 	BIT_MASK64(a, b)	((uint64_t) ( ( (uint64_t) -1 >> (63 - (b)) ) & ~( (1ULL << (a) ) - 1) ))
+#define BIT_MASK64(a, b)			((uint64_t) (((uint64_t)-1 >> (63-(b))) & ~((1ULL << (a))-1)))
 
 // ###################################### General Use Macros #######################################
 
 // https://stackoverflow.com/questions/3553296/c-sizeof-single-struct-member
-#define SIZEOF_MEMBER(type, member)			sizeof(((type *)0)->member)
+#define SIZEOF_MEMBER(T,M)			sizeof(((T *)0)->M)
 // return the number of elements in an array
-#define	NUM_OF_MEMBERS(array)				(sizeof(array) / sizeof(array[0]))
+#define	NUM_OF_MEMBERS(A)			(sizeof(A) / sizeof(A[0]))
 // return the number of elements in an array that is a member of a structure
-#define NUM_OF_MEM_ELEM(struc, member)		(sizeof(((struc *)0)->member) / sizeof(((struc *)0)->member[0]))
+#define NUM_OF_MEM_ELEM(S,M)		(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0]))
 
-#define	UNUSED(x)							(void) (x) ;
-#define	STRING_NULL							(char *) "null"
-#define	STRING_OOR							(char *) "pOOR"
+#define	UNUSED(x)					(void) (x) ;
+#define	STRING_NULL					(char *) "null"
+#define	STRING_OOR					(char *) "pOOR"
 
-#define	debugAPPL_MESS_UP					"[start]"
-#define	debugAPPL_MESS_DN					"[delete]"
-#define	debugAPPL_PLACE						"I'm LOST!!"
+#define	debugAPPL_MESS_UP			"[start]"
+#define	debugAPPL_MESS_DN			"[delete]"
+#define	debugAPPL_PLACE				"I'm LOST!!"
 
 // ######################################## delimiter strings ######################################
 
@@ -406,8 +405,7 @@ typedef	const unsigned char * pcu8_t ;
 // ######################### common & standard network related definitions #########################
 
 #define	configSSID_MAX_LENGTH        		32
-#define	configMAC_ADDRESS_LENGTH			6
-#define	configUNIQUE_UID_LENGTH				((configMAC_ADDRESS_LENGTH * 2) + 1)
+#define	lenMAC_ADDRESS			6
 
 // #################################################################################################
 
