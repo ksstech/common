@@ -167,8 +167,6 @@ void	xGenerateUUID(char * pBuf) {
 	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
 }
 
-//const char charset[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ;
-
 const char charset[] = {
 	'0','1','2','3','4','5','6','7','8','9',
 	'A','B','C','D','E','F','G','H','I','J','K','L','M',
@@ -177,38 +175,40 @@ const char charset[] = {
 	'n','o','p','q','r','s','t','u','v','w','x','y','z',
 } ;
 
-void	vBuildRandomBuffer(uint8_t * pu8, int32_t len) {
+void	vBuildRandomSXX(uint8_t * pu8, int32_t len) {
 	if (len && pu8)
 		for (int n = 0; n < len; ++n) pu8[n] = charset[rand() % sizeof(charset)] ;
 }
 
-void	vBuildRandomString(uint8_t * pu8, int32_t len) {
+void	vBuildRandomStr(uint8_t * pu8, int32_t len) {
 	if (len && pu8) {
-		vBuildRandomBuffer(pu8, --len) ;
+		vBuildRandomSXX(pu8, --len) ;
 		pu8[len] = CHR_NUL ;
 	}
 }
 
 x8_t	xBuildRandomX8(void) {
-	int8_t I8 = rand() >> 23 ;
-	return (x8_t) I8 ;
+	x8_t X8 ;
+	X8.u8 = rand() & 0xFF ;
+	return X8 ;
 }
 
 x16_t	xBuildRandomX16(void) {
-	int16_t I16 = rand() >> 7 ;
-	return (x16_t) I16 ;
+	x16_t X16 ;
+	X16.u16 = rand() & 0xFFFF ;
+	return X16 ;
 }
 
 x32_t	xBuildRandomX32(void) {
 	x32_t	X32 ;
 	X32.i32 = rand() ;
-	if (rand() %  2)
-		X32.i32 *= -1 ;
+	if (rand() % 2)
+		X32.i32 *= -1 ;									// ensure some (-) values
 	return X32 ;
 }
 
 x64_t	xBuildRandomX64(void) {
-	x64_t	X64 ;
+	x64_t X64 ;
 	X64.x32[0] = xBuildRandomX32() ;
 	X64.x32[1] = xBuildRandomX32() ;
 	return X64 ;
