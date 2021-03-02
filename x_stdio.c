@@ -24,8 +24,8 @@
 
 #include	"hal_config.h"
 #include	"hal_usart.h"
-#include	"hal_rtc.h"
-#include	"hal_nvs.h"
+//#include	"hal_rtc.h"
+#include	"hal_variables.h"
 
 #include	"FreeRTOS_Support.h"
 #include	"x_errors_events.h"
