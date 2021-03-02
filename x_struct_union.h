@@ -225,7 +225,9 @@ DUMB_STATIC_ASSERT( sizeof(flagmask_t) == 4) ;
 
 // ################################### complex VAR related structures ##############################
 
-typedef enum varsize_e { vs08B = 0, vs16B, vs32B, vs64B } varsize_t ;
+typedef enum varsize_e { vs08B, vs16B, vs32B, vs64B } varsize_t ;
+
+typedef enum varform_e { vfUXX, vfIXX, vfFXX, vfSXX } varform_t ;
 
 typedef enum vartype_e {			// HANDLE WITH CARE - SEQUENCE IS CRITICAL !!!
 	vtNULL	= 0,					// first ie ZERO and unused !!!!
@@ -240,10 +242,6 @@ typedef enum vartype_e {			// HANDLE WITH CARE - SEQUENCE IS CRITICAL !!!
 	vtCOMPLEX,						// primarily 1-Wire thermometers for now
 } vartype_t ;
 
-typedef enum varform_e { vfUXX = 0, vfIXX, vfFXX, vfSXX } varform_t ;
-
-/* Basic 4 byte structure defining the characteristics
- * of a complex variable, excluding the storage component */
 typedef	union vardef_u {
 	struct {
 		uint8_t		varcount 	: 8 ;		// number of items in array type ?
@@ -274,7 +272,7 @@ DUMB_STATIC_ASSERT(sizeof(vardef_t) == 4) ;
 
 /* Similar to the basic 4 byte structure but including 4 byte (1 word) space for
  * the actual variable or pointer to variable,array or complex structure */
-typedef	union var_u {
+typedef	union var_t {
 	struct {
 		vardef_t	varDef ;
 		z32_t		varVal ;
@@ -282,7 +280,7 @@ typedef	union var_u {
 	uint64_t		varValue ;
 } var_t ;
 
-typedef	union x64var_u {
+typedef	union x64var_t {
 	struct __attribute__((packed)) {
 		vardef_t	varDef ;
 		z64_t		varVal ;
@@ -374,6 +372,8 @@ typedef struct complex_s {								// vtCOMPLEX handlers
 	void	(* sense) (ep_work_t *, ep_work_t *) ;
 	float	(* get) (ep_work_t *) ;
 } complex_t ;
+
+// ###################################### Public functions #########################################
 
 #ifdef __cplusplus
 }
