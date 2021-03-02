@@ -1,21 +1,5 @@
 /*
- * Copyright 2014-20 Andre M Maree / KSS Technologies (Pty) Ltd.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
+ * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
  */
 
 /*
@@ -124,7 +108,7 @@ char * xTimeGetMonthName(int32_t num) { return (num < 12) ? (char *) MonthNames[
  */
 void	xTimeGMTime(seconds_t tValue, struct tm * psTM, int32_t fElapsed) {
     memset(psTM, 0, sizeof(struct tm)) ;
-#if 	(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_I32UNIX)
+#if 	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	if (tValue < 0)	{									// if time prior to 1970
 		return ;
 	}
@@ -223,9 +207,9 @@ seconds_t	xTimeCalcLocalTimeSeconds(TSZ_t * psTSZ) {
 //	http://www.timeanddate.com/countdown/to?p0=198&year=1900&month=1&day=1&hour=0&min=0&sec=0
 
 void	xTimeTest(void) {
-#if		(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_POINTER)
+#if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
 	TZ_t	sTZ = {	.daylight = 0, .timezone = 0, .pcTZName = "Africa/Johannesburg", .pcDSTName = "South Africa Standard Time" } ;
-#elif	(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_FOURCHARS)
+#elif	(timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
 	TZ_t	sTZ = {	.daylight = 0, .timezone = 0, .tzname = { 'S', 'A', 'S', 'T' }, .dstname = { 'N', 'O', 'N', 'E' } } ;
 #endif
 
@@ -233,7 +217,7 @@ void	xTimeTest(void) {
 	TZ_t	sTZtemp ;
 	sTSZtemp.pTZ = &sTZtemp ;
 
-#if		(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_U32NTP)
+#if		(timexEPOCH_SELECTED == timexEPOCH_U32NTP)
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
 	printfx("1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
 
@@ -243,7 +227,7 @@ void	xTimeTest(void) {
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
 	printfx("2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
 
-#elif	(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_I32UNIX)
+#elif	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
 	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
 
@@ -256,7 +240,7 @@ void	xTimeTest(void) {
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
 	printfx("2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
 
-#elif	(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_U32UNIX)
+#elif	(timexEPOCH_SELECTED == timexEPOCH_U32UNIX)
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
 	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
 

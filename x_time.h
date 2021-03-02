@@ -5,14 +5,6 @@
 
 #pragma once
 
-#if		defined(ESP_PLATFORM)
-	#include	"sdkconfig.h"
-#elif	defined(HAL_OSX)
-	#include	"hal_config.h"
-#else
-	#error	"Unknown/undefined HW/SW platform"
-#endif
-
 #include	"x_definitions.h"							// no nested includes
 
 #include	<stdint.h>
@@ -24,19 +16,19 @@
 
 // ############################## BUILD: TimeZone structure support ################################
 
-#define	buildTIME_EPOCH_U32NTP					1
-#define	buildTIME_EPOCH_I32UNIX					2
-#define	buildTIME_EPOCH_U32UNIX					3
-#define	buildTIME_EPOCH_SELECTED				buildTIME_EPOCH_U32UNIX
+#define	timexEPOCH_U32NTP			1
+#define	timexEPOCH_I32UNIX			2
+#define	timexEPOCH_U32UNIX			3
+#define	timexEPOCH_SELECTED			timexEPOCH_U32UNIX
 
-#define	buildTIME_TZTYPE_POINTER				1
-#define	buildTIME_TZTYPE_FOURCHARS				2
-#define	buildTIME_TZTYPE_RFC3164				3
-#define	buildTIME_TZTYPE_SELECTED				buildTIME_TZTYPE_RFC3164
+#define	timexTZTYPE_POINTER			1
+#define	timexTZTYPE_FOURCHARS		2
+#define	timexTZTYPE_RFC3164			3
+#define	timexTZTYPE_SELECTED		timexTZTYPE_RFC3164
 
 // ##################### BUILD: Unix I32 vs NTP U32 vs proprietary U32 epoch #######################
 
-#if		(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_U32NTP)
+#if		(timexEPOCH_SELECTED == timexEPOCH_U32NTP)
 	#define	SECONDS_IN_EPOCH_PAST			0UL				// 00:00.00 UTC 1900/01/01
 	#define	SECONDS_IN_EPOCH_FUTURE			UINT32_MAX		// ??h??m??s on 2036/02/07
 	#define	YEAR_BASE_MIN					1900UL
@@ -45,7 +37,7 @@
 	#define	timeEPOCH_DAY_0_NUM				1				// 1900/01/01 was Monday, hence day 1
 	typedef	uint32_t						seconds_t ;
 
-#elif	(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_I32UNIX)
+#elif	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	#define	SECONDS_IN_EPOCH_PAST			0				// No support for dates prior to 1 Jan 1970
 	#define	SECONDS_IN_EPOCH_FUTURE			INT32_MAX		// 03:14:07 UTC 2038/01/19 Tue
 	#define	YEAR_BASE_MIN					1970L
@@ -55,7 +47,7 @@
 	typedef	int32_t							seconds_t ;
 	#warning	"UNTESTED configuration !!"
 
-#elif	(buildTIME_EPOCH_SELECTED == buildTIME_EPOCH_U32UNIX)
+#elif	(timexEPOCH_SELECTED == timexEPOCH_U32UNIX)
 /* Non standard interpretation for seconds based on U32 but with the base
  * date & time (0seconds) being 1970/01/01T00:00.00.000, same as I32 Unix */
 	#define	SECONDS_IN_EPOCH_PAST			0UL				// 00:00.00 UTC 1970/01/01
@@ -111,7 +103,7 @@
 
 // ################################## TZ DST UTC and time related ##################################
 
-#if		(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_POINTER)
+#if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
 	#define	configTZ_EST	{-1*SECONDS_IN_HOUR,	-5*SECONDS_IN_HOUR, 	"EST",		"EST"	}
 	#define	configTZ_UTC	{ 0, 					0, 						"UTC",		0 		}
 	#define	configTZ_SAST	{ 0,					2*SECONDS_IN_HOUR,		"SAST", 	0		}
@@ -121,7 +113,7 @@
 	#define	configTIME_MAX_LEN_TZNAME			48		// "America/Argentina/ComodRivadavia" == 33
 	#define	configTIME_MAX_LEN_TZINFO			(sizeof("+12h34()") + configTIME_MAX_LEN_DSTNAME)
 
-#elif	(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_FOURCHARS)
+#elif	(timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
 	#define	configTZ_EST	{-1*SECONDS_IN_HOUR,	-5*SECONDS_IN_HOUR, 	{'E','S','T',0},	{'E','S','T',0} }
 	#define	configTZ_UTC	{ 0, 					0, 						{'U','T','C',0},	{'N','/','A',0} }
 	#define	configTZ_SAST	{ 0,					2*SECONDS_IN_HOUR,		{'S','A','S','T'}, 	{'N','/','A',0} }
@@ -131,7 +123,7 @@
 	#define	configTIME_MAX_LEN_TZNAME			4
 	#define	configTIME_MAX_LEN_TZINFO			(sizeof("+12h34()") + configTIME_MAX_LEN_DSTNAME)
 
-#elif	(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_RFC3164)
+#elif	(timexTZTYPE_SELECTED == timexTZTYPE_RFC3164)
 	#define	configTZ_EST	{-1*SECONDS_IN_HOUR,	-5*SECONDS_IN_HOUR,		0,	0	}
 	#define	configTZ_UTC	{ 0, 					0, 						0,	0 	}
 	#define	configTZ_SAST	{ 0,					2*SECONDS_IN_HOUR,		0,	0	}
@@ -142,7 +134,7 @@
 	#define	configTIME_MAX_LEN_TZINFO			sizeof("+12h34")
 
 #else
-	#error	"Invalid or undefined 'buildTIME_TZTYPE_SELECTED' value"
+	#error	"Invalid or undefined 'timexTZTYPE_SELECTED' value"
 
 #endif
 
@@ -181,10 +173,10 @@
 typedef	struct __attribute__((__packed__)) TZ_s {
 	short	daylight ;
 	int32_t	timezone ;
-#if		(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_POINTER) || (buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_RFC3164)
+#if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER || timexTZTYPE_SELECTED == timexTZTYPE_RFC3164)
 	char *	pcTZName ;
 	char *	pcDSTName ;
-#elif	(buildTIME_TZTYPE_SELECTED == buildTIME_TZTYPE_FOURCHARS)
+#elif	(timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
 	char	tzname[4] ;
 	char	dstname[4] ;
 #endif
