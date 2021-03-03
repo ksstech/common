@@ -7,8 +7,8 @@
 
 #include	"x_definitions.h"							// no nested includes
 
-#include	<stdint.h>
 #include	<time.h>									// struct tm
+#include	<stdint.h>
 
 #ifdef __cplusplus
 	extern "C" {

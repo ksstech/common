@@ -127,7 +127,7 @@ typedef union ps_u {
 	struct	x32mmab_s *	pMMAB ;
 	struct	x32stat_s *	pSTAT ;
 	struct	TSZ_s *		pTSZ ;
-	struct	cli_s *		psCLI ;
+	struct	cli_t *		psCLI ;
 	struct	complex_s * psCX ;
 	union	ow_rom_u *	pOW_ROM ;
 } ps_t ;
