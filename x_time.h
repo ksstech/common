@@ -63,44 +63,6 @@
 
 #endif
 
-// ################ Time related constants, all based on normal (NON leap) years ###################
-
-#define MICROS_IN_MILLISEC				1000
-
-#define MICROS_IN_SECOND				1000000
-#define MILLIS_IN_SECOND				1000
-
-#define SECONDS_IN_MINUTE				60
-
-#define SECONDS_IN_HOUR					3600
-#define	MINUTES_IN_HOUR					60
-
-#define MILLIS_IN_DAY					86400000
-#define SECONDS_IN_DAY					86400
-#define	MINUTES_IN_DAY					1440
-#define	HOURS_IN_DAY					24
-
-#define SECONDS_IN_WEEK					604800
-#define	MINUTES_IN_WEEK					10080
-#define	HOURS_IN_WEEK					168
-#define	DAYS_IN_WEEK					7
-
-#define	SECONDS_IN_MONTH28D				( SECONDS_IN_DAY * 28 )
-#define	SECONDS_IN_MONTH29D				( SECONDS_IN_DAY * 29 )
-#define	SECONDS_IN_MONTH30D				( SECONDS_IN_DAY * 30 )
-#define	SECONDS_IN_MONTH31D				( SECONDS_IN_DAY * 31 )
-
-#define	SECONDS_IN_YEAR365				( SECONDS_IN_DAY * DAYS_IN_YEAR )
-#define	MINUTES_IN_YEAR					( MINUTES_IN_DAY * DAYS_IN_YEAR )
-#define	HOURS_IN_YEAR					( HOURS_IN_DAY * DAYS_IN_YEAR )
-#define	DAYS_IN_YEAR					365
-#define	MONTHS_IN_YEAR					12
-
-#define	DAYS_IN_LEAPYEAR				366
-#define	SECONDS_IN_LEAPYEAR				( SECONDS_IN_DAY * (DAYS_IN_LEAPYEAR ))
-
-#define	SECONDS_IN_YEAR_AVG				( SECONDS_IN_YEAR365 + 20736)
-
 // ################################## TZ DST UTC and time related ##################################
 
 #if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
