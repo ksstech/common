@@ -151,7 +151,7 @@ typedef	union z64_u {
 
 // ##################################### CLI related structures ####################################
 
-typedef struct __attribute__((packed)) cli_s {
+typedef struct __attribute__((packed)) cli_t {
 	char *			pcBeg ;								// Buffer beginning
 	char *			pcStore ;							// Buffer position
 	char *			pcParse ;
@@ -242,7 +242,7 @@ typedef enum vartype_e {			// HANDLE WITH CARE - SEQUENCE IS CRITICAL !!!
 	vtCOMPLEX,						// primarily 1-Wire thermometers for now
 } vartype_t ;
 
-typedef	union vardef_u {
+typedef	union vardef_t {			// Complex variable properties definition excluding the storage component
 	struct {
 		uint8_t		varcount 	: 8 ;		// number of items in array type ?
 		uint8_t		varindex 	: 8 ;		// CVARS: index for value to get/set ?
