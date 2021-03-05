@@ -4,12 +4,13 @@
  * x_utilities.c
  */
 
+#include	"x_utilities.h"
 #include 	"printfx.h"
-#include	"x_struct_union.h"
+#include	"x_errors_events.h"
 #include	"hal_config.h"
 
 #include	<limits.h>
-#include	<stdint.h>
+#include	<string.h>
 
 #define	debugFLAG					0xC000
 
@@ -220,3 +221,49 @@ uint32_t u32pow(uint32_t base, uint32_t exp) {
 	return res ;
 }
 
+// ################################### 1/2/4 bit field array support ###############################
+
+ba_t *	pvBitArrayCreate(size_t Count, size_t Size) {
+	if (Size != 1 || Size != 2 || Size != 4)			// check for valid size
+		return pvFAILURE ;								// complain
+	size_t szBA = Count * Size ;						// size in of bits
+	if (szBA & 0x00000007)								// not on a byte boundary
+		return pvFAILURE ;								// complain
+	szBA >>= 3 ;										// size in bytes
+	ba_t * psBA = malloc(sizeof(ba_t) + szBA) ;
+	psBA->ByteSize	= szBA ;
+	psBA->Count		= Count ;
+	psBA->BitSize	= Size ;
+	psBA->Fields	= Size == 1	? 8		: Size == 2 ?	4		: 2 ;
+	psBA->Mask		= Size == 1	? 0x01	: Size == 2 ?	0x03	: 0x0F ;
+	psBA->pvBA	= (uint8_t *) psBA + sizeof(ba_t) ;
+	memset(psBA->pvBA, 0, szBA) ;
+	return psBA ;
+}
+
+void	xBitArrayDelete(ba_t * psBA) {
+	IF_myASSERT(debugPARAM, halCONFIG_inSRAM(psBA)) ;
+	memset(psBA, 0, sizeof(ba_t) + psBA->ByteSize) ;
+	free(psBA) ;
+}
+
+int32_t	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
+	if (baI > psBA->Count || baV > psBA->Mask)
+		return erFAILURE ;
+	uint8_t	Xidx = baI / psBA->Fields ;
+	uint8_t	Sidx = baI % psBA->Fields ;
+	uint8_t Mask = psBA->Mask << Sidx ;
+	psBA->pvBA[Xidx]	&= ~Mask ;						// Remove THIS field bits
+	psBA->pvBA[Xidx]	|= (baV << Sidx) ;				// add in new THIS field bits
+	return erSUCCESS ;
+}
+
+int32_t	xBitArrayGet(ba_t * psBA, int32_t baI) {
+	if (baI > psBA->Count)
+		return erFAILURE ;
+	uint8_t	Xidx = baI / psBA->Fields ;
+	uint8_t	Sidx = baI % psBA->Fields ;
+	uint8_t Mask = psBA->Mask << Sidx ;
+	uint8_t u8Val = psBA->pvBA[Xidx] & (Mask << Sidx) ;	// strip out OTHER field bits
+	return u8Val >> Sidx ;								// return THIS field value in LSB(s)
+}
