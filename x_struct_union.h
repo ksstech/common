@@ -311,18 +311,15 @@ typedef	union epid_u {									// endpoint ID value
 } epid_t ;
 DUMB_STATIC_ASSERT(sizeof(epid_t) == 4) ;
 
-typedef union event_u {
-	struct {
-		union {
-			x32_t		var ;
-			z32_t		pVar ;
-		} ;
-		uint8_t		Event ;								// kwPRESSED, kwRELEASE etc..
-		uint8_t		Idx ;								// mostly 0, 1->n for multiple buttons
-		uint8_t		epuri ;
-		uint8_t		epunit ;
+typedef struct event_t {
+	union {
+		x32_t		var ;
+		z32_t		pVar ;
 	} ;
-	uint64_t		val ;
+	uint8_t		Event ;								// kwPRESSED, kwRELEASE etc..
+	uint8_t		Idx ;								// mostly 0, 1->n for multiple buttons
+	uint8_t		epuri ;
+	uint8_t		epunit ;
 } event_t ;
 
 /*
