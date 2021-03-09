@@ -441,53 +441,60 @@ typedef	const unsigned char * pcu8_t ;
 
 // ######################### common & standard network related definitions #########################
 
-#define	configSSID_MAX_LENGTH        		32
-#define	lenMAC_ADDRESS			6
+#define	configSSID_MAX_LENGTH		32
+#define	lenMAC_ADDRESS				6
 
 // #################################################################################################
 
-#define	EQ_RETURN(x,y)						if (x == y) return x ;
-#define	NE_RETURN(x,y)						if (x != y) return x ;
-#define	LT_RETURN(x,y)						if (x < y) return x ;
-#define	GT_RETURN(x,y)						if (x > y) return x ;
+#define	EQ_RETURN(x,y)				if (x == y) return x ;
+#define	NE_RETURN(x,y)				if (x != y) return x ;
+#define	LT_RETURN(x,y)				if (x < y) return x ;
+#define	GT_RETURN(x,y)				if (x > y) return x ;
 
-#define	IF_EQ_RETURN(T,x,y)					if (T) { if (x == y) return x ; }
-#define	IF_NE_RETURN(T,x,y)					if (T) { if (x != y) return x ; }
+#define	IF_EQ_RETURN(T,x,y)			if (T) { if (x == y) return x ; }
+#define	IF_NE_RETURN(T,x,y)			if (T) { if (x != y) return x ; }
 
-#define	EQ_GOTO(x,y,L)						if (x == y) goto L ;
-#define	NE_GOTO(x,y,L)						if (x != y) goto L ;
-#define	LT_GOTO(x,y,L)						if (x < y) goto L ;
-#define	GT_GOTO(x,y,L)						if (x > y) goto L ;
+#define	EQ_GOTO(x,y,L)				if (x == y) goto L ;
+#define	NE_GOTO(x,y,L)				if (x != y) goto L ;
+#define	LT_GOTO(x,y,L)				if (x < y) goto L ;
+#define	GT_GOTO(x,y,L)				if (x > y) goto L ;
 
-#define	EQ_BREAK(x,y)						if (x == y) break ;
-#define	NE_BREAK(x,y)						if (x != y) break ;
-#define	LT_BREAK(x,y)						if (x < y) break ;
-#define	GT_BREAK(x,y)						if (x > y) break ;
+#define	EQ_BREAK(x,y)				if (x == y) break ;
+#define	NE_BREAK(x,y)				if (x != y) break ;
+#define	LT_BREAK(x,y)				if (x < y) break ;
+#define	GT_BREAK(x,y)				if (x > y) break ;
 
-#define	IF_EQ_GOTO(T,x,y,L)					if (T) { if (x == y) goto L ; }
-#define	IF_NE_GOTO(T,x,y,L)					if (T) { if (x != y) goto L ; }
+#define	IF_EQ_GOTO(T,x,y,L)			if (T) { if (x == y) goto L ; }
+#define	IF_NE_GOTO(T,x,y,L)			if (T) { if (x != y) goto L ; }
 
 // ################################ Strings in Macros manipulation #################################
 
 #ifndef mySTRINGIFY
-	#define mySTRINGIFY_(x)					#x
-	#define mySTRINGIFY(x)					mySTRINGIFY_(x)
+	#define mySTRINGIFY_(x)			#x
+	#define mySTRINGIFY(x)			mySTRINGIFY_(x)
 #endif
 
-#define STR_FMTB(x)							"%" mySTRINGIFY(x) "s"
+#define STR_FMTB(x)					"%" mySTRINGIFY(x) "s"
 
-#define CONCAT2_(a, b)						a##b
-#define CONCAT3_(a, b, c)					a##b##c
-#define CONCAT4_(a, b, c, d)				a##b##c##d
+#define CONCAT2_(a, b)				a##b
+#define CONCAT3_(a, b, c)			a##b##c
+#define CONCAT4_(a, b, c, d)		a##b##c##d
 
-#define CONCAT2(a, b)						CONCAT2_(a, b)
-#define CONCAT3(a, b, c)					CONCAT3_(a, b, c)
-#define CONCAT4(a, b, c, d)					CONCAT4_(a, b, c, d)
+#define CONCAT2(a, b)				CONCAT2_(a, b)
+#define CONCAT3(a, b, c)			CONCAT3_(a, b, c)
+#define CONCAT4(a, b, c, d)			CONCAT4_(a, b, c, d)
 
 // #################################################################################################
 
-#define	MAINS_FREQ_HZ						50
-#define	MAINS_SUPPLY_V						230.0
+#define	MAINS_FREQ_HZ				50
+#define	MAINS_SUPPLY_V				230.0
+
+// #############################
+
+// https://stackoverflow.com/questions/32082004/embedding-json-as-a-string-in-c-code-using-preprocessor
+// https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/preprocessor/macros/__VA_ARGS__/count-arguments
+#define LSC(...) #__VA_ARGS__
+//#define LSC( { "key" : "value", "num1" : 12345 } ) ;
 
 // ############################# common complex data types/ structures #############################
 

@@ -93,7 +93,7 @@ typedef union x64_u {
 
 // ########################################## p32 pointer types ####################################
 
-typedef union p32_u {
+typedef union p32_t {
 	void *		pvoid ;
 	void * *	pPVoid ;
 // pointers to x64
@@ -243,6 +243,32 @@ typedef enum vartype_e {			// HANDLE WITH CARE - SEQUENCE IS CRITICAL !!!
 } vartype_t ;
 
 typedef	union vardef_t {			// Complex variable properties definition excluding the storage component
+#if 0
+	struct {
+		uint8_t		varcount 	: 8 ;		// number of items in array type ?
+		uint8_t		varindex 	: 8 ;		// CVARS: index for value to get/set ?
+		varsize_t	varsize 	: 2 ;		// 2 + 1 storage size of an individual element
+		vartype_t	vartype		: 5 ;		// 4 + 1 VALUE, MMA[B], STAT, ARRAY, CLOCK, TABLE etc
+		varform_t	varform		: 2 ;		// 2 + 1 UXX, IXX, FXX or SXX
+		uint8_t		pntr		: 1 ;		// indirect/pointer to type
+		uint8_t		sumX		: 1 ;		// treat as a sum, add value on update
+		uint8_t		sense		: 1 ;		// indicate when sense command has changed default config
+		uint8_t		spare		: 4 ;
+	} cv ;
+	struct {
+		uint8_t		varcount 	: 8 ;		// number of items in array type ?
+		uint8_t		varindex 	: 8 ;		// STATS: specify MMA_IDX??? value to be logged
+		varsize_t	varsize 	: 2 ;		// 2 + 1 storage size of an individual element
+		vartype_t	vartype		: 5 ;		// 4 + 1 VALUE, MMA[B], STAT, ARRAY, CLOCK, TABLE etc
+		varform_t	varform		: 2 ;		// 2 + 1 UXX, IXX, FXX or SXX
+		uint8_t		rst			: 1 ;		// used to indicate AVGL must be reset with this value...
+		uint8_t		init		: 1 ;		// set in statistics after first run/update done
+		uint8_t		step		: 1 ;		// stats updated AND value added to buffer
+		uint8_t		zero		: 1 ;		// if set, value=0 will not update AVGx, DEVx, CNTx or SUMx
+		uint8_t		alloc		: 1 ;		// set if memory allocated, 0 if provided
+		uint8_t		spare		: 2 ;
+	} st ;
+#else
 	struct {
 		uint8_t		varcount 	: 8 ;		// number of items in array type ?
 		uint8_t		varindex 	: 8 ;		// CVARS: index for value to get/set ?
@@ -266,6 +292,7 @@ typedef	union vardef_t {			// Complex variable properties definition excluding t
 		uint8_t		zero		: 1 ;		// if set, value=0 will not update AVGx, DEVx, CNTx or SUMx
 		uint8_t		alloc		: 1 ;		// set if memory allocated, 0 if provided
 	} st ;
+#endif
 	uint32_t		val ;
 } vardef_t ;
 DUMB_STATIC_ASSERT(sizeof(vardef_t) == 4) ;
