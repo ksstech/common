@@ -477,11 +477,12 @@ typedef	const unsigned char * pcu8_t ;
 #define STR_FMTB(x)					"%" mySTRINGIFY(x) "s"
 
 #define CONCAT2_(a, b)				a##b
-#define CONCAT3_(a, b, c)			a##b##c
-#define CONCAT4_(a, b, c, d)		a##b##c##d
-
 #define CONCAT2(a, b)				CONCAT2_(a, b)
+
+#define CONCAT3_(a, b, c)			a##b##c
 #define CONCAT3(a, b, c)			CONCAT3_(a, b, c)
+
+#define CONCAT4_(a, b, c, d)		a##b##c##d
 #define CONCAT4(a, b, c, d)			CONCAT4_(a, b, c, d)
 
 // #################################################################################################
@@ -493,8 +494,9 @@ typedef	const unsigned char * pcu8_t ;
 
 // https://stackoverflow.com/questions/32082004/embedding-json-as-a-string-in-c-code-using-preprocessor
 // https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/preprocessor/macros/__VA_ARGS__/count-arguments
+
+// #define LSC( { "key" : "value", "num1" : 12345 } ) ;
 #define LSC(...) #__VA_ARGS__
-//#define LSC( { "key" : "value", "num1" : 12345 } ) ;
 
 // ############################# common complex data types/ structures #############################
 
