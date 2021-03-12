@@ -155,7 +155,7 @@ typedef struct __attribute__((packed)) cli_t {
 	char *			pcBeg ;								// Buffer beginning
 	char *			pcStore ;							// Buffer position
 	char *			pcParse ;
-	struct cmnd_s *	pasList ;							// Command List
+	struct cmnd_t *	pasList ;							// Command List
 	z64_t			z64Var ;
 	uint8_t			u8BSize ;
 	uint8_t			u8LSize ;							// Command List Size
@@ -164,9 +164,9 @@ typedef struct __attribute__((packed)) cli_t {
 	uint8_t			bForce	: 1 ;						// force flags display
 } cli_t ;
 
-typedef	struct	cmnd_s {
-	char	cmnd[4] ;
-	int32_t	(* hdlr) (cli_t *) ;
+typedef	struct	cmnd_t {
+	const char	cmnd[4] ;
+	int32_t	(* const hdlr) (cli_t *) ;
 } cmnd_t ;
 
 enum {													// {flags}{counter}
