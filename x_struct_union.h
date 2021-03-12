@@ -373,7 +373,7 @@ typedef	struct __attribute__((__packed__)) ep_work_s {
 			} ;
 			uint8_t		flag ;							// SENSE vs ALERT (vs OBSERVE for CoAP)
 		} ;
-		uint8_t		idx ;								// EPP = logged #, EWS = enumerated #
+		uint8_t		idx ;								// EW = logged #, EWS = enumerated #
 		uint8_t		uri ;
 		uint8_t		eChan ;
 	} ;
