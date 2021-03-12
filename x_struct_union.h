@@ -391,10 +391,10 @@ typedef union alert_u {
 } alert_t ;
 
 typedef struct complex_s {								// vtCOMPLEX handlers
-	ep_work_t * (* work) (int32_t) ;
-	void	(* reset) (ep_work_t *, ep_work_t *) ;
-	void	(* sense) (ep_work_t *, ep_work_t *) ;
-	float	(* get) (ep_work_t *) ;
+	ep_work_t * (* const work) (int32_t) ;
+	void	(* const reset) (ep_work_t *, ep_work_t *) ;
+	void	(* const sense) (ep_work_t *, ep_work_t *) ;
+	float	(* const get) (ep_work_t *) ;
 } complex_t ;
 
 // ###################################### Public functions #########################################
