@@ -4,11 +4,23 @@
 
 #pragma	once
 
-#include	"x_time.h"						// x_definitions stdint.h time.h
+#include	"x_time.h"						// x_definitions time.h stdint.h
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+// ###################################### enumerations #############################################
+
+typedef enum {
+	epSCALE_NANO	= -3,
+	epSCALE_MICRO	= -2,
+	epSCALE_MILLI	= -1,
+	epSCALE_NONE	= 0,
+	epSCALE_KILO	= 1,
+	epSCALE_MEGA	= 2,
+	epSCALE_GIGA	= 3,
+} ep_scale_t ;
 
 // ############################# common complex data types/ structures #############################
 
@@ -49,7 +61,7 @@ DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4) ;
 
 // ######################################### 8 bit types ###########################################
 
-typedef union x8_u {
+typedef union x8_t {
 	uint8_t		u8 ;
 	int8_t		i8 ;
 	char		c8 ;
@@ -58,7 +70,7 @@ DUMB_STATIC_ASSERT(sizeof(x8_t) == 1) ;
 
 // ######################################### 16 bit types ##########################################
 
-typedef union x16_u {
+typedef union x16_t {
 	uint16_t	u16 ;
 	int16_t		i16 ;
 	x8_t		x8[2] ;
@@ -67,22 +79,18 @@ DUMB_STATIC_ASSERT(sizeof(x16_t) == 2) ;
 
 // ########################################## x32 types ############################################
 
-typedef union x32_u {
+typedef union x32_t {
 	uint32_t	u32 ;
 	int32_t		i32 ;
 	float		f32 ;
 	x16_t		x16[2] ;
 	x8_t		x8[4] ;
-#ifdef ESP_PLATFORM
-	char *		pc8 ;
-	const char *pcc8 ;
-#endif
 } x32_t ;
 DUMB_STATIC_ASSERT(sizeof(x32_t) == 4) ;
 
 // ########################################## x64 types ############################################
 
-typedef union x64_u {
+typedef union x64_t {
 	uint64_t	u64 ;
 	int64_t		i64 ;
  	double		f64 ;
@@ -90,12 +98,13 @@ typedef union x64_u {
 	x16_t		x16[4] ;
 	x8_t		x8[8] ;
 } x64_t ;
+DUMB_STATIC_ASSERT(sizeof(x64_t) == 8) ;
 
-// ########################################## p32 pointer types ####################################
+// ###################################### px (32/64) pointer types #################################
 
-typedef union p32_t {
-	void *		pvoid ;
-	void * *	pPVoid ;
+typedef union px_t {
+	void *		pv ;
+	void * *	ppv ;
 // pointers to x64
 	x64_t * 	px64 ;
 	uint64_t *	pu64 ;
@@ -118,56 +127,41 @@ typedef union p32_t {
 	seconds_t *	psec ;
 	char *		pc8 ;
 	char **		ppc8 ;
-} p32_t ;
+} px_t ;
+DUMB_STATIC_ASSERT(sizeof(px_t) == __SIZEOF_POINTER__) ;
 
 // ################################## Structure pointer container ##################################
 
-typedef union ps_u {
+typedef union ps_t {
 	struct	x32mma_s *	pMMA ;
 	struct	x32mmab_s *	pMMAB ;
 	struct	x32stat_s *	pSTAT ;
 	struct	TSZ_s *		pTSZ ;
 	struct	cli_t *		psCLI ;
-	struct	complex_s * psCX ;
+	struct	complex_t * psCX ;
 	union	ow_rom_u *	pOW_ROM ;
 } ps_t ;
+DUMB_STATIC_ASSERT(sizeof(ps_t) == __SIZEOF_POINTER__) ;
 
 // #################################### All-In-One container #######################################
 
-typedef	union z32_u {
-	void *	pvoid ;
-	x32_t	x32 ;
-	p32_t	p32 ;
+typedef	union z32_t {
+#if (__SIZEOF_POINTER__ == 4)
+	px_t	px ;
 	ps_t	ps ;
+#endif
+	x32_t	x32 ;
 } z32_t ;
+DUMB_STATIC_ASSERT(sizeof(z32_t) == 4) ;
 
-typedef	union z64_u {
-	x32_t		x32[2] ;
-	p32_t		p32[2] ;
-	z32_t		z32[2] ;
-	ps_t		ps[2] ;
-	x64_t		x64 ;
+typedef	union z64_t {
+	px_t	px ;
+	ps_t	ps ;
+	x64_t	x64 ;
 } z64_t ;
+DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
 
 // ##################################### CLI related structures ####################################
-
-typedef struct __attribute__((packed)) cli_t {
-	char *			pcBeg ;								// Buffer beginning
-	char *			pcStore ;							// Buffer position
-	char *			pcParse ;
-	struct cmnd_t *	pasList ;							// Command List
-	z64_t			z64Var ;
-	uint8_t			u8BSize ;
-	uint8_t			u8LSize ;							// Command List Size
-	uint8_t			bMode	: 1 ;						// Long mode
-	uint8_t			bEcho	: 1 ;
-	uint8_t			bForce	: 1 ;						// force flags display
-} cli_t ;
-
-typedef	struct	cmnd_t {
-	const char	cmnd[4] ;
-	int32_t	(* const hdlr) (cli_t *) ;
-} cmnd_t ;
 
 enum {													// {flags}{counter}
 	maskCOUNT	= 0x000FFFFF,							// counter value or mask
@@ -218,184 +212,11 @@ typedef	union flagmask_u {
 	} ;
 	uint32_t	u32Val ;
 } flagmask_t ;
-DUMB_STATIC_ASSERT( sizeof(flagmask_t) == 4) ;
+DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
 
 #define	makeMASKFLAG(A,B,C,D,E,F,G,H,I,J,K,L,M) (flagmask_t) \
 	{ .a=A, .b=B, .c=C, .d=D, .e=E, .f=F, .g=G, .h=H, .i=I, .j=J, .k=K, .l=L, .m=M }
 
-// ################################### complex VAR related structures ##############################
-
-typedef enum varsize_e { vs08B, vs16B, vs32B, vs64B } varsize_t ;
-
-typedef enum varform_e { vfUXX, vfIXX, vfFXX, vfSXX } varform_t ;
-
-typedef enum vartype_e {			// HANDLE WITH CARE - SEQUENCE IS CRITICAL !!!
-	vtNULL	= 0,					// first ie ZERO and unused !!!!
-	vtVALUE,						// single value, direct or indirect
-	vtMMA,							// MinMaxAvg structure
-	vtMMAB,							// MinMaxAvgBuf structure
-	vtSTAT,							// Statistics structure
-	vtARRAY,						// pointer to array of values/strings
-	vtCLOCK,						// epoch time
-	vtTIMER,						// uSec based time ie RunTime
-	vtTABLE,						// table of rows/records and columns/fields
-	vtCOMPLEX,						// primarily 1-Wire thermometers for now
-} vartype_t ;
-
-typedef	union vardef_t {			// Complex variable properties definition excluding the storage component
-#if 0
-	struct {
-		uint8_t		varcount 	: 8 ;		// number of items in array type ?
-		uint8_t		varindex 	: 8 ;		// CVARS: index for value to get/set ?
-		varsize_t	varsize 	: 2 ;		// 2 + 1 storage size of an individual element
-		vartype_t	vartype		: 5 ;		// 4 + 1 VALUE, MMA[B], STAT, ARRAY, CLOCK, TABLE etc
-		varform_t	varform		: 2 ;		// 2 + 1 UXX, IXX, FXX or SXX
-		uint8_t		pntr		: 1 ;		// indirect/pointer to type
-		uint8_t		sumX		: 1 ;		// treat as a sum, add value on update
-		uint8_t		sense		: 1 ;		// indicate when sense command has changed default config
-		uint8_t		spare		: 4 ;
-	} cv ;
-	struct {
-		uint8_t		varcount 	: 8 ;		// number of items in array type ?
-		uint8_t		varindex 	: 8 ;		// STATS: specify MMA_IDX??? value to be logged
-		varsize_t	varsize 	: 2 ;		// 2 + 1 storage size of an individual element
-		vartype_t	vartype		: 5 ;		// 4 + 1 VALUE, MMA[B], STAT, ARRAY, CLOCK, TABLE etc
-		varform_t	varform		: 2 ;		// 2 + 1 UXX, IXX, FXX or SXX
-		uint8_t		rst			: 1 ;		// used to indicate AVGL must be reset with this value...
-		uint8_t		init		: 1 ;		// set in statistics after first run/update done
-		uint8_t		step		: 1 ;		// stats updated AND value added to buffer
-		uint8_t		zero		: 1 ;		// if set, value=0 will not update AVGx, DEVx, CNTx or SUMx
-		uint8_t		alloc		: 1 ;		// set if memory allocated, 0 if provided
-		uint8_t		spare		: 2 ;
-	} st ;
-#else
-	struct {
-		uint8_t		varcount 	: 8 ;		// number of items in array type ?
-		uint8_t		varindex 	: 8 ;		// CVARS: index for value to get/set ?
-		varsize_t	varsize 	: 3 ;		// 2 + 1 storage size of an individual element
-		vartype_t	vartype		: 5 ;		// 4 + 1 VALUE, MMA[B], STAT, ARRAY, CLOCK, TABLE etc
-		varform_t	varform		: 3 ;		// 2 + 1 UXX, IXX, FXX or SXX
-		uint8_t		pntr		: 1 ;		// indirect/pointer to type
-		uint8_t		sumX		: 1 ;		// treat as a sum, add value on update
-		uint8_t		sense		: 1 ;		// indicate when sense command has changed default config
-		uint8_t		spare		: 2 ;
-	} cv ;
-	struct {
-		uint8_t		varcount 	: 8 ;		// number of items in array type ?
-		uint8_t		varindex 	: 8 ;		// STATS: specify MMA_IDX??? value to be logged
-		varsize_t	varsize 	: 3 ;		// 2 + 1 storage size of an individual element
-		vartype_t	vartype		: 5 ;		// 4 + 1 VALUE, MMA[B], STAT, ARRAY, CLOCK, TABLE etc
-		varform_t	varform		: 3 ;		// 2 + 1 UXX, IXX, FXX or SXX
-		uint8_t		rst			: 1 ;		// used to indicate AVGL must be reset with this value...
-		uint8_t		init		: 1 ;		// set in statistics after first run/update done
-		uint8_t		step		: 1 ;		// stats updated AND value added to buffer
-		uint8_t		zero		: 1 ;		// if set, value=0 will not update AVGx, DEVx, CNTx or SUMx
-		uint8_t		alloc		: 1 ;		// set if memory allocated, 0 if provided
-	} st ;
-#endif
-	uint32_t		val ;
-} vardef_t ;
-DUMB_STATIC_ASSERT(sizeof(vardef_t) == 4) ;
-
-/* Similar to the basic 4 byte structure but including 4 byte (1 word) space for
- * the actual variable or pointer to variable,array or complex structure */
-typedef	union var_t {
-	struct {
-		vardef_t	varDef ;
-		z32_t		varVal ;
-	} ;
-	uint64_t		varValue ;
-} var_t ;
-
-typedef	union x64var_t {
-	struct __attribute__((packed)) {
-		vardef_t	varDef ;
-		z64_t		varVal ;
-	} ;
-	uint32_t		varValues[3] ;
-} x64var_t ;
-
-// ##################################### endpoint related structures ###############################
-
-typedef enum {
-	epSCALE_NANO	= -3,
-	epSCALE_MICRO	= -2,
-	epSCALE_MILLI	= -1,
-	epSCALE_NONE	= 0,
-	epSCALE_KILO	= 1,
-	epSCALE_MEGA	= 2,
-	epSCALE_GIGA	= 3,
-} ep_scale_t ;
-
-typedef	union epid_u {									// endpoint ID value
-	struct {
-		uint8_t		devclass ;							// Device category ie ACTxxx, BMA222, BMP180, TMPxxx etc
-		uint8_t		subclass ;							// Device SubCategory ie subxxxx, A_xxxx, D_xxxx, R_xxxx etc
-		uint8_t		epuri ;
-		uint8_t		epunit ;
-	} ;
-	uint32_t	val ;
-} epid_t ;
-DUMB_STATIC_ASSERT(sizeof(epid_t) == 4) ;
-
-typedef struct event_t {
-	union {
-		x32_t		var ;
-		z32_t		pVar ;
-	} ;
-	uint8_t		Event ;								// kwPRESSED, kwRELEASE etc..
-	uint8_t		Idx ;								// mostly 0, 1->n for multiple buttons
-	uint8_t		epuri ;
-	uint8_t		epunit ;
-} event_t ;
-
-/*
- * Definition of a table entry containing all the DYNAMIC (SRAM based)
- * info related to an endpoint.
- * FIXED sequence, tied to macros to build table!!!
- */
-typedef	struct __attribute__((__packed__)) ep_work_s {
-	var_t		Var ;
-	uint32_t	tSeconds ;								// timestamp when last read ie latest value
-	uint32_t	Tsns ;									// SNS reload value
-	uint32_t	Rsns ;									// SNS countdown value, 0 to stop
-	uint32_t	Tlog ;									// LOG reload value
-	uint32_t	Rlog ;									// LOG countdown value, 0 to stop
-	uint32_t	Tadd ;									// LOG to buffer (if buffered) countdown
-	struct  {
-		union {
-			struct {
-				int8_t		fScale	: 3 ;
-				uint8_t		fSpare	: 2 ;
-				uint8_t		fSECsns	: 1 ;				// 0=Tsns in EWP, 1=Tsns in EWS
-				uint8_t		fAlert	: 1 ;
-				uint8_t		fSense	: 1 ;
-			} ;
-			uint8_t		flag ;							// SENSE vs ALERT (vs OBSERVE for CoAP)
-		} ;
-		uint8_t		idx ;								// EW = logged #, EWS = enumerated #
-		uint8_t		uri ;
-		uint8_t		eChan ;
-	} ;
-} ep_work_t ;
-
-typedef union alert_u {
-	struct {
-		void *		pvValue ;
-		uint8_t		Type ;
-		uint8_t 	Level ;
-		uint8_t		Field ;
-		uint8_t		Chan ;
-	} ;
-	uint64_t		Value ;
-} alert_t ;
-
-typedef struct complex_s {								// vtCOMPLEX handlers
-	ep_work_t * (* const work) (int32_t) ;
-	void	(* const reset) (ep_work_t *, ep_work_t *) ;
-	void	(* const sense) (ep_work_t *, ep_work_t *) ;
-	float	(* const get) (ep_work_t *) ;
-} complex_t ;
 
 // ###################################### Public functions #########################################
 
