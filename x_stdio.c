@@ -103,18 +103,16 @@ int32_t	xStdioBufInit(void) {
 		psBuf->Size != rtcBUF_SIZE	||
 		psBuf->Used > rtcBUF_SIZE	||
 		psBuf->IdxWR >= rtcBUF_SIZE	||
-		psBuf->IdxRD >= rtcBUF_SIZE) {
-		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;
+		psBuf->IdxRD >= rtcBUF_SIZE) {					// RTC buffer structure NOT valid.
+		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
 		psBuf->pBuf	= sRTCvars.RTCbuf ;
 		psBuf->Size	= rtcBUF_SIZE ;
-	}
-	/* Since the value of the mux from last time round is of no value the 2nd (or later) times
-	 * around the buffer structure will/might be correct but the mux must be re-initialised.
-	 * The mux initialization will be done when xStdioBufLock() is called for the first time.
-	 */
-	if (StdioBufFlag == 0)
+	} else if (StdioBufFlag == 0) {
+		/* Buffer structure might be correct but MUX must be re-initialised.
+		 * MUX init will be done 1st time xStdioBufLock() is called */
 		psBuf->mux	= NULL ;
-	StdioBufFlag	= 0x12345678 ;
+	}
+	StdioBufFlag	= stdioFLAG_INIT ;
 	return erSUCCESS ;
 }
 
