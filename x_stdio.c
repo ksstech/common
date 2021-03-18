@@ -1,21 +1,5 @@
 /*
- * Copyright 2014-18 Andre M Maree / KSS Technologies (Pty) Ltd.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
- * and associated documentation files (the "Software"), to deal in the Software without restriction,
- * including without limitation the rights to use, copy, modify, merge, publish, distribute,
- * sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or
- * substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
- * BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
- * DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
+ * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
 /*
@@ -24,7 +8,6 @@
 
 #include	"hal_config.h"
 #include	"hal_usart.h"
-//#include	"hal_rtc.h"
 #include	"hal_variables.h"
 
 #include	"FreeRTOS_Support.h"
@@ -107,6 +90,8 @@ static uint32_t StdioBufFlag	= 0 ;
 
 // ################################ RTC Slow RAM buffer support ####################################
 
+#define		stdioFLAG_INIT		0x12345678
+
 /* This code should ONLY run under very specific conditions being:
  * a) the first time on a new mote; or
  * b) after a power failure when RTC data has been wiped; or
@@ -134,8 +119,9 @@ int32_t	xStdioBufInit(void) {
 }
 
 int32_t	xStdioBufLock(TickType_t Ticks) {
-	if (StdioBufFlag == 0)
+	if (StdioBufFlag != stdioFLAG_INIT) {
 		xStdioBufInit() ;
+	}
 	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks) ;
 }
 
@@ -144,10 +130,12 @@ int32_t	xStdioBufUnLock(void) {
 }
 
 int32_t	xStdioBufPutC(int cChr) {
-	if (StdioBufFlag == 0)
+	if (StdioBufFlag != stdioFLAG_INIT) {
 		xStdioBufInit() ;
-	if (cChr == CHR_LF)
+	}
+	if (cChr == CHR_LF) {
 		xStdioBufPutC(CHR_CR) ;
+	}
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == psBuf->Size) {					// buffer full ?
 		++psBuf->IdxRD ;								// discard oldest (next to be read) char
@@ -161,8 +149,9 @@ int32_t	xStdioBufPutC(int cChr) {
 }
 
 int32_t	xStdioBufGetC(void) {
-	if (StdioBufFlag == 0)
+	if (StdioBufFlag != stdioFLAG_INIT) {
 		xStdioBufInit() ;
+	}
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == 0) {
 		errno = EAGAIN ;
