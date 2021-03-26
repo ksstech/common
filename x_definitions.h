@@ -240,7 +240,7 @@ enum {													// 64bit bit masks
 #define		CHR_y							0x79
 #define		CHR_z							0x7A
 #define		CHR_L_CURLY						0x7B		// '{'
-#define		CHR_VERT_BAR					0x7C		// ' '
+#define		CHR_VERT_BAR					0x7C		// '|'
 #define		CHR_R_CURLY						0x7D		// '}'
 #define		CHR_TILDE						0x7E		// '~'
 #define		CHR_DEL							0x7F		// c-8 = non printing !!!!
