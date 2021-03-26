@@ -222,6 +222,36 @@ uint32_t u32pow(uint32_t base, uint32_t exp) {
 	return res ;
 }
 
+uint64_t u64pow(uint32_t base, uint32_t exp) {
+	uint64_t res ;
+	for(res = 1; exp > 0; res *= base, --exp) ;
+	return res ;
+}
+
+int32_t u32Trailing0(uint32_t U32) {
+	int32_t iRV = 0 ;
+	while (U32 > 0) {
+		if (U32 % 10) {
+			break ;
+		}
+		++iRV ;
+		U32 /= 10 ;
+	}
+	return iRV ;
+}
+
+int32_t u64Trailing0(uint64_t U64) {
+	int32_t iRV = 0 ;
+	while (U64 > 0) {
+		if (U64 % 10) {
+			break ;
+		}
+		++iRV ;
+		U64 /= 10 ;
+	}
+	return iRV ;
+}
+
 // ################################### 1/2/4 bit field array support ###############################
 
 ba_t *	pvBitArrayCreate(size_t Count, size_t Size) {

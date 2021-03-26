@@ -51,6 +51,10 @@ x32_t	xBuildRandomX32(void) ;
 x64_t	xBuildRandomX64(void) ;
 
 uint32_t u32pow(uint32_t base, uint32_t exp) ;
+uint64_t u64pow(uint32_t base, uint32_t exp) ;
+
+int32_t u32Trailing0(uint32_t U32) ;
+int32_t u64Trailing0(uint64_t U64) ;
 
 // ################################### 1/2/4 bit field array support ###############################
 
