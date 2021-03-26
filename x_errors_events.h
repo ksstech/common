@@ -26,6 +26,7 @@ enum {
 	erSCRIPT_INV_MODE,				// no message
 	erSCRIPT_TOO_MANY,
 	erSCRIPT_INV_SYNTAX,
+	erSCRIPT_INV_ENDPOINT,
 	erSCRIPT_INCOM_SENSE,			// incomplete sense instruction
 	erSCRIPT_INCOM_RULES,			// incomplete rules instruction
 	erSCRIPT_INCOM_IDRES,			// incomplete identity/resource entry
