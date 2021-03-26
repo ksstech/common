@@ -2,16 +2,11 @@
  * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-/*
- * x_utilties.h
- */
-
 #pragma once
 
-#include	"x_struct_union.h"
+#include	"x_struct_union.h"							// x_time time stdint x_definitions
 
 #include	<stddef.h>
-#include	<stdint.h>
 #include	<stdbool.h>
 
 #ifdef __cplusplus

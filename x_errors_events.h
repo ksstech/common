@@ -6,6 +6,10 @@
 
 #include	<stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // ########################################### Macros ##############################################
 
 
@@ -60,6 +64,6 @@ enum {
 int32_t	ErrorSet(int32_t eCode) ;
 int32_t	ErrorGet(void) ;
 
-#if		defined(cc3200)
-char * strerror(int _errno) ;
+#ifdef __cplusplus
+}
 #endif

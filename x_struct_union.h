@@ -4,7 +4,7 @@
 
 #pragma	once
 
-#include	"x_time.h"						// x_definitions time.h stdint.h
+#include	"x_time.h"						// time stdint x_definitions
 
 #ifdef __cplusplus
 extern "C" {

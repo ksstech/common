@@ -1,16 +1,15 @@
 /*
- * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
- *
- * x_utilities.c
+ * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
 #include	"x_utilities.h"
+#include	<limits.h>
+#include	<string.h>
+
 #include 	"printfx.h"
 #include	"x_errors_events.h"
 #include	"hal_config.h"
 
-#include	<limits.h>
-#include	<string.h>
 
 #define	debugFLAG					0xC000
 
@@ -177,8 +176,9 @@ const char charset[] = {
 } ;
 
 void	vBuildRandomSXX(uint8_t * pu8, int32_t len) {
-	if (len && pu8)
+	if (len && pu8) {
 		for (int n = 0; n < len; ++n) pu8[n] = charset[rand() % sizeof(charset)] ;
+	}
 }
 
 void	vBuildRandomStr(uint8_t * pu8, int32_t len) {
@@ -203,8 +203,9 @@ x16_t	xBuildRandomX16(void) {
 x32_t	xBuildRandomX32(void) {
 	x32_t	X32 ;
 	X32.i32 = rand() ;
-	if (rand() % 2)
+	if (rand() % 2) {
 		X32.i32 *= -1 ;									// ensure some (-) values
+	}
 	return X32 ;
 }
 

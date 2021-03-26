@@ -406,28 +406,28 @@ enum {
 
 // ######################################## delimiter strings ######################################
 
-#define	sepSPACE_COMMA_TAB_LF_CR			" ,\t\n\r"
-#define	sepSPACE_COMMA_TAB_LF				" ,\t\n"
-#define	sepSPACE_COMMA_TAB_CR				" ,\t\r"
-#define	sepSPACE_COMMA_TAB					" ,\t"
-#define	sepSPACE_COMMA_LF_CR				" ,\n\r"
-#define	sepSPACE_COMMA_LF					" ,\n"
-#define	sepSPACE_COMMA_CR					" ,\r"
-#define	sepSPACE_COMMA						" ,"
-#define	sepSPACE_LF_CR						" \n\r"
-#define	sepSPACE_LF							" \n"
-#define	sepSPACE_CR							" \r"
-#define	sepSPACE							" "
+#define	sepSPACE_COMMA_TAB_LF_CR	" ,\t\n\r"
+#define	sepSPACE_COMMA_TAB_LF		" ,\t\n"
+#define	sepSPACE_COMMA_TAB_CR		" ,\t\r"
+#define	sepSPACE_COMMA_TAB			" ,\t"
+#define	sepSPACE_COMMA_LF_CR		" ,\n\r"
+#define	sepSPACE_COMMA_LF			" ,\n"
+#define	sepSPACE_COMMA_CR			" ,\r"
+#define	sepSPACE_COMMA				" ,"
+#define	sepSPACE_LF_CR				" \n\r"
+#define	sepSPACE_LF					" \n"
+#define	sepSPACE_CR					" \r"
+#define	sepSPACE					" "
 
 // ################################### missing standard definitions ################################
 
-#define	pvFAILURE							((void *) 0xFFFFFFFF)
-#define	pcFAILURE							((char *) 0xFFFFFFFF)
+#define	pvFAILURE					((void *) 0xFFFFFFFF)
+#define	pcFAILURE					((char *) 0xFFFFFFFF)
 
-#define	UINT8_MIN							0x00
-#define	UINT16_MIN							0x0000
-#define	UINT32_MIN							0x00000000
-#define	UINT64_MIN							0x0000000000000000
+#define	UINT8_MIN					0x00
+#define	UINT16_MIN					0x0000
+#define	UINT32_MIN					0x00000000
+#define	UINT64_MIN					0x0000000000000000
 
 typedef	char i8_t ;
 typedef	const char ci8_t ;
