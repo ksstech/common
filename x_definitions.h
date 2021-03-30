@@ -308,6 +308,7 @@ enum {
 #define	MINUTES_IN_WEEK					10080
 #define	HOURS_IN_WEEK					168
 #define	DAYS_IN_WEEK					7
+#define	DAYS_IN_MONTH_MAX				31
 
 #define	SECONDS_IN_MONTH28D				( SECONDS_IN_DAY * 28 )
 #define	SECONDS_IN_MONTH29D				( SECONDS_IN_DAY * 29 )
@@ -383,9 +384,10 @@ enum {
 
 // ###################### macros to create variable width 32 & 64 bit masks ########################
 
-#define BIT_MASK32(a, b)			((uint32_t) (((uint32_t)-1L >> (31-(b))) & ~((1U << (a))-1)))
-
-#define BIT_MASK64(a, b)			((uint64_t) (((uint64_t)-1 >> (63-(b))) & ~((1ULL << (a))-1)))
+#define BIT_MASK8(a,b)				((0xFF >> (7-(b))) & ~((0x01 << (a))-1))
+#define BIT_MASK16(a,b)				((0xFFFF >> (15-(b))) & ~((0x0001 << (a))-1))
+#define BIT_MASK32(a,b)				((0xFFFFFFFF >> (31-(b))) & ~((1UL << (a))-1))
+#define BIT_MASK64(a,b)				((0xFFFFFFFFFFFFFFFF >> (63-(b))) & ~((1ULL << (a))-1))
 
 // ###################################### General Use Macros #######################################
 
