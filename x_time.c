@@ -2,10 +2,6 @@
  * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
  */
 
-/*
- * x_time.c
- */
-
 #include	"x_time.h"
 #include 	"printfx.h"
 #include	"x_definitions.h"
@@ -68,11 +64,14 @@ int32_t	xTimeIsLeapYear(int32_t year) {
  * \return		number of leap years, FAILURE if parameter out of range
  */
 int32_t	xTimeCountLeapYears(int32_t NowYear) {
-	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX, seconds_t))
+	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX, seconds_t)) {
 		return erFAILURE ;
+	}
 	int32_t	Leaps, TestYear ;
 	for(TestYear = YEAR_BASE_MIN, Leaps = 0; TestYear < NowYear; TestYear++) {
-		if (xTimeIsLeapYear(TestYear))	++Leaps ;
+		if (xTimeIsLeapYear(TestYear)) {
+			++Leaps ;
+		}
 	}
 	return Leaps ;
 }
@@ -113,14 +112,11 @@ void	xTimeGMTime(seconds_t tValue, struct tm * psTM, int32_t fElapsed) {
 		return ;
 	}
 #endif
-	// calculate seconds
-    psTM->tm_sec	= tValue % SECONDS_IN_MINUTE ;
+    psTM->tm_sec	= tValue % SECONDS_IN_MINUTE ;		// calculate seconds
     tValue		/= SECONDS_IN_MINUTE ;
-    // calculate minutes
-    psTM->tm_min	= tValue % MINUTES_IN_HOUR ;
+    psTM->tm_min	= tValue % MINUTES_IN_HOUR ;	    // calculate minutes
     tValue		/= MINUTES_IN_HOUR ;
-    // calculate hours
-    psTM->tm_hour	= tValue % HOURS_IN_DAY ;
+    psTM->tm_hour	= tValue % HOURS_IN_DAY ;		    // calculate hours
     tValue		/= HOURS_IN_DAY ;
     if (fElapsed) {
     	psTM->tm_mday = tValue ;						// elapsed time, leave as is
@@ -138,11 +134,12 @@ void	xTimeGMTime(seconds_t tValue, struct tm * psTM, int32_t fElapsed) {
     psTM->tm_year = year - YEAR_BASE_MIN ;				// Adjust year for correct epoch
 	psTM->tm_yday = tValue ;							// and store the day # of the year
 	// calculate the month of the year
-    while (true) {
+    while (1) {
     	int32_t	DaysInMonth = DaysPerMonth[psTM->tm_mon] ;
     	// if date is in Feb and year is a leap year, add day for 29th Feb
-    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year))
+    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year)) {
     		++DaysInMonth ;
+    	}
     	if (tValue < DaysInMonth) {
     		break ;
     	}
@@ -156,7 +153,7 @@ void	xTimeGMTime(seconds_t tValue, struct tm * psTM, int32_t fElapsed) {
 /*
  * xTimeCalcDaysInMonth()
  */
-int32_t	xTimeCalcDaysInMonth(struct tm *psTM) {			// handle February of a leap year
+int32_t	xTimeCalcDaysInMonth(struct tm * psTM) {			// handle February of a leap year
 	return DaysPerMonth[psTM->tm_mon] + ((xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon == 1)) ? 1 : 0) ;
 }
 
