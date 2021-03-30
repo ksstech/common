@@ -131,7 +131,7 @@
 /*
  * TIME ZONE STRUCTURE DEFINITION
  */
-typedef	struct __attribute__((__packed__)) TZ_s {
+typedef	struct __attribute__((__packed__)) TZ_t {
 	short	daylight ;
 	int32_t	timezone ;
 #if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER || timexTZTYPE_SELECTED == timexTZTYPE_RFC3164)
@@ -143,7 +143,7 @@ typedef	struct __attribute__((__packed__)) TZ_s {
 #endif
 } TZ_t ;
 
-typedef	struct TSZ_s {
+typedef	struct TSZ_t {
 	uint64_t	usecs ;
 	TZ_t	*	pTZ ;
 } TSZ_t ;

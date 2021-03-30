@@ -133,13 +133,14 @@ DUMB_STATIC_ASSERT(sizeof(px_t) == __SIZEOF_POINTER__) ;
 // ################################## Structure pointer container ##################################
 
 typedef union ps_t {
-	struct	x32mma_s *	pMMA ;
-	struct	x32mmab_s *	pMMAB ;
-	struct	x32stat_s *	pSTAT ;
-	struct	TSZ_s *		pTSZ ;
-	struct	cli_t *		psCLI ;
-	struct	complex_t * psCX ;
-	union	ow_rom_u *	pOW_ROM ;
+	struct x32mma_t *	pMMA ;
+	struct x32mmab_t *	pMMAB ;
+	struct x32stat_t *	pSTAT ;
+	struct pcnt_t *		psPCNT ;
+	struct TSZ_t *		pTSZ ;
+	struct cli_t *		psCLI ;
+	struct vt_enum_t *	psCX ;
+	union ow_rom_u *	pOW_ROM ;
 } ps_t ;
 DUMB_STATIC_ASSERT(sizeof(ps_t) == __SIZEOF_POINTER__) ;
 
