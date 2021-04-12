@@ -175,6 +175,9 @@ int32_t	xStdioBufGetC(void) {
  * @return		if successful, character sent, else EOF
  */
 int		putcharx(int cChr) {
+	if (cChr == CHR_LF) {
+		putcharx(CHR_CR) ;
+	}
 #if		(retargetSTDOUT == retargetUART)
 	while(!halUART_TxFifoSpace(configSTDIO_UART_CHAN)) ;
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
