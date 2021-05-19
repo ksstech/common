@@ -5,9 +5,10 @@
 
 #pragma once
 
+#include	"x_definitions.h"							// no nested includes
+
 #include	<time.h>									// struct tm
 #include	<stdint.h>
-#include	"x_definitions.h"							// no nested includes
 
 #ifdef __cplusplus
 	extern "C" {
