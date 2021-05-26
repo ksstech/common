@@ -46,7 +46,7 @@ uint64_t mac2int(uint8_t * hwaddr) {
  * @param[in] mac uint64_t mac address
  * @param[out] hwaddr hex mac address
  */
-void int2mac(uint64_t mac, uint8_t * hwaddr) {
+void 	int2mac(uint64_t mac, uint8_t * hwaddr) {
 	for (int8_t i = 5; i >= 0; --i) {
 		*hwaddr++ = mac >> (CHAR_BIT * i);
 	}
@@ -119,8 +119,9 @@ int32_t	xDigitsInU32(uint32_t U32, bool grouping) {
 int32_t	xDigitsInU64(uint64_t U64, bool grouping) {
 #if 1
 	int x ;
-	if (U64 <= UINT32_MAX)
+	if (U64 <= UINT32_MAX) {
 		return xDigitsInU32((uint32_t) U64, grouping) ;
+	}
 	if (U64 >= 100000000000000ULL) {
 		if (U64 >= 100000000000000000ULL) {
 			if (U64 >= 1000000000000000000ULL) {
@@ -255,11 +256,13 @@ int32_t u64Trailing0(uint64_t U64) {
 // ################################### 1/2/4 bit field array support ###############################
 
 ba_t *	pvBitArrayCreate(size_t Count, size_t Size) {
-	if (Size != 1 || Size != 2 || Size != 4)			// check for valid size
+	if (Size != 1 || Size != 2 || Size != 4) {			// check for valid size
 		return pvFAILURE ;								// complain
-	size_t szBA = Count * Size ;						// size in of bits
-	if (szBA & 0x00000007)								// not on a byte boundary
+	}
+	size_t szBA = Count * Size ;						// size in total # of bits
+	if (szBA & 0x00000007) {							// not on a byte boundary
 		return pvFAILURE ;								// complain
+	}
 	szBA >>= 3 ;										// size in bytes
 	ba_t * psBA = malloc(sizeof(ba_t) + szBA) ;
 	psBA->ByteSize	= szBA ;
@@ -279,8 +282,9 @@ void	xBitArrayDelete(ba_t * psBA) {
 }
 
 int32_t	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
-	if (baI > psBA->Count || baV > psBA->Mask)
+	if (baI >= psBA->Count || baV > psBA->Mask) {
 		return erFAILURE ;
+	}
 	uint8_t	Xidx = baI / psBA->Fields ;
 	uint8_t	Sidx = baI % psBA->Fields ;
 	uint8_t Mask = psBA->Mask << Sidx ;
@@ -290,8 +294,9 @@ int32_t	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
 }
 
 int32_t	xBitArrayGet(ba_t * psBA, int32_t baI) {
-	if (baI > psBA->Count)
+	if (baI >= psBA->Count) {
 		return erFAILURE ;
+	}
 	uint8_t	Xidx = baI / psBA->Fields ;
 	uint8_t	Sidx = baI % psBA->Fields ;
 	uint8_t Mask = psBA->Mask << Sidx ;
