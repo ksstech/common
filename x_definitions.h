@@ -389,6 +389,50 @@ enum {
 #define BIT_MASK32(a,b)				((0xFFFFFFFF >> (31-(b))) & ~((1UL << (a))-1))
 #define BIT_MASK64(a,b)				((0xFFFFFFFFFFFFFFFF >> (63-(b))) & ~((1ULL << (a))-1))
 
+// ################################## variable bit field flags #####################################
+
+/* Based on 32bit variables used as flags
+ * Support primarily 1/2/4 bit sized flags
+ */
+#define	mask1B						0x01
+#define	mask2B						0x03
+#define	mask4B						0x0F
+
+//#if		(!defined(NDEBUG)) || defined(DEBUG)
+#if 0
+	#define	maskSET1B(f,i,x)		if (sizeof(f) == sizeof(uint32_t) && (i < 32)) {	\\
+										f &= ~(mask1B << i);							\\
+										f |= ((x & mask1B) << i) ;						\\
+									} else {											\\
+										myASSERT(0) ; 									\\
+									}
+	#define	maskSET2B(f,i,x)		if (sizeof(f) == sizeof(uint32_t) && (i < 16)) {	\\
+										f &= ~(mask2B << (i * 2)) ;						\\
+										f |= ((x & mask2B) << (i * 2)) ;				\\
+									} else {											\\
+										myASSERT(0) ; 									\\
+									}
+	#define	maskSET4B(f,i,x)		if (sizeof(f) == sizeof(uint32_t) && (i < 8)) {		\\
+										f &= ~(mask4B << (i * 4)) ;						\\
+										f |= ((x & mask1B) << (i * 4)) ;				\\
+									} else {											\\
+										myASSERT(0) ; 									\\
+									}
+	#define	maskGET1B(f,i)			? (i < 32) ? ((f >> (i * 1)) & mask1B) : -1
+	#define	maskGET2B(f,i)			? (i < 16) ? ((f >> (i * 2)) & mask2B) : -1
+	#define	maskGET4B(f,i)			? (i < 8 ) ? ((f >> (i * 4)) & mask4B) : -1
+
+#else
+	#define	maskSET1B(f,i,x)		(f &= ~(mask1B << (i * 1)) ; f |= ((x & mask1B) << (i * 1)))
+	#define	maskGET1B(f,i)			((f >> (i * 1)) & mask1B)
+
+	#define	maskSET2B(f,i,x)		(f &= ~(mask2B << (i * 2)) ; f |= ((x & mask2B) << (i * 2)))
+	#define	maskGET2B(f,i)			((f >> (i * 2)) & mask2B)
+
+	#define	maskSET4B(f,i,x)		(f &= ~(mask4B << (i * 4)) ; f |= ((x & mask4B) << (i * 4)))
+	#define	maskGET4B(f,i)			((f >> (i * 4)) & mask4B)
+#endif
+
 // ###################################### General Use Macros #######################################
 
 // https://stackoverflow.com/questions/3553296/c-sizeof-single-struct-member
