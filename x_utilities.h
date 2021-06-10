@@ -30,6 +30,7 @@ typedef struct ba_t {									// 1/2/4 bit field array
 
 // #################################################################################################
 
+void	vShowActivity(int i) ;
 void	vUtilPrintCharacterSet(void) ;
 
 uint64_t mac2int(uint8_t * hwaddr) ;

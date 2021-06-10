@@ -2,14 +2,13 @@
  * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
+#include	"hal_config.h"
 #include	"x_utilities.h"
-#include	<limits.h>
-#include	<string.h>
-
 #include 	"printfx.h"
 #include	"x_errors_events.h"
-#include	"hal_config.h"
 
+#include	<limits.h>
+#include	<string.h>
 
 #define	debugFLAG					0xC000
 
@@ -19,6 +18,16 @@
 #define	debugRESULT					(debugFLAG_GLOBAL & debugFLAG & 0x8000)
 
 // #################################################################################################
+
+void	vShowActivity(int i) {
+	static char caActivity[4] = { 0x30, 0x30, 0x30, 0x30 } ;
+	IF_myASSERT(debugPARAM, i < sizeof(caActivity)) ;
+	++caActivity[i] ;
+	if (caActivity[i] == 0x3A) {
+		caActivity[i] = 0x30 ;
+	}
+	PRINT("%s\r", caActivity) ;
+}
 
 void	vUtilPrintCharacterSet(void) {
 	uint8_t Buffer[256] ;
