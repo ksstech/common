@@ -88,10 +88,11 @@ extern "C" {
 
 // #################################### Global/public functions ####################################
 
-int32_t	xStdioBufLock(TickType_t Ticks) ;
-int32_t	xStdioBufUnLock(void) ;
-int32_t	xStdioBufPutC(int cChr) ;
-int32_t	xStdioBufGetC(void) ;
+int		xStdioBufLock(TickType_t Ticks) ;
+int		xStdioBufUnLock(void) ;
+int		xStdioBufPutC(int cChr) ;
+int		xStdioBufGetC(void) ;
+int		xStdioBufAvail(void) ;
 
 int		putcharx(int cChr) ;
 int		getcharx(void) ;

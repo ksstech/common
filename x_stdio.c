@@ -97,7 +97,7 @@ static uint32_t StdioBufFlag	= 0 ;
  * b) after a power failure when RTC data has been wiped; or
  * c) if the allocation of RTC slow RAM has changed and the location of the pointers are in a different place.
  */
-int32_t	xStdioBufInit(void) {
+int	xStdioBufInit(void) {
 	ubuf_t * psBuf	= &sRTCvars.sRTCbuf ;
 	if (psBuf->pBuf != sRTCvars.RTCbuf	||
 		psBuf->Size != rtcBUF_SIZE	||
@@ -116,18 +116,18 @@ int32_t	xStdioBufInit(void) {
 	return erSUCCESS ;
 }
 
-int32_t	xStdioBufLock(TickType_t Ticks) {
+int	xStdioBufLock(TickType_t Ticks) {
 	if (StdioBufFlag != stdioFLAG_INIT) {
 		xStdioBufInit() ;
 	}
 	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks) ;
 }
 
-int32_t	xStdioBufUnLock(void) {
+int	xStdioBufUnLock(void) {
 	return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux) ;
 }
 
-int32_t	xStdioBufPutC(int cChr) {
+int	xStdioBufPutC(int cChr) {
 	if (StdioBufFlag != stdioFLAG_INIT) {
 		xStdioBufInit() ;
 	}
@@ -146,7 +146,7 @@ int32_t	xStdioBufPutC(int cChr) {
 	return cChr ;
 }
 
-int32_t	xStdioBufGetC(void) {
+int	xStdioBufGetC(void) {
 	if (StdioBufFlag != stdioFLAG_INIT) {
 		xStdioBufInit() ;
 	}
@@ -164,6 +164,13 @@ int32_t	xStdioBufGetC(void) {
 		psBuf->IdxRD = psBuf->IdxWR = 0 ;				// reset both In & Out indexes to start
 	}
 	return cChr ;
+}
+
+int	xStdioBufAvail(void) {
+	if (StdioBufFlag != stdioFLAG_INIT) {
+		xStdioBufInit() ;
+	}
+	return xUBufAvail(&sRTCvars.sRTCbuf) ;
 }
 
 // ######################################## global functions #######################################
