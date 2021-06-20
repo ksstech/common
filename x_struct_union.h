@@ -27,11 +27,18 @@ typedef enum {
 typedef union __attribute__((packed)) ow_rom_u {
 	uint64_t	Value ;
 	uint8_t		HexChars[8] ;
-	struct {
-		uint8_t		Family ;
-		uint8_t		TagNum[6] ;
-		uint8_t		CRC ;
-	} ;
+	union {
+		struct {
+			uint8_t		Family ;
+			uint8_t		TagNum[6] ;
+			uint8_t		CRC ;
+		} ;
+		struct {
+			uint8_t		buf1	: 8 ;
+			uint64_t	Tagval	: 48 ;
+			uint8_t		buf2	: 8 ;
+		} ;
+	};
 } ow_rom_t ;
 DUMB_STATIC_ASSERT( sizeof(ow_rom_t) == 8) ;
 
