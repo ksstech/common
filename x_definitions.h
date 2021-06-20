@@ -399,26 +399,26 @@ enum {
 #define	mask3B						0x07
 #define	mask4B						0x0F
 
-#define	maskSET1B(f,i,x)			f &= ~(mask1B << (i * 1)) ; f |= ((x & mask1B) << (i * 1))
-#define	maskGET1B(f,i)				((f >> (i * 1)) & mask1B)
+#define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<(i*1);f&=~m;f|=(((s)x<<(i*1))&m);}
+#define	maskGET1B(f,i,s)			(((s)f>>(i*1))&(s)mask1B)
 
-#define	maskSET2B(f,i,x)			f &= ~(mask2B << (i * 2)) ; f |= ((x & mask2B) << (i * 2))
-#define	maskGET2B(f,i)				((f >> (i * 2)) & mask2B)
+#define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<(i*2);f&=~m;f|=(((s)x<<(i*2))&m);}
+#define	maskGET2B(f,i,s)			(((s)f>>(i*2))&(s)mask2B)
 
-#define	maskSET3B(f,i,x)			f &= ~(mask3B << (i * 3)) ; f |= ((x & mask3B) << (i * 3))
-#define	maskGET3B(f,i)				((f >> (i * 3)) & mask3B)
+#define	maskSET3B(f,i,x,s)			{s m=(s)mask3B<<(i*3);f&=~m;f|=(((s)x<<(i*3))&m);}
+#define	maskGET3B(f,i,s)			(((s)f>>(i*3))&(s)mask3B)
 
-#define	maskSET4B(f,i,x)			f &= ~(mask4B << (i * 4)) ; f |= ((x & mask4B) << (i * 4))
-#define	maskGET4B(f,i)				((f >> (i * 4)) & mask4B)
+#define	maskSET4B(f,i,x,s)			{s m=(s)mask4B<<(i*4);f&=~m;f|=(((s)x<<(i*4))&m);}
+#define	maskGET4B(f,i,s)			(((s)f>>(i*4))&(s)mask4B)
 
 // ###################################### General Use Macros #######################################
 
 // https://stackoverflow.com/questions/3553296/c-sizeof-single-struct-member
-#define SIZEOF_MEMBER(T,M)			sizeof(((T *)0)->M)
+#define SO_MEM(T,M)					sizeof(((T *)0)->M)
 // return the number of elements in an array
-#define	NUM_OF_MEMBERS(A)			(sizeof(A) / sizeof(A[0]))
+#define	NO_MEM(A)					(sizeof(A) / sizeof(A[0]))
 // return the number of elements in an array that is a member of a structure
-#define NUM_OF_MEM_ELEM(S,M)		(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0]))
+#define NO_ELEM(S,M)				(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0]))
 
 #define	UNUSED(x)					(void) (x) ;
 #define	STRING_NULL					(char *) "null"
