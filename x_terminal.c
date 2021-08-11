@@ -1,16 +1,12 @@
 /*
- * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
- *
+ * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
  * x_terminal.c
  */
 
 #include	"x_terminal.h"
-#include	"x_definitions.h"
-#include	"x_values_to_string.h"
-#include	"x_stdio.h"
-
 #include	"hal_config.h"
-#include	"hal_usart.h"
+#include	"x_stdio.h"
+#include	"x_utilities.h"
 
 // #################################### Global/public variables ####################################
 
@@ -23,57 +19,55 @@ terminfo_t	sTI = {
 
 // ################################# Terminal (VT100) support routines #############################
 
-void	vANSIputs(char * pStr) { while (*pStr) putcx(*pStr++, configSTDIO_UART_CHAN) ; }
+void vANSIputs(char * pStr) { while (*pStr) putcx(*pStr++, configSTDIO_UART_CHAN); }
 
-void	vANSIcursorsave(void)	{ vANSIputs("\033[s") ; }
-void	vANSIcursorback(void)	{ vANSIputs("\033[u") ; }
-void 	vANSIclear2EOL(void)	{ vANSIputs("\033[0K") ; }
-void 	vANSIclear2BOL(void)	{ vANSIputs("\033[1K") ; }
-void 	vANSIclearline(void)	{ vANSIputs("\033[2K") ; }
-void  	vANSIclearscreen(void)	{ vANSIputs("\033[2J") ; }
-void 	vANSIhome(void) 		{ vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
-void 	vANSIclearhome(void)	{ vANSIclearscreen() ; vANSIhome() ; }
+void vANSIcursorsave(void)	{ vANSIputs("\033[s") ; }
+void vANSIcursorback(void)	{ vANSIputs("\033[u") ; }
+void vANSIclear2EOL(void)	{ vANSIputs("\033[0K") ; }
+void vANSIclear2BOL(void)	{ vANSIputs("\033[1K") ; }
+void vANSIclearline(void)	{ vANSIputs("\033[2K") ; }
+void vANSIclearscreen(void)	{ vANSIputs("\033[2J") ; }
+void vANSIhome(void) 		{ vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
+void vANSIclearhome(void)	{ vANSIclearscreen() ; vANSIhome() ; }
 
-char *	pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
+char * pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
 	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
-		*pBuf++	= CHR_ESC ;
-		*pBuf++	= CHR_L_SQUARE ;
-		pBuf 	+= xU32ToDecStr(a1, pBuf) ;
+		*pBuf++	= 0x1B ;
+		*pBuf++	= '[' ;
+		pBuf += xU32ToDecStr(a1, pBuf) ;
 		if (a2) {
-			*pBuf++ = CHR_SEMICOLON ;
-			pBuf 	+= xU32ToDecStr(a2, pBuf) ;
+			*pBuf++ = ';' ;
+			pBuf += xU32ToDecStr(a2, pBuf) ;
 		}
-		*pBuf++ = CHR_m ;
+		*pBuf++ = 'm' ;
 	}
-	*pBuf = CHR_NUL ;									// terminate
+	*pBuf = 0 ;									// terminate
 	return pBuf ;
 }
 
-char *	pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) {
+char * pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) {
 	if (Row > 0 && Col > 0) {
-		*pBuf++	= CHR_ESC ;
-		*pBuf++	= CHR_L_SQUARE ;
+		*pBuf++	= 0x1B ;
+		*pBuf++	= '[' ;
 		pBuf	+= xU32ToDecStr(Row, pBuf) ;
-		*pBuf++	= CHR_SEMICOLON ;
+		*pBuf++	= ';' ;
 		pBuf	+= xU32ToDecStr(Col, pBuf) ;
-		*pBuf++ = CHR_H ;
+		*pBuf++	= 'H' ;
 		sTI.CurX = (Col %= sTI.MaxX) ;
 		sTI.CurY = (Row %= sTI.MaxY) ;
 	}
-	*pBuf	= CHR_NUL ;									// terminate
-	return pBuf ;
+	*pBuf = 0;
+	return pBuf;
 }
 
-void	vANSIattrib(uint8_t a1, uint8_t a2) {
-	char	Buffer[12] ;
-	if (pcANSIattrib(Buffer, a1, a2) != Buffer)
-		vANSIputs(Buffer) ;
+void vANSIattrib(uint8_t a1, uint8_t a2) {
+	char Buffer[sizeof("E[yyy;xxxH0")] ;
+	if (pcANSIattrib(Buffer, a1, a2) != Buffer) vANSIputs(Buffer) ;
 }
 
-void 	vANSIlocate(uint8_t Row, uint8_t Col) {
-	char	Buffer[16] ;								//	"E[yyy;xxxH0"
-	if (pcANSIlocate(Buffer, Row, Col) != Buffer)
-		vANSIputs(Buffer) ;
+void vANSIlocate(uint8_t Row, uint8_t Col) {
+	char Buffer[sizeof("E[yyy;xxxH0")];
+	if (pcANSIlocate(Buffer, Row, Col) != Buffer) vANSIputs(Buffer);
 }
 
 /**
@@ -81,12 +75,12 @@ void 	vANSIlocate(uint8_t Row, uint8_t Col) {
  * @param x		columns
  * @param y		rows
  */
-void	vTerminalSetSize(uint16_t x, uint16_t y) {
+void vTerminalSetSize(uint16_t x, uint16_t y) {
 	sTI.MaxX = x ? x : TERMINAL_DEFAULT_MAX_X ;
 	sTI.MaxY = y ? y : TERMINAL_DEFAULT_MAX_Y ;
 }
 
-void	vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32 ; }
+void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32 ; }
 
 #if 0
 // ###################################### terminal IO related ######################################
@@ -142,7 +136,7 @@ uint32_t	i ;
 
 // ##################################### functional tests ##########################################
 
-void	vANSItestcode(void) {
+void vANSItestcode(void) {
 	vANSIputs("Waiting to clear the screen...") ;
 
 	vTaskDelay(5000) ;

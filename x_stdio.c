@@ -1,28 +1,24 @@
 /*
  * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
- */
-
-/*
  * x_stdio.c
  */
 
-#include	"hal_config.h"
-#include	"hal_usart.h"
 #include	"hal_variables.h"
-
-#include	"FreeRTOS_Support.h"
-#include	"x_errors_events.h"
-#include 	"printfx.h"
 #include	"x_stdio.h"
-#include	"x_time.h"
+#include	"hal_usart.h"
+
 #include	"x_ubuf.h"
-#include	"x_definitions.h"
+#include 	"printfx.h"
+
+#include	"x_errors_events.h"
+#include	"x_time.h"
+
 #include	"esp_attr.h"
 
 #include	<string.h>
 #include	<sys/errno.h>
-#include	<sys/types.h>
 #include	<sys/stat.h>
+#include	<sys/types.h>
 
 // ############################################### Macros ##########################################
 
@@ -83,14 +79,14 @@
 
 // ###################################### Private variables ########################################
 
-static uint32_t StdioBufFlag	= 0 ;
+static uint32_t StdioBufFlag		= 0 ;
 
 // ###################################### Global variables #########################################
 
 
 // ################################ RTC Slow RAM buffer support ####################################
 
-#define		stdioFLAG_INIT		0x12345678
+#define	stdioFLAG_INIT				0x12345678
 
 /* This code should ONLY run under very specific conditions being:
  * a) the first time on a new mote; or
@@ -99,11 +95,11 @@ static uint32_t StdioBufFlag	= 0 ;
  */
 int	xStdioBufInit(void) {
 	ubuf_t * psBuf	= &sRTCvars.sRTCbuf ;
-	if (psBuf->pBuf != sRTCvars.RTCbuf	||
-		psBuf->Size != rtcBUF_SIZE	||
-		psBuf->Used > rtcBUF_SIZE	||
-		psBuf->IdxWR >= rtcBUF_SIZE	||
-		psBuf->IdxRD >= rtcBUF_SIZE) {					// RTC buffer structure NOT valid.
+	if (psBuf->pBuf != sRTCvars.RTCbuf
+	||	psBuf->Size != rtcBUF_SIZE
+	||	psBuf->Used > rtcBUF_SIZE
+	||	psBuf->IdxWR >= rtcBUF_SIZE
+	||	psBuf->IdxRD >= rtcBUF_SIZE) {					// RTC buffer structure NOT valid.
 		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
 		psBuf->pBuf	= sRTCvars.RTCbuf ;
 		psBuf->Size	= rtcBUF_SIZE ;
@@ -117,23 +113,15 @@ int	xStdioBufInit(void) {
 }
 
 int	xStdioBufLock(TickType_t Ticks) {
-	if (StdioBufFlag != stdioFLAG_INIT) {
-		xStdioBufInit() ;
-	}
+	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit();
 	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks) ;
 }
 
-int	xStdioBufUnLock(void) {
-	return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux) ;
-}
+int	xStdioBufUnLock(void) { return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux); }
 
 int	xStdioBufPutC(int cChr) {
-	if (StdioBufFlag != stdioFLAG_INIT) {
-		xStdioBufInit() ;
-	}
-	if (cChr == CHR_LF) {
-		xStdioBufPutC(CHR_CR) ;
-	}
+	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit() ;
+	if (cChr == '\n') xStdioBufPutC('\r') ;
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == psBuf->Size) {					// buffer full ?
 		++psBuf->IdxRD ;								// discard oldest (next to be read) char
@@ -147,9 +135,7 @@ int	xStdioBufPutC(int cChr) {
 }
 
 int	xStdioBufGetC(void) {
-	if (StdioBufFlag != stdioFLAG_INIT) {
-		xStdioBufInit() ;
-	}
+	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit();
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == 0) {
 		errno = EAGAIN ;
@@ -158,18 +144,14 @@ int	xStdioBufGetC(void) {
 		errno = ENOMEM ;
 		return EOF ;
 	}
-	int32_t cChr = *(psBuf->pBuf + psBuf->IdxRD++) ;
+	int cChr = *(psBuf->pBuf + psBuf->IdxRD++) ;
 	psBuf->IdxRD %= psBuf->Size ;
-	if (--psBuf->Used == 0)	{							// buffer now empty
-		psBuf->IdxRD = psBuf->IdxWR = 0 ;				// reset both In & Out indexes to start
-	}
+	if (--psBuf->Used == 0)	psBuf->IdxRD = psBuf->IdxWR = 0 ;	// empty, reset In & Out indexes
 	return cChr ;
 }
 
 int	xStdioBufAvail(void) {
-	if (StdioBufFlag != stdioFLAG_INIT) {
-		xStdioBufInit() ;
-	}
+	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit();
 	return xUBufAvail(&sRTCvars.sRTCbuf) ;
 }
 
@@ -181,10 +163,8 @@ int	xStdioBufAvail(void) {
  * @param[in]	cChr - char to output
  * @return		if successful, character sent, else EOF
  */
-int		putcharx(int cChr) {
-	if (cChr == CHR_LF) {
-		putcharx(CHR_CR) ;
-	}
+int	putcharx(int cChr) {
+	if (cChr == '\n') putcharx(CHR_CR);
 #if		(retargetSTDOUT == retargetUART)
 	while(!halUART_TxFifoSpace(configSTDIO_UART_CHAN)) ;
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
@@ -206,47 +186,45 @@ int		putcharx(int cChr) {
 #endif
 }
 
-int		getcharx(void) {
+int	getcharx(void) {
 #if		(retargetSTDIN == retargetUART)
-	return halUART_GetChar(configSTDIO_UART_CHAN) ;
-
+	return halUART_GetChar(configSTDIO_UART_CHAN);
 #elif	(retargetSTDIN == retargetITM)
-	return halITM_GetChar() ;
-
+	return halITM_GetChar();
 #elif	(retargetSTDIN == retargetRTT)
-	return SEGGER_RTT_Read(0u, 1u) ;
-]
+	return SEGGER_RTT_Read(0u, 1u);
 #elif	(retargetSTDIN == retargetTNET)
-	return xTelnetGetChar() ;
-
+	return xTelnetGetChar();
 #else
-
 	return EOF ;
 #endif
 }
 
-int		putcx(int cChr, int ud) {
-	if (ud == configSTDIO_UART_CHAN) {
+int	putcx(int cChr, int ud) {
 #if		(CONFIG_IRMACS_UART_REDIR == 1)
-		return xStdioBufPutC(cChr) ;
+	if (ud == configSTDIO_UART_CHAN) return xStdioBufPutC(cChr) ;
 #else
-		return putcharx(cChr) ;
+	if (ud == configSTDIO_UART_CHAN) return putcharx(cChr) ;
 #endif
-	}
 	while(!halUART_TxFifoSpace(ud)) ;
 	return halUART_PutChar(cChr, ud) ;
 }
 
-int		getcx(int ud) {
-	if (ud == configSTDIO_UART_CHAN)
-		return getcharx() ;
+int	getcx(int ud) {
+	if (ud == configSTDIO_UART_CHAN) return getcharx() ;
 	return halUART_GetChar((uart_port_t) ud) ;
 }
 
-int		putsx(char * pStr, int ud) {
-	int32_t iRV = 0 ;
-	while (*pStr) { putcx(*pStr++, ud) ; ++iRV ; }
-	if (iRV) { putcx(CHR_LF, ud) ; ++iRV ; }
+int	putsx(char * pStr, int ud) {
+	int iRV = 0;
+	while (*pStr) {
+		putcx(*pStr++, ud);
+		++iRV;
+	}
+	if (iRV) {
+		putcx('\n', ud);
+		++iRV;
+	}
 	return iRV ;
 }
 
@@ -463,7 +441,7 @@ int 	_tmpnam(char * name, int sig, unsigned maxlen) { return 0 ; /* fail, not su
 
 #endif
 
-void	vStdioDiagsReportFileInfo(const char * pName, struct stat *psStat) {
+void vStdioDiagsReportFileInfo(const char * pName, struct stat *psStat) {
 	printfx(" %s : dev=%d  ino=%u  mode=%0x  nlink=%u  uid=%d  gid=%u  rdev=%d  size=%d", pName, psStat->st_dev,
 		psStat->st_ino, psStat->st_mode, psStat->st_nlink, psStat->st_uid, psStat->st_gid, psStat->st_rdev, psStat->st_size) ;
 	printfx("  aT=%R  mT=%R  cT=%R  bsize=%d  blocks=%d",
@@ -478,9 +456,9 @@ void	vStdioDiagsReportFileInfo(const char * pName, struct stat *psStat) {
 		S_ISCHR(psStat->st_mode) ? "" : "non") ;
 }
 
-void	vStdioDiags(void) {
+void vStdioDiags(void) {
 	struct stat fs ;
-	int32_t iRV = fstat(fileno(stdin), &fs) ;
+	int iRV = fstat(fileno(stdin), &fs) ;
 	IF_myASSERT(debugRESULT, iRV == 0) ;
 	vStdioDiagsReportFileInfo("stdin", &fs) ;
 

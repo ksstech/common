@@ -1,10 +1,10 @@
 /*
- * x_struct_union.h
+ * struct_union.h
  */
 
 #pragma	once
 
-#include	"x_time.h"						// time stdint x_definitions
+#include	"x_time.h"				// stdint time x_definitions
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,12 +28,12 @@ typedef union __attribute__((packed)) ow_rom_u {
 	uint64_t	Value ;
 	uint8_t		HexChars[8] ;
 	union {
-		struct {
+		struct __attribute__((packed)) {
 			uint8_t		Family ;
 			uint8_t		TagNum[6] ;
 			uint8_t		CRC ;
 		} ;
-		struct {
+		struct __attribute__((packed)) {
 			uint8_t		buf1	: 8 ;
 			uint64_t	Tagval	: 48 ;
 			uint8_t		buf2	: 8 ;
@@ -42,7 +42,7 @@ typedef union __attribute__((packed)) ow_rom_u {
 } ow_rom_t ;
 DUMB_STATIC_ASSERT( sizeof(ow_rom_t) == 8) ;
 
-typedef union mac_addr_t {
+typedef union __attribute__((packed)) mac_addr_t {
 	struct __attribute__((packed)) {
 		uint8_t		str6hex[6] ;
 		uint8_t		filler1[2] ;
@@ -54,7 +54,7 @@ typedef union mac_addr_t {
 } mac_addr_t ;
 DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8) ;
 
-typedef	union xVer_u {									// Version numbers
+typedef	union __attribute__((packed)) xVer_u {			// Version numbers
 	struct __attribute__((packed)) {
 		uint8_t		ver_rev ;			// Revision of Sub
 		uint8_t		ver_sub ;			// Sub version
@@ -139,6 +139,15 @@ DUMB_STATIC_ASSERT(sizeof(px_t) == __SIZEOF_POINTER__) ;
 
 // ################################## Structure pointer container ##################################
 
+struct x32mma_t ;
+struct x32mmab_t ;
+struct x32stat_t ;
+struct pcnt_t ;
+struct TSZ_t ;
+struct cli_t ;
+struct vt_enum_t ;
+union ow_rom_t ;
+
 typedef union ps_t {
 	struct x32mma_t *	pMMA ;
 	struct x32mmab_t *	pMMAB ;
@@ -187,8 +196,8 @@ enum {													// {flags}{counter}
 	mfbRT		= 1 << 31,								// prefix RunTime
 } ;
 
-typedef	union flagmask_u {
-	struct {											// Generic structure for init
+typedef	union {
+	struct __attribute__((packed)) {					// Generic structure for init
 		uint32_t	m		: 20 ;
 		uint8_t		l		: 1 ;
 		uint8_t		k		: 1 ;
@@ -203,7 +212,7 @@ typedef	union flagmask_u {
 		uint8_t		b		: 1 ;
 		uint8_t		a		: 1 ;
 	} ;
-	struct {											// Printing control
+	struct __attribute__((packed)) {					// Printing control
 		uint32_t	uCount	: 20 ;
 		uint8_t		bCount	: 1 ;
 		uint8_t		bColor	: 1 ;
@@ -224,9 +233,6 @@ DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
 
 #define	makeMASKFLAG(A,B,C,D,E,F,G,H,I,J,K,L,M) (flagmask_t) \
 	{ .a=A, .b=B, .c=C, .d=D, .e=E, .f=F, .g=G, .h=H, .i=I, .j=J, .k=K, .l=L, .m=M }
-
-
-// ###################################### Public functions #########################################
 
 #ifdef __cplusplus
 }

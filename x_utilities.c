@@ -3,11 +3,11 @@
  */
 
 #include	"hal_config.h"
-#include	"x_utilities.h"
 #include 	"printfx.h"
+#include	"x_utilities.h"
 #include	"x_errors_events.h"
 
-#include	<limits.h>
+#include	<stdlib.h>
 #include	<string.h>
 
 #define	debugFLAG					0xC000
@@ -19,21 +19,17 @@
 
 // #################################################################################################
 
-void	vShowActivity(int i) {
+void vShowActivity(int i) {
 	static char caActivity[4] = { 0x30, 0x30, 0x30, 0x30 } ;
 	IF_myASSERT(debugPARAM, i < sizeof(caActivity)) ;
 	++caActivity[i] ;
-	if (caActivity[i] == 0x3A) {
-		caActivity[i] = 0x30 ;
-	}
+	if (caActivity[i] == 0x3A) caActivity[i] = 0x30 ;
 	PRINT("%s\r", caActivity) ;
 }
 
-void	vUtilPrintCharacterSet(void) {
+void vUtilPrintCharacterSet(void) {
 	uint8_t Buffer[256] ;
-	for (int32_t cChr = 0; cChr < sizeof(Buffer); cChr++) {
-		Buffer[cChr] = cChr ;
-	}
+	for (int cChr = 0; cChr < sizeof(Buffer); cChr++) Buffer[cChr] = cChr;
 	printfx("%!'+B", sizeof(Buffer), Buffer) ;
 }
 
@@ -44,9 +40,7 @@ void	vUtilPrintCharacterSet(void) {
  */
 uint64_t mac2int(uint8_t * hwaddr) {
 	uint64_t iRV = 0 ;
-	for (int8_t i = 5; i >= 0; --i) {
-		iRV |= (uint64_t) *hwaddr++ << (CHAR_BIT * i);
-	}
+	for (int8_t i = 5; i >= 0; --i) iRV |= (uint64_t) *hwaddr++ << (BITS_IN_BYTE * i);
 	return iRV;
 }
 
@@ -55,124 +49,83 @@ uint64_t mac2int(uint8_t * hwaddr) {
  * @param[in] mac uint64_t mac address
  * @param[out] hwaddr hex mac address
  */
-void 	int2mac(uint64_t mac, uint8_t * hwaddr) {
-	for (int8_t i = 5; i >= 0; --i) {
-		*hwaddr++ = mac >> (CHAR_BIT * i);
-	}
+void int2mac(uint64_t mac, uint8_t * hwaddr) {
+	for (int8_t i = 5; i >= 0; --i) *hwaddr++ = mac >> (BITS_IN_BYTE * i);
 }
 
-void	MemDump(uint8_t ** pMemAddr, int32_t cChr, size_t Size) {
+void MemDump(uint8_t ** pMemAddr, int32_t cChr, size_t Size) {
 	printfx("MemDump:\n%#'+B", Size, *pMemAddr) ;
-	*pMemAddr = (cChr == CHR_PLUS) ? (*pMemAddr + Size) : (cChr == CHR_MINUS) ? (*pMemAddr - Size) : *pMemAddr ;
+	*pMemAddr = (cChr == '+') ? (*pMemAddr + Size) : (cChr == '-') ? (*pMemAddr - Size) : *pMemAddr ;
 }
 
-int32_t	xDigitsInI32(int32_t I32, bool grouping) {
+int	xDigitsInI32(int32_t I32, bool grouping) {
 	int x ;
 	if (I32 == INT32_MIN) {
 		x = 10 + 1 ;
-	} else {
-		// if value is negative, and '-' counts as a digit....
-		if (I32 < 0)
-			return xDigitsInI32(-I32, grouping) + 1 ;
+	} else {	// if value is negative, and '-' counts as a digit....
+		if (I32 < 0) return xDigitsInI32(-I32, grouping) + 1 ;
 		if (I32 >= 10000) {
 			if (I32 >= 10000000) {
-		        if (I32 >= 100000000) {
-	                x = (I32 >= 1000000000)	? 10 : 9 ;
-	            }
-		        x = 8 ;
+		        if (I32 >= 100000000) x = (I32 >= 1000000000) ? 10 : 9 ;
+		        else x = 8 ;
+			} else {
+				if (I32 >= 100000) x = (I32 >= 1000000) ? 7 : 6 ;
+				else x = 5 ;
 			}
-			if (I32 >= 100000) {
-				x = (I32 >= 1000000) ? 7 : 6 ;
-			}
-	        x = 5 ;
+	    } else {
+		    if (I32 >= 100) x = (I32 >= 1000) ? 4 : 3 ;
+		    else x = (I32 >= 10) ? 2 : 1 ;
 	    }
-	    if (I32 >= 100) {
-	        x = (I32 >= 1000) ? 4 : 3 ;
-	    }
-	    x = (I32 >= 10) ? 2 : 1 ;
 	}
 	return x + ((x - 1) / 3) ;
 }
 
-int32_t	xDigitsInU32(uint32_t U32, bool grouping) {
-#if 1
-	int32_t x ;
+int	xDigitsInU32(uint32_t U32, bool grouping) {
+	int x ;
 	if (U32 >= 10000) {
 		if (U32 >= 10000000) {
-	        if (U32 >= 100000000) {
-                x = (U32 >= 1000000000)? 10 : 9 ;
-            }
-	        x = 8 ;
+	        if (U32 >= 100000000) x = (U32 >= 1000000000)? 10 : 9 ;
+	        else x = 8 ;
+		} else {
+			if (U32 >= 100000) x = (U32 >= 1000000) ? 7 : 6 ;
+			else x = 5 ;
 		}
-		if (U32 >= 100000) {
-			x = (U32 >= 1000000) ? 7 : 6 ;
-		}
-        x = 5 ;
+    } else {
+        if (U32 >= 100) x = (U32 >= 1000) ? 4 : 3 ;
+        else x = (U32 >= 10) ? 2 : 1 ;
     }
-    if (U32 >= 100) {
-        x = (U32 >= 1000) ? 4 : 3 ;
-    }
-    x = U32 >= 10 ? 2 : 1 ;
     return x + ((x - 1) / 3) ;
-
-#else	// Iterative
-	int32_t x = 0 ;
-	while (U32 != 0) {
-		U32 /= 10 ;
-		++x ;
-	}
-	return x + ((x - 1) / 3) ;
-#endif
 }
 
-int32_t	xDigitsInU64(uint64_t U64, bool grouping) {
-#if 1
+int	xDigitsInU64(uint64_t U64, bool grouping) {
 	int x ;
-	if (U64 <= UINT32_MAX) {
-		return xDigitsInU32((uint32_t) U64, grouping) ;
-	}
+	if (U64 <= UINT32_MAX) return xDigitsInU32((uint32_t) U64, grouping) ;
 	if (U64 >= 100000000000000ULL) {
 		if (U64 >= 100000000000000000ULL) {
-			if (U64 >= 1000000000000000000ULL) {
-				x = (U64 >= 10000000000000000000ULL) ? 20  : 19 ;
-			}
-			x = 18 ;
+			if (U64 >= 1000000000000000000ULL) x = (U64 >= 10000000000000000000ULL) ? 20  : 19 ;
+			else x = 18 ;
+		} else {
+			if (U64 >= 1000000000000000ULL) x = (U64 >= 10000000000000000ULL) ? 17 : 16 ;
+			else x = 15 ;
 		}
-		if (U64 >= 1000000000000000ULL) {
-			x = (U64 >= 10000000000000000ULL) ? 17 : 16 ;
-		}
-		x = 15 ;
+	} else {
+		if (U64 >= 1000000000000ULL) x = (U64 > 10000000000000ULL) ? 14 : 13 ;
+		else x = (U64 >= 100000000000ULL) ? 12 : 11 ;
 	}
-	if (U64 >= 1000000000000ULL) {
-		x = (U64 > 10000000000000ULL) ? 14 : 13 ;
-	}
-	x = (U64 >= 100000000000ULL) ? 12 : 11 ;
 	return x + ((x - 1) / 3) ;
-#else	// Iterative
-	int32_t x = 0 ;
-	while (U64 != 0) {
-		U64 /= 10 ;
-		++x ;
-	}
-    return x + ((x - 1) / 3) ;
-#endif
 }
 
 // https://stackoverflow.com/questions/7399069/how-to-generate-a-guid-in-c#7399348
-void	xGenerateUUID(char * pBuf) {
+void xGenerateUUID(char * pBuf) {
 // V4 template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx" ;
 	char szHex[] = "0123456789ABCDEF" ;
 	srand(clock()) ;
 	for (int t = 0; t < 36; ++t, ++pBuf) {
 	    int r = rand() % 16;
-	    if (t == 8 || t == 13 || t == 18 || t == 23)
-	    	*pBuf = CHR_MINUS ;
-	    else if (t == 14)
-	    	*pBuf = CHR_4 ;
-	    else if (t == 19)
-	    	*pBuf = szHex[(r & 0x03) | 0x08] ;
-	    else
-	    	*pBuf = szHex[r] ;
+	    if (t == 8 || t == 13 || t == 18 || t == 23) *pBuf = '-' ;
+	    else if (t == 14) *pBuf = '4' ;
+	    else if (t == 19) *pBuf = szHex[(r & 0x03) | 0x08] ;
+	    else *pBuf = szHex[r] ;
 	}
 	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
 }
@@ -185,41 +138,39 @@ const char charset[] = {
 	'n','o','p','q','r','s','t','u','v','w','x','y','z',
 } ;
 
-void	vBuildRandomSXX(uint8_t * pu8, int32_t len) {
+void vBuildRandomSXX(uint8_t * pu8, int len) {
 	if (len && pu8) {
 		for (int n = 0; n < len; ++n) pu8[n] = charset[rand() % sizeof(charset)] ;
 	}
 }
 
-void	vBuildRandomStr(uint8_t * pu8, int32_t len) {
+void vBuildRandomStr(uint8_t * pu8, int32_t len) {
 	if (len && pu8) {
 		vBuildRandomSXX(pu8, --len) ;
 		pu8[len] = CHR_NUL ;
 	}
 }
 
-x8_t	xBuildRandomX8(void) {
+x8_t xBuildRandomX8(void) {
 	x8_t X8 ;
 	X8.u8 = rand() & 0xFF ;
 	return X8 ;
 }
 
-x16_t	xBuildRandomX16(void) {
+x16_t xBuildRandomX16(void) {
 	x16_t X16 ;
 	X16.u16 = rand() & 0xFFFF ;
 	return X16 ;
 }
 
-x32_t	xBuildRandomX32(void) {
+x32_t xBuildRandomX32(void) {
 	x32_t	X32 ;
 	X32.i32 = rand() ;
-	if (rand() % 2) {
-		X32.i32 *= -1 ;									// ensure some (-) values
-	}
+	if (rand() % 2) X32.i32 *= -1 ;						// ensure some (-) values
 	return X32 ;
 }
 
-x64_t	xBuildRandomX64(void) {
+x64_t xBuildRandomX64(void) {
 	x64_t X64 ;
 	X64.x32[0] = xBuildRandomX32() ;
 	X64.x32[1] = xBuildRandomX32() ;
@@ -238,40 +189,55 @@ uint64_t u64pow(uint32_t base, uint32_t exp) {
 	return res ;
 }
 
-int32_t u32Trailing0(uint32_t U32) {
-	int32_t iRV = 0 ;
+int u32Trailing0(uint32_t U32) {
+	int iRV = 0 ;
 	while (U32 > 0) {
-		if (U32 % 10) {
-			break ;
-		}
+		if (U32 % 10) break;
 		++iRV ;
 		U32 /= 10 ;
 	}
 	return iRV ;
 }
 
-int32_t u64Trailing0(uint64_t U64) {
-	int32_t iRV = 0 ;
+int u64Trailing0(uint64_t U64) {
+	int iRV = 0 ;
 	while (U64 > 0) {
-		if (U64 % 10) {
-			break ;
-		}
+		if (U64 % 10) break ;
 		++iRV ;
 		U64 /= 10 ;
 	}
 	return iRV ;
 }
 
+/* ################################ Decimal number conversions ################################## */
+
+int	xU32ToDecStr(uint32_t Value, char * pBuf) {
+	int	Len = 0 ;
+	if (Value) {
+		uint32_t	iTemp, Div = 1000000000UL ;
+		do {
+			iTemp = Value / Div ;
+			if (iTemp != 0 || Len > 0) {
+				*pBuf++	= iTemp + '0' ;
+				Value 	-= iTemp * Div ;
+				++Len ;
+			}
+			Div /= 10 ;
+		} while (Div) ;
+	} else {
+		*pBuf++ = '0' ;									// answer is single '0'
+		++Len ;
+	}
+	*pBuf	= 0 ;										// terminate
+	return Len ;
+}
+
 // ################################### 1/2/4 bit field array support ###############################
 
-ba_t *	pvBitArrayCreate(size_t Count, size_t Size) {
-	if (Size != 1 || Size != 2 || Size != 4) {			// check for valid size
-		return pvFAILURE ;								// complain
-	}
+ba_t *pvBitArrayCreate(size_t Count, size_t Size) {
+	if (Size != 1 || Size != 2 || Size != 4) return pvFAILURE;
 	size_t szBA = Count * Size ;						// size in total # of bits
-	if (szBA & 0x00000007) {							// not on a byte boundary
-		return pvFAILURE ;								// complain
-	}
+	if (szBA & 0x00000007) return pvFAILURE;			// not on a byte boundary
 	szBA >>= 3 ;										// size in bytes
 	ba_t * psBA = malloc(sizeof(ba_t) + szBA) ;
 	psBA->ByteSize	= szBA ;
@@ -284,16 +250,14 @@ ba_t *	pvBitArrayCreate(size_t Count, size_t Size) {
 	return psBA ;
 }
 
-void	xBitArrayDelete(ba_t * psBA) {
+void xBitArrayDelete(ba_t * psBA) {
 	IF_myASSERT(debugPARAM, halCONFIG_inSRAM(psBA)) ;
 	memset(psBA, 0, sizeof(ba_t) + psBA->ByteSize) ;
 	free(psBA) ;
 }
 
-int32_t	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
-	if (baI >= psBA->Count || baV > psBA->Mask) {
-		return erFAILURE ;
-	}
+int	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
+	if (baI >= psBA->Count || baV > psBA->Mask) return erFAILURE;
 	uint8_t	Xidx = baI / psBA->Fields ;
 	uint8_t	Sidx = baI % psBA->Fields ;
 	uint8_t Mask = psBA->Mask << Sidx ;
@@ -302,10 +266,8 @@ int32_t	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
 	return erSUCCESS ;
 }
 
-int32_t	xBitArrayGet(ba_t * psBA, int32_t baI) {
-	if (baI >= psBA->Count) {
-		return erFAILURE ;
-	}
+int	xBitArrayGet(ba_t * psBA, int32_t baI) {
+	if (baI >= psBA->Count) return erFAILURE;
 	uint8_t	Xidx = baI / psBA->Fields ;
 	uint8_t	Sidx = baI % psBA->Fields ;
 	uint8_t Mask = psBA->Mask << Sidx ;

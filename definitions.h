@@ -1,116 +1,12 @@
 /*
- * x_definitions.h
+ * definitions.h
  */
 
 #pragma once
 
 #ifdef __cplusplus
-	extern "C" {
+extern "C" {
 #endif
-
-// ########################################### Bit masks ##########################################
-
-enum {													// 32bit bit masks
-    B00MASK = 0x00000001,
-    B01MASK = 0x00000002,
-    B02MASK = 0x00000004,
-    B03MASK = 0x00000008,
-    B04MASK = 0x00000010,
-    B05MASK = 0x00000020,
-    B06MASK = 0x00000040,
-    B07MASK = 0x00000080,
-    B08MASK = 0x00000100,
-    B09MASK = 0x00000200,
-    B10MASK = 0x00000400,
-    B11MASK = 0x00000800,
-    B12MASK = 0x00001000,
-    B13MASK = 0x00002000,
-    B14MASK = 0x00004000,
-    B15MASK = 0x00008000,
-    B16MASK = 0x00010000,
-    B17MASK = 0x00020000,
-    B18MASK = 0x00040000,
-    B19MASK = 0x00080000,
-    B20MASK = 0x00100000,
-    B21MASK = 0x00200000,
-    B22MASK = 0x00400000,
-    B23MASK = 0x00800000,
-    B24MASK = 0x01000000,
-    B25MASK = 0x02000000,
-    B26MASK = 0x04000000,
-    B27MASK = 0x08000000,
-    B28MASK = 0x10000000,
-    B29MASK = 0x20000000,
-    B30MASK = 0x40000000,
-    B31MASK = 0x80000000,
-} ;
-
-enum {													// 64bit bit masks
-	BIT00MASK = (1ULL << 0),
-    BIT01MASK = (1ULL << 1),
-    BIT02MASK = (1ULL << 2),
-    BIT03MASK = (1ULL << 3),
-    BIT04MASK = (1ULL << 4),
-    BIT05MASK = (1ULL << 5),
-    BIT06MASK = (1ULL << 6),
-    BIT07MASK = (1ULL << 7),
-  	BIT08MASK = (1ULL << 8),
-    BIT09MASK = (1ULL << 9),
-	BIT10MASK = (1ULL << 10),
-    BIT11MASK = (1ULL << 11),
-    BIT12MASK = (1ULL << 12),
-    BIT13MASK = (1ULL << 13),
-    BIT14MASK = (1ULL << 14),
-    BIT15MASK = (1ULL << 15),
-    BIT16MASK = (1ULL << 16),
-    BIT17MASK = (1ULL << 17),
-  	BIT18MASK = (1ULL << 18),
-    BIT19MASK = (1ULL << 19),
-	BIT20MASK = (1ULL << 20),
-    BIT21MASK = (1ULL << 21),
-    BIT22MASK = (1ULL << 22),
-    BIT23MASK = (1ULL << 23),
-    BIT24MASK = (1ULL << 24),
-    BIT25MASK = (1ULL << 25),
-    BIT26MASK = (1ULL << 26),
-    BIT27MASK = (1ULL << 27),
-  	BIT28MASK = (1ULL << 28),
-    BIT29MASK = (1ULL << 29),
-	BIT30MASK = (1ULL << 30),
-    BIT31MASK = (1ULL << 31),
-    BIT32MASK = (1ULL << 32),
-    BIT33MASK = (1ULL << 33),
-    BIT34MASK = (1ULL << 34),
-    BIT35MASK = (1ULL << 35),
-    BIT36MASK = (1ULL << 36),
-    BIT37MASK = (1ULL << 37),
-  	BIT38MASK = (1ULL << 38),
-    BIT39MASK = (1ULL << 39),
-	BIT40MASK = (1ULL << 40),
-    BIT41MASK = (1ULL << 41),
-    BIT42MASK = (1ULL << 42),
-    BIT43MASK = (1ULL << 43),
-    BIT44MASK = (1ULL << 44),
-    BIT45MASK = (1ULL << 45),
-    BIT46MASK = (1ULL << 46),
-    BIT47MASK = (1ULL << 47),
-  	BIT48MASK = (1ULL << 48),
-    BIT49MASK = (1ULL << 49),
-	BIT50MASK = (1ULL << 50),
-    BIT51MASK = (1ULL << 51),
-    BIT52MASK = (1ULL << 52),
-    BIT53MASK = (1ULL << 53),
-    BIT54MASK = (1ULL << 54),
-    BIT55MASK = (1ULL << 55),
-    BIT56MASK = (1ULL << 56),
-    BIT57MASK = (1ULL << 57),
-  	BIT58MASK = (1ULL << 58),
-    BIT59MASK = (1ULL << 59),
-	BIT60MASK = (1ULL << 60),
-    BIT61MASK = (1ULL << 61),
-    BIT62MASK = (1ULL << 62),
-    BIT63MASK = (1ULL << 63),
-} ;
 
 // ####################################### ASCII char set ##########################################
 
@@ -245,48 +141,6 @@ enum {													// 64bit bit masks
 #define		CHR_TILDE						0x7E		// '~'
 #define		CHR_DEL							0x7F		// c-8 = non printing !!!!
 
-/*
- * ANSI standard terminal colors
- */
-enum {
-	attrRESET			= 0,
-	attrBRIGHT			= 1,
-	attrDIM				= 2,
-	atrITALICS			= 3,
-	attrULINE_ON		= 4,
-	attrSLOW_BLINK		= 5,
-	attrRAPID_BLINK		= 6,
-	attrREV_ON			= 7,
-	attrHIDDEN			= 8,
-	attrSTRIKE_ON		= 9,
-
-	attrULINE_OFF		= 24,
-	attrREV_OF			= 27,
-	attrREVEAL			= 28,
-	attrSTRIKE_OFF		= 29,
-
-// foreground colors
-	colourFOREGND		= 30,
-	colourFG_BLACK 		= colourFOREGND,
-	colourFG_RED,
-	colourFG_GREEN,
-	colourFG_YELLOW,
-	colourFG_BLUE,
-	colourFG_MAGENTA,
-	colourFG_CYAN,
-	colourFG_WHITE,										// 30 + 7 = 37
-// background colors
-	colourBACKGND		= 40,
-	colourBG_BLACK		= colourBACKGND,
-	colourBG_RED,
-	colourBG_GREEN,
-	colourBG_YELLOW,
-	colourBG_BLUE,
-	colourBG_MAGENTA,
-	colourBG_CYAN,
-	colourBG_WHITE,										// 40 + 7 = 47
-} ;
-
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
 #define MICROS_IN_MILLISEC				1000
@@ -369,9 +223,6 @@ enum {
 								 x==100000000 || x==1000000000 || x==10000000000 || x==100000000000) ? 1 : 0)
 
 #define	SWAP(v1, v2, t)					{t vx = v1 ; v1 = v2 ; v2 = vx ; }
-
-#define	TABLE_ENTRY_INT(x,y,z)		{ .iVal1=x , .iVal2=y , .pMess=z } ,
-#define	TABLE_ENTRY(x,y,z)			{ .uVal1=x , .uVal2=y , .pMess=z },
 
 #define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
 #define	IF_EXEC_0(T,F)				if (T) { do { F(); } while (0); }
@@ -511,6 +362,7 @@ typedef	const unsigned char * pcu8_t ;
 
 // #################################################################################################
 
+#define	BITS_IN_BYTE				8
 #define	MAINS_FREQ_HZ				50
 #define	MAINS_SUPPLY_V				230.0
 
@@ -525,6 +377,153 @@ typedef	const unsigned char * pcu8_t ;
 // ############################# common complex data types/ structures #############################
 
 #define DUMB_STATIC_ASSERT(test) typedef char assertion_on_mystruct[( !!(test) )*2-1 ]
+
+// ########################################### Bit masks ##########################################
+
+enum {								// 32bit bit masks
+    B00MASK = 0x00000001,
+    B01MASK = 0x00000002,
+    B02MASK = 0x00000004,
+    B03MASK = 0x00000008,
+    B04MASK = 0x00000010,
+    B05MASK = 0x00000020,
+    B06MASK = 0x00000040,
+    B07MASK = 0x00000080,
+    B08MASK = 0x00000100,
+    B09MASK = 0x00000200,
+    B10MASK = 0x00000400,
+    B11MASK = 0x00000800,
+    B12MASK = 0x00001000,
+    B13MASK = 0x00002000,
+    B14MASK = 0x00004000,
+    B15MASK = 0x00008000,
+    B16MASK = 0x00010000,
+    B17MASK = 0x00020000,
+    B18MASK = 0x00040000,
+    B19MASK = 0x00080000,
+    B20MASK = 0x00100000,
+    B21MASK = 0x00200000,
+    B22MASK = 0x00400000,
+    B23MASK = 0x00800000,
+    B24MASK = 0x01000000,
+    B25MASK = 0x02000000,
+    B26MASK = 0x04000000,
+    B27MASK = 0x08000000,
+    B28MASK = 0x10000000,
+    B29MASK = 0x20000000,
+    B30MASK = 0x40000000,
+    B31MASK = 0x80000000,
+} ;
+
+enum {								// 64bit bit masks
+	BIT00MASK = (1ULL << 0),
+    BIT01MASK = (1ULL << 1),
+    BIT02MASK = (1ULL << 2),
+    BIT03MASK = (1ULL << 3),
+    BIT04MASK = (1ULL << 4),
+    BIT05MASK = (1ULL << 5),
+    BIT06MASK = (1ULL << 6),
+    BIT07MASK = (1ULL << 7),
+  	BIT08MASK = (1ULL << 8),
+    BIT09MASK = (1ULL << 9),
+	BIT10MASK = (1ULL << 10),
+    BIT11MASK = (1ULL << 11),
+    BIT12MASK = (1ULL << 12),
+    BIT13MASK = (1ULL << 13),
+    BIT14MASK = (1ULL << 14),
+    BIT15MASK = (1ULL << 15),
+    BIT16MASK = (1ULL << 16),
+    BIT17MASK = (1ULL << 17),
+  	BIT18MASK = (1ULL << 18),
+    BIT19MASK = (1ULL << 19),
+	BIT20MASK = (1ULL << 20),
+    BIT21MASK = (1ULL << 21),
+    BIT22MASK = (1ULL << 22),
+    BIT23MASK = (1ULL << 23),
+    BIT24MASK = (1ULL << 24),
+    BIT25MASK = (1ULL << 25),
+    BIT26MASK = (1ULL << 26),
+    BIT27MASK = (1ULL << 27),
+  	BIT28MASK = (1ULL << 28),
+    BIT29MASK = (1ULL << 29),
+	BIT30MASK = (1ULL << 30),
+    BIT31MASK = (1ULL << 31),
+    BIT32MASK = (1ULL << 32),
+    BIT33MASK = (1ULL << 33),
+    BIT34MASK = (1ULL << 34),
+    BIT35MASK = (1ULL << 35),
+    BIT36MASK = (1ULL << 36),
+    BIT37MASK = (1ULL << 37),
+  	BIT38MASK = (1ULL << 38),
+    BIT39MASK = (1ULL << 39),
+	BIT40MASK = (1ULL << 40),
+    BIT41MASK = (1ULL << 41),
+    BIT42MASK = (1ULL << 42),
+    BIT43MASK = (1ULL << 43),
+    BIT44MASK = (1ULL << 44),
+    BIT45MASK = (1ULL << 45),
+    BIT46MASK = (1ULL << 46),
+    BIT47MASK = (1ULL << 47),
+  	BIT48MASK = (1ULL << 48),
+    BIT49MASK = (1ULL << 49),
+	BIT50MASK = (1ULL << 50),
+    BIT51MASK = (1ULL << 51),
+    BIT52MASK = (1ULL << 52),
+    BIT53MASK = (1ULL << 53),
+    BIT54MASK = (1ULL << 54),
+    BIT55MASK = (1ULL << 55),
+    BIT56MASK = (1ULL << 56),
+    BIT57MASK = (1ULL << 57),
+  	BIT58MASK = (1ULL << 58),
+    BIT59MASK = (1ULL << 59),
+	BIT60MASK = (1ULL << 60),
+    BIT61MASK = (1ULL << 61),
+    BIT62MASK = (1ULL << 62),
+    BIT63MASK = (1ULL << 63),
+} ;
+
+enum {								// ANSI standard terminal colors
+	attrRESET			= 0,
+	attrBRIGHT			= 1,
+	attrDIM				= 2,
+	atrITALICS			= 3,
+	attrULINE_ON		= 4,
+	attrSLOW_BLINK		= 5,
+	attrRAPID_BLINK		= 6,
+	attrREV_ON			= 7,
+	attrHIDDEN			= 8,
+	attrSTRIKE_ON		= 9,
+
+	attrULINE_OFF		= 24,
+	attrREV_OF			= 27,
+	attrREVEAL			= 28,
+	attrSTRIKE_OFF		= 29,
+
+// foreground colors
+	colourFOREGND		= 30,
+	colourFG_BLACK 		= colourFOREGND,
+	colourFG_RED,
+	colourFG_GREEN,
+	colourFG_YELLOW,
+	colourFG_BLUE,
+	colourFG_MAGENTA,
+	colourFG_CYAN,
+	colourFG_WHITE,										// 30 + 7 = 37
+// background colors
+	colourBACKGND		= 40,
+	colourBG_BLACK		= colourBACKGND,
+	colourBG_RED,
+	colourBG_GREEN,
+	colourBG_YELLOW,
+	colourBG_BLUE,
+	colourBG_MAGENTA,
+	colourBG_CYAN,
+	colourBG_WHITE,										// 40 + 7 = 47
+} ;
+
+#ifdef __cplusplus
+}
+#endif
 
 #if 0
 
@@ -636,8 +635,4 @@ static void kConstPrinter(kConst k) { printf("%s", kConstStr[k]); }
 		#define STATIC_ASSERT(e,m) \
 		;enum { ASSERT_CONCAT(assert_line_, __LINE__) = 1/(!!(e)) }
 	#endif
-#endif
-
-#ifdef __cplusplus
-	}
 #endif

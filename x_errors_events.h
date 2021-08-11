@@ -4,14 +4,13 @@
 
 #pragma	once
 
-#include	<stdint.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 // ########################################### Macros ##############################################
 
+#define	TABLE_ENTRY_INT(x,y,z)		{ .iVal1=x , .iVal2=y , .pMess=z }
 
 // ######################################## Error and Event codes ##################################
 
@@ -24,7 +23,6 @@ enum {
 	erSCRIPT_INV_PARA,
 	erSCRIPT_INV_OPERATION,
 	erSCRIPT_INV_MODE,				// no message
-	erSCRIPT_TOO_MANY,
 	erSCRIPT_INV_SYNTAX,
 	erSCRIPT_INV_ENDPOINT,
 	erSCRIPT_INCOM_SENSE,			// incomplete sense instruction
@@ -32,6 +30,7 @@ enum {
 	erSCRIPT_INCOM_IDRES,			// incomplete identity/resource entry
 	erINV_VAR_TYPE,
 	erINV_STATS_CONFIG,
+	erSCRIPT_TOO_MANY,
 
 	erTX_QUEUE_SEND,
 	erSENSOR_NOT_READABLE,			// no message
@@ -48,9 +47,7 @@ enum {
 /* based on the range of error codes used by any HAL (and other) modules
  * insert their error code list at the most suitable location in the enumerated list
  */
-#if		defined(ESP_PLATFORM)
-	#include    "hal_errorcodes.h"
-#endif
+
 // Indicates the last ie general FAILURE and neutral SUCCESS code
 	erFAILURE						= -1,
 	erSUCCESS						= 0,
@@ -58,12 +55,22 @@ enum {
 	evLASTCODE,						// Insert all new codes ABOVE here
 } ;
 
+// ####################################### Structures ##############################################
+
+typedef struct {
+	int			iVal1 ;
+	int			iVal2 ;
+	const char * pMess ;
+} eTable_t ;
+
 // ################################### Global/public variable(s) ###################################
+
 
 // ################################### Global/public functions #####################################
 
-int32_t	ErrorSet(int32_t eCode) ;
-int32_t	ErrorGet(void) ;
+int	ErrorSet(int eCode) ;
+int	ErrorGet(void) ;
+char * pcCodeToMessage(int eCode, const eTable_t * eTable) ;
 
 #ifdef __cplusplus
 }

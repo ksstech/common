@@ -11,6 +11,8 @@
 //	#define		__CUSTOM_FILE_IO__
 #endif
 
+#include	"FreeRTOS_Support.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -88,19 +90,19 @@ extern "C" {
 
 // #################################### Global/public functions ####################################
 
-int		xStdioBufLock(TickType_t Ticks) ;
-int		xStdioBufUnLock(void) ;
-int		xStdioBufPutC(int cChr) ;
-int		xStdioBufGetC(void) ;
-int		xStdioBufAvail(void) ;
+int	xStdioBufLock(TickType_t Ticks) ;
+int	xStdioBufUnLock(void) ;
+int	xStdioBufPutC(int) ;
+int	xStdioBufGetC(void) ;
+int	xStdioBufAvail(void) ;
 
-int		putcharx(int cChr) ;
-int		getcharx(void) ;
-int		putcx(int cChr, int ud) ;
-int		getcx(int ud) ;
-int		putsx(char * pStr, int ud) ;
+int	putcharx(int) ;
+int	getcharx(void) ;
+int	putcx(int, int) ;
+int	getcx(int) ;
+int	putsx(char *, int) ;
 
-void	fDiags(void) ;
+void fDiags(void) ;
 
 #ifdef __cplusplus
 } /* extern "C" */

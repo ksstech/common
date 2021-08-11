@@ -1,17 +1,18 @@
 /*
- * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
- *	x_time.h
+ * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
+ * x_time.h
  */
 
 #pragma once
 
-#include	"x_definitions.h"							// no nested includes
+#include	"definitions.h"								// no nested includes
 
 #include	<time.h>									// struct tm
+#include	<limits.h>
 #include	<stdint.h>
 
 #ifdef __cplusplus
-	extern "C" {
+extern "C" {
 #endif
 
 // ############################## BUILD: TimeZone structure support ################################
@@ -91,9 +92,9 @@
 	#define	configTZ_SAST	{ 0,					2*SECONDS_IN_HOUR,		0,	0	}
 	#define	configTZ_ACT	{-1*SECONDS_IN_HOUR, 	10.5*SECONDS_IN_HOUR,	0,	0	}
 
-	#define	configTIME_MAX_LEN_DSTNAME			48		// "Australian Central Daylight Savings Time" = 42
-	#define	configTIME_MAX_LEN_TZNAME			48		// "America/Argentina/ComodRivadavia" == 33
-	#define	configTIME_MAX_LEN_TZINFO			sizeof("+12h34")
+	#define	configTIME_MAX_LEN_DSTNAME	48		// "Australian Central Daylight Savings Time" = 42
+	#define	configTIME_MAX_LEN_TZNAME	48		// "America/Argentina/ComodRivadavia" == 33
+	#define	configTIME_MAX_LEN_TZINFO	sizeof("+12h34")
 
 #else
 	#error	"Invalid or undefined 'timexTZTYPE_SELECTED' value"
@@ -134,7 +135,7 @@
  */
 typedef	struct __attribute__((__packed__)) TZ_t {
 	short	daylight ;
-	int32_t	timezone ;
+	int		timezone ;
 #if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER || timexTZTYPE_SELECTED == timexTZTYPE_RFC3164)
 	char *	pcTZName ;
 	char *	pcDSTName ;
@@ -151,23 +152,23 @@ typedef	struct TSZ_t {
 
 // ###################################### x_time related ###########################################
 
-int32_t	xTimeIsLeapYear(int32_t Year) ;
-int32_t	xTimeCountLeapYears(int32_t Year) ;
-int32_t	xTimeGetDayNumber(char * pName) ;
-int32_t	xTimeGetMonthNumber(char * pName) ;
-int32_t	xTimeCalcDaysInMonth(struct tm *psTM) ;
-int32_t	xTimeCalcDaysYTD(struct tm * psTM) ;
-int32_t	xTimeCalcDaysToDate(struct tm * psTM) ;
-char * xTimeGetDayName(int32_t) ;
-char * xTimeGetMonthName(int32_t) ;
-void	xTimeGMTime(seconds_t tValue, struct tm * psTM, int32_t fElapsed) ;
-seconds_t xTimeCalcSeconds(struct tm *psTM, int32_t fElapsed) ;
-seconds_t xTimeCalcLocalTimeSeconds(TSZ_t * psTSZ) ;
+int	xTimeIsLeapYear(int) ;
+int	xTimeCountLeapYears(int) ;
+int	xTimeGetDayNumber(char *) ;
+int	xTimeGetMonthNumber(char *) ;
+int	xTimeCalcDaysInMonth(struct tm *) ;
+int	xTimeCalcDaysYTD(struct tm *) ;
+int	xTimeCalcDaysToDate(struct tm *) ;
+char * xTimeGetDayName(int) ;
+char * xTimeGetMonthName(int) ;
+void xTimeGMTime(seconds_t, struct tm *, int) ;
+seconds_t xTimeCalcSeconds(struct tm *, int) ;
+seconds_t xTimeCalcLocalTimeSeconds(TSZ_t *) ;
 
 inline uint32_t xTimeStampAsSeconds(uint64_t Timestamp) { return (uint32_t) (Timestamp / (uint64_t) MICROS_IN_SECOND) ; }
 inline uint64_t xTimeMakeTimestamp(uint32_t Seconds, uint32_t Micros) { return ((uint64_t) Seconds * (uint64_t) MICROS_IN_SECOND) + (uint64_t) Micros ; }
 
-void	xTime_Test(void) ;
+void xTime_Test(void) ;
 
 #ifdef __cplusplus
 }

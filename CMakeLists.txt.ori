@@ -1,0 +1,35 @@
+#COMMON
+set( srcs "x_errors_events.c" "x_stdio.c" "x_terminal.c" "x_time.c" "x_utilities.c" )
+set( include_dirs "." )
+set( requires rtos-support )
+set( priv_requires buffers hal_esp32 printfx stringsX )
+
+set( vBase "/Users/andremaree/Dropbox/devs/ws/" )
+set( vNow ${CMAKE_SOURCE_DIR} )
+string( LENGTH ${vBase} vBaseLen )
+
+set( p1 "z-projects/irmacs" )
+string( LENGTH ${p1} p1L )
+string( SUBSTRING ${vNow} ${vBaseLen} ${p1L} p1S )
+
+set( p2 "xcode/test1/test1" )
+string( LENGTH ${p2} p2L )
+string( SUBSTRING ${vNow} ${vBaseLen} ${p2L} p2S )
+
+if( p1S MATCHES p1 )
+	idf_component_register(
+		SRCS ${srcs} 
+		INCLUDE_DIRS ${include_dirs} 
+		REQUIRES ${requires}
+		PRIV_REQUIRES ${priv_requires}
+	)
+
+elseif( p2S MATCHES p2 )
+	project(common)
+	add_library(common "x_time.c" "x_utilities.c" )
+	target_include_directories(common PUBLIC ".")
+
+else()
+	message( "${p1} : ${p1L} / ${p1S}" )
+	message( "${p2} : ${p2L} / ${p2S}" )
+endif()
