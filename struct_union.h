@@ -181,27 +181,21 @@ DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
 // ##################################### CLI related structures ####################################
 
 enum {													// {flags}{counter}
-	maskCOUNT	= 0x000FFFFF,							// counter value or mask
-	mfbCOUNT	= 1 << 20,								// Prefix 24x LSB uCount
-	mfbCOLOR	= 1 << 21,								// Use colours where applicable
-	mfbPRIOX	= 1 << 22,
-	mfbSTATE	= 1 << 23,
-	mfbSTACK	= 1 << 24,
-	mfbCORE		= 1 << 25,
-	mfbXTRAS	= 1 << 26,
-	mfbSPARE1	= 1 << 27,
-	mfbSPARE2	= 1 << 28,
-	mfbSPARE3	= 1 << 29,
+	maskCOUNT	= 0x007FFFFF,							// counter value or mask
+	mfbCOUNT	= 1 << 23,								// Prefix 23x LSB uCount
+	mfbCOLOR	= 1 << 24,								// Use colours where applicable
+	mfbPRIOX	= 1 << 25,
+	mfbSTATE	= 1 << 26,
+	mfbSTACK	= 1 << 27,
+	mfbCORE		= 1 << 28,
+	mfbXTRAS	= 1 << 29,
 	mfbNL		= 1 << 30,								// PostFix 'n'
 	mfbRT		= 1 << 31,								// prefix RunTime
 } ;
 
 typedef	union {
 	struct __attribute__((packed)) {					// Generic structure for init
-		uint32_t	m		: 20 ;
-		uint8_t		l		: 1 ;
-		uint8_t		k		: 1 ;
-		uint8_t		j		: 1 ;
+		uint32_t	j		: 23 ;
 		uint8_t		i		: 1 ;
 		uint8_t		h		: 1 ;
 		uint8_t		g		: 1 ;
@@ -213,17 +207,14 @@ typedef	union {
 		uint8_t		a		: 1 ;
 	} ;
 	struct __attribute__((packed)) {					// Printing control
-		uint32_t	uCount	: 20 ;
-		uint8_t		bCount	: 1 ;
-		uint8_t		bColor	: 1 ;
+		uint32_t	uCount	: 23 ;						// Task # mask
+		uint8_t		bCount	: 1 ;						// Task #
+		uint8_t		bColor	: 1 ;						// Use colour
 		uint8_t		bPrioX	: 1 ;						// Priorities
 		uint8_t		bState	: 1 ;						// Task state RBPS
 		uint8_t		bStack	: 1 ;						// Low Stack value
 		uint8_t		bCore	: 1 ;						// MCU 01X
 		uint8_t		bXtras	: 1 ;						// Ticks, Stack & TCB
-		uint8_t		bSpare1	: 1	;
-		uint8_t		bSpare2	: 1 ;
-		uint8_t		bSpare3	: 1 ;
 		uint8_t		bNL		: 1 ;						// terminating NL
 		uint8_t		bRT		: 1 ;						// Runtime
 	} ;
@@ -231,8 +222,8 @@ typedef	union {
 } flagmask_t ;
 DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
 
-#define	makeMASKFLAG(A,B,C,D,E,F,G,H,I,J,K,L,M) (flagmask_t) \
-	{ .a=A, .b=B, .c=C, .d=D, .e=E, .f=F, .g=G, .h=H, .i=I, .j=J, .k=K, .l=L, .m=M }
+#define	makeMASKFLAG(A,B,C,D,E,F,G,H,I,J) (flagmask_t) \
+	{ .a=A, .b=B, .c=C, .d=D, .e=E, .f=F, .g=G, .h=H, .i=I, .j=J }
 
 #ifdef __cplusplus
 }
