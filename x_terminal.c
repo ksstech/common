@@ -19,16 +19,33 @@ terminfo_t	sTI = {
 
 // ################################# Terminal (VT100) support routines #############################
 
+int	vANSIgets(char * pcBuf) { return 0 ; }
+
 void vANSIputs(char * pStr) { while (*pStr) putcx(*pStr++, configSTDIO_UART_CHAN); }
 
-void vANSIcursorsave(void)	{ vANSIputs("\033[s") ; }
-void vANSIcursorback(void)	{ vANSIputs("\033[u") ; }
-void vANSIclear2EOL(void)	{ vANSIputs("\033[0K") ; }
-void vANSIclear2BOL(void)	{ vANSIputs("\033[1K") ; }
-void vANSIclearline(void)	{ vANSIputs("\033[2K") ; }
-void vANSIclearscreen(void)	{ vANSIputs("\033[2J") ; }
-void vANSIhome(void) 		{ vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
-void vANSIclearhome(void)	{ vANSIclearscreen() ; vANSIhome() ; }
+void vANSIcursorsave(void) { vANSIputs("\033[s") ; }
+
+void vANSIcursorback(void) { vANSIputs("\033[u") ; }
+
+void vANSIcursorread(void) {
+	char Buf[16] ;
+	vANSIputs("\033[6n") ;
+	vANSIgets(Buf);
+	// Add logic to read the buffer and return a string
+	// see http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
+}
+
+void vANSIclear2EOL(void) { vANSIputs("\033[0K") ; }
+
+void vANSIclear2BOL(void) { vANSIputs("\033[1K") ; }
+
+void vANSIclearline(void) { vANSIputs("\033[2K") ; }
+
+void vANSIclearscreen(void) { vANSIputs("\033[2J") ; }
+
+void vANSIclearhome(void) { vANSIclearscreen() ; vANSIhome() ; }
+
+void vANSIhome(void) { vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
 
 char * pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
 	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
@@ -83,54 +100,12 @@ void vTerminalSetSize(uint16_t x, uint16_t y) {
 void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32 ; }
 
 #if 0
-// ###################################### terminal IO related ######################################
-
-static	char		ActivityChr[]   = { ' ', '*', 'x', '+', 'X' } ;
-static 	int32_t		ActivityIdx     = 0 ;
-
-/*
- * vTerminalActivityShow
- * \brief	sequentially (per call) display a character to indicate activity
- *			before each character comes a CR to ensure cursor remain at Column 0 of current line
- * \param	None
- * \return	None
- */
-void	vTerminalActivityShow(void) {
-	putchar('\r') ;
-    putchar(ActivityChr[ActivityIdx++]) ;
-    ActivityIdx %= sizeof(ActivityChr) ;
-    putchar('\r') ;
-}
-
-/*
- * vTerminalActivityLoop
- * \brief	flush the console buffer then continually display the activity chars
- *			whilst waiting for a key from the console before returning
- * \param	None
- * \return	None
- */
-void	vTerminalActivityLoop(void) {
-  	while (gotchar() != EOF) ;						// first flush the UART receive buffer
-	while (getchar() == 0) {						// then start waiting for another key to be pressed
-		vTerminalActivityShow() ;
-	}
-}
-
 // ################################### Graphical plot ##############################################
 
-int32_t	TerminalCursorGet(uint8_t * CurX, uint8_t * CurY) {
-uint8_t		Buf[16] ;
-	puts("\033[6n") ;
-	gets(buf);
-	// Add logic to read the buffer and return a string
-	// see http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
-	return SUCCESS ;
-}
-
 void	TerminalPlot(int16_t * dat, uint32_t len) {
-uint32_t	i ;
-//	TerminalClear() ;
-//	for (i = 0; i < len; i++) { }
+	uint32_t	i ;
+	TerminalClear() ;
+	for (i = 0; i < len; i++) { }
 }
 #endif
 

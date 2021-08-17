@@ -5,6 +5,7 @@
 #include	"hal_config.h"
 #include 	"printfx.h"
 #include	"x_utilities.h"
+#include	"x_terminal.h"
 #include	"x_errors_events.h"
 
 #include	<stdlib.h>
@@ -20,11 +21,16 @@
 // #################################################################################################
 
 void vShowActivity(int i) {
-	static char caActivity[4] = { 0x30, 0x30, 0x30, 0x30 } ;
-	IF_myASSERT(debugPARAM, i < sizeof(caActivity)) ;
+	static char caActivity[] = { '0', '0', '0', '0', 0 } ;
+	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1)) ;
 	++caActivity[i] ;
-	if (caActivity[i] == 0x3A) caActivity[i] = 0x30 ;
-	PRINT("%s\r", caActivity) ;
+	if (caActivity[i] == 0x3A) caActivity[i] = '0' ;
+	printfx_lock();
+	vANSIcursorsave();
+	vANSIlocate(1, 120);
+	vANSIputs(caActivity) ;
+	vANSIcursorback();
+	printfx_unlock();
 }
 
 void vUtilPrintCharacterSet(void) {
@@ -139,9 +145,7 @@ const char charset[] = {
 } ;
 
 void vBuildRandomSXX(uint8_t * pu8, int len) {
-	if (len && pu8) {
-		for (int n = 0; n < len; ++n) pu8[n] = charset[rand() % sizeof(charset)] ;
-	}
+	if (len && pu8) for (int n = 0; n < len; pu8[n++] = charset[rand() % sizeof(charset)]) ;
 }
 
 void vBuildRandomStr(uint8_t * pu8, int32_t len) {

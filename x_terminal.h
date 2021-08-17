@@ -38,27 +38,30 @@ typedef union {
 
 // ###################################### global functions ######################################
 
-char *	pcANSIattrib(char * pBuf, uint8_t FG, uint8_t BG) ;
-void	vANSIattrib(uint8_t FG, uint8_t BG) ;
+int	vANSIgets(char * pcBuf);
+void vANSIputs(char * pStr);
+void vANSIcursorsave(void);
+void vANSIcursorback(void);
+void vANSIcursorread(void);
 
-char *	pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) ;
-void	vANSIlocate(uint8_t x, uint8_t y) ;
+void vANSIclear2EOL(void);
+void vANSIclear2BOL(void);
+void vANSIclearline(void);
+void vANSIclearscreen(void);
+void vANSIclearhome(void);
 
-void 	vANSIhome(void) ;
+void vANSIhome(void) ;
 
-void	vTerminalClear(void) ;
-void	vANSIclear2EOL(void) ;
-void	vANSIclear2BOL(void) ;
-void	vANSIclear_line(void) ;
-void	vANSIclearhome(void) ;
+char * pcANSIattrib(char * pBuf, uint8_t FG, uint8_t BG) ;
+char * pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) ;
 
-void	vTerminalSetSize(uint16_t x, uint16_t y) ;
-void	vTerminalGetInfo(terminfo_t * psTermInfo) ;
+void vANSIattrib(uint8_t FG, uint8_t BG);
+void vANSIlocate(uint8_t x, uint8_t y);
 
-void    vTerminalActivityShow(void) ;
-void	vTerminalActivityLoop(void) ;
+void vTerminalSetSize(uint16_t x, uint16_t y) ;
+void vTerminalGetInfo(terminfo_t * psTermInfo) ;
 
-void	vANSItestcode(void) ;
+void vANSItestcode(void) ;
 
 #ifdef __cplusplus
 }
