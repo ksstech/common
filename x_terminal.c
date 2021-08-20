@@ -21,7 +21,7 @@ terminfo_t	sTI = {
 
 int	vANSIgets(char * pcBuf) { return 0 ; }
 
-void vANSIputs(char * pStr) { while (*pStr) putcx(*pStr++, configSTDIO_UART_CHAN); }
+void vANSIputs(char * pStr) { while (*pStr) putcharX(*pStr++, configSTDIO_UART_CHAN); }
 
 void vANSIcursorsave(void) { vANSIputs("\033[s") ; }
 

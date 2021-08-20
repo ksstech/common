@@ -158,35 +158,30 @@ int	xStdioBufAvail(void) {
 // ######################################## global functions #######################################
 
 /**
- * putcharx() - Output a single character to the (possibly redirected) STDOUT
- * @brief		non-blocking behaviour, return immediately
+ * Output a single character to [retargeted] STDOUT
+ * @brief		blocking behaviour, might not return immediately
  * @param[in]	cChr - char to output
  * @return		if successful, character sent, else EOF
  */
-int	putcharx(int cChr) {
-	if (cChr == '\n') putcharx(CHR_CR);
+int	putcharRT(int cChr) {
+	if (cChr == '\n') putcharRT(CHR_CR);
 #if		(retargetSTDOUT == retargetUART)
 	while(!halUART_TxFifoSpace(configSTDIO_UART_CHAN)) ;
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
-
 #elif	(retargetSTDOUT == retargetITM)
 	return halITM_PutChar(cChr) ;
-
 #elif	(retargetSTDOUT == retargetRTT)
 	char c = cChr ;
 	SEGGER_RTT_Write(0u, &c, 1u) ;
 	return cChr ;
-
 #elif	(retargetSTDOUT == retargetTNET)
 	return xTelnetPutChar(cChr) ;
-
 #else
-
 	return EOF ;
 #endif
 }
 
-int	getcharx(void) {
+int	getcharRT(void) {
 #if		(retargetSTDIN == retargetUART)
 	return halUART_GetChar(configSTDIO_UART_CHAN);
 #elif	(retargetSTDIN == retargetITM)
@@ -200,29 +195,29 @@ int	getcharx(void) {
 #endif
 }
 
-int	putcx(int cChr, int ud) {
+int	putcharX(int cChr, int ud) {
 #if		(CONFIG_IRMACS_UART_REDIR == 1)
 	if (ud == configSTDIO_UART_CHAN) return xStdioBufPutC(cChr) ;
 #else
-	if (ud == configSTDIO_UART_CHAN) return putcharx(cChr) ;
+	if (ud == configSTDIO_UART_CHAN) return putcharRT(cChr) ;
 #endif
 	while(!halUART_TxFifoSpace(ud)) ;
 	return halUART_PutChar(cChr, ud) ;
 }
 
-int	getcx(int ud) {
-	if (ud == configSTDIO_UART_CHAN) return getcharx() ;
+int	getcharX(int ud) {
+	if (ud == configSTDIO_UART_CHAN) return getcharRT() ;
 	return halUART_GetChar((uart_port_t) ud) ;
 }
 
-int	putsx(char * pStr, int ud) {
+int	putsX(char * pStr, int ud) {
 	int iRV = 0;
 	while (*pStr) {
-		putcx(*pStr++, ud);
+		putcharX(*pStr++, ud);
 		++iRV;
 	}
 	if (iRV) {
-		putcx('\n', ud);
+		putcharX('\n', ud);
 		++iRV;
 	}
 	return iRV ;
@@ -265,7 +260,7 @@ int		__fgetc (FILE * stream) {
 			return ch_saved ;						// and re-return last character
 		}
 		ch_saved = getchar_stdin() ; 				// nothing there, read & save as last char
-    	putcharx(ch_saved) ;					// echo to STDOUT
+    	putcharRT(ch_saved) ;					// echo to STDOUT
     	return ch_saved ;							// and return...
 	}
 #if		(buildSTDIO_FILEIO == 1)
@@ -386,7 +381,7 @@ int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
     		return ((int)(len | 0x80000000U)) ;
     	}
     	*buf++ = (uint8_t) ch ;
-    	putcharx(ch);
+    	putcharRT(ch);
     	len--;
     	return ((int)(len)) ;
     case FH_STDOUT:

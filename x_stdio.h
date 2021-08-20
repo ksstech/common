@@ -96,11 +96,11 @@ int	xStdioBufPutC(int) ;
 int	xStdioBufGetC(void) ;
 int	xStdioBufAvail(void) ;
 
-int	putcharx(int) ;
-int	getcharx(void) ;
-int	putcx(int, int) ;
-int	getcx(int) ;
-int	putsx(char *, int) ;
+int	putcharRT(int) ;
+int	getcharRT(void) ;
+int	putcharX(int, int) ;
+int	getcharX(int) ;
+int	putsX(char *, int) ;
 
 void fDiags(void) ;
 
