@@ -250,17 +250,15 @@ extern "C" {
 #define	mask3B						0x07
 #define	mask4B						0x0F
 
-#define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<(i*1);f&=~m;f|=(((s)x<<(i*1))&m);}
 #define	maskGET1B(f,i,s)			(((s)f>>(i*1))&(s)mask1B)
-
-#define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<(i*2);f&=~m;f|=(((s)x<<(i*2))&m);}
 #define	maskGET2B(f,i,s)			(((s)f>>(i*2))&(s)mask2B)
-
-#define	maskSET3B(f,i,x,s)			{s m=(s)mask3B<<(i*3);f&=~m;f|=(((s)x<<(i*3))&m);}
 #define	maskGET3B(f,i,s)			(((s)f>>(i*3))&(s)mask3B)
-
-#define	maskSET4B(f,i,x,s)			{s m=(s)mask4B<<(i*4);f&=~m;f|=(((s)x<<(i*4))&m);}
 #define	maskGET4B(f,i,s)			(((s)f>>(i*4))&(s)mask4B)
+
+#define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<(i*1);f&=~m;f|=((((s)x)<<(i*1))&m);}
+#define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<(i*2);f&=~m;f|=((((s)x)<<(i*2))&m);}
+#define	maskSET3B(f,i,x,s)			{s m=(s)mask3B<<(i*3);f&=~m;f|=((((s)x)<<(i*3))&m);}
+#define	maskSET4B(f,i,x,s)			{s m=(s)mask4B<<(i*4);f&=~m;f|=((((s)x)<<(i*4))&m);}
 
 // ###################################### General Use Macros #######################################
 
