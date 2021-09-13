@@ -273,8 +273,8 @@ extern "C" {
 #define	STRING_NULL					(char *) "null"
 #define	STRING_OOR					(char *) "pOOR"
 
-#define	debugAPPL_MESS_UP			"[start]\n"
-#define	debugAPPL_MESS_DN			"[delete]\n"
+#define	debugAPPL_MESS_UP			"%s start\n",__FUNCTION__
+#define	debugAPPL_MESS_DN			"%s deleted\n",__FUNCTION__
 #define	debugAPPL_PLACE				"I'm LOST!!\n"
 
 // ######################################## delimiter strings ######################################

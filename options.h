@@ -25,40 +25,69 @@ extern "C" {
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
-	ioB1_0 = 0,						// DS248x status & config changes tracking
-	ioB1_1,							// I2C task auto remove Delay if 0.
-	ioB1_2,							// halWL events track 0=DISABLE 1=ENABLE
-	ioB1_3,							// halWL wifi storage 0=FLASH 1=RAM
-	ioFlags,						// log flag changes 0=DISable 1=ENable
-	// ...
-	ioB1_63 = 63,
-
-	ioB2_0	= 64,
-	// ...
-	ioB2_31 = 95,
-
-	// 0=9600, 57600, 115200, 230400, 460800, 912600, 1024000, 7=2048000
-	ioB3_0 = 96,
-	ioU0Speed = ioB3_0,					// UARTx speed
+	ioB1_0, ioSTDIO = ioB1_0,		// DS248x status & config changes tracking
+	ioI2Cinit,
+	ioI2Cdly,						// I2C task auto remove Delay if 0.
+	ioFOTA,
+	ioFlags,						// Log flag changes 0=DISable 1=ENable
+	ioTimeout,
+	ioStart,
+	ioRstrt,						// shutdown/restart tracking
+	ioParse,
+	ioSyntax,
+	ioSense,
+	ioMode,
+	ioEndPoint,
+	ioIdent,
+	ioDBmatch,
+	ioDBerr,
+	ioMQcon,
+	ioMQsub,
+	ioMQpub,
+	ioOWscan,
+	ioActuate,
+	ioAlert,
+	ioMemory,
+	// hardware devices
+	ioDS18x20 = 32,
+	ioDS1990x,
+	ioDS248x,
+	ioM90Ex6,
+	// Add more ...
+	ioWLmode=59,
+	ioWLevt,						// halWL events track 0=DISABLE 1=ENABLE
+	ioWLram,						// halWL wifi storage 0=FLASH 1=RAM
+	ioWLscan,
+	ioB1_63=63, ioWLsort=ioB1_63,
+	// START of 2-bit flags
+	ioB2_0=64,
+	// Add more ...
+	ioB2_31=95,
+	// START of 3-bit flags
+	ioB3_0=96, ioU0Speed=ioB3_0,	// UARTx speed
 	ioU1Speed,
 	ioU2Speed,
-	ioU0RXbuf,							// UARTx RX buffers
+	ioU0RXbuf,						// UARTx RX buffers
 	ioU1RXbuf,
 	ioU2RXbuf,
-	ioU0TXbuf,							// UARTx TX buffers
+	ioU0TXbuf,						// UARTx TX buffers
 	ioU1TXbuf,
 	ioU2TXbuf,
-	// ...
-	ioB3_20 = 116, ioSLOGhi = ioB3_20,	// SLOG maximum level (0 -> 7)
-	// 4-bit options
+	// Add more ...
+	ioWLauth=115,
+	ioB3_20=116, ioSLOGhi=ioB3_20,	// SLOG maximum level (0 -> 7)
+	// START 4-bit flags
 	ioB4_0=117,
-	// ...
+	ioDS1990RdDly = ioB4_0,			// delay (sec) between successive read same tag
+	// Add more ...
 	ioB4_15=132,
-	// various larger value options
-	ioS_NWMO,							// set network mode 0->3
+	// various special case options
+	ioS_NWMO,						// set network mode 0->3
 	ioS_WIFI,
 	ioS_MQTT,
 	ioS_PEEK,
+	ioS_IOdef,
+	ioS_LAST = ioS_IOdef,
 } ;
 
 // ########################################## structures ###########################################
@@ -226,7 +255,8 @@ typedef struct ioset_t {			// 1/2/3/4 bit option variables
 
 // ####################################### public functions ########################################
 
-int xOptionsSetDirect(int EI, int EV, int Flag);
+void xOptionsSetDefaults(void);
+int xOptionsSetDirect(uint8_t EI, int EV, int Flag);
 int	xOptionsSet(uint8_t	EI, int EV, int Flag);
 void vOptionsShow(void);
 

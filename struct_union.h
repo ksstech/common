@@ -24,7 +24,7 @@ typedef enum {
 
 // ############################# common complex data types/ structures #############################
 
-typedef union __attribute__((packed)) ow_rom_u {
+typedef union __attribute__((packed)) ow_rom_t {
 	uint64_t	Value ;
 	uint8_t		HexChars[8] ;
 	union {
@@ -146,7 +146,6 @@ struct pcnt_t ;
 struct TSZ_t ;
 struct cli_t ;
 struct vt_enum_t ;
-union ow_rom_t ;
 
 typedef union ps_t {
 	struct x32mma_t *	pMMA ;
@@ -156,7 +155,7 @@ typedef union ps_t {
 	struct TSZ_t *		pTSZ ;
 	struct cli_t *		psCLI ;
 	struct vt_enum_t *	psCX ;
-	union ow_rom_u *	pOW_ROM ;
+	union ow_rom_t *	pOW_ROM ;
 } ps_t ;
 DUMB_STATIC_ASSERT(sizeof(ps_t) == __SIZEOF_POINTER__) ;
 
@@ -181,42 +180,42 @@ DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
 // ##################################### CLI related structures ####################################
 
 enum {													// {flags}{counter}
+	mfbRT		= 1 << 0,								// prefix RunTime
+	mfbNL		= 1 << 1,								// PostFix 'n'
+	mfbXTRAS	= 1 << 2,
+	mfbCORE		= 1 << 3,
+	mfbSTACK	= 1 << 4,
+	mfbSTATE	= 1 << 5,
+	mfbPRIOX	= 1 << 6,
+	mfbCOLOR	= 1 << 7,								// Use colours where applicable
+	mfbCOUNT	= 1 << 8,								// Prefix 23x LSB uCount
 	maskCOUNT	= 0x007FFFFF,							// counter value or mask
-	mfbCOUNT	= 1 << 23,								// Prefix 23x LSB uCount
-	mfbCOLOR	= 1 << 24,								// Use colours where applicable
-	mfbPRIOX	= 1 << 25,
-	mfbSTATE	= 1 << 26,
-	mfbSTACK	= 1 << 27,
-	mfbCORE		= 1 << 28,
-	mfbXTRAS	= 1 << 29,
-	mfbNL		= 1 << 30,								// PostFix 'n'
-	mfbRT		= 1 << 31,								// prefix RunTime
 } ;
 
 typedef	union {
 	struct __attribute__((packed)) {					// Generic structure for init
-		uint32_t	j		: 23 ;
-		uint8_t		i		: 1 ;
-		uint8_t		h		: 1 ;
-		uint8_t		g		: 1 ;
-		uint8_t		f		: 1 ;
-		uint8_t		e		: 1	;
-		uint8_t		d		: 1 ;
-		uint8_t		c		: 1 ;
-		uint8_t		b		: 1 ;
-		uint8_t		a		: 1 ;
+		int	a:1;
+		int	b:1;
+		int	c:1;
+		int	d:1;
+		int	e:1;
+		int	f:1;
+		int	g:1;
+		int	h:1;
+		int	i:1;
+		int	j:23;
 	} ;
-	struct __attribute__((packed)) {					// Printing control
-		uint32_t	uCount	: 23 ;						// Task # mask
-		uint8_t		bCount	: 1 ;						// Task #
-		uint8_t		bColor	: 1 ;						// Use colour
-		uint8_t		bPrioX	: 1 ;						// Priorities
-		uint8_t		bState	: 1 ;						// Task state RBPS
-		uint8_t		bStack	: 1 ;						// Low Stack value
-		uint8_t		bCore	: 1 ;						// MCU 01X
-		uint8_t		bXtras	: 1 ;						// Ticks, Stack & TCB
-		uint8_t		bNL		: 1 ;						// terminating NL
-		uint8_t		bRT		: 1 ;						// Runtime
+	struct __attribute__((packed)) {				// Printing control
+		int	bRT		: 1 ;							// Runtime
+		int	bNL		: 1 ;							// terminating NL
+		int	bXtras	: 1 ;							// Ticks, Stack & TCB
+		int	bCore	: 1 ;							// MCU 01X
+		int	bStack	: 1 ;							// Low Stack value
+		int	bState	: 1 ;							// Task state RBPS
+		int	bPrioX	: 1 ;							// Priorities
+		int	bColor	: 1 ;							// Use colour
+		int	bCount	: 1 ;							// Task #
+		int	uCount	: 23 ;							// Task # mask
 	} ;
 	uint32_t	u32Val ;
 } flagmask_t ;
