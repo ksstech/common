@@ -3,6 +3,7 @@
  */
 
 #include	"hal_config.h"
+#include	"FreeRTOS_Support.h"
 #include 	"printfx.h"
 #include	"x_utilities.h"
 #include	"x_terminal.h"
@@ -243,7 +244,7 @@ ba_t *pvBitArrayCreate(size_t Count, size_t Size) {
 	size_t szBA = Count * Size ;						// size in total # of bits
 	if (szBA & 0x00000007) return pvFAILURE;			// not on a byte boundary
 	szBA >>= 3 ;										// size in bytes
-	ba_t * psBA = malloc(sizeof(ba_t) + szBA) ;
+	ba_t * psBA = pvRtosMalloc(sizeof(ba_t) + szBA) ;
 	psBA->ByteSize	= szBA ;
 	psBA->Count		= Count ;
 	psBA->BitSize	= Size ;
@@ -257,7 +258,7 @@ ba_t *pvBitArrayCreate(size_t Count, size_t Size) {
 void xBitArrayDelete(ba_t * psBA) {
 	IF_myASSERT(debugPARAM, halCONFIG_inSRAM(psBA)) ;
 	memset(psBA, 0, sizeof(ba_t) + psBA->ByteSize) ;
-	free(psBA) ;
+	vRtosFree(psBA) ;
 }
 
 int	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
