@@ -124,15 +124,21 @@ void xTimeGMTime(seconds_t tValue, struct tm * psTM, int fElapsed) {
 	psTM->tm_mday = tValue + 1 ;						// range is 1 -> 31
 }
 
-/*
- * xTimeCalcDaysInMonth()
- */
-int	xTimeCalcDaysInMonth(struct tm * psTM) {			// handle February of a leap year
-	return DaysPerMonth[psTM->tm_mon] + ((xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon == 1)) ? 1 : 0) ;
+int xTimeCalcDaysMonth(int Year, int Month) {			// handle February of a leap year
+	return DaysPerMonth[Month] + ((xTimeIsLeapYear(Year + YEAR_BASE_MIN) && (Month == 1)) ? 1 : 0) ;
 }
 
-/*
- * xTimeCalcDaysYTD()
+/**
+ * @brief
+ * @param psTM
+ * @return
+ */
+int	xTimeCalcDaysInMonth(struct tm * psTM) { return xTimeCalcDaysMonth(psTM->tm_year, psTM->tm_mon); }
+
+/**
+ * @brief
+ * @param psTM
+ * @return
  */
 int	xTimeCalcDaysYTD(struct tm *psTM) {				// handle day AFTER February of leap year
 	return DaysToMonth[psTM->tm_mon] + (psTM->tm_mday-1) + ((xTimeIsLeapYear(psTM->tm_year+YEAR_BASE_MIN) && (psTM->tm_mon > 1)) ? 1 : 0) ;
