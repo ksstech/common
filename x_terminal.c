@@ -5,6 +5,7 @@
 
 #include	"x_terminal.h"
 #include	"hal_config.h"
+#include	"hal_usart.h"
 #include	"x_stdio.h"
 #include	"x_utilities.h"
 
@@ -98,6 +99,23 @@ void vTerminalSetSize(uint16_t x, uint16_t y) {
 }
 
 void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32 ; }
+
+int xTerminalAttached(void) {
+	int iRV = 0;
+	if (halUART_RxFifoUsed(configSTDIO_UART_CHAN) == 0) {
+		halUART_Flush(configSTDIO_UART_CHAN) ;				// nothing to read, ensure TX buffer is empty
+		putcharX(CHR_ENQ, configSTDIO_UART_CHAN) ;	// send ENQ to illicit a response
+		for (int i = 0; i < 5; ++i) {
+			vTaskDelay(pdMS_TO_TICKS(1)) ;					// wait a short while for a response
+			if (getcharX(configSTDIO_UART_CHAN) == CHR_ENQ) {
+				iRV = 1;
+			}
+		}
+	}
+	if (iRV == 0) return iRV ;
+	// add code to determine specific terminat type.
+	return false ;
+}
 
 #if 0
 // ################################### Graphical plot ##############################################
