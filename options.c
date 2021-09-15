@@ -62,7 +62,7 @@ ioset_t const ioDefaults = {
 
 void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(ioset_t)); }
 
-int xOptionsSetDirect(uint8_t EI, int EV, int Flag) {
+int xOptionsSetDirect(int EI, int EV, int Flag) {
 	if (EI > ioB4_15)
 		{ SET_ERRINFO("Invalid IOSet value"); return erSCRIPT_INV_OPERATION; }
 
@@ -77,7 +77,7 @@ int xOptionsSetDirect(uint8_t EI, int EV, int Flag) {
 	return erSUCCESS;
 }
 
-int	xOptionsSet(uint8_t	EI, int EV, int Flag) {
+int	xOptionsSet(int	EI, int EV, int Flag) {
 	int iRV = erSUCCESS ;
 	if (EI <= ioB4_15) {
 		iRV = xOptionsSetDirect(EI, EV, Flag) ;
@@ -87,7 +87,7 @@ int	xOptionsSet(uint8_t	EI, int EV, int Flag) {
 		xOptionsSetDefaults();
 	}
 	if (iRV > erFAILURE) {
-		if (Flag) BlobsFlag |= varFLAG_IOSET;
+		if (Flag) SystemFlag |= varFLAG_IOSET;
 		IF_PRINT(debugTRACK, "IOSET %d=%d (%d)\n", EI, EV, Flag);
 	}
 	return iRV ;
