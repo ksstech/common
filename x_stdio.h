@@ -38,7 +38,7 @@ extern "C" {
 	#define		FF_MODERW					__SRW					// 0x0010
 	#define		FF_STATEOF					__SEOF					// 0x0020 found EOF
 	#define		FF_STATERR					__SERR					// 0x0040 found error
-	#define		FF_BUFFALOC					__SMBF					// 0x0080 buffer is from malloc
+	#define		FF_BUFFALOC					__SMBF					// 0x0080 buffer is from pvRtosMalloc
 	#define		FF_MODEA					__SAPP					// 0x0100
 	#define		FF_FILBUF					__SSTR					// 0x0200 this is an sprintf/snprintf string
 //	#define		FF_							__SOPT					// 0x0400 do fseek() optimisation

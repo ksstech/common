@@ -146,8 +146,8 @@ typedef	struct __attribute__((__packed__)) TZ_t {
 } TZ_t ;
 
 typedef	struct TSZ_t {
-	uint64_t	usecs ;
-	TZ_t	*	pTZ ;
+	uint64_t	usecs;				// Must ALWAYS be UTC based value, adjust for local TZ
+	TZ_t	*	pTZ ;				// TZ info to be used for local DTZ calculation
 } TSZ_t ;
 
 // ###################################### x_time related ###########################################
@@ -156,6 +156,7 @@ int	xTimeIsLeapYear(int) ;
 int	xTimeCountLeapYears(int) ;
 int	xTimeGetDayNumber(char *) ;
 int	xTimeGetMonthNumber(char *) ;
+int xTimeCalcDaysMonth(int Year, int Month);
 int	xTimeCalcDaysInMonth(struct tm *) ;
 int	xTimeCalcDaysYTD(struct tm *) ;
 int	xTimeCalcDaysToDate(struct tm *) ;

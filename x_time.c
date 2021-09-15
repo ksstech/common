@@ -27,11 +27,10 @@ const char DaysPerMonth[]	= { 31,	28,	31,	30,	31,	30,	31,	31,	30,	31,	30,	31 } ;
 
 // #################################################################################################
 
-/*
- * xTimeIsLeapYear
- * \brief	tests if a year is a leap year
- * \param	year to be tested
- * \return	1=yes or 0=no based on evaluation
+/**
+ * @brief	tests if a year is a leap year
+ * @param	year to be tested
+ * @return	1=yes or 0=no based on evaluation
  */
 int	xTimeIsLeapYear(int year) {
 	if ((year % 4) == 0) {						// if a multiple of 4
@@ -42,11 +41,11 @@ int	xTimeIsLeapYear(int year) {
 	} else return 0;							// NOT a multiple of 4, definitely NOT a leap year
 }
 
-/*
- * xTimeCountLeapYears() - calculate the number of leap days from epoch start to (year-01-01T00:00:00.000Z
- * \brief		value supplied for year date must not be before epoch start
- * \param[in]	year - ending year for calculation
- * \return		number of leap years, FAILURE if parameter out of range
+/**
+ * @brief	calculate the number of leap days from epoch start to (year-01-01T00:00:00.000Z
+ * @brief	value supplied for year date must not be before epoch start
+ * @param[in]	year - ending year for calculation
+ * @return		number of leap years, FAILURE if parameter out of range
  */
 int	xTimeCountLeapYears(int NowYear) {
 	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX, seconds_t))return erFAILURE;
@@ -57,19 +56,17 @@ int	xTimeCountLeapYears(int NowYear) {
 	return Leaps ;
 }
 
-/*
- * xTimeGetDayNumber()
- * \brief	calculate the day number based on the 3 char string supplied
- * \param	str - pointer to the name string
- * \return	0 to 6 for Sun to Sat or FAILURE if not matched
+/**
+ * @brief	calculate the day number based on the 3 char string supplied
+ * @param	str - pointer to the name string
+ * @return	0 to 6 for Sun to Sat or FAILURE if not matched
  */
 int	xTimeGetDayNumber(char * str) { return xstrindex(str, (char * *) DayNames) ; }
 
-/*
- * xTimeGetMonthNumber()
- * \brief	calculate the month number based on the 3 char string supplied
- * \param	str - pointer to the name string
- * \return	0 to 11 for Jan to Dec or FAILURE if not matched
+/**
+ * @brief	calculate the month number based on the 3 char string supplied
+ * @param	str - pointer to the name string
+ * @return	0 to 11 for Jan to Dec or FAILURE if not matched
  */
 int	xTimeGetMonthNumber(char * str) { return xstrindex(str, (char * *) MonthNames) ; }
 
@@ -77,14 +74,14 @@ char * xTimeGetDayName(int num) { return (num < 7) ? (char *) DayNames[num] : pc
 
 char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num] : pcFAILURE ; }
 
-/*
- * xTimeGMTime() -	Converts epoch seconds to components of date and time.
- * \brief		This function converts a number of seconds since 1970-01-01T00:00:00.000Z
- * \brief		into the equivalent year, month, day, hours, minutes, and seconds representation.
- * \param[in]	timer - epoch seconds.
- * \param[out]	tm - pointer to tm structure to be filled with date & time components.
- * \param[in]	Elapsed - flag indicating if tValue is epoch (zero) or elapsed (non zero) seconds.
- * \return		none
+/**
+ * @brief	Converts epoch seconds to components of date and time.
+ * @brief	This function converts a number of seconds since 1970-01-01T00:00:00.000Z
+ * @brief	into the equivalent year, month, day, hours, minutes, and seconds representation.
+ * @param[in]	timer - epoch seconds.
+ * @param[out]	tm - pointer to tm structure to be filled with date & time components.
+ * @param[in]	Elapsed - flag indicating if tValue is epoch (zero) or elapsed (non zero) seconds.
+ * @return		none
  */
 void xTimeGMTime(seconds_t tValue, struct tm * psTM, int fElapsed) {
     memset(psTM, 0, sizeof(struct tm)) ;
@@ -141,15 +138,20 @@ int	xTimeCalcDaysYTD(struct tm *psTM) {				// handle day AFTER February of leap 
 	return DaysToMonth[psTM->tm_mon] + (psTM->tm_mday-1) + ((xTimeIsLeapYear(psTM->tm_year+YEAR_BASE_MIN) && (psTM->tm_mon > 1)) ? 1 : 0) ;
 }
 
-/*
- * xTimeCalcDaysToDate()
+/**
+ * @brief
+ * @param psTM
+ * @return
  */
 int	xTimeCalcDaysToDate(struct tm *psTM) {
 	return (psTM->tm_year*DAYS_IN_YEAR) + xTimeCountLeapYears(psTM->tm_year+YEAR_BASE_MIN) + xTimeCalcDaysYTD(psTM) ;
 }
 
-/*
- * xTimeCalcSeconds()
+/**
+ * @brief
+ * @param psTM
+ * @param fElapsed
+ * @return
  */
 seconds_t xTimeCalcSeconds(struct tm *psTM, int fElapsed) {
 	// calculate seconds for hh:mm:ss portion
@@ -169,11 +171,13 @@ seconds_t xTimeCalcSeconds(struct tm *psTM, int fElapsed) {
 	return Seconds ;
 }
 
-/*
- * xTimeCalcLocalTimeSeconds()
+/**
+ * @brief
+ * @param	psTSZ
+ * @return	Timestamp as seconds (uint32_t)
  */
 seconds_t xTimeCalcLocalTimeSeconds(TSZ_t * psTSZ) {
-	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int32_t) psTSZ->pTZ->daylight ;
+	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight ;
 }
 
 // ##################################### functional tests ##########################################

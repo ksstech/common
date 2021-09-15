@@ -31,51 +31,6 @@
 
 // ###################################### BUILD : CONFIG definitions ##############################
 
-#define	retargetNONE				0
-#define	retargetUART				1
-#define	retargetITM					2
-#define	retargetRTT					3
-#define	retargetTNET				4
-#define	retargetCUSTOM				5
-
-#define	retargetCHAN				retargetNONE
-
-#if 	(retargetCHAN == retargetRTT)					// ALL to RTT
-	#define	retargetSTDIN			retargetRTT
-	#define	retargetSTDOUT			retargetRTT
-	#define	retargetSTDERR			retargetRTT
-
-#elif	(retargetCHAN == retargetUART)					// ALL to UART
-	#define	retargetSTDIN			retargetUART
-	#define	retargetSTDOUT			retargetUART
-	#define	retargetSTDERR			retargetUART
-
-#elif	(retargetCHAN == retargetITM)					// ALL to ITM
-	#define	retargetSTDIN			retargetITM
-	#define	retargetSTDOUT			retargetITM
-	#define	retargetSTDERR			retargetITM
-
-#elif	(retargetCHAN == retargetTNET)					// ALL to Telnet
-	#define	retargetSTDIN			retartgetTNET
-	#define	retargetSTDOUT			retartgetTNET
-	#define	retargetSTDERR			retartgetTNET
-
-#elif	(retargetCHAN == retargetCUSTOM)				// custom
-	#define	retargetSTDIN			retargetNONE
-	#define	retargetSTDOUT			retargetNONE
-	#define	retargetSTDERR			retargetNONE
-
-#else
-	#define	retargetSTDIN			retargetUART
-	#define	retargetSTDOUT			retargetUART
-	#define	retargetSTDERR			retargetUART
-#endif
-
-// ##################################### Configuration tests #######################################
-
-#if		(retargetCHAN == retargetTNET)  && (configCONSOLE_TELNET == 0)
-	#error "Conflicting configuration for retargetTNET and configCONSOLE_TELNET"
-#endif
 
 // ###################################### Private variables ########################################
 
@@ -95,11 +50,8 @@ static uint32_t StdioBufFlag		= 0 ;
  */
 int	xStdioBufInit(void) {
 	ubuf_t * psBuf	= &sRTCvars.sRTCbuf ;
-	if (psBuf->pBuf != sRTCvars.RTCbuf
-	||	psBuf->Size != rtcBUF_SIZE
-	||	psBuf->Used > rtcBUF_SIZE
-	||	psBuf->IdxWR >= rtcBUF_SIZE
-	||	psBuf->IdxRD >= rtcBUF_SIZE) {					// RTC buffer structure NOT valid.
+	if (psBuf->pBuf != sRTCvars.RTCbuf || psBuf->Size != rtcBUF_SIZE || psBuf->Used > rtcBUF_SIZE ||
+		psBuf->IdxWR >= rtcBUF_SIZE || psBuf->IdxRD >= rtcBUF_SIZE) {// RTC buffer structure NOT valid.
 		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
 		psBuf->pBuf	= sRTCvars.RTCbuf ;
 		psBuf->Size	= rtcBUF_SIZE ;
@@ -113,14 +65,14 @@ int	xStdioBufInit(void) {
 }
 
 int	xStdioBufLock(TickType_t Ticks) {
-	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit();
+	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
 	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks) ;
 }
 
 int	xStdioBufUnLock(void) { return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux); }
 
 int	xStdioBufPutC(int cChr) {
-	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit() ;
+	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
 	if (cChr == '\n') xStdioBufPutC('\r') ;
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == psBuf->Size) {					// buffer full ?
@@ -135,23 +87,23 @@ int	xStdioBufPutC(int cChr) {
 }
 
 int	xStdioBufGetC(void) {
-	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit();
-	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
+	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
+	ubuf_t * psBuf = &sRTCvars.sRTCbuf;
 	if (psBuf->Used == 0) {
-		errno = EAGAIN ;
-		return EOF ;
+		errno = EAGAIN;
+		return EOF;
 	} else if (psBuf->Size == 0) {
-		errno = ENOMEM ;
-		return EOF ;
+		errno = ENOMEM;
+		return EOF;
 	}
-	int cChr = *(psBuf->pBuf + psBuf->IdxRD++) ;
+	int cChr = *(psBuf->pBuf + psBuf->IdxRD++);
 	psBuf->IdxRD %= psBuf->Size ;
-	if (--psBuf->Used == 0)	psBuf->IdxRD = psBuf->IdxWR = 0 ;	// empty, reset In & Out indexes
+	if (--psBuf->Used == 0) psBuf->IdxRD = psBuf->IdxWR = 0;	// empty, reset In & Out indexes
 	return cChr ;
 }
 
 int	xStdioBufAvail(void) {
-	if (StdioBufFlag != stdioFLAG_INIT) xStdioBufInit();
+	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
 	return xUBufAvail(&sRTCvars.sRTCbuf) ;
 }
 
@@ -165,35 +117,10 @@ int	xStdioBufAvail(void) {
  */
 int	putcharRT(int cChr) {
 	if (cChr == '\n') putcharRT(CHR_CR);
-#if		(retargetSTDOUT == retargetUART)
-	while(!halUART_TxFifoSpace(configSTDIO_UART_CHAN)) ;
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
-#elif	(retargetSTDOUT == retargetITM)
-	return halITM_PutChar(cChr) ;
-#elif	(retargetSTDOUT == retargetRTT)
-	char c = cChr ;
-	SEGGER_RTT_Write(0u, &c, 1u) ;
-	return cChr ;
-#elif	(retargetSTDOUT == retargetTNET)
-	return xTelnetPutChar(cChr) ;
-#else
-	return EOF ;
-#endif
 }
 
-int	getcharRT(void) {
-#if		(retargetSTDIN == retargetUART)
-	return halUART_GetChar(configSTDIO_UART_CHAN);
-#elif	(retargetSTDIN == retargetITM)
-	return halITM_GetChar();
-#elif	(retargetSTDIN == retargetRTT)
-	return SEGGER_RTT_Read(0u, 1u);
-#elif	(retargetSTDIN == retargetTNET)
-	return xTelnetGetChar();
-#else
-	return EOF ;
-#endif
-}
+int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
 
 int	putcharX(int cChr, int ud) {
 #if		(CONFIG_IRMACS_UART_REDIR == 1)
@@ -206,8 +133,8 @@ int	putcharX(int cChr, int ud) {
 }
 
 int	getcharX(int ud) {
-	if (ud == configSTDIO_UART_CHAN) return getcharRT() ;
-	return halUART_GetChar((uart_port_t) ud) ;
+	if (ud == configSTDIO_UART_CHAN) return getcharRT();
+	return halUART_GetChar((uart_port_t) ud);
 }
 
 int	putsX(char * pStr, int ud) {
