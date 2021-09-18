@@ -51,7 +51,7 @@ const char ioSxMes[] = "\t133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PE
 ioset_t const ioDefaults = {
 	.B3_3 = 1,
 	.B3_6 = 1,
-	.B3_20 = CONFIG_LOG_DEFAULT_LEVEL + 2,
+	.B3_20 = CONFIG_LOG_MAXIMUM_LEVEL + 2,
 	.B4_0 = ds1990READ_INTVL,
 };
 
@@ -77,45 +77,52 @@ int xOptionsSetDirect(int EI, int EV, int Flag) {
 	return erSUCCESS;
 }
 
-int	xOptionsSet(int	EI, int EV, int Flag) {
+int	xOptionsSet(int	EI, int EV, int Persist) {
 	int iRV = erSUCCESS ;
 	if (EI <= ioB4_15) {
-		iRV = xOptionsSetDirect(EI, EV, Flag) ;
+		iRV = xOptionsSetDirect(EI, EV, Persist) ;
 	} else if (EI == ioS_NWMO) {
 		iRV = INRANGE(WIFI_MODE_NULL, EV, WIFI_MODE_APSTA, int) ? halWL_SetMode(EV) : erFAILURE ;
 	} else if (EI == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
 	}
 	if (iRV > erFAILURE) {
-		if (Flag) SystemFlag |= varFLAG_IOSET;
-		IF_PRINT(debugTRACK, "IOSET %d=%d (%d)\n", EI, EV, Flag);
+		if (Persist) SystemFlag |= varFLAG_IOSET;
+		IF_PRINT(debugTRACK, "IOSET %d=%d (%d)\n", EI, EV, Persist);
 	}
 	return iRV ;
 }
 
+void vOptionsPrint(int Num, int v1, int v2) {
+	if (v1 != v2)
+		printfx("%C%3d=%x%C ", xpfSGR(colourBG_CYAN,0,0,0), Num, v1, 0);
+	else
+		printfx("%3d=%d ", Num, v1);
+}
+
 void vOptionsShow(void) {
 	printfx("ioB1: 0x%llx\n\t", sNVSvars.ioBX.ioB1);
-	for (int i = ioB1_0; i <= ioB1_63; ++i) {
-		printfx("%3d=%d ", i, ioB1GET(i));
+	for (int i = 0; i <= 63; ++i) {
+		vOptionsPrint(i, ioB1GET(i), (ioDefaults.ioB1 >> i) & 1);
 		if ((i % 16) == 15) printfx("\n\t");
 	}
 	printfx(ioB1Mes);
 	printfx("ioB2: 0x%llx\n\t", sNVSvars.ioBX.ioB2);
-	for (int i = ioB2_0; i <= ioB2_31; ++i) {
-		printfx("%3d=%d ", i, ioB2GET(i));
+	for (int i = 0; i <= 31; ++i) {
+		vOptionsPrint(i+ioB2_0, ioB2GET(i+ioB2_0), (ioDefaults.ioB2 >> (i*2)) & 3);
 		if ((i % 16) == 15) printfx("\n\t");
 	}
 	printfx(ioB2Mes);
 	printfx("ioB3: 0x%llx\n\t", sNVSvars.ioBX.ioB3);
-	for (int i = ioB3_0; i <= ioB3_20; ++i) {
-		printfx("%3d=%d ", i, ioB3GET(i));
+	for (int i = 0; i <= 20; ++i) {
+		vOptionsPrint(i+ioB3_0, ioB2GET(i+ioB3_0), (ioDefaults.ioB3 >> (i*3)) & 7);
 		if ((i % 16) == 15) printfx("\n\t");
 	}
 	printfx(ioB3Mes);
 	printfx("ioB4: 0x%llx\n\t", sNVSvars.ioBX.ioB4);
-	for (int i = ioB4_0; i <= ioB4_15; ++i) {
-		printfx("%3d=%d ", i, ioB4GET(i));
-		if (((i - ioB4_0) % 16) == 15) printfx("\n\t");
+	for (int i = 0; i <= 15; ++i) {
+		vOptionsPrint(i+ioB4_0, ioB2GET(i+ioB4_0), (ioDefaults.ioB4 >> (i*4)) & 15);
+		if ((i % 16) == 15) printfx("\n\t");
 	}
 	printfx(ioB4Mes);
 	printfx(ioSxMes);
