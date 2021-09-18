@@ -34,45 +34,45 @@
 
 // ###################################### Private variables ########################################
 
-static uint32_t StdioBufFlag		= 0 ;
 
 // ###################################### Global variables #########################################
 
 
 // ################################ RTC Slow RAM buffer support ####################################
 
-#define	stdioFLAG_INIT				0x12345678
-
 /* This code should ONLY run under very specific conditions being:
  * a) the first time on a new mote; or
  * b) after a power failure when RTC data has been wiped; or
  * c) if the allocation of RTC slow RAM has changed and the location of the pointers are in a different place.
  */
-int	xStdioBufInit(void) {
+void xStdioBufInit(void) {
 	ubuf_t * psBuf	= &sRTCvars.sRTCbuf ;
-	if (psBuf->pBuf != sRTCvars.RTCbuf || psBuf->Size != rtcBUF_SIZE || psBuf->Used > rtcBUF_SIZE ||
-		psBuf->IdxWR >= rtcBUF_SIZE || psBuf->IdxRD >= rtcBUF_SIZE) {// RTC buffer structure NOT valid.
+	if (psBuf->pBuf != sRTCvars.RTCbuf ||				// check if RTC buffer structure valid
+		psBuf->Size != rtcBUF_SIZE || psBuf->Used > rtcBUF_SIZE ||
+		psBuf->IdxWR >= rtcBUF_SIZE || psBuf->IdxRD >= rtcBUF_SIZE) {
 		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
 		psBuf->pBuf	= sRTCvars.RTCbuf ;
 		psBuf->Size	= rtcBUF_SIZE ;
-	} else if (StdioBufFlag == 0) {
+	} else if (!(SystemFlag & sysFLAG_RTCBUFINIT)) {
 		/* Buffer structure might be correct but MUX must be re-initialised.
 		 * MUX init will be done 1st time xStdioBufLock() is called */
 		psBuf->mux	= NULL ;
 	}
-	StdioBufFlag	= stdioFLAG_INIT ;
-	return erSUCCESS ;
+	SystemFlag |= sysFLAG_RTCBUFINIT;
 }
 
 int	xStdioBufLock(TickType_t Ticks) {
-	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
+	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
 	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks) ;
 }
 
-int	xStdioBufUnLock(void) { return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux); }
+int	xStdioBufUnLock(void) {
+	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
+	return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux);
+}
 
 int	xStdioBufPutC(int cChr) {
-	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
+	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
 	if (cChr == '\n') xStdioBufPutC('\r') ;
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == psBuf->Size) {					// buffer full ?
@@ -87,7 +87,7 @@ int	xStdioBufPutC(int cChr) {
 }
 
 int	xStdioBufGetC(void) {
-	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
+	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf;
 	if (psBuf->Used == 0) {
 		errno = EAGAIN;
@@ -103,7 +103,7 @@ int	xStdioBufGetC(void) {
 }
 
 int	xStdioBufAvail(void) {
-	if (unlikely(StdioBufFlag != stdioFLAG_INIT)) xStdioBufInit();
+	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
 	return xUBufAvail(&sRTCvars.sRTCbuf) ;
 }
 
@@ -123,13 +123,11 @@ int	putcharRT(int cChr) {
 int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
 
 int	putcharX(int cChr, int ud) {
-#if		(CONFIG_IRMACS_UART_REDIR == 1)
-	if (ud == configSTDIO_UART_CHAN) return xStdioBufPutC(cChr) ;
-#else
-	if (ud == configSTDIO_UART_CHAN) return putcharRT(cChr) ;
-#endif
-	while(!halUART_TxFifoSpace(ud)) ;
-	return halUART_PutChar(cChr, ud) ;
+	if (ud == configSTDIO_UART_CHAN) {
+		if (SystemFlag & sysFLAG_RTCBUF_USE) return xStdioBufPutC(cChr);
+		return putcharRT(cChr);
+	}
+	return halUART_PutChar(cChr, ud);
 }
 
 int	getcharX(int ud) {
