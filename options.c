@@ -51,7 +51,7 @@ const char ioSxMes[] = "\t133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PE
 ioset_t const ioDefaults = {
 	.B3_3 = 1,
 	.B3_6 = 1,
-	.B3_20 = CONFIG_LOG_MAXIMUM_LEVEL + 2,
+	.B3_20 = CONFIG_LOG_DEFAULT_LEVEL + 2,
 	.B4_0 = ds1990READ_INTVL,
 };
 
