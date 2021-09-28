@@ -115,13 +115,13 @@ void vOptionsShow(void) {
 	printfx(ioB2Mes);
 	printfx("ioB3: 0x%llx\n\t", sNVSvars.ioBX.ioB3);
 	for (int i = 0; i <= 20; ++i) {
-		vOptionsPrint(i+ioB3_0, ioB2GET(i+ioB3_0), (ioDefaults.ioB3 >> (i*3)) & 7);
+		vOptionsPrint(i+ioB3_0, ioB3GET(i+ioB3_0), (ioDefaults.ioB3 >> (i*3)) & 7);
 		if ((i % 16) == 15) printfx("\n\t");
 	}
 	printfx(ioB3Mes);
 	printfx("ioB4: 0x%llx\n\t", sNVSvars.ioBX.ioB4);
 	for (int i = 0; i <= 15; ++i) {
-		vOptionsPrint(i+ioB4_0, ioB2GET(i+ioB4_0), (ioDefaults.ioB4 >> (i*4)) & 15);
+		vOptionsPrint(i+ioB4_0, ioB4GET(i+ioB4_0), (ioDefaults.ioB4 >> (i*4)) & 15);
 		if ((i % 16) == 15) printfx("\n\t");
 	}
 	printfx(ioB4Mes);
