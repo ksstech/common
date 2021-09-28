@@ -105,7 +105,7 @@ extern "C" {
 #define		CHR_L_SQUARE					0x5B		// '['
 #define		CHR_BACKSLASH					0x5C		// '\'
 #define		CHR_R_SQUARE					0x5D		// ']'
-#define		CHR_CARET						0x5E		// '~'
+#define		CHR_CARET						0x5E		// '^'
 #define		CHR_UNDERSCORE					0x5F		// '_'
 #define		CHR_GRAVE						0x60		// '`'
 // Lowercase a-z
