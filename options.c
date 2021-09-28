@@ -31,18 +31,18 @@
 const char ioB1Mes[] =
 	"0=STDIO Buf\t1=I2Cinit\t2=I2Cdly\t3=FOTA\t\t4=Flags \t5=Timeout\t6=Startup\t7=ShutDown\n"
 	"\t8=ParaPar\t9=SyntPar\t10=Sense\t11=Mode\t\t12=EndPoint\t13=Ident\t14=DB Match\t15=DB Error\n"
-	"\t16=MQTT Con\t17=MQTT Sub\t18=MQTT Pub\t19=OW Scan\t20=Actuate\t21=Alerts\t22=Memory\n"
-	"\t32=DS18x20\t33=DS1990x\t34=DS248\t35=M90Ex6\n"
+	"\t16=MQTT Con\t17=MQTT Sub\t18=MQTT Pub\t19=OW Scan\t20=Actuate\t21=Alerts\t22=Memory\t23=TNETtrack\n"
+	"\t24=HTTPtrack\n"
+	"\t32=DS18x20\t33=DS1990x\t34=DS248Xstat\t35=M90write\t36=M90offset\n"
 	"\t\t\t\t\t\t\t59=WL Mode\t60=WL Events\t61=WL RAM\t62=WL Scan\t63=WL Sort\n";
 
-const char ioB2Mes[] = "64->95=Unused\n";
+const char ioB2Mes[] = "64=DS248Xdbg\t65->95=Unused\n";
 
 const char ioB3Mes[] =
 	"\n\t96=U0 Speed\t97=U1 Speed\t98=U2 Speed\t99=U0 RXbuf\t100=U1 RXbuf\t101=U2 RXbuf\t102=U0 TXbuf\n"
 	"\t103=U1 TXbuf\t104=U2 TXbuf\t115=WL Auth\t116=SLOG Max\n";
 
-const char ioB4Mes[] = "117=DS199xRdDly\n"
-		"118->132=Unused\n";
+const char ioB4Mes[] = "117=DS199xRdDly\t118->132=Unused\n";
 
 const char ioSxMes[] = "\t133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n";
 

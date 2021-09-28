@@ -48,11 +48,14 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioActuate,
 	ioAlert,
 	ioMemory,
+	ioTNET,
+	ioHTTP,
 	// hardware devices
 	ioDS18x20 = 32,
 	ioDS1990x,
-	ioDS248x,
-	ioM90Ex6,
+	ioDS248Xstat,
+	ioM90write,
+	ioM90offset,
 	// Add more ...
 	ioWLmode=59,
 	ioWLevt,						// halWL events track 0=DISABLE 1=ENABLE
@@ -61,6 +64,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_63=63, ioWLsort=ioB1_63,
 	// START of 2-bit flags
 	ioB2_0=64,
+	ioDS248Xdbg = ioB2_0,
 	// Add more ...
 	ioB2_31=95,
 	// START of 3-bit flags
@@ -248,7 +252,6 @@ typedef struct ioset_t {			// 1/2/3/4 bit option variables
 		uint64_t ioB1 ;
 	};
 } ioset_t;
-
 
 // ####################################### public variables ########################################
 
