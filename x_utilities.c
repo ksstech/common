@@ -137,21 +137,38 @@ void xGenerateUUID(char * pBuf) {
 	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
 }
 
-const char charset[] = {
-	'0','1','2','3','4','5','6','7','8','9',
-	'A','B','C','D','E','F','G','H','I','J','K','L','M',
-	'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-	'a','b','c','d','e','f','g','h','i','j','k','l','m',
-	'n','o','p','q','r','s','t','u','v','w','x','y','z',
-} ;
+#define ALPHA_UC 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+#define	ALPHA_LC	"abcdefghijklmnopqrstuvwxyz"
+#define	NUMERICS	"0123456789"
+#define	SYMBOLS1	" !\"#$%&'()*+,-./"
+#define	SYMBOLS2	":;<=>?@[\140]^_`{|}~"
 
-void vBuildRandomSXX(uint8_t * pu8, int len) {
-	if (len && pu8) for (int n = 0; n < len; pu8[n++] = charset[rand() % sizeof(charset)]) ;
+#define	ALPHA_UC_SIZE	(sizeof(ALPHA_UC) - 1)
+#define	ALPHA_LC_SIZE	(sizeof(ALPHA_LC) - 1)
+#define	NUMERICS_SIZE	(sizeof(NUMERICS) - 1)
+#define	SYMBOLS1_SIZE	(sizeof(SYMBOLS1) - 1)
+#define	SYMBOLS2_SIZE	(sizeof(SYMBOLS2) - 1)
+
+#define BASIC_SIZE	(ALPHA_UC_SIZE + ALPHA_LC_SIZE)
+#define	OPTN1_SIZE	(BASIC_SIZE + NUMERICS_SIZE)
+#define	OPTN2_SIZE	(OPTN1_SIZE + SYMBOLS1_SIZE)
+#define	OPTN3_SIZE	(OPTN2_SIZE + SYMBOLS2_SIZE)
+
+const char charset[] = { ALPHA_UC ALPHA_LC NUMERICS SYMBOLS1 SYMBOLS2 };
+DUMB_STATIC_ASSERT(sizeof(charset) == (OPTN3_SIZE + 1));
+
+void vBuildRandomSXX(uint8_t * pu8, int len, int set) {
+	if (len && pu8) {
+		int size = (set >= 3) ?	OPTN3_SIZE :
+					(set == 2) ? OPTN2_SIZE :
+					(set == 1) ? OPTN1_SIZE : BASIC_SIZE;
+		for (int n = 0; n < len; pu8[n++] = charset[rand() % size]) ;
+	}
 }
 
-void vBuildRandomStr(uint8_t * pu8, int32_t len) {
+void vBuildRandomStr(uint8_t * pu8, int len, int set) {
 	if (len && pu8) {
-		vBuildRandomSXX(pu8, --len) ;
+		vBuildRandomSXX(pu8, --len, set) ;
 		pu8[len] = CHR_NUL ;
 	}
 }
@@ -239,7 +256,7 @@ int	xU32ToDecStr(uint32_t Value, char * pBuf) {
 
 // ################################### 1/2/4 bit field array support ###############################
 
-ba_t *pvBitArrayCreate(size_t Count, size_t Size) {
+ba_t * pvBitArrayCreate(size_t Count, size_t Size) {
 	if (Size != 1 || Size != 2 || Size != 4) return pvFAILURE;
 	size_t szBA = Count * Size ;						// size in total # of bits
 	if (szBA & 0x00000007) return pvFAILURE;			// not on a byte boundary

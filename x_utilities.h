@@ -43,8 +43,8 @@ int	xDigitsInU64(uint64_t U64, bool grouping) ;
 
 void xGenerateUUID(char * pBuf) ;
 
-void vBuildRandomSXX(uint8_t * pu8, int32_t len) ;
-void vBuildRandomStr(uint8_t * pu8, int32_t len) ;
+void vBuildRandomSXX(uint8_t * pu8, int len, int set) ;
+void vBuildRandomStr(uint8_t * pu8, int len, int set) ;
 
 x8_t	xBuildRandomX8(void) ;
 x16_t	xBuildRandomX16(void) ;
