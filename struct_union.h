@@ -194,7 +194,7 @@ enum {													// {flags}{counter}
 
 typedef	union {
 	struct __attribute__((packed)) {					// Generic structure for init
-		int	a:1;
+/*LSB*/	int	a:1;
 		int	b:1;
 		int	c:1;
 		int	d:1;
@@ -203,10 +203,10 @@ typedef	union {
 		int	g:1;
 		int	h:1;
 		int	i:1;
-		int	j:23;
+/*MSB*/	int	j:23;
 	} ;
 	struct __attribute__((packed)) {				// Printing control
-		int	bRT		: 1 ;							// Runtime
+/*LSB*/	int	bRT		: 1 ;							// Runtime
 		int	bNL		: 1 ;							// terminating NL
 		int	bXtras	: 1 ;							// Ticks, Stack & TCB
 		int	bCore	: 1 ;							// MCU 01X
@@ -215,7 +215,7 @@ typedef	union {
 		int	bPrioX	: 1 ;							// Priorities
 		int	bColor	: 1 ;							// Use colour
 		int	bCount	: 1 ;							// Task #
-		int	uCount	: 23 ;							// Task # mask
+/*MSB*/	int	uCount	: 23 ;							// Task # mask
 	} ;
 	uint32_t	u32Val ;
 } flagmask_t ;
