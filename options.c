@@ -32,7 +32,7 @@ const char ioB1Mes[] =
 	"0=STDIO Buf\t1=I2Cinit\t2=I2Cdly\t3=FOTA\t\t4=Flags \t5=Timeout\t6=Startup\t7=ShutDown\n"
 	"\t8=ParaPar\t9=SyntPar\t10=Sense\t11=Mode\t\t12=EndPoint\t13=Ident\t14=DB Match\t15=DB Error\n"
 	"\t16=MQTT Con\t17=MQTT Sub\t18=MQTT Pub\t19=OW Scan\t20=Actuate\t21=Alerts\t22=Memory\t23=TNETtrack\n"
-	"\t24=HTTPtrack\n"
+	"\t24=HTTPtrack\t25=SENSORtrack\t26-RulesTable\t27=RulesSched\t28=RulesIdent\n"
 	"\t32=DS18x20\t33=DS1990x\t34=DS248Xstat\t35=M90write\t36=M90offset\n"
 	"\t\t\t\t\t\t\t59=WL Mode\t60=WL Events\t61=WL RAM\t62=WL Scan\t63=WL Sort\n";
 
@@ -49,10 +49,10 @@ const char ioSxMes[] = "\t133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PE
 // ###################################### private variables ########################################
 
 ioset_t const ioDefaults = {
-	.B3_3 = 1,
-	.B3_6 = 1,
-	.B3_20 = CONFIG_LOG_DEFAULT_LEVEL + 2,
-	.B4_0 = ds1990READ_INTVL,
+	.B3_3	= 1,
+	.B3_6	= 1,
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
+	.B4_0	= ds1990READ_INTVL,
 };
 
 // ####################################### public variables ########################################
@@ -62,42 +62,55 @@ ioset_t const ioDefaults = {
 
 void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(ioset_t)); }
 
-int xOptionsSetDirect(int EI, int EV, int Flag) {
-	if (EI > ioB4_15)
-		{ SET_ERRINFO("Invalid IOSet value"); return erSCRIPT_INV_OPERATION; }
+/**
+ * Set value of 1, 2, 3 or 4 bit option values
+ * @param	ON - option number
+ * @param	OV - option value
+ * @return	1 if value changed, 0 if value same or error code
+ */
+int xOptionsSetDirect(int ON, int OV) {
+	int iRV = 1;
+	if (ON > ioB4_15)
+		ERR_EXIT("Invalid option number", erSCRIPT_INV_OPERATION);
 
-	int EVL = (EI >= ioB4_0) ? 15 : (EI >= ioB3_0) ? 7 : (EI >= ioB2_0) ? 3 : 1 ;
-	if (OUTSIDE(0, EV, EVL, int) || OUTSIDE(0, Flag, 1, int))
-		{ ErrLine = __LINE__; return erSCRIPT_INV_VALUE; }
+	int EVL = (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1 ;
+	if (OUTSIDE(0, OV, EVL, int))
+		ERR_EXIT("Invalid option value", erSCRIPT_INV_VALUE);
 
-	if (EI >= ioB4_0) { ioB4SET(EI, EV); }
-	else if (EI >= ioB3_0) { ioB3SET(EI, EV); }
-	else if (EI >= ioB2_0) { ioB2SET(EI, EV); }
-	else { ioB1SET(EI, EV); }
-	return erSUCCESS;
+	// to avoid unnecessary flash writes, only write if value is different.
+	if (ON >= ioB4_0) {
+		if (ioB4GET(ON) != OV) ioB4SET(ON, OV) else iRV = 0;
+	} else if (ON >= ioB3_0) {
+		if (ioB3GET(ON) != OV) ioB3SET(ON, OV) else iRV = 0;
+	} else if (ON >= ioB2_0) {
+		if (ioB2GET(ON) != OV) ioB2SET(ON, OV) else iRV = 0;
+	} else {
+		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
+	}
+exit:
+	return iRV;
 }
 
-int	xOptionsSet(int	EI, int EV, int Persist) {
+int	xOptionsSet(int	ON, int OV, int PF) {
 	int iRV = erSUCCESS ;
-	if (EI <= ioB4_15) {
-		iRV = xOptionsSetDirect(EI, EV, Persist) ;
-	} else if (EI == ioS_NWMO) {
-		iRV = INRANGE(WIFI_MODE_NULL, EV, WIFI_MODE_APSTA, int) ? halWL_SetMode(EV) : erFAILURE ;
-	} else if (EI == ioS_IOdef) {						// reset ALL IOSet values to defaults
+	IF_PRINT(debugTRACK, "IOSET %d=%d (%d)\n", ON, OV, PF);
+	if (ON <= ioB4_15) {
+		iRV = xOptionsSetDirect(ON, OV);
+		// If nothing changed, force persistence flag to false
+		if (iRV == 0)
+		{ PF = 0; LLTRACK("ON %d not changed", OV); }
+	} else if (ON == ioS_NWMO) {
+		iRV = INRANGE(WIFI_MODE_NULL, OV, WIFI_MODE_APSTA, int) ? halWL_SetMode(OV) : erFAILURE ;
+	} else if (ON == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
 	}
-	if (iRV > erFAILURE) {
-		if (Persist) SystemFlag |= varFLAG_IOSET;
-		IF_PRINT(debugTRACK, "IOSET %d=%d (%d)\n", EI, EV, Persist);
-	}
+	if ((iRV > erFAILURE) && (PF == 1))
+		SystemFlag |= varFLAG_IOSET;
 	return iRV ;
 }
 
 void vOptionsPrint(int Num, int v1, int v2) {
-	if (v1 != v2)
-		printfx("%C%3d=%x%C ", xpfSGR(colourBG_CYAN,0,0,0), Num, v1, 0);
-	else
-		printfx("%3d=%d ", Num, v1);
+	printfx("%C%3d=%x%C ", (v1 == v2) ? 0 : xpfSGR(colourBG_CYAN,0,0,0), Num, v1, 0);
 }
 
 void vOptionsShow(void) {

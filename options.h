@@ -45,11 +45,15 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioMQsub,
 	ioMQpub,
 	ioOWscan,
-	ioActuate,
+	ioActuate,						// RulesEngine * TaskActuator
 	ioAlert,
 	ioMemory,
 	ioTNET,
 	ioHTTP,
+	ioSENSOR,						// vTaskSensor()
+	ioREtable,
+	ioREsched,
+	ioREident,
 	// hardware devices
 	ioDS18x20 = 32,
 	ioDS1990x,
@@ -62,12 +66,12 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioWLram,						// halWL wifi storage 0=FLASH 1=RAM
 	ioWLscan,
 	ioB1_63=63, ioWLsort=ioB1_63,
-	// START of 2-bit flags
+	// ##################### START of 2-bit flags
 	ioB2_0=64,
 	ioDS248Xdbg = ioB2_0,
 	// Add more ...
 	ioB2_31=95,
-	// START of 3-bit flags
+	// ##################### START of 3-bit flags
 	ioB3_0=96, ioU0Speed=ioB3_0,	// UARTx speed
 	ioU1Speed,
 	ioU2Speed,
@@ -80,17 +84,17 @@ enum {								// enumerated option numbers used by ioBxSET
 	// Add more ...
 	ioWLauth=115,
 	ioB3_20=116, ioSLOGhi=ioB3_20,	// SLOG maximum level (0 -> 7)
-	// START 4-bit flags
+	// ##################### START 4-bit flags
 	ioB4_0=117,
 	ioDS1990RdDly = ioB4_0,			// delay (sec) between successive read same tag
 	// Add more ...
 	ioB4_15=132,
-	// various special case options
-	ioS_NWMO,						// set network mode 0->3
-	ioS_WIFI,
-	ioS_MQTT,
-	ioS_PEEK,
-	ioS_IOdef,
+	// ##################### START special flags
+	ioS_NWMO,						// 133 {0->3} 			(network mode)
+	ioS_WIFI,						// 134 {ssid} {pswd}
+	ioS_MQTT,						// 135 {w.x.y.z[:???]}	(mqtt broker/proxy)
+	ioS_PEEK,						// 136 {addr} {size}
+	ioS_IOdef,						// 137 					(reset to defaults)
 	ioS_LAST = ioS_IOdef,
 } ;
 
@@ -259,8 +263,8 @@ typedef struct ioset_t {			// 1/2/3/4 bit option variables
 // ####################################### public functions ########################################
 
 void xOptionsSetDefaults(void);
-int xOptionsSetDirect(int EI, int EV, int Flag);
-int	xOptionsSet(int	EI, int EV, int Flag);
+int xOptionsSetDirect(int ON, int OV);
+int	xOptionsSet(int	ON, int OV, int PF);
 void vOptionsShow(void);
 
 #ifdef __cplusplus
