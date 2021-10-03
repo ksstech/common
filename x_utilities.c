@@ -65,62 +65,7 @@ void MemDump(uint8_t ** pMemAddr, int32_t cChr, size_t Size) {
 	*pMemAddr = (cChr == '+') ? (*pMemAddr + Size) : (cChr == '-') ? (*pMemAddr - Size) : *pMemAddr ;
 }
 
-int	xDigitsInI32(int32_t I32, bool grouping) {
-	int x ;
-	if (I32 == INT32_MIN) {
-		x = 10 + 1 ;
-	} else {	// if value is negative, and '-' counts as a digit....
-		if (I32 < 0) return xDigitsInI32(-I32, grouping) + 1 ;
-		if (I32 >= 10000) {
-			if (I32 >= 10000000) {
-		        if (I32 >= 100000000) x = (I32 >= 1000000000) ? 10 : 9 ;
-		        else x = 8 ;
-			} else {
-				if (I32 >= 100000) x = (I32 >= 1000000) ? 7 : 6 ;
-				else x = 5 ;
-			}
-	    } else {
-		    if (I32 >= 100) x = (I32 >= 1000) ? 4 : 3 ;
-		    else x = (I32 >= 10) ? 2 : 1 ;
-	    }
-	}
-	return x + ((x - 1) / 3) ;
-}
-
-int	xDigitsInU32(uint32_t U32, bool grouping) {
-	int x ;
-	if (U32 >= 10000) {
-		if (U32 >= 10000000) {
-	        if (U32 >= 100000000) x = (U32 >= 1000000000)? 10 : 9 ;
-	        else x = 8 ;
-		} else {
-			if (U32 >= 100000) x = (U32 >= 1000000) ? 7 : 6 ;
-			else x = 5 ;
-		}
-    } else {
-        if (U32 >= 100) x = (U32 >= 1000) ? 4 : 3 ;
-        else x = (U32 >= 10) ? 2 : 1 ;
-    }
-    return x + ((x - 1) / 3) ;
-}
-
-int	xDigitsInU64(uint64_t U64, bool grouping) {
-	int x ;
-	if (U64 <= UINT32_MAX) return xDigitsInU32((uint32_t) U64, grouping) ;
-	if (U64 >= 100000000000000ULL) {
-		if (U64 >= 100000000000000000ULL) {
-			if (U64 >= 1000000000000000000ULL) x = (U64 >= 10000000000000000000ULL) ? 20  : 19 ;
-			else x = 18 ;
-		} else {
-			if (U64 >= 1000000000000000ULL) x = (U64 >= 10000000000000000ULL) ? 17 : 16 ;
-			else x = 15 ;
-		}
-	} else {
-		if (U64 >= 1000000000000ULL) x = (U64 > 10000000000000ULL) ? 14 : 13 ;
-		else x = (U64 >= 100000000000ULL) ? 12 : 11 ;
-	}
-	return x + ((x - 1) / 3) ;
-}
+// ####################################### UUID support ############################################
 
 // https://stackoverflow.com/questions/7399069/how-to-generate-a-guid-in-c#7399348
 void xGenerateUUID(char * pBuf) {
@@ -136,6 +81,8 @@ void xGenerateUUID(char * pBuf) {
 	}
 	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
 }
+
+// ################################ Random number & string support #################################
 
 #define ALPHA_UC 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 #define	ALPHA_LC	"abcdefghijklmnopqrstuvwxyz"
@@ -199,6 +146,8 @@ x64_t xBuildRandomX64(void) {
 	return X64 ;
 }
 
+// ############################## Ixx and Uxx manipulation support #################################
+
 uint32_t u32pow(uint32_t base, uint32_t exp) {
 	uint32_t res ;
 	for(res = 1; exp > 0; res *= base, --exp) ;
@@ -231,7 +180,62 @@ int u64Trailing0(uint64_t U64) {
 	return iRV ;
 }
 
-/* ################################ Decimal number conversions ################################## */
+int	xDigitsInI32(int32_t I32, bool grouping) {
+	int x ;
+	if (I32 == INT32_MIN) {
+		x = 10 + 1 ;
+	} else {	// if value is negative, and '-' counts as a digit....
+		if (I32 < 0) return xDigitsInI32(-I32, grouping) + 1 ;
+		if (I32 >= 10000) {
+			if (I32 >= 10000000) {
+		        if (I32 >= 100000000) x = (I32 >= 1000000000) ? 10 : 9 ;
+		        else x = 8 ;
+			} else {
+				if (I32 >= 100000) x = (I32 >= 1000000) ? 7 : 6 ;
+				else x = 5 ;
+			}
+	    } else {
+		    if (I32 >= 100) x = (I32 >= 1000) ? 4 : 3 ;
+		    else x = (I32 >= 10) ? 2 : 1 ;
+	    }
+	}
+	return x + ((x - 1) / 3) ;
+}
+
+int	xDigitsInU32(uint32_t U32, bool grouping) {
+	int x ;
+	if (U32 >= 10000) {
+		if (U32 >= 10000000) {
+	        if (U32 >= 100000000) x = (U32 >= 1000000000)? 10 : 9 ;
+	        else x = 8 ;
+		} else {
+			if (U32 >= 100000) x = (U32 >= 1000000) ? 7 : 6 ;
+			else x = 5 ;
+		}
+    } else {
+        if (U32 >= 100) x = (U32 >= 1000) ? 4 : 3 ;
+        else x = (U32 >= 10) ? 2 : 1 ;
+    }
+    return x + ((x - 1) / 3) ;
+}
+
+int	xDigitsInU64(uint64_t U64, bool grouping) {
+	int x ;
+	if (U64 <= UINT32_MAX) return xDigitsInU32((uint32_t) U64, grouping) ;
+	if (U64 >= 100000000000000ULL) {
+		if (U64 >= 100000000000000000ULL) {
+			if (U64 >= 1000000000000000000ULL) x = (U64 >= 10000000000000000000ULL) ? 20  : 19 ;
+			else x = 18 ;
+		} else {
+			if (U64 >= 1000000000000000ULL) x = (U64 >= 10000000000000000ULL) ? 17 : 16 ;
+			else x = 15 ;
+		}
+	} else {
+		if (U64 >= 1000000000000ULL) x = (U64 > 10000000000000ULL) ? 14 : 13 ;
+		else x = (U64 >= 100000000000ULL) ? 12 : 11 ;
+	}
+	return x + ((x - 1) / 3) ;
+}
 
 int	xU32ToDecStr(uint32_t Value, char * pBuf) {
 	int	Len = 0 ;
@@ -252,6 +256,12 @@ int	xU32ToDecStr(uint32_t Value, char * pBuf) {
 	}
 	*pBuf	= 0 ;										// terminate
 	return Len ;
+}
+
+uint32_t xU32Round(uint32_t u32V, uint32_t u32P) {
+	uint32_t u32F = u32V % u32P;
+	u32V -= u32F;
+	return (u32F >= (u32P / 2)) ? (u32V + u32P) : u32V;
 }
 
 // ################################### 1/2/4 bit field array support ###############################

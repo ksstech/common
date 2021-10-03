@@ -37,10 +37,6 @@ uint64_t mac2int(uint8_t * hwaddr) ;
 void int2mac(uint64_t mac, uint8_t * hwaddr) ;
 void MemDump(uint8_t ** pMemAddr, int cChr, size_t Size) ;
 
-int	xDigitsInI32(int32_t I32, bool grouping) ;
-int	xDigitsInU32(uint32_t U32, bool grouping) ;
-int	xDigitsInU64(uint64_t U64, bool grouping) ;
-
 void xGenerateUUID(char * pBuf) ;
 
 void vBuildRandomSXX(uint8_t * pu8, int len, int set) ;
@@ -57,7 +53,12 @@ uint64_t u64pow(uint32_t base, uint32_t exp) ;
 int u32Trailing0(uint32_t U32) ;
 int u64Trailing0(uint64_t U64) ;
 
+int	xDigitsInI32(int32_t I32, bool grouping) ;
+int	xDigitsInU32(uint32_t U32, bool grouping) ;
+int	xDigitsInU64(uint64_t U64, bool grouping) ;
+
 int	xU32ToDecStr(uint32_t Value, char *) ;
+uint32_t xU32Round(uint32_t u32V, uint32_t u32P);
 
 // ################################### 1/2/4 bit field array support ###############################
 
