@@ -210,7 +210,7 @@ extern "C" {
 
 // normalise a value to be in the range specified
 #define	FIT2RANGE(x,y,z,c)				( y = ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
-#define	TRIMMED(x,y,z,c)				    ( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
+#define	TRIMMED(x,y,z,c)				( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
 
 /* Used to check build configuration where only 1 of 2 or 3 option may be selected
  * does not yet work correctly if a negative number is used in a definition..
@@ -219,7 +219,7 @@ extern "C" {
 #define	MORETHAN1of3(x,y,z)		((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((x+y+z)==1)) ? 0 : 1
 #define	MORETHAN1of4(w,x,y,z)	((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((w+x+y+z)==1)) ? 0 : 1
 
-#define	POWER_OF_10(x)		((x==1 || x==10 || x==100 || x==1000 ||	x==10000 || x==100000 || x==1000000	|| x==10000000 || \
+#define	POWER_OF_10(x)			((x==1 || x==10 || x==100 || x==1000 ||	x==10000 || x==100000 || x==1000000	|| x==10000000 || \
 								 x==100000000 || x==1000000000 || x==10000000000 || x==100000000000) ? 1 : 0)
 
 #define	SWAP(v1, v2, t)					{t vx = v1 ; v1 = v2 ; v2 = vx ; }
@@ -366,10 +366,14 @@ typedef	const unsigned char * pcu8_t ;
 
 // #############################
 
-// https://stackoverflow.com/questions/32082004/embedding-json-as-a-string-in-c-code-using-preprocessor
-// https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/preprocessor/macros/__VA_ARGS__/count-arguments
+/*
+https://stackoverflow.com/questions/32082004/embedding-json-as-a-string-in-c-code-using-preprocessor
+https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/preprocessor/macros/__VA_ARGS__/count-arguments
+https://riptutorial.com/cplusplus/example/3527/macros
 
-// #define LSC( { "key" : "value", "num1" : 12345 } ) ;
+#define LSC( { "key" : "value", "num1" : 12345 } ) ;
+*/
+
 #define LSC(...) #__VA_ARGS__
 
 // ############################# common complex data types/ structures #############################
