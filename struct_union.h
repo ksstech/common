@@ -144,7 +144,6 @@ struct x32mmab_t ;
 struct x32stat_t ;
 struct pcnt_t ;
 struct TSZ_t ;
-struct cli_t ;
 struct vt_enum_t ;
 
 typedef union ps_t {
@@ -153,7 +152,6 @@ typedef union ps_t {
 	struct x32stat_t *	pSTAT ;
 	struct pcnt_t *		psPCNT ;
 	struct TSZ_t *		pTSZ ;
-	struct cli_t *		psCLI ;
 	struct vt_enum_t *	psCX ;
 	union ow_rom_t *	pOW_ROM ;
 } ps_t ;
