@@ -54,6 +54,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioREtable,
 	ioREsched,
 	ioREident,
+	ioLFS,
 	// hardware devices
 	ioDS18x20 = 32,
 	ioDS1990x,

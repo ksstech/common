@@ -32,7 +32,7 @@ const char ioB1Mes[] =
 	"0=STDIO Buf\t1=I2Cinit\t2=I2Cdly\t3=FOTA\t\t4=Flags \t5=Timeout\t6=Startup\t7=ShutDown\n"
 	"\t8=ParaPar\t9=SyntPar\t10=Sense\t11=Mode\t\t12=EndPoint\t13=Ident\t14=DB Match\t15=DB Error\n"
 	"\t16=MQTT Con\t17=MQTT Sub\t18=MQTT Pub\t19=OW Scan\t20=Actuate\t21=Alerts\t22=Memory\t23=TNETtrack\n"
-	"\t24=HTTPtrack\t25=SENSORtrack\t26-RulesTable\t27=RulesSched\t28=RulesIdent\n"
+	"\t24=HTTPtrack\t25=SENSORtrack\t26-RulesTable\t27=RulesSched\t28=RulesIdent\t29-LittleFS\n"
 	"\t32=DS18x20\t33=DS1990x\t34=DS248Xstat\t35=M90write\t36=M90offset\n"
 	"\t\t\t\t\t\t\t59=WL Mode\t60=WL Events\t61=WL RAM\t62=WL Scan\t63=WL Sort\n";
 
