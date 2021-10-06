@@ -10,207 +10,207 @@ extern "C" {
 
 // ####################################### ASCII char set ##########################################
 
-#define		CHR_NUL							0x00		// c-@
-#define		CHR_SOH							0x01		// c-A
-#define		CHR_STX							0x02		// c-B
-#define		CHR_ETX							0x03		// c-C
-#define		CHR_EOT							0x04		// c-D
-#define		CHR_ENQ							0x05		// c-E
-#define		CHR_ACK							0x06		// c-F
-#define		CHR_BEL							0x07		// c-G
-#define		CHR_BS							0x08		// c-H
-#define		CHR_TAB							0x09		// c-I
-#define		CHR_LF							0x0A		// c-J
-#define		CHR_VT							0x0B		// c-K
-#define		CHR_FF							0x0C		// c-L
-#define		CHR_CR							0x0D		// c-M
-#define		CHR_SO							0x0E		// c-N
-#define		CHR_SI							0x0F		// c-O
-#define		CHR_DLE							0x10		// c-P
-#define		CHR_DC1							0x11		// c-Q
-#define		CHR_DC2							0x12		// c-R
-#define		CHR_DC3							0x13		// c-S	aka	XOFF
-#define		CHR_DC4							0x14		// c-T
-#define		CHR_NAK							0x15		// c-U
-#define		CHR_SYN							0x16		// c-V
-#define		CHR_ETB							0x17		// c-W
-#define		CHR_CAN							0x18		// c-X
-#define		CHR_EM							0x19		// c-Y
-#define		CHR_SUB							0x1A		// c-Z
-#define		CHR_ESC							0x1B		// c-3		#
-#define		CHR_FS							0x1C		// c-4				c-FWD SLASH
-#define		CHR_GS							0x1D		// c-5		c-]
-#define		CHR_RS							0x1E		// c-6		c-"
-#define		CHR_US							0x1F		// c-7		c--		c-BACK SLASH
-#define		CHR_SPACE						0x20		// ' '
-#define		CHR_EXCLAMATION					0x21		// !
-#define		CHR_DOUBLE_QUOTE				0x22		// "
-#define		CHR_HASH						0x23		// #
-#define		CHR_DOLLAR						0x24		// $
-#define		CHR_PERCENT						0x25
-#define		CHR_AMPERSAND					0x26
-#define		CHR_SINGLE_QUOTE				0x27		// '
-#define		CHR_L_ROUND						0x28		// (
-#define		CHR_R_ROUND						0x29		// )
-#define		CHR_ASTERISK					0x2A		// @
-#define		CHR_PLUS						0x2B
-#define		CHR_COMMA						0x2C
-#define		CHR_MINUS						0x2D
-#define		CHR_FULLSTOP					0x2E
-#define		CHR_FWDSLASH					0x2F		// /
-#define		CHR_0							0x30
-#define		CHR_1							0x31
-#define		CHR_2							0x32
-#define		CHR_3							0x33
-#define		CHR_4							0x34
-#define		CHR_5							0x35
-#define		CHR_6							0x36
-#define		CHR_7							0x37
-#define		CHR_8							0x38
-#define		CHR_9							0x39
-#define		CHR_COLON						0x3A
-#define		CHR_SEMICOLON					0x3B
-#define		CHR_L_ANGLED					0x3C		// <
-#define		CHR_EQUALS						0x3D
-#define		CHR_R_ANGLED					0x3E		// >
-#define		CHR_QUESTION					0x3F
-#define		CHR_AT_SIGN						0x40
+#define	CHR_NUL						0x00		// c-@
+#define	CHR_SOH						0x01		// c-A
+#define	CHR_STX						0x02		// c-B
+#define	CHR_ETX						0x03		// c-C
+#define	CHR_EOT						0x04		// c-D
+#define	CHR_ENQ						0x05		// c-E
+#define	CHR_ACK						0x06		// c-F
+#define	CHR_BEL						0x07		// c-G
+#define	CHR_BS						0x08		// c-H		\b
+#define	CHR_TAB						0x09		// c-I		\t
+#define	CHR_LF						0x0A		// c-J		\n
+#define	CHR_VT						0x0B		// c-K
+#define	CHR_FF						0x0C		// c-L		FormFeed
+#define	CHR_CR						0x0D		// c-M		\r
+#define	CHR_SO						0x0E		// c-N
+#define	CHR_SI						0x0F		// c-O
+#define	CHR_DLE						0x10		// c-P
+#define	CHR_DC1						0x11		// c-Q
+#define	CHR_DC2						0x12		// c-R
+#define	CHR_DC3						0x13		// c-S		XOFF
+#define	CHR_DC4						0x14		// c-T
+#define	CHR_NAK						0x15		// c-U
+#define	CHR_SYN						0x16		// c-V
+#define	CHR_ETB						0x17		// c-W
+#define	CHR_CAN						0x18		// c-X
+#define	CHR_EM						0x19		// c-Y
+#define	CHR_SUB						0x1A		// c-Z
+#define	CHR_ESC						0x1B		// c-3		#
+#define	CHR_FS						0x1C		// c-4				c-FWD SLASH
+#define	CHR_GS						0x1D		// c-5		c-]
+#define	CHR_RS						0x1E		// c-6		c-"
+#define	CHR_US						0x1F		// c-7		c--		c-BACK SLASH
+#define	CHR_SPACE					0x20		// ' '
+#define	CHR_EXCLAMATION				0x21		// !
+#define	CHR_DOUBLE_QUOTE			0x22		// "
+#define	CHR_HASH					0x23		// #
+#define	CHR_DOLLAR					0x24		// $
+#define	CHR_PERCENT					0x25		// %
+#define	CHR_AMPERSAND				0x26		// &
+#define	CHR_SINGLE_QUOTE			0x27		// '
+#define	CHR_L_ROUND					0x28		// (
+#define	CHR_R_ROUND					0x29		// )
+#define	CHR_ASTERISK				0x2A		// @
+#define	CHR_PLUS					0x2B		// +
+#define	CHR_COMMA					0x2C		// ,
+#define	CHR_MINUS					0x2D		// -
+#define	CHR_FULLSTOP				0x2E		// .
+#define	CHR_FWDSLASH				0x2F		// /
+#define	CHR_0						0x30
+#define	CHR_1						0x31
+#define	CHR_2						0x32
+#define	CHR_3						0x33
+#define	CHR_4						0x34
+#define	CHR_5						0x35
+#define	CHR_6						0x36
+#define	CHR_7						0x37
+#define	CHR_8						0x38
+#define	CHR_9						0x39
+#define	CHR_COLON					0x3A		// :
+#define	CHR_SEMICOLON				0x3B		// ;
+#define	CHR_L_ANGLED				0x3C		// <
+#define	CHR_EQUALS					0x3D		// =
+#define	CHR_R_ANGLED				0x3E		// >
+#define	CHR_QUESTION				0x3F		// ?
+#define	CHR_AT_SIGN					0x40		// @
 // Uppercase A-Z
-#define		CHR_A							0x41
-#define		CHR_B							0x42
-#define		CHR_C							0x43
-#define		CHR_D							0x44
-#define		CHR_E							0x45
-#define		CHR_F							0x46
-#define		CHR_G							0x47
-#define		CHR_H							0x48
-#define		CHR_I							0x49
-#define		CHR_J							0x4A
-#define		CHR_K							0x4B
-#define		CHR_L							0x4C
-#define		CHR_M							0x4D
-#define		CHR_N							0x4E
-#define		CHR_O							0x4F
-#define		CHR_P							0x50
-#define		CHR_Q							0x51
-#define		CHR_R							0x52
-#define		CHR_S							0x53
-#define		CHR_T							0x54
-#define		CHR_U							0x55
-#define		CHR_V							0x56
-#define		CHR_W							0x57
-#define		CHR_X							0x58
-#define		CHR_Y							0x59
-#define		CHR_Z							0x5A
-#define		CHR_L_SQUARE					0x5B		// '['
-#define		CHR_BACKSLASH					0x5C		// '\'
-#define		CHR_R_SQUARE					0x5D		// ']'
-#define		CHR_CARET						0x5E		// '^'
-#define		CHR_UNDERSCORE					0x5F		// '_'
-#define		CHR_GRAVE						0x60		// '`'
+#define	CHR_A						0x41
+#define	CHR_B						0x42
+#define	CHR_C						0x43
+#define	CHR_D						0x44
+#define	CHR_E						0x45
+#define	CHR_F						0x46
+#define	CHR_G						0x47
+#define	CHR_H						0x48
+#define	CHR_I						0x49
+#define	CHR_J						0x4A
+#define	CHR_K						0x4B
+#define	CHR_L						0x4C
+#define	CHR_M						0x4D
+#define	CHR_N						0x4E
+#define	CHR_O						0x4F
+#define	CHR_P						0x50
+#define	CHR_Q						0x51
+#define	CHR_R						0x52
+#define	CHR_S						0x53
+#define	CHR_T						0x54
+#define	CHR_U						0x55
+#define	CHR_V						0x56
+#define	CHR_W						0x57
+#define	CHR_X						0x58
+#define	CHR_Y						0x59
+#define	CHR_Z						0x5A
+#define	CHR_L_SQUARE				0x5B		// '['
+#define	CHR_BACKSLASH				0x5C		// '\'
+#define	CHR_R_SQUARE				0x5D		// ']'
+#define	CHR_CARET					0x5E		// '^'
+#define	CHR_UNDERSCORE				0x5F		// '_'
+#define	CHR_GRAVE					0x60		// '`'
 // Lowercase a-z
-#define		CHR_a							0x61
-#define		CHR_b							0x62
-#define		CHR_c							0x63
-#define		CHR_d							0x64
-#define		CHR_e							0x65
-#define		CHR_f							0x66
-#define		CHR_g							0x67
-#define		CHR_h							0x68
-#define		CHR_i							0x69
-#define		CHR_j							0x6A
-#define		CHR_k							0x6B
-#define		CHR_l							0x6C
-#define		CHR_m							0x6D
-#define		CHR_n							0x6E
-#define		CHR_o							0x6F
-#define		CHR_p							0x70
-#define		CHR_q							0x71
-#define		CHR_r							0x72
-#define		CHR_s							0x73
-#define		CHR_t							0x74
-#define		CHR_u							0x75		// c-1
-#define		CHR_v							0x76		// c-3
-#define		CHR_w							0x77
-#define		CHR_x							0x78
-#define		CHR_y							0x79
-#define		CHR_z							0x7A
-#define		CHR_L_CURLY						0x7B		// '{'
-#define		CHR_VERT_BAR					0x7C		// '|'
-#define		CHR_R_CURLY						0x7D		// '}'
-#define		CHR_TILDE						0x7E		// '~'
-#define		CHR_DEL							0x7F		// c-8 = non printing !!!!
+#define	CHR_a						0x61
+#define	CHR_b						0x62
+#define	CHR_c						0x63
+#define	CHR_d						0x64
+#define	CHR_e						0x65
+#define	CHR_f						0x66
+#define	CHR_g						0x67
+#define	CHR_h						0x68
+#define	CHR_i						0x69
+#define	CHR_j						0x6A
+#define	CHR_k						0x6B
+#define	CHR_l						0x6C
+#define	CHR_m						0x6D
+#define	CHR_n						0x6E
+#define	CHR_o						0x6F
+#define	CHR_p						0x70
+#define	CHR_q						0x71
+#define	CHR_r						0x72
+#define	CHR_s						0x73
+#define	CHR_t						0x74
+#define	CHR_u						0x75		// c-1
+#define	CHR_v						0x76		// c-3
+#define	CHR_w						0x77
+#define	CHR_x						0x78
+#define	CHR_y						0x79
+#define	CHR_z						0x7A
+#define	CHR_L_CURLY					0x7B		// '{'
+#define	CHR_VERT_BAR				0x7C		// '|'
+#define	CHR_R_CURLY					0x7D		// '}'
+#define	CHR_TILDE					0x7E		// '~'
+#define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
-#define MICROS_IN_MILLISEC				1000
+#define MICROS_IN_MILLISEC			1000
 
-#define MICROS_IN_SECOND				1000000
-#define MILLIS_IN_SECOND				1000
+#define MICROS_IN_SECOND			1000000
+#define MILLIS_IN_SECOND			1000
 
-#define SECONDS_IN_MINUTE				60
+#define SECONDS_IN_MINUTE			60
 
-#define SECONDS_IN_HOUR					3600
-#define	MINUTES_IN_HOUR					60
+#define SECONDS_IN_HOUR				3600
+#define	MINUTES_IN_HOUR				60
 
-#define MILLIS_IN_DAY					86400000
-#define SECONDS_IN_DAY					86400
-#define	MINUTES_IN_DAY					1440
-#define	HOURS_IN_DAY					24
+#define MILLIS_IN_DAY				86400000
+#define SECONDS_IN_DAY				86400
+#define	MINUTES_IN_DAY				1440
+#define	HOURS_IN_DAY				24
 
-#define SECONDS_IN_WEEK					604800
-#define	MINUTES_IN_WEEK					10080
-#define	HOURS_IN_WEEK					168
-#define	DAYS_IN_WEEK					7
-#define	DAYS_IN_MONTH_MAX				31
+#define SECONDS_IN_WEEK				604800
+#define	MINUTES_IN_WEEK				10080
+#define	HOURS_IN_WEEK				168
+#define	DAYS_IN_WEEK				7
+#define	DAYS_IN_MONTH_MAX			31
 
-#define	SECONDS_IN_MONTH28D				( SECONDS_IN_DAY * 28 )
-#define	SECONDS_IN_MONTH29D				( SECONDS_IN_DAY * 29 )
-#define	SECONDS_IN_MONTH30D				( SECONDS_IN_DAY * 30 )
-#define	SECONDS_IN_MONTH31D				( SECONDS_IN_DAY * 31 )
+#define	SECONDS_IN_MONTH28D			( SECONDS_IN_DAY * 28 )
+#define	SECONDS_IN_MONTH29D			( SECONDS_IN_DAY * 29 )
+#define	SECONDS_IN_MONTH30D			( SECONDS_IN_DAY * 30 )
+#define	SECONDS_IN_MONTH31D			( SECONDS_IN_DAY * 31 )
 
-#define	SECONDS_IN_YEAR365				( SECONDS_IN_DAY * DAYS_IN_YEAR )
-#define	MINUTES_IN_YEAR					( MINUTES_IN_DAY * DAYS_IN_YEAR )
-#define	HOURS_IN_YEAR					( HOURS_IN_DAY * DAYS_IN_YEAR )
-#define	DAYS_IN_YEAR					365
-#define	MONTHS_IN_YEAR					12
+#define	SECONDS_IN_YEAR365			( SECONDS_IN_DAY * DAYS_IN_YEAR )
+#define	MINUTES_IN_YEAR				( MINUTES_IN_DAY * DAYS_IN_YEAR )
+#define	HOURS_IN_YEAR				( HOURS_IN_DAY * DAYS_IN_YEAR )
+#define	DAYS_IN_YEAR				365
+#define	MONTHS_IN_YEAR				12
 
-#define	DAYS_IN_LEAPYEAR				366
-#define	SECONDS_IN_LEAPYEAR				( SECONDS_IN_DAY * (DAYS_IN_LEAPYEAR ))
+#define	DAYS_IN_LEAPYEAR			366
+#define	SECONDS_IN_LEAPYEAR			( SECONDS_IN_DAY * (DAYS_IN_LEAPYEAR ))
 
-#define	SECONDS_IN_YEAR_AVG				( SECONDS_IN_YEAR365 + 20736)
+#define	SECONDS_IN_YEAR_AVG			( SECONDS_IN_YEAR365 + 20736)
 
 // ########################## International Standards Organisation units ###########################
 
-#define	KILO							1024UL
-#define	MEGA							(KILO * KILO)
-#define	GIGA							(KILO * KILO * KILO)
-#define	TERA							(KILO * KILO * KILO * KILO)
-#define	PETA							(KILO * KILO * KILO * KILO * KILO)
+#define	KILO						1024UL
+#define	MEGA						(KILO * KILO)
+#define	GIGA						(KILO * KILO * KILO)
+#define	TERA						(KILO * KILO * KILO * KILO)
+#define	PETA						(KILO * KILO * KILO * KILO * KILO)
 
-#define	THOUSAND						1000
-#define	MILLION							1000000
-#define	BILLION							1000000000
-#define	TRILLION						1000000000000
+#define	THOUSAND					1000
+#define	MILLION						1000000
+#define	BILLION						1000000000
+#define	TRILLION					1000000000000
 
 // natural/physical constants
-#define	CONSTANT_SQRT_2					1.4142136
-#define	CONSTANT_PI						3.1428571
+#define	CONSTANT_SQRT_2				1.4142136
+#define	CONSTANT_PI					3.1428571
 
 // number base constants
-#define	BASE02							2
-#define	BASE08							8
-#define	BASE10							10
-#define	BASE16							16
+#define	BASE02						2
+#define	BASE08						8
+#define	BASE10						10
+#define	BASE16						16
 
 // true/false range tests
-#define	INRANGE(x,y,z,c)				(((c)(x) <= (c)(y)) && ((c)(y) <= (c)(z)) ? 1 : 0)
-#define	BETWEEN(x,y,z,c)				(((c)(x) <  (c)(y)) && ((c)(y) <  (c)(z)) ? 1 : 0)
-#define	OUTSIDE(x,y,z,c)				(((c)(x) >  (c)(y)) || ((c)(y) >  (c)(z)) ? 1 : 0)
+#define	INRANGE(x,y,z,c)			(((c)(x) <= (c)(y)) && ((c)(y) <= (c)(z)) ? 1 : 0)
+#define	BETWEEN(x,y,z,c)			(((c)(x) <  (c)(y)) && ((c)(y) <  (c)(z)) ? 1 : 0)
+#define	OUTSIDE(x,y,z,c)			(((c)(x) >  (c)(y)) || ((c)(y) >  (c)(z)) ? 1 : 0)
 
 // normalise a value to be in the range specified
-#define	FIT2RANGE(x,y,z,c)				( y = ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
-#define	TRIMMED(x,y,z,c)				( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
+#define	FIT2RANGE(x,y,z,c)			( y = ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
+#define	TRIMMED(x,y,z,c)			( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
 
 /* Used to check build configuration where only 1 of 2 or 3 option may be selected
  * does not yet work correctly if a negative number is used in a definition..
@@ -222,7 +222,7 @@ extern "C" {
 #define	POWER_OF_10(x)			((x==1 || x==10 || x==100 || x==1000 ||	x==10000 || x==100000 || x==1000000	|| x==10000000 || \
 								 x==100000000 || x==1000000000 || x==10000000000 || x==100000000000) ? 1 : 0)
 
-#define	SWAP(v1, v2, t)					{t vx = v1 ; v1 = v2 ; v2 = vx ; }
+#define	SWAP(v1, v2, t)				{t vx = v1 ; v1 = v2 ; v2 = vx ; }
 
 #define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
 #define	IF_EXEC_0(T,F)				if (T) { do { F(); } while (0); }
