@@ -25,7 +25,7 @@ extern "C" {
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
-	ioB1_0, ioSTDIO = ioB1_0,		// DS248x status & config changes tracking
+	ioSTDIO, ioB1_0=ioSTDIO,		// DS248x status & config changes tracking
 	ioI2Cinit,
 	ioI2Cdly,						// I2C task auto remove Delay if 0.
 	ioFOTA,
@@ -35,10 +35,10 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioRstrt,						// shutdown/restart tracking
 	ioParse,
 	ioSyntax,
+	ioJSONpar,
 	ioSense,
 	ioMode,
 	ioEndPoint,
-	ioIdent,
 	ioDBmatch,
 	ioDBerr,
 	ioMQcon,
@@ -48,32 +48,80 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioActuate,						// RulesEngine * TaskActuator
 	ioAlert,
 	ioMemory,
+	ioSpare,
 	ioTNET,
 	ioHTTP,
+	ioHTTPclnt,
 	ioSENSOR,						// vTaskSensor()
 	ioREtable,
 	ioREsched,
 	ioREident,
 	ioLFS,
-	// hardware devices
-	ioDS18x20 = 32,
+	ioB1_32,
+	ioB1_33,
+	ioB1_34,
+	ioB1_35,
+	ioB1_36,
+	ioB1_37,
+	ioB1_38,
+	ioB1_39,
+	ioDS18x20,						// hardware devices
 	ioDS1990x,
-	ioDS248Xstat,
+	ioDS248Xcheck,
 	ioM90write,
 	ioM90offset,
-	// Add more ...
-	ioWLmode=59,
-	ioWLevt,						// halWL events track 0=DISABLE 1=ENABLE
-	ioWLram,						// halWL wifi storage 0=FLASH 1=RAM
-	ioWLscan,
-	ioB1_63=63, ioWLsort=ioB1_63,
-	// ##################### START of 2-bit flags
-	ioB2_0=64,
-	ioDS248Xdbg = ioB2_0,
-	// Add more ...
-	ioB2_31=95,
-	// ##################### START of 3-bit flags
-	ioB3_0=96, ioU0Speed=ioB3_0,	// UARTx speed
+	ioB1_45,
+	ioB1_46,
+	ioB1_47,
+	ioB1_48,
+	ioB1_49,
+	ioB1_50,
+	ioB1_51,
+	ioB1_52,
+	ioB1_53,
+	ioB1_54,
+	ioB1_55,
+	ioB1_56,
+	ioB1_57,
+	ioWLhidden,
+	ioWLmode,
+	ioWLevt,						// events track 0=DISABLE 1=ENABLE
+	ioWLram,						// storage 0=FLASH 1=RAM
+	ioWLscan,						// 0=Fast 1=All
+	ioWLsort,						// 0=SIGnal, 1=SECurity
+	ioDS248Xdbg, ioB2_0=ioDS248Xdbg,
+	ioB2_1,
+	ioB2_2,
+	ioB2_3,
+	ioB2_4,
+	ioB2_5,
+	ioB2_6,
+	ioB2_7,
+	ioB2_8,
+	ioB2_9,
+	ioB2_10,
+	ioB2_11,
+	ioB2_12,
+	ioB2_13,
+	ioB2_14,
+	ioB2_15,
+	ioB2_16,
+	ioB2_17,
+	ioB2_18,
+	ioB2_19,
+	ioB2_20,
+	ioB2_21,
+	ioB2_22,
+	ioB2_23,
+	ioB2_24,
+	ioB2_25,
+	ioB2_26,
+	ioB2_27,
+	ioB2_28,
+	ioB2_29,
+	ioB2_30,
+	ioB2_31,
+	ioU0Speed, ioB3_0=ioU0Speed,	// UARTx speed
 	ioU1Speed,
 	ioU2Speed,
 	ioU0RXbuf,						// UARTx RX buffers
@@ -82,15 +130,34 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioU0TXbuf,						// UARTx TX buffers
 	ioU1TXbuf,
 	ioU2TXbuf,
-	// Add more ...
-	ioWLauth=115,
-	ioB3_20=116, ioSLOGhi=ioB3_20,	// SLOG maximum level (0 -> 7)
-	// ##################### START 4-bit flags
-	ioB4_0=117,
-	ioDS1990RdDly = ioB4_0,			// delay (sec) between successive read same tag
-	// Add more ...
-	ioB4_15=132,
-	// ##################### START special flags
+	B3_9,
+	B3_10,
+	B3_11,
+	B3_12,
+	B3_13,
+	B3_14,
+	B3_15,
+	B3_16,
+	ioWLretry,
+	ioWLauth,
+	ioSLhost,						// MAX Host logged level
+	ioSLOGhi,						// SLOG maximum level
+	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
+	ioB4_1,
+	ioB4_2,
+	ioB4_3,
+	ioB4_4,
+	ioB4_5,
+	ioB4_6,
+	ioB4_7,
+	ioB4_8,
+	ioB4_9,
+	ioB4_10,
+	ioB4_11,
+	ioB4_12,
+	ioB4_13,
+	ioB4_14,
+	ioB4_15,
 	ioS_NWMO,						// 133 {0->3} 			(network mode)
 	ioS_WIFI,						// 134 {ssid} {pswd}
 	ioS_MQTT,						// 135 {w.x.y.z[:???]}	(mqtt broker/proxy)
@@ -101,7 +168,7 @@ enum {								// enumerated option numbers used by ioBxSET
 
 // ########################################## structures ###########################################
 
-typedef struct ioset_t {			// 1/2/3/4 bit option variables
+typedef struct __attribute__((packed)) {	// 1/2/3/4 bit option variables
 	union {							// 4-bit option variables
 		struct __attribute__((packed)) {
 			int B4_0	: 4 ;
@@ -257,6 +324,7 @@ typedef struct ioset_t {			// 1/2/3/4 bit option variables
 		uint64_t ioB1 ;
 	};
 } ioset_t;
+DUMB_STATIC_ASSERT(sizeof(ioset_t) == 32);
 
 // ####################################### public variables ########################################
 

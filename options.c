@@ -4,6 +4,7 @@
 
 #include	"hal_variables.h"
 #include	"hal_network.h"
+#include	"hal_usart.h"
 
 #include	"printfx.h"
 #include	"syslog.h"
@@ -28,32 +29,63 @@
 
 // ###################################### private constants ########################################
 
-const char ioB1Mes[] =
-	"0=STDIO Buf\t1=I2Cinit\t2=I2Cdly\t3=FOTA\t\t4=Flags \t5=Timeout\t6=Startup\t7=ShutDown\n"
-	"\t8=ParaPar\t9=SyntPar\t10=Sense\t11=Mode\t\t12=EndPoint\t13=Ident\t14=DB Match\t15=DB Error\n"
-	"\t16=MQTT Con\t17=MQTT Sub\t18=MQTT Pub\t19=OW Scan\t20=Actuate\t21=Alerts\t22=Memory\t23=TNETtrack\n"
-	"\t24=HTTPtrack\t25=SENSORtrack\t26-RulesTable\t27=RulesSched\t28=RulesIdent\t29-LittleFS\n"
-	"\t32=DS18x20\t33=DS1990x\t34=DS248Xstat\t35=M90write\t36=M90offset\n"
-	"\t\t\t\t\t\t\t59=WL Mode\t60=WL Events\t61=WL RAM\t62=WL Scan\t63=WL Sort\n";
+const char ioBXmes[] =
+"STDIO Buf\0"	"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"Startup\0"		"ShutDown\0"
+"ParaPar\0"		"SyntPar\0"		"JSONpar\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"DB Match\0"	"DB Error\0"
+"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"OW Scan\0"		"Actuate\0"		"Alerts\0"		"Memory\0"		"\0"
+"TNETtrack\0"	"HTTPtrack\0"	"HTTPclnt\0"	"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"RuleIdent\0"	"LittleFS\0"
+"DS18x20\0"		"DS1990x\0"		"DS24check\0"	"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
 
-const char ioB2Mes[] = "64=DS248Xdbg\t65->95=Unused\n";
+"DS248Xdbg\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 
-const char ioB3Mes[] =
-	"\n\t96=U0 Speed\t97=U1 Speed\t98=U2 Speed\t99=U0 RXbuf\t100=U1 RXbuf\t101=U2 RXbuf\t102=U0 TXbuf\n"
-	"\t103=U1 TXbuf\t104=U2 TXbuf\t115=WL Auth\t116=SLOG Max\n";
+"U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"
+"U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"
 
-const char ioB4Mes[] = "117=DS199xRdDly\t118->132=Unused\n";
+"DS1990Dly\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
-const char ioSxMes[] = "\t133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n";
+const char ioSxMes[] = "133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n";
 
 // ###################################### private variables ########################################
 
+#if (configPRODUCTION == 0)
 ioset_t const ioDefaults = {
-	.B3_3	= 1,
-	.B3_6	= 1,
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
-	.B4_0	= ds1990READ_INTVL,
+	.B1_0	= 0,					// ioSTDIO
+	.B1_4	= 1,					// ioFlags
+	.B1_58	= 1,					// ioWLhidden 1=enabled
+	.B1_62	= 1,					// ioWLscan 1=all channels
+
+	.B3_3	= 1,					// ioU0RXbuf
+	.B3_6	= 1,					// ioU0TXbuf
+	.B3_17	= 4,					// ioWLretry
+	.B3_19	= 4,					// Maximum level sent to host
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 4,
+
+	.B4_0	= 5,					// successive read interval, avoid duplicates
 };
+#else
+ioset_t const ioDefaults = {
+	.B1_0	= 1,					// ioSTDIO
+	.B1_4	= 0,					// ioFlags
+	.B1_58	= 1,					// ioWLhidden 1=enabled
+	.B1_62	= 1,					// ioWLscan 1=all channels
+
+	.B3_3	= 1,					// ioU0RXbuf
+	.B3_6	= 1,					// ioU0TXbuf
+	.B3_17	= 4,					// ioWLretry
+	.B3_19	= 4,					// Maximum level sent to host
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
+
+	.B4_0	= 5,					// successive read interval, avoid duplicates
+};
+#endif
 
 // ####################################### public variables ########################################
 
@@ -86,6 +118,11 @@ int xOptionsSetDirect(int ON, int OV) {
 		if (ioB2GET(ON) != OV) ioB2SET(ON, OV) else iRV = 0;
 	} else {
 		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
+		if (ioU0Speed <= ON && ON <= ioU2Speed) {
+			halUART_SetSpeed(ON - ioU0Speed);
+		} else if (ioU0TXbuf <= ON && ON <= ioU2TXbuf) {
+			halUART_CalcBuffersSizes();
+		}
 	}
 exit:
 	return iRV;
@@ -97,8 +134,10 @@ int	xOptionsSet(int	ON, int OV, int PF) {
 	if (ON <= ioB4_15) {
 		iRV = xOptionsSetDirect(ON, OV);
 		// If nothing changed, force persistence flag to false
-		if (iRV == 0)
-		{ PF = 0; LLTRACK("ON %d not changed", OV); }
+		if (iRV == 0) {
+			PF = 0;
+			printf("ON=%d not changed", OV);
+		}
 	} else if (ON == ioS_NWMO) {
 		iRV = INRANGE(WIFI_MODE_NULL, OV, WIFI_MODE_APSTA, int) ? halWL_SetMode(OV) : erFAILURE ;
 	} else if (ON == ioS_IOdef) {						// reset ALL IOSet values to defaults
@@ -109,35 +148,52 @@ int	xOptionsSet(int	ON, int OV, int PF) {
 	return iRV ;
 }
 
-void vOptionsPrint(int Num, int v1, int v2) {
-	printfx("%C%3d=%x%C ", (v1 == v2) ? 0 : xpfSGR(colourBG_CYAN,0,0,0), Num, v1, 0);
+int xOptionGetCurrent(int ON) {
+	return (ON >= ioS_NWMO) ? erFAILURE :
+			(ON >= ioB4_0) ? ioB4GET(ON) :
+			(ON >= ioB3_0) ? ioB3GET(ON) :
+			(ON >= ioB2_0) ? ioB2GET(ON) :
+							ioB1GET(ON);
+}
+
+int xOptionGetDefault(int ON) {
+	return (ON >= ioS_NWMO) ? erFAILURE :
+			(ON >= ioB4_0) ? maskGET4B(ioDefaults.ioB4, (ON - ioB4_0), uint64_t) :
+			(ON >= ioB3_0) ? maskGET3B(ioDefaults.ioB3, (ON - ioB3_0), uint64_t) :
+			(ON >= ioB2_0) ? maskGET2B(ioDefaults.ioB2, (ON - ioB2_0), uint64_t) :
+							maskGET1B(ioDefaults.ioB1, (ON - ioB1_0), uint64_t);
 }
 
 void vOptionsShow(void) {
-	printfx("ioB1: 0x%llx\n\t", sNVSvars.ioBX.ioB1);
-	for (int i = 0; i <= 63; ++i) {
-		vOptionsPrint(i, ioB1GET(i), (ioDefaults.ioB1 >> i) & 1);
-		if ((i % 16) == 15) printfx("\n\t");
+	const char * pcMess = ioBXmes;
+	int Cur, Def, Col, Len, Idx = 0;
+	for (int Num = ioB1_0; Num <= ioB4_15; ++Num) {
+		Cur = xOptionGetCurrent(Num);
+		Def = xOptionGetDefault(Num);
+		Col = (Cur == Def) ? 0 : colourBG_CYAN;
+		if (Num == ioB1_0) {
+			printfx("1-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB1);
+			Idx = 0 ;
+		} else if (Num == ioB2_0) {
+			printfx("2-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB2);
+			Idx = 0 ;
+		} else if (Num == ioB3_0) {
+			printfx("3-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB3);
+			Idx = 0 ;
+		} else if (Num == ioB4_0) {
+			printfx("\n4-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB4);
+			Idx = 0 ;
+		}
+		printfx("%3d=%C%x%C/", Num, Col, Cur, 0);
+		Len = printfx("%s", pcMess);
+		pcMess += Len + 1;
+		if (Idx == 7) {
+			printfx("\n");
+			Idx = 0;
+		} else {
+			printfx("%.*s", 12-Len, "            ");
+			++Idx;
+		}
 	}
-	printfx(ioB1Mes);
-	printfx("ioB2: 0x%llx\n\t", sNVSvars.ioBX.ioB2);
-	for (int i = 0; i <= 31; ++i) {
-		vOptionsPrint(i+ioB2_0, ioB2GET(i+ioB2_0), (ioDefaults.ioB2 >> (i*2)) & 3);
-		if ((i % 16) == 15) printfx("\n\t");
-	}
-	printfx(ioB2Mes);
-	printfx("ioB3: 0x%llx\n\t", sNVSvars.ioBX.ioB3);
-	for (int i = 0; i <= 20; ++i) {
-		vOptionsPrint(i+ioB3_0, ioB3GET(i+ioB3_0), (ioDefaults.ioB3 >> (i*3)) & 7);
-		if ((i % 16) == 15) printfx("\n\t");
-	}
-	printfx(ioB3Mes);
-	printfx("ioB4: 0x%llx\n\t", sNVSvars.ioBX.ioB4);
-	for (int i = 0; i <= 15; ++i) {
-		vOptionsPrint(i+ioB4_0, ioB4GET(i+ioB4_0), (ioDefaults.ioB4 >> (i*4)) & 15);
-		if ((i % 16) == 15) printfx("\n\t");
-	}
-	printfx(ioB4Mes);
-	printfx(ioSxMes);
+	printfx("\n%s", ioSxMes);
 }
-
