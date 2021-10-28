@@ -45,8 +45,9 @@
  * c) if the allocation of RTC slow RAM has changed and the location of the pointers are in a different place.
  */
 void xStdioBufInit(void) {
-	ubuf_t * psBuf	= &sRTCvars.sRTCbuf ;
-	if (psBuf->pBuf != sRTCvars.RTCbuf ||				// check if RTC buffer structure valid
+	ubuf_t * psBuf	= &sRTCvars.sRTCbuf;
+	// check if RTC buffer structure valid ie pointer, size, counter & indexes VALID
+	if (psBuf->pBuf != sRTCvars.RTCbuf ||
 		psBuf->Size != rtcBUF_SIZE || psBuf->Used > rtcBUF_SIZE ||
 		psBuf->IdxWR >= rtcBUF_SIZE || psBuf->IdxRD >= rtcBUF_SIZE) {
 		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
@@ -61,8 +62,9 @@ void xStdioBufInit(void) {
 }
 
 int	xStdioBufLock(TickType_t Ticks) {
-	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
-	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks) ;
+	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
+		xStdioBufInit();
+	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks);
 }
 
 int	xStdioBufUnLock(void) {
@@ -71,8 +73,9 @@ int	xStdioBufUnLock(void) {
 }
 
 int	xStdioBufPutC(int cChr) {
-	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
 	if (cChr == '\n') xStdioBufPutC('\r') ;
+	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
+		xStdioBufInit();
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
 	if (psBuf->Used == psBuf->Size) {					// buffer full ?
 		++psBuf->IdxRD ;								// discard oldest (next to be read) char
@@ -86,7 +89,8 @@ int	xStdioBufPutC(int cChr) {
 }
 
 int	xStdioBufGetC(void) {
-	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
+	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
+		xStdioBufInit();
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf;
 	if (psBuf->Used == 0) {
 		errno = EAGAIN;
@@ -96,13 +100,15 @@ int	xStdioBufGetC(void) {
 		return EOF;
 	}
 	int cChr = *(psBuf->pBuf + psBuf->IdxRD++);
-	psBuf->IdxRD %= psBuf->Size ;
-	if (--psBuf->Used == 0) psBuf->IdxRD = psBuf->IdxWR = 0;	// empty, reset In & Out indexes
-	return cChr ;
+	psBuf->IdxRD %= psBuf->Size;
+	if (--psBuf->Used == 0)
+		psBuf->IdxRD = psBuf->IdxWR = 0;				// empty, reset In & Out indexes
+	return cChr;
 }
 
 int	xStdioBufAvail(void) {
-	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
+	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
+		xStdioBufInit();
 	return xUBufAvail(&sRTCvars.sRTCbuf) ;
 }
 
@@ -115,7 +121,8 @@ int	xStdioBufAvail(void) {
  * @return		if successful, character sent, else EOF
  */
 int	putcharRT(int cChr) {
-	if (cChr == '\n') putcharRT(CHR_CR);
+	if (cChr == '\n')
+		putcharRT('\r');
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
 }
 
