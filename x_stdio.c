@@ -129,6 +129,9 @@ int	putcharX(int cChr, int ud) {
 	return halUART_PutChar(cChr, ud);
 }
 
+void __real_uart_ll_write_txfifo(uart_dev_t * hw, const uint8_t *buf, uint32_t wr_len) {
+	uart_port_t eChan = (hw == UARTx[0]) ? 0 : (hw == UARTx[1]) ? 1 : 2;
+    for(int i = 0; i < wr_len; putcharX(buf[i++], eChan));
 }
 
 int	putsX(char * pStr, int ud) {
@@ -148,6 +151,8 @@ int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
 
 int	getcharX(int ud) {
 	return (ud == configSTDIO_UART_CHAN) ? getcharRT() : halUART_GetChar((uart_port_t) ud);
+}
+
 #if 0
 #if		defined(__ARM_CC)
 
