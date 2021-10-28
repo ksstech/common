@@ -134,9 +134,6 @@ int	putcharX(int cChr, int ud) {
 	return halUART_PutChar(cChr, ud);
 }
 
-int	getcharX(int ud) {
-	if (ud == configSTDIO_UART_CHAN) return getcharRT();
-	return halUART_GetChar((uart_port_t) ud);
 }
 
 int	putsX(char * pStr, int ud) {
@@ -154,6 +151,8 @@ int	putsX(char * pStr, int ud) {
 
 int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
 
+int	getcharX(int ud) {
+	return (ud == configSTDIO_UART_CHAN) ? getcharRT() : halUART_GetChar((uart_port_t) ud);
 #if 0
 #if		defined(__ARM_CC)
 
