@@ -58,7 +58,3 @@ char * pcCodeToMessage(int eCode, const eTable_t * eTable) {
 	}
 	return (char *) eTable[i].pMess ;
 }
-
-#if		defined(cc3200)
-char * strerror(int _errno) { return pcCodeToMessage(_errno, ErrorTable) ; }
-#endif
