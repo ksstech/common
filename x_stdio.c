@@ -67,10 +67,7 @@ int	xStdioBufLock(TickType_t Ticks) {
 	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks);
 }
 
-int	xStdioBufUnLock(void) {
-	if (!(SystemFlag & sysFLAG_RTCBUFINIT)) xStdioBufInit();
-	return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux);
-}
+int	xStdioBufUnLock(void) { return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux); }
 
 int	xStdioBufPutC(int cChr) {
 	if (cChr == '\n') xStdioBufPutC('\r') ;
