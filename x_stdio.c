@@ -53,7 +53,7 @@ void xStdioBufInit(void) {
 		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
 		psBuf->pBuf	= sRTCvars.RTCbuf ;
 		psBuf->Size	= rtcBUF_SIZE ;
-	} else if (!(SystemFlag & sysFLAG_RTCBUFINIT)) {
+	} else {
 		/* Buffer structure might be correct but MUX must be re-initialised.
 		 * MUX init will be done 1st time xStdioBufLock() is called */
 		psBuf->mux	= NULL ;
