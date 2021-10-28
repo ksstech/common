@@ -126,8 +126,6 @@ int	putcharRT(int cChr) {
 	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
 }
 
-int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
-
 int	putcharX(int cChr, int ud) {
 	if (ud == configSTDIO_UART_CHAN) {
 		if (SystemFlag & sysFLAG_RTCBUF_USE) return xStdioBufPutC(cChr);
@@ -153,6 +151,8 @@ int	putsX(char * pStr, int ud) {
 	}
 	return iRV ;
 }
+
+int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
 
 #if 0
 #if		defined(__ARM_CC)
