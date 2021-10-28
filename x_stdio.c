@@ -16,9 +16,8 @@
 #include	"esp_attr.h"
 
 #include	<string.h>
-#include	<sys/errno.h>
+#include	<errno.h>
 #include	<sys/stat.h>
-#include	<sys/types.h>
 
 // ############################################### Macros ##########################################
 

@@ -5,11 +5,9 @@
 
 #pragma once
 
-#include	"definitions.h"								// no nested includes
-
 #include	<time.h>									// struct tm
-#include	<limits.h>
-#include	<stdint.h>
+#include	<sys/time.h>
+#include	"definitions.h"								// no nested includes
 
 #ifdef __cplusplus
 extern "C" {
