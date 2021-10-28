@@ -70,7 +70,6 @@ int	xStdioBufLock(TickType_t Ticks) {
 int	xStdioBufUnLock(void) { return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux); }
 
 int	xStdioBufPutC(int cChr) {
-	if (cChr == '\n') xStdioBufPutC('\r') ;
 	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
 		xStdioBufInit();
 	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
