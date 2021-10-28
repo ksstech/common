@@ -66,7 +66,7 @@ ioset_t const ioDefaults = {
 	.B3_6	= 1,					// ioU0TXbuf
 	.B3_17	= 4,					// ioWLretry
 	.B3_19	= 4,					// Maximum level sent to host
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 4,
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 3,
 
 	.B4_0	= 5,					// successive read interval, avoid duplicates
 };
