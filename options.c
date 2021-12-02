@@ -51,7 +51,7 @@ const char ioBXmes[] =
 "DS1990Dly\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
-const char ioSxMes[] = "133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n";
+const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n\n";
 
 // ###################################### private variables ########################################
 
@@ -195,5 +195,5 @@ void vOptionsShow(void) {
 			++Idx;
 		}
 	}
-	printfx("\n%s", ioSxMes);
+	printfx(ioSxMes);
 }
