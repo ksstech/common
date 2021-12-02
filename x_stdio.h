@@ -90,18 +90,6 @@ extern "C" {
 
 // #################################### Global/public functions ####################################
 
-int	xStdioBufLock(TickType_t Ticks) ;
-int	xStdioBufUnLock(void) ;
-int	xStdioBufPutC(int) ;
-int	xStdioBufGetC(void) ;
-int	xStdioBufAvail(void) ;
-
-int	putcharRT(int) ;
-int	getcharRT(void) ;
-int	putcharX(int, int) ;
-int	getcharX(int) ;
-int	putsX(char *, int) ;
-
 void fDiags(void) ;
 
 #ifdef __cplusplus

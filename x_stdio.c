@@ -5,7 +5,6 @@
 
 #include	"hal_variables.h"
 #include	"x_stdio.h"
-#include	"hal_usart.h"
 
 #include	"x_ubuf.h"
 #include 	"printfx.h"
@@ -37,120 +36,7 @@
 // ###################################### Global variables #########################################
 
 
-// ################################ RTC Slow RAM buffer support ####################################
-
-/* This code should ONLY run under very specific conditions being:
- * a) the first time on a new mote; or
- * b) after a power failure when RTC data has been wiped; or
- * c) if the allocation of RTC slow RAM has changed and the location of the pointers are in a different place.
- */
-void xStdioBufInit(void) {
-	ubuf_t * psBuf	= &sRTCvars.sRTCbuf;
-	// check if RTC buffer structure valid ie pointer, size, counter & indexes VALID
-	if (psBuf->pBuf != sRTCvars.RTCbuf ||
-		psBuf->Size != rtcBUF_SIZE || psBuf->Used > rtcBUF_SIZE ||
-		psBuf->IdxWR >= rtcBUF_SIZE || psBuf->IdxRD >= rtcBUF_SIZE) {
-		memset(&sRTCvars, 0, sizeof(sRTCvars)) ;		// reinitialise it
-		psBuf->pBuf	= sRTCvars.RTCbuf ;
-		psBuf->Size	= rtcBUF_SIZE ;
-	} else {
-		/* Buffer structure might be correct but MUX must be re-initialised.
-		 * MUX init will be done 1st time xStdioBufLock() is called */
-		psBuf->mux	= NULL ;
-	}
-	SystemFlag |= sysFLAG_RTCBUFINIT;
-}
-
-int	xStdioBufLock(TickType_t Ticks) {
-	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
-		xStdioBufInit();
-	return xRtosSemaphoreTake(&sRTCvars.sRTCbuf.mux, Ticks);
-}
-
-int	xStdioBufUnLock(void) { return xRtosSemaphoreGive(&sRTCvars.sRTCbuf.mux); }
-
-int	xStdioBufPutC(int cChr) {
-	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
-		xStdioBufInit();
-	ubuf_t * psBuf = &sRTCvars.sRTCbuf ;
-	if (psBuf->Used == psBuf->Size) {					// buffer full ?
-		++psBuf->IdxRD ;								// discard oldest (next to be read) char
-		psBuf->IdxRD %= psBuf->Size ;					// adjust buffer for wrap
-		--psBuf->Used ;									// adjust used counter
-	}
-	*(psBuf->pBuf + psBuf->IdxWR++) = cChr ;			// store character in buffer, adjust pointer
-	psBuf->IdxWR %= psBuf->Size ;						// handle wrap
-	++psBuf->Used ;										// & update used counter
-	return cChr ;
-}
-
-int	xStdioBufGetC(void) {
-	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
-		xStdioBufInit();
-	ubuf_t * psBuf = &sRTCvars.sRTCbuf;
-	if (psBuf->Used == 0) {
-		errno = EAGAIN;
-		return EOF;
-	} else if (psBuf->Size == 0) {
-		errno = ENOMEM;
-		return EOF;
-	}
-	int cChr = *(psBuf->pBuf + psBuf->IdxRD++);
-	psBuf->IdxRD %= psBuf->Size;
-	if (--psBuf->Used == 0)
-		psBuf->IdxRD = psBuf->IdxWR = 0;				// empty, reset In & Out indexes
-	return cChr;
-}
-
-int	xStdioBufAvail(void) {
-	if ((SystemFlag & sysFLAG_RTCBUFINIT) == 0)
-		xStdioBufInit();
-	return xUBufAvail(&sRTCvars.sRTCbuf) ;
-}
-
 // ######################################## global functions #######################################
-
-/**
- * Output a single character to [retargeted] STDOUT
- * @brief		blocking behaviour, might not return immediately
- * @param[in]	cChr - char to output
- * @return		if successful, character sent, else EOF
- */
-int	putcharRT(int cChr) {
-	if (cChr == '\n')
-		putcharRT('\r');
-	return halUART_PutChar(cChr, configSTDIO_UART_CHAN) ;
-}
-
-int	putcharX(int cChr, int ud) {
-	if (ud == configSTDIO_UART_CHAN)
-		return (SystemFlag & sysFLAG_RTCBUF_USE) ? xStdioBufPutC(cChr) : putcharRT(cChr);
-	return halUART_PutChar(cChr, ud);
-}
-
-void __real_uart_ll_write_txfifo(uart_dev_t * hw, const uint8_t *buf, uint32_t wr_len) {
-	uart_port_t eChan = (hw == UARTx[0]) ? 0 : (hw == UARTx[1]) ? 1 : 2;
-    for(int i = 0; i < wr_len; putcharX(buf[i++], eChan));
-}
-
-int	putsX(char * pStr, int ud) {
-	int iRV = 0;
-	while (*pStr) {
-		putcharX(*pStr++, ud);
-		++iRV;
-	}
-	if (iRV) {
-		putcharX('\n', ud);
-		++iRV;
-	}
-	return iRV ;
-}
-
-int	getcharRT(void) { return halUART_GetChar(configSTDIO_UART_CHAN); }
-
-int	getcharX(int ud) {
-	return (ud == configSTDIO_UART_CHAN) ? getcharRT() : halUART_GetChar((uart_port_t) ud);
-}
 
 #if 0
 #if		defined(__ARM_CC)
@@ -285,7 +171,6 @@ int 	_open (const char * name, int openmode) {
 #endif
 	return (0);
 }
-
 int		_close (int fh) {
 	switch (fh) {
 	case FH_STDIN:
@@ -298,7 +183,6 @@ int		_close (int fh) {
 #endif
 	return (0);
 }
-
 int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
 	int		ch ;
 	(void) mode ;
@@ -322,7 +206,6 @@ int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
 #endif
 	return (0);
 }
-
 int 	_istty (int fh) {
 	switch (fh) {
     case FH_STDIN:
@@ -332,7 +215,6 @@ int 	_istty (int fh) {
 	}
 	return (0);
 }
-
 int 	_seek (int fh, long pos) {
 	switch (fh) {
     case FH_STDIN:
@@ -345,7 +227,6 @@ int 	_seek (int fh, long pos) {
 #endif
 	return (0);
 }
-
 long 	_flen (int fh) {
 	switch (fh) {
     case FH_STDIN:
