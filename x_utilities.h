@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include	"struct_union.h"
-
 #include	<stdbool.h>
 #include	<stddef.h>
+
+#include	"struct_union.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -203,17 +203,17 @@ typedef	union {
 		int	i:1;
 /*MSB*/	int	j:23;
 	} ;
-	struct __attribute__((packed)) {				// Printing control
-/*LSB*/	int	bRT		: 1 ;							// Runtime
-		int	bNL		: 1 ;							// terminating NL
-		int	bXtras	: 1 ;							// Ticks, Stack & TCB
-		int	bCore	: 1 ;							// MCU 01X
-		int	bStack	: 1 ;							// Low Stack value
-		int	bState	: 1 ;							// Task state RBPS
-		int	bPrioX	: 1 ;							// Priorities
-		int	bColor	: 1 ;							// Use colour
-		int	bCount	: 1 ;							// Task #
-/*MSB*/	int	uCount	: 23 ;							// Task # mask
+	struct __attribute__((packed)) {					// Printing control
+/*LSB*/	int	bRT		: 1 ;								// Runtime
+		int	bNL		: 1 ;								// terminating NL
+		int	bXtras	: 1 ;								// Ticks, Stack & TCB
+		int	bCore	: 1 ;								// MCU 01X
+		int	bStack	: 1 ;								// Low Stack value
+		int	bState	: 1 ;								// Task state RBPS
+		int	bPrioX	: 1 ;								// Priorities
+		int	bColor	: 1 ;								// Use colour
+		int	bCount	: 1 ;								// Task #
+/*MSB*/	int	uCount	: 23 ;								// Task # mask
 	} ;
 	uint32_t	u32Val ;
 } flagmask_t ;

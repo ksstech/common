@@ -3,10 +3,10 @@
  * x_terminal.c
  */
 
-#include	"x_terminal.h"
 #include	"hal_config.h"
 #include	"hal_usart.h"
-#include	"x_stdio.h"
+
+#include	"x_terminal.h"
 #include	"x_utilities.h"
 
 // #################################### Global/public variables ####################################
