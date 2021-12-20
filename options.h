@@ -48,10 +48,10 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioActuate,						// RulesEngine * TaskActuator
 	ioAlert,
 	ioMemory,
-	ioSpare,
-	ioTNET,
-	ioHTTP,
-	ioHTTPclnt,
+	ioTNETstart,					// 1 = Start
+	ioTNETtrack,
+	ioHTTPstart,					// 1 = Start
+	ioHTTPtrack,
 	ioSENSOR,						// vTaskSensor()
 	ioREtable,
 	ioREsched,
