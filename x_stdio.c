@@ -75,7 +75,7 @@ int		__fgetc (FILE * stream) {
 			return ch_saved ;						// and re-return last character
 		}
 		ch_saved = getchar_stdin() ; 				// nothing there, read & save as last char
-    	putcharRT(ch_saved) ;					// echo to STDOUT
+		putcharX(ch_saved, configSTDIO_UART_CHAN);	// echo to STDOUT
     	return ch_saved ;							// and return...
 	}
 #if		(buildSTDIO_FILEIO == 1)
@@ -194,7 +194,7 @@ int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
     		return ((int)(len | 0x80000000U)) ;
     	}
     	*buf++ = (uint8_t) ch ;
-    	putcharRT(ch);
+		putcharX(ch_saved, configSTDIO_UART_CHAN);	// echo to STDOUT
     	len--;
     	return ((int)(len)) ;
     case FH_STDOUT:
