@@ -114,8 +114,8 @@ typedef union px_t {
 	void * *	ppv ;
 // pointers to x64
 	x64_t * 	px64 ;
-	uint64_t *	pu64 ;
-	int64_t *	pi64 ;
+	u64_t *		pu64 ;
+	i64_t *		pi64 ;
 	double *	pf64 ;
 // pointers to x32
 	x32_t * 	px32 ;
