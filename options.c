@@ -55,25 +55,21 @@ const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT P
 
 // ###################################### private variables ########################################
 
+ioset_t const ioDefaults = {
 #if (configPRODUCTION == 0)
-ioset_t const ioDefaults = {
-	.B1_0	= 0,					// ioSTDIO
-	.B1_4	= 1,					// ioFlags
-	.B1_58	= 1,					// ioWLhidden 1=enabled
-	.B1_62	= 1,					// ioWLscan 1=all channels
-
-	.B3_3	= 1,					// ioU0RXbuf
-	.B3_6	= 1,					// ioU0TXbuf
-	.B3_17	= 4,					// ioWLretry
-	.B3_19	= 4,					// Maximum level sent to host
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 3,
-
-	.B4_0	= 5,					// successive read interval, avoid duplicates
-};
-#else
-ioset_t const ioDefaults = {
 	.B1_0	= 1,					// ioSTDIO
 	.B1_4	= 0,					// ioFlags
+
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
+#else
+	.B1_0	= 0,					// ioSTDIO
+	.B1_4	= 1,					// ioFlags
+
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 3,
+#endif
+	// Common values for production & development
+	.B1_23	= 1,					// TNETstart
+	.B1_25	= 1,					// HTTPstart
 	.B1_58	= 1,					// ioWLhidden 1=enabled
 	.B1_62	= 1,					// ioWLscan 1=all channels
 
@@ -81,11 +77,9 @@ ioset_t const ioDefaults = {
 	.B3_6	= 1,					// ioU0TXbuf
 	.B3_17	= 4,					// ioWLretry
 	.B3_19	= 4,					// Maximum level sent to host
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
 
 	.B4_0	= 5,					// successive read interval, avoid duplicates
 };
-#endif
 
 // ####################################### public variables ########################################
 
