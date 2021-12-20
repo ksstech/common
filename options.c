@@ -96,13 +96,13 @@ void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(iose
  */
 int xOptionsSetDirect(int ON, int OV) {
 	int iRV = 1;
-	if (ON > ioB4_15)
+	if (ON > ioB4_15) {
 		ERR_EXIT("Invalid option number", erSCRIPT_INV_OPERATION);
-
+	}
 	int EVL = (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1 ;
-	if (OUTSIDE(0, OV, EVL, int))
+	if (OUTSIDE(0, OV, EVL, int)) {
 		ERR_EXIT("Invalid option value", erSCRIPT_INV_VALUE);
-
+	}
 	// to avoid unnecessary flash writes, only write if value is different.
 	if (ON >= ioB4_0) {
 		if (ioB4GET(ON) != OV) ioB4SET(ON, OV) else iRV = 0;
@@ -112,11 +112,12 @@ int xOptionsSetDirect(int ON, int OV) {
 		if (ioB2GET(ON) != OV) ioB2SET(ON, OV) else iRV = 0;
 	} else {
 		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
-		if (ioU0Speed <= ON && ON <= ioU2Speed) {
-			halUART_SetSpeed(ON - ioU0Speed);
-		} else if (ioU0TXbuf <= ON && ON <= ioU2TXbuf) {
-			halUART_CalcBuffersSizes();
-		}
+		if (iRV) {					// Something changed, do exception processing
+			if (ioU0Speed <= ON && ON <= ioU2Speed) {		// UARTx speed change
+				halUART_SetSpeed(ON - ioU0Speed);
+			} else if (ioU0RXbuf <= ON && ON <= ioU2TXbuf) {// UARTx TX/RX buffer size change
+				halUART_CalcBuffersSizes();
+			}
 		#if	(configCONSOLE_TELNET == 1)
 			else if (ON == ioTNETstart) {					// TNET task start/stop
 				#include "x_telnet_server.h"
@@ -129,6 +130,7 @@ int xOptionsSetDirect(int ON, int OV) {
 				vTaskHttpStatus();
 			}
 		#endif
+		} // end (iRV)
 	}
 exit:
 	return iRV;
