@@ -82,7 +82,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_54,
 	ioB1_55,
 	ioB1_56,
-	ioB1_57,
+	ioWLantenna,					// external antenna 1=enable
 	ioWLhidden,
 	ioWLmode,
 	ioWLevt,						// events track 0=DISABLE 1=ENABLE

@@ -5,6 +5,7 @@
 #include	"hal_variables.h"
 #include	"hal_network.h"
 #include	"hal_usart.h"
+#include	"hal_gpio.h"
 
 #include	"printfx.h"
 #include	"syslog.h"
@@ -37,7 +38,7 @@ const char ioBXmes[] =
 "DS18x20\0"		"DS1990x\0"		"DS24check\0"	"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
+"\0"			"WL ExtAnt\0"	"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
 
 "DS248Xdbg\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
@@ -118,18 +119,23 @@ int xOptionsSetDirect(int ON, int OV) {
 			} else if (ioU0RXbuf <= ON && ON <= ioU2TXbuf) {// UARTx TX/RX buffer size change
 				halUART_CalcBuffersSizes();
 			}
-		#if	(configCONSOLE_TELNET == 1)
+			#if	(HW_VARIANT == HW_WIPY)
+			else if (ON == ioWLantenna) {					// Ext Antenna en/disable
+				ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
+			}
+			#endif
+			#if	(configCONSOLE_TELNET == 1)
 			else if (ON == ioTNETstart) {					// TNET task start/stop
 				#include "x_telnet_server.h"
 				vTaskTnetStatus();
 			}
-		#endif
-		#if	(configCONSOLE_HTTP == 1)
+			#endif
+			#if	(configCONSOLE_HTTP == 1)
 			else if (ON == ioHTTPstart) {					// HTTP task start/stop
 				#include "x_http_server.h"
 				vTaskHttpStatus();
 			}
-		#endif
+			#endif
 		} // end (iRV)
 	}
 exit:
