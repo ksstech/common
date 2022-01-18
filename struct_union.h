@@ -10,6 +10,9 @@
 extern "C" {
 #endif
 
+// See http://www.catb.org/esr/structure-packing/
+// Also http://c0x.coding-guidelines.com/6.7.2.1.html
+
 // ###################################### enumerations #############################################
 
 typedef enum {
@@ -106,6 +109,20 @@ typedef union x64_t {
 	x8_t		x8[8] ;
 } x64_t ;
 DUMB_STATIC_ASSERT(sizeof(x64_t) == 8) ;
+
+// ########################################## Other types ##########################################
+
+typedef struct __attribute__((packed)) {
+	int	res1 : 4;					// LSB
+	int fract : 4;
+	int integ : 8;
+} Q8dot4_t;
+
+typedef struct __attribute__((packed)) {
+	int	res1 : 4;					// LSB
+	int fract : 2;
+	int integ : 18;
+} Q18dot2_t;
 
 // ###################################### px (32/64) pointer types #################################
 
