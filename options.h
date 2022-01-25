@@ -70,7 +70,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioDS248Xcheck,
 	ioM90write,
 	ioM90offset,
-	ioB1_45,
+	ioLIS2HH12,
 	ioB1_46,
 	ioB1_47,
 	ioB1_48,
