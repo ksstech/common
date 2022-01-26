@@ -207,6 +207,35 @@ enum {													// {flags}{counter}
 	maskCOUNT	= 0x007FFFFF,							// counter value or mask
 } ;
 
+#if 1
+typedef	union {
+	struct __attribute__((packed)) {					// Generic structure for init
+		uint32_t	j:23;
+		uint32_t	i:1;
+		uint32_t	h:1;
+		uint32_t	g:1;
+		uint32_t	f:1;
+		uint32_t	e:1;
+		uint32_t	d:1;
+		uint32_t	c:1;
+		uint32_t	b:1;
+		uint32_t	a:1;
+	};
+	struct __attribute__((packed)) {					// Printing control
+		uint32_t	uCount	: 23 ;								// Task # mask
+		uint32_t	bCount	: 1 ;								// Task #
+		uint32_t	bColor	: 1 ;								// Use colour
+		uint32_t	bPrioX	: 1 ;								// Priorities
+		uint32_t	bState	: 1 ;								// Task state RBPS
+		uint32_t	bStack	: 1 ;								// Low Stack value
+		uint32_t	bCore	: 1 ;								// MCU 01X
+		uint32_t	bXtras	: 1 ;								// Ticks
+		uint32_t	bNL		: 1 ;								// terminating NL
+		uint32_t	bRT		: 1 ;								// Runtime
+	};
+	uint32_t	u32Val ;
+} flagmask_t ;
+#else
 typedef	union {
 	struct __attribute__((packed)) {					// Generic structure for init
 /*LSB*/	int	a:1;
@@ -234,7 +263,10 @@ typedef	union {
 	} ;
 	uint32_t	u32Val ;
 } flagmask_t ;
+#endif
 DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
+
+#define	makeMASKVALUE(A,B,C,D,E,F,G,H,I,J)  (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|(J&0x07FFFFF))
 
 #define	makeMASKFLAG(A,B,C,D,E,F,G,H,I,J) (flagmask_t) \
 	{ .a=A, .b=B, .c=C, .d=D, .e=E, .f=F, .g=G, .h=H, .i=I, .j=J }
