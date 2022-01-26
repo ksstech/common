@@ -158,7 +158,7 @@ int	xOptionsSet(int	ON, int OV, int PF) {
 		xOptionsSetDefaults();
 	}
 	if ((iRV > erFAILURE) && (PF == 1))
-		SystemFlag |= varFLAG_IOSET;
+		setSYSFLAGS(vfIOSET);
 	return iRV ;
 }
 
