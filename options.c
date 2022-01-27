@@ -106,13 +106,25 @@ int xOptionsSetDirect(int ON, int OV) {
 	}
 	// to avoid unnecessary flash writes, only write if value is different.
 	if (ON >= ioB4_0) {
-		if (ioB4GET(ON) != OV) ioB4SET(ON, OV) else iRV = 0;
+		if (ioB4GET(ON) != OV)
+			ioB4SET(ON, OV)
+		else
+			iRV = 0;
 	} else if (ON >= ioB3_0) {
-		if (ioB3GET(ON) != OV) ioB3SET(ON, OV) else iRV = 0;
+		if (ioB3GET(ON) != OV)
+			ioB3SET(ON, OV)
+		else
+			iRV = 0;
 	} else if (ON >= ioB2_0) {
-		if (ioB2GET(ON) != OV) ioB2SET(ON, OV) else iRV = 0;
+		if (ioB2GET(ON) != OV)
+			ioB2SET(ON, OV)
+		else
+			iRV = 0;
 	} else {
-		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
+		if (ioB1GET(ON) != OV)
+			ioB1SET(ON, OV)
+		else
+			iRV = 0;
 		if (iRV) {					// Something changed, do exception processing
 			if (ioU0Speed <= ON && ON <= ioU2Speed) {		// UARTx speed change
 				halUART_SetSpeed(ON - ioU0Speed);
