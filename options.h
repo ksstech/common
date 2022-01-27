@@ -25,7 +25,7 @@ extern "C" {
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
-	ioSTDIO, ioB1_0=ioSTDIO,		// DS248x status & config changes tracking
+	ioSTDIO, ioB1_0=ioSTDIO,		// STDOUT buffering
 	ioI2Cinit,
 	ioI2Cdly,						// I2C task auto remove Delay if 0.
 	ioFOTA,
@@ -140,8 +140,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	B3_16,
 	ioWLretry,
 	ioWLauth,
-	ioSLhost,						// MAX Host logged level
-	ioSLOGhi,						// SLOG maximum level
+	ioSLhost,						// Highest PRI sent to host (must <= ioSLOGhi)
+	ioSLOGhi,						// Highest PRI evaluated
 	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
 	ioB4_1,
 	ioB4_2,
