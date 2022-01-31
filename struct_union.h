@@ -194,20 +194,19 @@ DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
 
 // ##################################### CLI related structures ####################################
 
-enum {													// {flags}{counter}
-	mfbRT		= 1 << 0,								// prefix RunTime
-	mfbNL		= 1 << 1,								// PostFix 'n'
-	mfbXTRAS	= 1 << 2,
-	mfbCORE		= 1 << 3,
-	mfbSTACK	= 1 << 4,
-	mfbSTATE	= 1 << 5,
-	mfbPRIOX	= 1 << 6,
-	mfbCOLOR	= 1 << 7,								// Use colours where applicable
-	mfbCOUNT	= 1 << 8,								// Prefix 23x LSB uCount
-	maskCOUNT	= 0x007FFFFF,							// counter value or mask
-} ;
+enum {			// {flags}{counter}
+	maskCOUNT	= 0x007FFFFF,		// counter value or mask
+	mfbCOUNT	= (1 << 23),		// Prefix 23x LSB uCount
+	mfbCOLOR	= (1 << 24),		// Use colours where applicable
+	mfbPRIOX	= (1 << 25),
+	mfbSTATE	= (1 << 26),
+	mfbSTACK	= (1 << 27),
+	mfbCORE		= (1 << 28),
+	mfbXTRAS	= (1 << 29),
+	mfbNL		= (1 << 30),		// PostFix 'n'
+	mfbRT		= (1 << 31),		// prefix RunTime
+};
 
-#if 1
 typedef	union {
 	struct __attribute__((packed)) {					// Generic structure for init
 		uint32_t	j:23;
@@ -233,37 +232,8 @@ typedef	union {
 		uint32_t	bNL		: 1 ;								// terminating NL
 		uint32_t	bRT		: 1 ;								// Runtime
 	};
-	uint32_t	u32Val ;
-} flagmask_t ;
-#else
-typedef	union {
-	struct __attribute__((packed)) {					// Generic structure for init
-/*LSB*/	int	a:1;
-		int	b:1;
-		int	c:1;
-		int	d:1;
-		int	e:1;
-		int	f:1;
-		int	g:1;
-		int	h:1;
-		int	i:1;
-/*MSB*/	int	j:23;
-	} ;
-	struct __attribute__((packed)) {					// Printing control
-/*LSB*/	int	bRT		: 1 ;								// Runtime
-		int	bNL		: 1 ;								// terminating NL
-		int	bXtras	: 1 ;								// Ticks, Stack & TCB
-		int	bCore	: 1 ;								// MCU 01X
-		int	bStack	: 1 ;								// Low Stack value
-		int	bState	: 1 ;								// Task state RBPS
-		int	bPrioX	: 1 ;								// Priorities
-		int	bColor	: 1 ;								// Use colour
-		int	bCount	: 1 ;								// Task #
-/*MSB*/	int	uCount	: 23 ;								// Task # mask
-	} ;
-	uint32_t	u32Val ;
-} flagmask_t ;
-#endif
+	uint32_t	u32Val;
+} flagmask_t;
 DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
 
 #define	makeMASKVALUE(A,B,C,D,E,F,G,H,I,J)  (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|(J&0x07FFFFF))
