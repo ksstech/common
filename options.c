@@ -31,11 +31,11 @@
 // ###################################### private constants ########################################
 
 const char ioBXmes[] =
-"STDIO Buf\0"	"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"Startup\0"		"ShutDown\0"
-"ParaPar\0"		"SyntPar\0"		"JSONpar\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"DB Match\0"	"DB Error\0"
+"STDIO Buf\0"	"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"P_Token\0"
+"P_Param\0"		"P_Syntax\0"	"P_JSON\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"DB Match\0"	"DB Error\0"
 "MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"OW Scan\0"		"Actuate\0"		"Alerts\0"		"Memory\0"		"TNETstart\0"
 "TNETtrack\0"	"HTTPstart\0"	"HTTPtrack\0"	"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"RuleIdent\0"	"LittleFS\0"
-"DS18x20\0"		"DS1990x\0"		"DS24check\0"	"M90write\0"	"M90offset\0"	"ioLIS2HH12\0"	"\0"			"\0"
+"DS18x20\0"		"DS1990x\0"		"DS24check\0"	"M90write\0"	"M90offset\0"	"LIS2HH12\0"	"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"WL ExtAnt\0"	"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
