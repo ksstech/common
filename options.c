@@ -194,33 +194,35 @@ int xOptionGetDefault(int ON) {
 void vOptionsShow(void) {
 	const char * pcMess = ioBXmes;
 	int Cur, Def, Col, Len, Idx = 0;
+	printfx_lock();
 	for (int Num = ioB1_0; Num <= ioB4_15; ++Num) {
 		Cur = xOptionGetCurrent(Num);
 		Def = xOptionGetDefault(Num);
 		Col = (Cur == Def) ? 0 : colourBG_CYAN;
 		if (Num == ioB1_0) {
-			printfx("1-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB1);
+			printfx_nolock("1-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB1);
 			Idx = 0 ;
 		} else if (Num == ioB2_0) {
-			printfx("2-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB2);
+			printfx_nolock("2-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB2);
 			Idx = 0 ;
 		} else if (Num == ioB3_0) {
-			printfx("3-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB3);
+			printfx_nolock("3-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB3);
 			Idx = 0 ;
 		} else if (Num == ioB4_0) {
-			printfx("\n4-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB4);
+			printfx_nolock("\n4-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB4);
 			Idx = 0 ;
 		}
-		printfx("%3d=%C%x%C/", Num, Col, Cur, 0);
-		Len = printfx("%s", pcMess);
+		printfx_nolock("%3d=%C%x%C/", Num, Col, Cur, 0);
+		Len = printfx_nolock("%s", pcMess);
 		pcMess += Len + 1;
 		if (Idx == 7) {
-			printfx("\n");
+			printfx_nolock("\n");
 			Idx = 0;
 		} else {
-			printfx("%.*s", 12-Len, "            ");
+			printfx_nolock("%.*s", 12-Len, "            ");
 			++Idx;
 		}
 	}
-	printfx(ioSxMes);
+	printfx_nolock(ioSxMes);
+	printfx_unlock();
 }
