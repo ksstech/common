@@ -40,17 +40,17 @@ const char ioBXmes[] =
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"WL ExtAnt\0"	"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
 
-"DS248Xdbg\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"DS248Xdbg\0"			"\0"
 
 "U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"
 "U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"
 
 "DS1990Dly\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
+"GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
 const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n\n";
 
@@ -58,17 +58,26 @@ const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT P
 
 ioset_t const ioDefaults = {
 #if (configPRODUCTION == 0)
-	.B1_0	= 1,					// ioSTDIO
+	.B1_0	= 0,					// ioSTDIO
 	.B1_4	= 1,					// ioFlags
 
+	.B2_0	= hostDEV,
+	.B2_1	= hostDEV,
+	.B2_2	= hostDEV,
+	.B2_3	= hostDEV,
 	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,				// Maximum level sent to host
 	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
 #else
-	.B1_0	= 0,					// ioSTDIO
+	.B1_0	= 1,					// ioSTDIO
 	.B1_4	= 0,					// ioFlags
 
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 2,				// Maximum level sent to host
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 3,
+	.B2_0	= hostPROD,
+	.B2_1	= hostPROD,
+	.B2_2	= hostPROD,
+	.B2_3	= hostPROD,
+
+	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,				// Maximum level sent to host
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,
 #endif
 	// Common values for production & development
 	.B1_23	= 1,					// TNETstart
@@ -81,6 +90,7 @@ ioset_t const ioDefaults = {
 	.B3_17	= 4,					// ioWLretry
 
 	.B4_0	= 5,					// successive read interval, avoid duplicates
+	.B4_8	= 5,					// GUI delay between screens
 };
 
 // ####################################### public variables ########################################

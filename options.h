@@ -89,10 +89,10 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioWLram,						// storage 0=FLASH 1=RAM
 	ioWLscan,						// 0=Fast 1=All
 	ioWLsort,						// 0=SIGnal, 1=SECurity
-	ioDS248Xdbg, ioB2_0=ioDS248Xdbg,
-	ioB2_1,
-	ioB2_2,
-	ioB2_3,
+	ioHostMQTT, ioB2_0=ioHostMQTT,
+	ioHostFOTA,
+	ioHostSLOG,
+	ioHostCONF,
 	ioB2_4,
 	ioB2_5,
 	ioB2_6,
@@ -120,7 +120,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB2_28,
 	ioB2_29,
 	ioB2_30,
-	ioB2_31,
+	ioDS248Xdbg,
 	ioU0Speed, ioB3_0=ioU0Speed,	// UARTx speed
 	ioU1Speed,
 	ioU2Speed,
@@ -150,7 +150,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB4_5,
 	ioB4_6,
 	ioB4_7,
-	ioB4_8,
+	ioGUIintval,
 	ioB4_9,
 	ioB4_10,
 	ioB4_11,
