@@ -393,8 +393,6 @@ typedef	const unsigned char * pcu8_t ;
 #define	MAINS_FREQ_HZ				50
 #define	MAINS_SUPPLY_V				230.0
 
-// #############################
-
 /*
 https://stackoverflow.com/questions/32082004/embedding-json-as-a-string-in-c-code-using-preprocessor
 https://renenyffenegger.ch/notes/development/languages/C-C-plus-plus/preprocessor/macros/__VA_ARGS__/count-arguments
@@ -405,9 +403,8 @@ https://riptutorial.com/cplusplus/example/3527/macros
 
 #define LSC(...) #__VA_ARGS__
 
-// ############################# common complex data types/ structures #############################
-
-#define DUMB_STATIC_ASSERT(test) typedef char assertion_on_mystruct[( !!(test) )*2-1 ]
+#define sizeofMACRO(test) (( !!(test) )*2-1)
+#define DUMB_STATIC_ASSERT(test) typedef char assertion_on_mystruct[sizeofMACRO(test)]
 
 // ########################################### Bit masks ##########################################
 
