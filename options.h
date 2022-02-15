@@ -97,7 +97,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB2_5,
 	ioB2_6,
 	ioB2_7,
-	ioB2_8,
+	ioAPindex,
 	ioB2_9,
 	ioB2_10,
 	ioB2_11,

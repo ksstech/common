@@ -41,7 +41,7 @@ const char ioBXmes[] =
 "\0"			"WL ExtAnt\0"	"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
 
 "HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"APindex\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"DS248Xdbg\0"			"\0"
 
