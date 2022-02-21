@@ -109,11 +109,11 @@ void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(iose
 int xOptionsSetDirect(int ON, int OV) {
 	int iRV = 1;
 	if (ON > ioB4_15) {
-		ERR_EXIT("Invalid option number", erSCRIPT_INV_OPERATION);
+		ERR_EXIT("Invalid option number", erINVALID_OPERATION);
 	}
 	int EVL = (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1 ;
 	if (OUTSIDE(0, OV, EVL, int)) {
-		ERR_EXIT("Invalid option value", erSCRIPT_INV_VALUE);
+		ERR_EXIT("Invalid option value", erINVALID_VALUE);
 	}
 	// to avoid unnecessary flash writes, only write if value is different.
 	if (ON >= ioB4_0) {

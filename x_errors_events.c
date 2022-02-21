@@ -6,20 +6,6 @@
 
 const	eTable_t	ErrorTable[] = {
 #if		(!defined(NDEBUG) || defined(DEBUG))
-	TABLE_ENTRY_INT( erSCRIPT_INV_KEYWORD,		0,	"Inv KEYWORD"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_INDEX,		0,	"Inv INDEX"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_VALUE,		0,	"Inv VALUE"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_PARA,			0,	"Inv PARA"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_OPERATION,	0,	"Inv Ep Oper"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_MODE,			0,	"Inv MODE"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_SYNTAX,		0,	"Inv SYNTAX"),
-	TABLE_ENTRY_INT( erSCRIPT_INV_ENDPOINT,		0,	"Inv ENDPOINT"),
-	TABLE_ENTRY_INT( erSCRIPT_INCOM_SENSE,		0,	"Incom SENSE "),
-	TABLE_ENTRY_INT( erSCRIPT_INCOM_RULES,		0,	"Incom RULES"),
-	TABLE_ENTRY_INT( erSCRIPT_INCOM_IDRES,		0,	"Incom IDENT "),
-	TABLE_ENTRY_INT( erINV_VAR_TYPE,			0,	"Inv VAR Type"),
-	TABLE_ENTRY_INT( erINV_STATS_CONFIG,		0,	"Inv STATS Config"),
-	TABLE_ENTRY_INT( erSCRIPT_TOO_MANY,			0,	"Too Many"),
 #endif
 
 	// Messages below here will ALWAYS be in the firmware, so as to be syslog'd
