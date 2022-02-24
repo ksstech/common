@@ -32,15 +32,15 @@
 
 const char ioBXmes[] =
 "STDIO Buf\0"	"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"P_Token\0"
-"P_Param\0"		"P_Syntax\0"	"P_JSON\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"DB Match\0"	"DB Error\0"
-"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"OW Scan\0"		"Actuate\0"		"Alerts\0"		"Memory\0"		"TNETstart\0"
-"TNETtrack\0"	"HTTPstart\0"	"HTTPtrack\0"	"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"RuleIdent\0"	"LittleFS\0"
+"P_Param\0"		"P_Syntax\0"	"P_JSON\0"		"W_JSON\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"\0"
+"DB Match\0"	"DB Error\0"	"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"OW Scan\0"		"Actuate\0"		"Alerts\0"
+"Memory\0"		"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"RuleIdent\0"	"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
+"TNETstart\0"	"HTTPstart\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "DS18x20\0"		"DS1990x\0"		"DS24check\0"	"M90write\0"	"M90offset\0"	"LIS2HH12\0"	"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"WL ExtAnt\0"	"WL Hidden\0"	"WL Mode\0"		"WL Events\0"	"WL RAM\0"		"WL Scan\0"		"WL Sort\0"
+"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"
 
-"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"\0"			"\0"			"\0"			"\0"
+"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0-2\0"		"\0"			"\0"			"\0"
 "APindex\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"DS248Xdbg\0"			"\0"
@@ -65,6 +65,7 @@ ioset_t const ioDefaults = {
 	.B2_1	= hostDEV,
 	.B2_2	= hostDEV,
 	.B2_3	= hostDEV,
+
 	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,				// Maximum level sent to host
 	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
 #else
@@ -80,8 +81,8 @@ ioset_t const ioDefaults = {
 	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,
 #endif
 	// Common values for production & development
-	.B1_23	= 1,					// TNETstart
-	.B1_25	= 1,					// HTTPstart
+	.B1_32	= 1,					// TNETstart
+	.B1_33	= 1,					// HTTPstart
 	.B1_58	= 1,					// ioWLhidden 1=enabled
 	.B1_62	= 1,					// ioWLscan 1=all channels
 
@@ -114,28 +115,18 @@ int xOptionsSetDirect(int ON, int OV) {
 	int EVL = (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1 ;
 	if (OUTSIDE(0, OV, EVL, int)) {
 		ERR_EXIT("Invalid option value", erINVALID_VALUE);
+	} else if (ON == ioMQTT_QoS && ioB2GET(ioMQTT_QoS) == 3) {
+		ERR_EXIT("MQTT QoS max=2", erINVALID_VALUE);
 	}
 	// to avoid unnecessary flash writes, only write if value is different.
 	if (ON >= ioB4_0) {
-		if (ioB4GET(ON) != OV)
-			ioB4SET(ON, OV)
-		else
-			iRV = 0;
+		if (ioB4GET(ON) != OV) ioB4SET(ON, OV) else iRV = 0;
 	} else if (ON >= ioB3_0) {
-		if (ioB3GET(ON) != OV)
-			ioB3SET(ON, OV)
-		else
-			iRV = 0;
+		if (ioB3GET(ON) != OV) ioB3SET(ON, OV) else iRV = 0;
 	} else if (ON >= ioB2_0) {
-		if (ioB2GET(ON) != OV)
-			ioB2SET(ON, OV)
-		else
-			iRV = 0;
+		if (ioB2GET(ON) != OV) ioB2SET(ON, OV) else iRV = 0;
 	} else {
-		if (ioB1GET(ON) != OV)
-			ioB1SET(ON, OV)
-		else
-			iRV = 0;
+		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
 		if (iRV) {					// Something changed, do exception processing
 			if (ioU0Speed <= ON && ON <= ioU2Speed) {		// UARTx speed change
 				halUART_SetSpeed(ON - ioU0Speed);
@@ -150,13 +141,13 @@ int xOptionsSetDirect(int ON, int OV) {
 			#if	(configCONSOLE_TELNET == 1)
 			else if (ON == ioTNETstart) {					// TNET task start/stop
 				#include "x_telnet_server.h"
-				vTaskTnetStatus();
+				vTnetStartStop();
 			}
 			#endif
 			#if	(configCONSOLE_HTTP == 1)
 			else if (ON == ioHTTPstart) {					// HTTP task start/stop
 				#include "x_http_server.h"
-				vTaskHttpStatus();
+				vHttpStartStop();
 			}
 			#endif
 		} // end (iRV)

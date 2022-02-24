@@ -35,10 +35,12 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioToken,
 	ioParse,
 	ioSyntax,
-	ioJSONpar,
+	ioP_JSON,
+	ioW_JSON,
 	ioSense,
 	ioMode,
 	ioEndPoint,
+	ioB1_15,
 	ioDBmatch,
 	ioDBerr,
 	ioMQcon,
@@ -48,29 +50,27 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioActuate,						// RulesEngine * TaskActuator
 	ioAlert,
 	ioMemory,
-	ioTNETstart,					// 1 = Start
-	ioTNETtrack,
-	ioHTTPstart,					// 1 = Start
-	ioHTTPtrack,
 	ioSENSOR,						// vTaskSensor()
 	ioREtable,
 	ioREsched,
 	ioREident,
 	ioLFS,
+	ioTNETtrack,
+	ioHTTPtrack,
+	ioTNETstart,					// 1 = Start
+	ioHTTPstart,					// 1 = Start
+	ioB1_34,
+	ioB1_35,
+	ioB1_36,
+	ioB1_37,
+	ioB1_38,
+	ioB1_39,
 	ioDS18x20,						// hardware devices
 	ioDS1990x,
 	ioDS248Xcheck,
 	ioM90write,
 	ioM90offset,
 	ioLIS2HH12,
-	ioB1_38,
-	ioB1_39,
-	ioB1_40,
-	ioB1_41,
-	ioB1_42,
-	ioB1_43,
-	ioB1_44,
-	ioB1_45,
 	ioB1_46,
 	ioB1_47,
 	ioB1_48,
@@ -93,7 +93,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioHostFOTA,
 	ioHostSLOG,
 	ioHostCONF,
-	ioB2_4,
+	ioMQTT_QoS,
 	ioB2_5,
 	ioB2_6,
 	ioB2_7,
@@ -328,6 +328,7 @@ DUMB_STATIC_ASSERT(sizeof(ioset_t) == 32);
 
 // ####################################### public variables ########################################
 
+extern ioset_t const ioDefaults;
 
 // ####################################### public functions ########################################
 
