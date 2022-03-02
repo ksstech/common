@@ -22,8 +22,8 @@ extern "C" {
 
 #define	timexTZTYPE_POINTER			1
 #define	timexTZTYPE_FOURCHARS		2
-#define	timexTZTYPE_RFC3164			3
-#define	timexTZTYPE_SELECTED		timexTZTYPE_RFC3164
+#define	timexTZTYPE_RFC5424			3
+#define	timexTZTYPE_SELECTED		timexTZTYPE_RFC5424
 
 // ##################### BUILD: Unix I32 vs NTP U32 vs proprietary U32 epoch #######################
 
@@ -84,7 +84,7 @@ extern "C" {
 	#define	configTIME_MAX_LEN_TZNAME			4
 	#define	configTIME_MAX_LEN_TZINFO			(sizeof("+12h34()") + configTIME_MAX_LEN_DSTNAME)
 
-#elif	(timexTZTYPE_SELECTED == timexTZTYPE_RFC3164)
+#elif	(timexTZTYPE_SELECTED == timexTZTYPE_RFC5424)
 	#define	configTZ_EST	{-1*SECONDS_IN_HOUR,	-5*SECONDS_IN_HOUR,		0,	0	}
 	#define	configTZ_UTC	{ 0, 					0, 						0,	0 	}
 	#define	configTZ_SAST	{ 0,					2*SECONDS_IN_HOUR,		0,	0	}
@@ -92,7 +92,7 @@ extern "C" {
 
 	#define	configTIME_MAX_LEN_DSTNAME	48		// "Australian Central Daylight Savings Time" = 42
 	#define	configTIME_MAX_LEN_TZNAME	48		// "America/Argentina/ComodRivadavia" == 33
-	#define	configTIME_MAX_LEN_TZINFO	sizeof("+12h34")
+	#define	configTIME_MAX_LEN_TZINFO	sizeof("(+12h34)")
 
 #else
 	#error	"Invalid or undefined 'timexTZTYPE_SELECTED' value"
@@ -131,22 +131,25 @@ extern "C" {
 /*
  * TIME ZONE STRUCTURE DEFINITION
  */
-typedef	struct __attribute__((__packed__)) TZ_t {
-	short	daylight ;
-	int		timezone ;
-#if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER || timexTZTYPE_SELECTED == timexTZTYPE_RFC3164)
-	char *	pcTZName ;
-	char *	pcDSTName ;
-#elif	(timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
-	char	tzname[4] ;
-	char	dstname[4] ;
+typedef	struct __attribute__((__packed__)) tz_s {
+	short	daylight;
+	int		timezone;
+#if	(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
+	char *	pcTZName;
+	char *	pcDSTName;
+#elif (timexTZTYPE_SELECTED == timexTZTYPE_RFC5424)
+	char	TZid[configTIME_MAX_LEN_TZNAME];
+	char	TZname[configTIME_MAX_LEN_DSTNAME];
+#elif (timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
+	char	tzname[4];
+	char	dstname[4];
 #endif
-} TZ_t ;
+} tz_t;
 
-typedef	struct TSZ_t {
+typedef	struct tsz_s {
 	uint64_t	usecs;				// Must ALWAYS be UTC based value, adjust for local TZ
-	TZ_t	*	pTZ ;				// TZ info to be used for local DTZ calculation
-} TSZ_t ;
+	tz_t	*	pTZ ;				// TZ info to be used for local DTZ calculation
+} tsz_t;
 
 // ###################################### x_time related ###########################################
 
@@ -162,7 +165,7 @@ char * xTimeGetDayName(int) ;
 char * xTimeGetMonthName(int) ;
 void xTimeGMTime(seconds_t, struct tm *, int) ;
 seconds_t xTimeCalcSeconds(struct tm *, int) ;
-seconds_t xTimeCalcLocalTimeSeconds(TSZ_t *) ;
+seconds_t xTimeCalcLocalTimeSeconds(tsz_t *) ;
 
 inline uint32_t xTimeStampAsSeconds(uint64_t Timestamp) { return (uint32_t) (Timestamp / (uint64_t) MICROS_IN_SECOND) ; }
 inline uint64_t xTimeMakeTimestamp(uint32_t Seconds, uint32_t Micros) { return ((uint64_t) Seconds * (uint64_t) MICROS_IN_SECOND) + (uint64_t) Micros ; }
