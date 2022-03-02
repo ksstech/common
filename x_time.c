@@ -182,7 +182,7 @@ seconds_t xTimeCalcSeconds(struct tm *psTM, int fElapsed) {
  * @param	psTSZ
  * @return	Timestamp as seconds (uint32_t)
  */
-seconds_t xTimeCalcLocalTimeSeconds(TSZ_t * psTSZ) {
+seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
 	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight ;
 }
 
@@ -192,13 +192,13 @@ seconds_t xTimeCalcLocalTimeSeconds(TSZ_t * psTSZ) {
 
 void xTimeTest(void) {
 #if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
-	TZ_t	sTZ = {	.daylight = 0, .timezone = 0, .pcTZName = "Africa/Johannesburg", .pcDSTName = "South Africa Standard Time" } ;
+	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .pcTZName = "Africa/Johannesburg", .pcDSTName = "South Africa Standard Time" } ;
 #elif	(timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
-	TZ_t	sTZ = {	.daylight = 0, .timezone = 0, .tzname = { 'S', 'A', 'S', 'T' }, .dstname = { 'N', 'O', 'N', 'E' } } ;
+	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .tzname = { 'S', 'A', 'S', 'T' }, .dstname = { 'N', 'O', 'N', 'E' } } ;
 #endif
 
-	TSZ_t	sTSZtemp ;
-	TZ_t	sTZtemp ;
+	tsz_t	sTSZtemp ;
+	tz_t	sTZtemp ;
 	sTSZtemp.pTZ = &sTZtemp ;
 
 #if		(timexEPOCH_SELECTED == timexEPOCH_U32NTP)
