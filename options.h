@@ -22,6 +22,37 @@ extern "C" {
 #define	ioB3SET(i,x)				maskSET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), x, uint64_t)
 #define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, uint64_t)
 
+#define iosetDEFAULT_DEV					\
+	.B1_0	= 0,							\
+	.B1_4	= 1,							\
+	.B2_0	= hostDEV,						\
+	.B2_1	= hostDEV,						\
+	.B2_2	= hostDEV,						\
+	.B2_3	= hostDEV,						\
+	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
+
+#define iosetDEFAULT_PROD					\
+	.B1_0	= 1,							\
+	.B1_4	= 0,							\
+	.B2_0	= hostPROD,						\
+	.B2_1	= hostPROD,						\
+	.B2_2	= hostPROD,						\
+	.B2_3	= hostPROD,						\
+	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,	\
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,
+
+#define iosetDEFAULT	\
+	.B1_32	= 1,		\
+	.B1_33	= 1,		\
+	.B1_58	= 1,		\
+	.B1_62	= 1,		\
+	.B3_3	= 1,		\
+	.B3_6	= 1,		\
+	.B3_17	= 4,		\
+	.B4_0	= 5,		\
+	.B4_8	= 5,
+
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
@@ -168,7 +199,7 @@ enum {								// enumerated option numbers used by ioBxSET
 
 // ########################################## structures ###########################################
 
-typedef struct __attribute__((packed)) {	// 1/2/3/4 bit option variables
+typedef struct __attribute__((packed)) ioset_s {	// 1/2/3/4 bit option variables
 	union {							// 4-bit option variables
 		struct __attribute__((packed)) {
 			int B4_0	: 4 ;
