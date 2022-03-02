@@ -160,7 +160,7 @@ struct x32mma_t ;
 struct x32mmab_t ;
 struct x32stat_t ;
 struct pcnt_t ;
-struct TSZ_t ;
+struct tsz_s ;
 struct vt_enum_t ;
 
 typedef union ps_t {
@@ -168,7 +168,7 @@ typedef union ps_t {
 	struct x32mmab_t *	pMMAB ;
 	struct x32stat_t *	pSTAT ;
 	struct pcnt_t *		psPCNT ;
-	struct TSZ_t *		pTSZ ;
+	struct tsz_s *		pTSZ ;
 	struct vt_enum_t *	psCX ;
 	union ow_rom_t *	pOW_ROM ;
 } ps_t ;
