@@ -79,7 +79,7 @@ void xGenerateUUID(char * pBuf) {
 	    else if (t == 19) *pBuf = szHex[(r & 0x03) | 0x08] ;
 	    else *pBuf = szHex[r] ;
 	}
-	IF_PRINT(debugRESULT, "%.36s\n", pBuf) ;
+	IF_P(debugRESULT, "%.36s\n", pBuf);
 }
 
 // ################################ Random number & string support #################################
