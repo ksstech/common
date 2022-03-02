@@ -56,46 +56,18 @@ const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT P
 
 // ###################################### private variables ########################################
 
-ioset_t const ioDefaults = {
-#if (configPRODUCTION == 0)
-	.B1_0	= 0,					// ioSTDIO
-	.B1_4	= 1,					// ioFlags
-
-	.B2_0	= hostDEV,
-	.B2_1	= hostDEV,
-	.B2_2	= hostDEV,
-	.B2_3	= hostDEV,
-
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,				// Maximum level sent to host
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
-#else
-	.B1_0	= 1,					// ioSTDIO
-	.B1_4	= 0,					// ioFlags
-
-	.B2_0	= hostPROD,
-	.B2_1	= hostPROD,
-	.B2_2	= hostPROD,
-	.B2_3	= hostPROD,
-
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,				// Maximum level sent to host
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,
-#endif
-	// Common values for production & development
-	.B1_32	= 1,					// TNETstart
-	.B1_33	= 1,					// HTTPstart
-	.B1_58	= 1,					// ioWLhidden 1=enabled
-	.B1_62	= 1,					// ioWLscan 1=all channels
-
-	.B3_3	= 1,					// ioU0RXbuf
-	.B3_6	= 1,					// ioU0TXbuf
-	.B3_17	= 4,					// ioWLretry
-
-	.B4_0	= 5,					// successive read interval, avoid duplicates
-	.B4_8	= 5,					// GUI delay between screens
-};
 
 // ####################################### public variables ########################################
 
+ioset_t const ioDefaults = {
+	#if (configPRODUCTION == 0)
+	iosetDEFAULT_DEV
+	iosetDEFAULT
+	#else
+	iosetDEFAULT_PROD
+	iosetDEFAULT
+	#endif
+};
 
 // ####################################### public functions ########################################
 
@@ -158,7 +130,7 @@ exit:
 
 int	xOptionsSet(int	ON, int OV, int PF) {
 	int iRV = erSUCCESS ;
-	IF_PRINT(debugTRACK, "IOSET %d=%d (%d)\n", ON, OV, PF);
+	IF_P(debugTRACK, "IOSET %d=%d (%d)\n", ON, OV, PF);
 	if (ON <= ioB4_15) {
 		iRV = xOptionsSetDirect(ON, OV);
 		// If nothing changed, force persistence flag to false
