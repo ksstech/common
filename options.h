@@ -66,7 +66,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioToken,
 	ioParse,
 	ioSyntax,
-	ioP_JSON,
+	ioJSONpar,
 	ioW_JSON,
 	ioSense,
 	ioMode,
