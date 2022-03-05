@@ -136,7 +136,6 @@ int	xOptionsSet(int	ON, int OV, int PF) {
 		// If nothing changed, force persistence flag to false
 		if (iRV == 0) {
 			PF = 0;
-			printf("ON=%d not changed", OV);
 		}
 	} else if (ON == ioS_NWMO) {
 		iRV = INRANGE(WIFI_MODE_NULL, OV, WIFI_MODE_APSTA, int) ? halWL_SetMode(OV) : erFAILURE ;
