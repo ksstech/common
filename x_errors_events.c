@@ -4,10 +4,7 @@
 
 #include	"x_errors_events.h"
 
-const	eTable_t	ErrorTable[] = {
-#if		(!defined(NDEBUG) || defined(DEBUG))
-#endif
-
+const eTable_t ErrorTable[] = {
 	// Messages below here will ALWAYS be in the firmware, so as to be syslog'd
 	TABLE_ENTRY_INT(erTX_QUEUE_SEND, 0, "TX Queue Send Err"),
 
