@@ -26,6 +26,7 @@ extern "C" {
 #define iosetDEFAULT_DEV					\
 	.B1_0	= 0,							\
 	.B1_4	= 1,							\
+	.B1_34	= 0,							\
 	.B2_0	= hostDEV,						\
 	.B2_1	= hostDEV,						\
 	.B2_2	= hostDEV,						\
@@ -36,6 +37,7 @@ extern "C" {
 #define iosetDEFAULT_PROD					\
 	.B1_0	= 1,							\
 	.B1_4	= 0,							\
+	.B1_34	= 1,							\
 	.B2_0	= hostPROD,						\
 	.B2_1	= hostPROD,						\
 	.B2_2	= hostPROD,						\
@@ -91,7 +93,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioHTTPtrack,
 	ioTNETstart,					// 1 = Start
 	ioHTTPstart,					// 1 = Start
-	ioB1_34,
+	ioTNETauth,						// 1 = authenticate
 	ioB1_35,
 	ioB1_36,
 	ioB1_37,
