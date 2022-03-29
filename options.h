@@ -24,7 +24,6 @@ extern "C" {
 #define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, uint64_t)
 
 #define iosetDEFAULT_DEV					\
-	.B1_0	= 0,							\
 	.B1_4	= 1,							\
 	.B1_34	= 0,							\
 	.B2_0	= hostDEV,						\
@@ -35,7 +34,6 @@ extern "C" {
 	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
 
 #define iosetDEFAULT_PROD					\
-	.B1_0	= 1,							\
 	.B1_4	= 0,							\
 	.B1_34	= 1,							\
 	.B2_0	= hostPROD,						\
@@ -59,7 +57,7 @@ extern "C" {
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
-	ioSTDIO, ioB1_0=ioSTDIO,		// STDOUT buffering
+	ioB1_0,
 	ioI2Cinit,
 	ioI2Cdly,						// I2C task auto remove Delay if 0.
 	ioFOTA,

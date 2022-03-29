@@ -31,7 +31,7 @@
 // ###################################### private constants ########################################
 
 const char ioBXmes[] =
-"STDIO Buf\0"	"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"P_Token\0"
+"\0"			"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"P_Token\0"
 "P_Param\0"		"P_Syntax\0"	"P_JSON\0"		"W_JSON\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"\0"
 "DB Match\0"	"DB Error\0"	"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"OW Scan\0"		"Actuate\0"		"Alerts\0"
 "Memory\0"		"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"RuleIdent\0"	"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
