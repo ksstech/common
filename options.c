@@ -99,31 +99,31 @@ int xOptionsSetDirect(int ON, int OV) {
 		if (ioB2GET(ON) != OV) ioB2SET(ON, OV) else iRV = 0;
 	} else {
 		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
-		if (iRV) {					// Something changed, do exception processing
-			if (ioU0Speed <= ON && ON <= ioU2Speed) {		// UARTx speed change
-				halUART_SetSpeed(ON - ioU0Speed);
-			} else if (ioU0RXbuf <= ON && ON <= ioU2TXbuf) {// UARTx TX/RX buffer size change
-				halUART_CalcBuffersSizes();
-			}
-			#if	(HW_VARIANT == HW_WIPY)
-			else if (ON == ioWLantenna) {					// Ext Antenna en/disable
-				ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
-			}
-			#endif
-			#if	(configCONSOLE_TELNET == 1)
-			else if (ON == ioTNETstart) {					// TNET task start/stop
-				#include "x_telnet_server.h"
-				vTnetStartStop();
-			}
-			#endif
-			#if	(configCONSOLE_HTTP == 1)
-			else if (ON == ioHTTPstart) {					// HTTP task start/stop
-				#include "x_http_server.h"
-				vHttpStartStop();
-			}
-			#endif
-		} // end (iRV)
 	}
+	if (iRV) {					// Something changed, do exception processing
+		if (INRANGE(ioU0Speed, ON, ioU2Speed, int)) {	// UARTx speed change
+			halUART_SetSpeed(ON - ioU0Speed);
+		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf, int)) {// UARTx TX/RX buffer size change
+			halUART_CalcBuffersSizes();
+		}
+		#if	(HW_VARIANT == HW_WIPY)
+		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
+			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
+		}
+		#endif
+		#if	(configCONSOLE_TELNET == 1)
+		else if (ON == ioTNETstart) {					// TNET task start/stop
+			#include "x_telnet_server.h"
+			vTnetStartStop();
+		}
+		#endif
+		#if	(configCONSOLE_HTTP == 1)
+		else if (ON == ioHTTPstart) {					// HTTP task start/stop
+			#include "x_http_server.h"
+			vHttpStartStop();
+		}
+		#endif
+	} // end (iRV)
 exit:
 	return iRV;
 }
