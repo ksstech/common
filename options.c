@@ -80,17 +80,18 @@ void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(iose
  * @return	1 if value changed, 0 if value same or error code
  */
 int xOptionsSetDirect(int ON, int OV) {
-	int iRV = 1;
+	int iRV;
 	if (ON > ioB4_15) {
 		ERR_EXIT("Invalid option number", erINVALID_OPERATION);
 	}
 	int EVL = (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1 ;
 	if (OUTSIDE(0, OV, EVL, int)) {
 		ERR_EXIT("Invalid option value", erINVALID_VALUE);
-	} else if (ON == ioMQTT_QoS && ioB2GET(ioMQTT_QoS) == 3) {
-		ERR_EXIT("MQTT QoS max=2", erINVALID_VALUE);
+	} else if (ON == ioMQTT_QoS && OUTSIDE(0, OV, 2, int)) {
+		ERR_EXIT("MQTT QoS 0->2", erINVALID_VALUE);
 	}
 	// to avoid unnecessary flash writes, only write if value is different.
+	iRV = 1;
 	if (ON >= ioB4_0) {
 		if (ioB4GET(ON) != OV) ioB4SET(ON, OV) else iRV = 0;
 	} else if (ON >= ioB3_0) {
