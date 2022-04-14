@@ -154,7 +154,7 @@ int 	_open (const char * name, int openmode) {
 	if (name == NULL) {
 		return EOF ;
 	}
-	if (name[0] == ':') {
+	if (name[0] == CHR_COLON) {
 		if (strcmp(name, ":STDIN") == 0) {
 			return (FH_STDIN) ;
 		}
