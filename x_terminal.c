@@ -50,29 +50,29 @@ void vANSIhome(void) { vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
 
 char * pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
 	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
-		*pBuf++	= 0x1B ;
-		*pBuf++	= '[' ;
-		pBuf += xU32ToDecStr(a1, pBuf) ;
+		*pBuf++	= CHR_ESC;
+		*pBuf++	= CHR_L_SQUARE;
+		pBuf += xU32ToDecStr(a1, pBuf);
 		if (a2) {
-			*pBuf++ = ';' ;
-			pBuf += xU32ToDecStr(a2, pBuf) ;
+			*pBuf++ = CHR_SEMICOLON;
+			pBuf += xU32ToDecStr(a2, pBuf);
 		}
-		*pBuf++ = 'm' ;
+		*pBuf++ = CHR_m;
 	}
-	*pBuf = 0 ;									// terminate
-	return pBuf ;
+	*pBuf = 0;									// terminate
+	return pBuf;
 }
 
 char * pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) {
 	if (Row > 0 && Col > 0) {
-		*pBuf++	= 0x1B ;
-		*pBuf++	= '[' ;
-		pBuf	+= xU32ToDecStr(Row, pBuf) ;
-		*pBuf++	= ';' ;
-		pBuf	+= xU32ToDecStr(Col, pBuf) ;
-		*pBuf++	= 'H' ;
-		sTI.CurX = (Col %= sTI.MaxX) ;
-		sTI.CurY = (Row %= sTI.MaxY) ;
+		*pBuf++	= CHR_ESC;
+		*pBuf++	= CHR_L_SQUARE;
+		pBuf	+= xU32ToDecStr(Row, pBuf);
+		*pBuf++	= CHR_SEMICOLON;
+		pBuf	+= xU32ToDecStr(Col, pBuf);
+		*pBuf++	= CHR_H;
+		sTI.CurX = (Col %= sTI.MaxX);
+		sTI.CurY = (Row %= sTI.MaxY);
 	}
 	*pBuf = 0;
 	return pBuf;
