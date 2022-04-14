@@ -52,7 +52,7 @@ extern "C" {
 #define	CHR_SINGLE_QUOTE			0x27		// '
 #define	CHR_L_ROUND					0x28		// (
 #define	CHR_R_ROUND					0x29		// )
-#define	CHR_ASTERISK				0x2A		// @
+#define	CHR_ASTERISK				0x2A		// *
 #define	CHR_PLUS					0x2B		// +
 #define	CHR_COMMA					0x2C		// ,
 #define	CHR_MINUS					0x2D		// -
