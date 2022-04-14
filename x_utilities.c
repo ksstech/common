@@ -25,7 +25,7 @@ void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 } ;
 	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1)) ;
 	++caActivity[i] ;
-	if (caActivity[i] == 0x3A) caActivity[i] = '0' ;
+	if (caActivity[i] == 0x3A) caActivity[i] = CHR_0;
 	printfx_lock();
 	vANSIcursorsave();
 	vANSIlocate(1, 120);
@@ -62,7 +62,7 @@ void int2mac(uint64_t mac, uint8_t * hwaddr) {
 
 void MemDump(uint8_t ** pMemAddr, int32_t cChr, size_t Size) {
 	printfx("MemDump:\n%#'+B", Size, *pMemAddr) ;
-	*pMemAddr = (cChr == '+') ? (*pMemAddr + Size) : (cChr == '-') ? (*pMemAddr - Size) : *pMemAddr ;
+	*pMemAddr = (cChr == CHR_PLUS) ? (*pMemAddr + Size) : (cChr == CHR_MINUS) ? (*pMemAddr - Size) : *pMemAddr ;
 }
 
 // ####################################### UUID support ############################################
@@ -74,10 +74,14 @@ void xGenerateUUID(char * pBuf) {
 	srand(clock()) ;
 	for (int t = 0; t < 36; ++t, ++pBuf) {
 	    int r = rand() % 16;
-	    if (t == 8 || t == 13 || t == 18 || t == 23) *pBuf = '-' ;
-	    else if (t == 14) *pBuf = '4' ;
-	    else if (t == 19) *pBuf = szHex[(r & 0x03) | 0x08] ;
-	    else *pBuf = szHex[r] ;
+	    if (t == 8 || t == 13 || t == 18 || t == 23)
+	    	*pBuf = CHR_MINUS;
+	    else if (t == 14)
+	    	*pBuf = CHR_4;
+	    else if (t == 19)
+	    	*pBuf = szHex[(r & 0x03) | 0x08] ;
+	    else
+	    	*pBuf = szHex[r] ;
 	}
 	IF_P(debugRESULT, "%.36s\n", pBuf);
 }
@@ -203,38 +207,51 @@ int	xDigitsInI32(int32_t I32, bool grouping) {
 }
 
 int	xDigitsInU32(uint32_t U32, bool grouping) {
-	int x ;
+	int x;
 	if (U32 >= 10000) {
 		if (U32 >= 10000000) {
-	        if (U32 >= 100000000) x = (U32 >= 1000000000)? 10 : 9 ;
-	        else x = 8 ;
+	        if (U32 >= 100000000)
+	        	x = (U32 >= 1000000000)? 10 : 9;
+	        else
+	        	x = 8;
 		} else {
-			if (U32 >= 100000) x = (U32 >= 1000000) ? 7 : 6 ;
-			else x = 5 ;
+			if (U32 >= 100000)
+				x = (U32 >= 1000000) ? 7 : 6;
+			else
+				x = 5;
 		}
     } else {
-        if (U32 >= 100) x = (U32 >= 1000) ? 4 : 3 ;
-        else x = (U32 >= 10) ? 2 : 1 ;
+        if (U32 >= 100)
+        	x = (U32 >= 1000) ? 4 : 3;
+        else
+        	x = (U32 >= 10) ? 2 : 1;
     }
-    return x + ((x - 1) / 3) ;
+    return x + ((x - 1) / 3);
 }
 
 int	xDigitsInU64(uint64_t U64, bool grouping) {
 	int x ;
-	if (U64 <= UINT32_MAX) return xDigitsInU32((uint32_t) U64, grouping) ;
+	if (U64 <= UINT32_MAX)
+		return xDigitsInU32((uint32_t) U64, grouping) ;
 	if (U64 >= 100000000000000ULL) {
 		if (U64 >= 100000000000000000ULL) {
-			if (U64 >= 1000000000000000000ULL) x = (U64 >= 10000000000000000000ULL) ? 20  : 19 ;
-			else x = 18 ;
+			if (U64 >= 1000000000000000000ULL)
+				x = (U64 >= 10000000000000000000ULL) ? 20  : 19;
+			else
+				x = 18;
 		} else {
-			if (U64 >= 1000000000000000ULL) x = (U64 >= 10000000000000000ULL) ? 17 : 16 ;
-			else x = 15 ;
+			if (U64 >= 1000000000000000ULL)
+				x = (U64 >= 10000000000000000ULL) ? 17 : 16;
+			else
+				x = 15;
 		}
 	} else {
-		if (U64 >= 1000000000000ULL) x = (U64 > 10000000000000ULL) ? 14 : 13 ;
-		else x = (U64 >= 100000000000ULL) ? 12 : 11 ;
+		if (U64 >= 1000000000000ULL)
+			x = (U64 > 10000000000000ULL) ? 14 : 13;
+		else
+			x = (U64 >= 100000000000ULL) ? 12 : 11;
 	}
-	return x + ((x - 1) / 3) ;
+	return x + ((x - 1) / 3);
 }
 
 int	xU32ToDecStr(uint32_t Value, char * pBuf) {
@@ -244,14 +261,14 @@ int	xU32ToDecStr(uint32_t Value, char * pBuf) {
 		do {
 			iTemp = Value / Div ;
 			if (iTemp != 0 || Len > 0) {
-				*pBuf++	= iTemp + '0' ;
+				*pBuf++	= iTemp + CHR_0;
 				Value 	-= iTemp * Div ;
 				++Len ;
 			}
 			Div /= 10 ;
 		} while (Div) ;
 	} else {
-		*pBuf++ = '0' ;									// answer is single '0'
+		*pBuf++ = CHR_0;									// answer is single '0'
 		++Len ;
 	}
 	*pBuf	= 0 ;										// terminate
