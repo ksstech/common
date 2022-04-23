@@ -295,10 +295,18 @@ extern "C" {
 #define	pvFAILURE					((void *) 0xFFFFFFFF)
 #define	pcFAILURE					((char *) 0xFFFFFFFF)
 
-#define	UINT8_MIN					0x00
-#define	UINT16_MIN					0x0000
-#define	UINT32_MIN					0x00000000
-#define	UINT64_MIN					0x0000000000000000
+#ifndef UINT8_MIN
+	#define	UINT8_MIN				0x00
+#endif
+#ifndef UINT16_MIN
+	#define	UINT16_MIN				0x0000
+#endif
+#ifndef UINT32_MIN
+	#define	UINT32_MIN				0x00000000
+#endif
+#ifndef UINT64_MIN
+	#define	UINT64_MIN				0x0000000000000000
+#endif
 
 #ifndef i8_t
 	typedef	char i8_t;
