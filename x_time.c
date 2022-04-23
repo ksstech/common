@@ -115,8 +115,11 @@ void xTimeGMTime(seconds_t tValue, struct tm * psTM, int fElapsed) {
     while (1) {
     	int	DaysInMonth = DaysPerMonth[psTM->tm_mon] ;
     	// if date is in Feb and year is a leap year, add day for 29th Feb
-    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year)) ++DaysInMonth;
-    	if (tValue < DaysInMonth) break;
+    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year))
+    		++DaysInMonth;
+    	if (tValue < DaysInMonth) {
+    		break;
+    	}
    		tValue -= DaysInMonth;
    		++psTM->tm_mon ;
     }
