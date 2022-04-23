@@ -57,7 +57,7 @@ extern "C" {
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
-	ioB1_0,
+	ioTZlocal, ioB1_0 = ioTZlocal,
 	ioI2Cinit,
 	ioI2Cdly,						// I2C task auto remove Delay if 0.
 	ioFOTA,
@@ -96,7 +96,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_36,
 	ioB1_37,
 	ioB1_38,
-	ioB1_39,
+	ioMBstart,						// 1 = start ModBus
 	ioDS18x20,						// hardware devices
 	ioDS1990x,
 	ioDS248Xcheck,
