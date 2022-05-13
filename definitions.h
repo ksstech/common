@@ -37,7 +37,7 @@ extern "C" {
 #define	CHR_CAN						0x18		// c-X
 #define	CHR_EM						0x19		// c-Y
 #define	CHR_SUB						0x1A		// c-Z
-#define	CHR_ESC						0x1B		// c-3		#
+#define	CHR_ESC						0x1B		// c-3 #
 #define	CHR_FS						0x1C		// c-4				c-FWD SLASH
 #define	CHR_GS						0x1D		// c-5		c-]
 #define	CHR_RS						0x1E		// c-6		c-"
