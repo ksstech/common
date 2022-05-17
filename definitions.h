@@ -76,8 +76,8 @@ extern "C" {
 #define	CHR_QUESTION				0x3F		// ?
 #define	CHR_AT_SIGN					0x40		// @
 // Uppercase A-Z
-#define	CHR_A						0x41
-#define	CHR_B						0x42
+#define	CHR_A						0x41		// Cursor UP
+#define	CHR_B						0x42		// Cursor DOWN
 #define	CHR_C						0x43
 #define	CHR_D						0x44
 #define	CHR_E						0x45
