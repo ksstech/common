@@ -311,13 +311,6 @@ extern "C" {
 	#define	UINT64_MIN				0x0000000000000000
 #endif
 
-#ifndef i8_t
-	typedef	char i8_t;
-#endif
-#ifndef u8_t
-	typedef unsigned char u8_t;
-#endif
-
 typedef	const char ci8_t ;
 typedef	const unsigned char cu8_t ;
 
@@ -326,30 +319,29 @@ typedef	const char * pci8_t ;
 typedef	unsigned char * pu8_t ;
 typedef	const unsigned char * pcu8_t ;
 
-#ifndef i16_t
-	typedef	char i16_t;
+#ifndef s8_t
+	typedef	__int8_t s8_t;
+#endif
+#ifndef u8_t
+	typedef __uint8_t u8_t;
+#endif
+#ifndef s16_t
+	typedef	__int16_t s16_t;
 #endif
 #ifndef u16_t
-	typedef unsigned short u16_t;
+	typedef __uint16_t u16_t;
 #endif
-
-#if !defined(i32_t)
-	typedef	long i32_t;
+#ifndef s32_t
+	typedef	__int32_t s32_t;
 #endif
-
-#ifndef u32
-	#ifndef uint32_t
-	typedef unsigned long u32;
-	#else
-	typedef uint32_t u32 ;
-	#endif
+#ifndef u32_t
+	typedef __uint32_t u32_t;
 #endif
-
-#ifndef i64_t
-	typedef	long long i64_t;
+#ifndef s64_t
+	typedef	__int64_t s64_t;
 #endif
 #ifndef u64_t
-	typedef unsigned long long u64_t;
+	typedef __uint64_t u64_t;
 #endif
 
 // ######################### common & standard network related definitions #########################
