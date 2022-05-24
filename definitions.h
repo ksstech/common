@@ -357,8 +357,6 @@ typedef	const unsigned char * pcu8_t ;
 #define	GT_RETURN(x,y)				if (x > y) return x ;
 
 #define	IF_RETURN(T,iRV)			if (T) return iRV;
-#define	IF_EQ_RETURN(T,x,y)			if (T) { if (x == y) return x ; }
-#define	IF_NE_RETURN(T,x,y)			if (T) { if (x != y) return x ; }
 
 #define	EQ_GOTO(x,y,L)				if (x == y) goto L ;
 #define	NE_GOTO(x,y,L)				if (x != y) goto L ;
