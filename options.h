@@ -52,7 +52,7 @@ extern "C" {
 	.B3_6	= 1,		\
 	.B3_17	= 4,		\
 	.B4_0	= 5,		\
-	.B4_8	= 5,
+	.B4_1	= 7
 
 // ######################################### enumerations ##########################################
 
@@ -175,7 +175,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioSLhost,						// Highest PRI sent to host (must <= ioSLOGhi)
 	ioSLOGhi,						// Highest PRI evaluated
 	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
-	ioB4_1,
+	ioCLIbuf, ioB4_1=ioCLIbuf, 		// 0=disable, 1+ = (n+1)*128 bytes in size
 	ioB4_2,
 	ioB4_3,
 	ioB4_4,

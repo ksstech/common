@@ -49,7 +49,7 @@ const char ioBXmes[] =
 "U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"
 
-"DS1990Dly\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"DS1990Dly\0"	"CLIbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
 const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n\n";
