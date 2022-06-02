@@ -79,13 +79,13 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioMQsub,
 	ioMQpub,
 	ioOWscan,
-	ioActuate,						// RulesEngine * TaskActuator
+	ioB1_22,
 	ioAlert,
 	ioMemory,
 	ioSENSOR,						// vTaskSensor()
 	ioREtable,
 	ioREsched,
-	ioREident,
+	ioB1_28,
 	ioLFS,
 	ioTNETtrack,
 	ioHTTPtrack,
@@ -121,6 +121,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioWLram,						// storage 0=FLASH 1=RAM
 	ioWLscan,						// 0=Fast 1=All
 	ioWLsort,						// 0=SIGnal, 1=SECurity
+	// 2-bit options
 	ioHostMQTT, ioB2_0=ioHostMQTT,
 	ioHostFOTA,
 	ioHostSLOG,
@@ -145,14 +146,15 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB2_21,
 	ioB2_22,
 	ioB2_23,
-	ioB2_24,
-	ioB2_25,
+	dbgIdent,
+	dbgActuate,						// RulesEngine * TaskActuator
 	ioB2_26,
 	ioB2_27,
 	ioB2_28,
 	ioB2_29,
 	ioB2_30,
-	ioDS248Xdbg,
+	dbgDS248X,
+	//3-bit options
 	ioU0Speed, ioB3_0=ioU0Speed,	// UARTx speed
 	ioU1Speed,
 	ioU2Speed,
@@ -174,6 +176,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioWLauth,
 	ioSLhost,						// Highest PRI sent to host (must <= ioSLOGhi)
 	ioSLOGhi,						// Highest PRI evaluated
+	// 4-bit options
 	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
 	ioCLIbuf, ioB4_1=ioCLIbuf, 		// 0=disable, 1+ = (n+1)*128 bytes in size
 	ioB4_2,
