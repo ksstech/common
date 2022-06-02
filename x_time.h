@@ -34,7 +34,7 @@ extern "C" {
 	#define	YEAR_BASE_MAX					2036UL
 	#define	EPOCH_SECONDS_DIFFERENCE		0UL				// difference between selected epoch & NTP epoch
 	#define	timeEPOCH_DAY_0_NUM				1				// 1900/01/01 was Monday, hence day 1
-	typedef	uint32_t						seconds_t ;
+	typedef	u32_t							seconds_t ;
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	#define	SECONDS_IN_EPOCH_PAST			0				// No support for dates prior to 1 Jan 1970
@@ -55,7 +55,7 @@ extern "C" {
 	#define	YEAR_BASE_MAX					2106			// ??:??.?? UTC 2106/02/07
 	#define	EPOCH_SECONDS_DIFFERENCE		2208988800L		// difference between selected epoch & NTP epoch
 	#define	timeEPOCH_DAY_0_NUM				4				// 1970/01/01 was Thursday, hence day 4
-	typedef	uint32_t						seconds_t ;
+	typedef	u32_t						seconds_t ;
 
 #else
 	#error "Cannot determine epoch, invalid base year specified"
@@ -111,9 +111,9 @@ extern "C" {
  * \param[out]	none
  * \return		fraction of a second as a number of milliseconds
  */
-#define	xTimeFractionToMillis(x)	((uint32_t) x / (uint32_t) FRACTIONS_PER_MILLISEC)
+#define	xTimeFractionToMillis(x)	((u32_t) x / (u32_t) FRACTIONS_PER_MILLISEC)
 
-#define	xTimeMillisToFraction(x)	((uint32_t) x * (uint32_t) FRACTIONS_PER_MILLISEC)
+#define	xTimeMillisToFraction(x)	((u32_t) x * (u32_t) FRACTIONS_PER_MILLISEC)
 
 /*
  * xTimeFractionToMicros()
@@ -122,9 +122,9 @@ extern "C" {
  * \param[out]	none
  * \return		fraction of a second as a number of microseconds
  */
-#define	xTimeFractionToMicros(x)	((uint32_t) x / (uint32_t) FRACTIONS_PER_MICROSEC)
+#define	xTimeFractionToMicros(x)	((u32_t) x / (u32_t) FRACTIONS_PER_MICROSEC)
 
-#define	xTimeMicrosToFraction(x)	((uint32_t) x * (uint32_t) FRACTIONS_PER_MICROSEC)
+#define	xTimeMicrosToFraction(x)	((u32_t) x * (u32_t) FRACTIONS_PER_MICROSEC)
 
 // ####################################### structures & unions #####################################
 
@@ -145,10 +145,11 @@ typedef	struct __attribute__((__packed__)) tz_s {
 	char	dstname[4];
 #endif
 } tz_t;
+DUMB_STATIC_ASSERT(sizeof(tz_t) == (6 + configTIME_MAX_LEN_TZNAME + configTIME_MAX_LEN_DSTNAME));
 
 typedef	struct tsz_s {
-	uint64_t	usecs;				// Must ALWAYS be UTC based value, adjust for local TZ
-	tz_t	*	pTZ ;				// TZ info to be used for local DTZ calculation
+	u64_t	usecs;				// Must ALWAYS be UTC based value, adjust for local TZ
+	tz_t *	pTZ ;				// TZ info to be used for local DTZ calculation
 } tsz_t;
 
 // ###################################### x_time related ###########################################
@@ -167,8 +168,8 @@ void xTimeGMTime(seconds_t, struct tm *, int) ;
 seconds_t xTimeCalcSeconds(struct tm *, int) ;
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t *) ;
 
-inline uint32_t xTimeStampAsSeconds(uint64_t Timestamp) { return (uint32_t) (Timestamp / (uint64_t) MICROS_IN_SECOND) ; }
-inline uint64_t xTimeMakeTimestamp(uint32_t Seconds, uint32_t Micros) { return ((uint64_t) Seconds * (uint64_t) MICROS_IN_SECOND) + (uint64_t) Micros ; }
+inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / (u64_t) MICROS_IN_SECOND) ; }
+inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) { return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros ; }
 
 void xTime_Test(void) ;
 

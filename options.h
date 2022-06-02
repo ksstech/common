@@ -13,15 +13,15 @@ extern "C" {
 
 // ############################################ macros #############################################
 
-#define	ioB1GET(i)					maskGET1B(sNVSvars.ioBX.ioB1, (i-ioB1_0), uint64_t)
-#define	ioB2GET(i)					maskGET2B(sNVSvars.ioBX.ioB2, (i-ioB2_0), uint64_t)
-#define	ioB3GET(i)					maskGET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), uint64_t)
-#define	ioB4GET(i)					maskGET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), uint64_t)
+#define	ioB1GET(i)					maskGET1B(sNVSvars.ioBX.ioB1, (i-ioB1_0), u64_t)
+#define	ioB2GET(i)					maskGET2B(sNVSvars.ioBX.ioB2, (i-ioB2_0), u64_t)
+#define	ioB3GET(i)					maskGET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), u64_t)
+#define	ioB4GET(i)					maskGET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), u64_t)
 
-#define	ioB1SET(i,x)				maskSET1B(sNVSvars.ioBX.ioB1, (i-ioB1_0), x, uint64_t)
-#define	ioB2SET(i,x)				maskSET2B(sNVSvars.ioBX.ioB2, (i-ioB2_0), x, uint64_t)
-#define	ioB3SET(i,x)				maskSET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), x, uint64_t)
-#define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, uint64_t)
+#define	ioB1SET(i,x)				maskSET1B(sNVSvars.ioBX.ioB1, (i-ioB1_0), x, u64_t)
+#define	ioB2SET(i,x)				maskSET2B(sNVSvars.ioBX.ioB2, (i-ioB2_0), x, u64_t)
+#define	ioB3SET(i,x)				maskSET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), x, u64_t)
+#define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, u64_t)
 
 #define iosetDEFAULT_DEV					\
 	.B1_4	= 1,							\
@@ -223,7 +223,7 @@ typedef struct __attribute__((packed)) ioset_s {	// 1/2/3/4 bit option variables
 			int B4_14	: 4 ;
 			int B4_15	: 4 ;
 		};
-		uint64_t ioB4 ;
+		u64_t ioB4 ;
 	};
 	union {							// 3-bit option variables
 		struct __attribute__((packed)) {
@@ -250,7 +250,7 @@ typedef struct __attribute__((packed)) ioset_s {	// 1/2/3/4 bit option variables
 			int B3_20	: 3 ;
 			int B3_xx	: 1 ;
 		};
-		uint64_t ioB3 ;
+		u64_t ioB3 ;
 	};
 	union {							// 2-bit option variables
 		struct __attribute__((packed)) {
@@ -287,7 +287,7 @@ typedef struct __attribute__((packed)) ioset_s {	// 1/2/3/4 bit option variables
 			int B2_30	: 2 ;
 			int B2_31	: 2 ;
 		};
-		uint64_t ioB2 ;
+		u64_t ioB2 ;
 	};
 	union {							// 1-bit option variables
 		struct __attribute__((packed)) {
@@ -356,7 +356,7 @@ typedef struct __attribute__((packed)) ioset_s {	// 1/2/3/4 bit option variables
 			int B1_62	: 1 ;
 			int B1_63	: 1 ;
 		};
-		uint64_t ioB1 ;
+		u64_t ioB1;
 	};
 } ioset_t;
 DUMB_STATIC_ASSERT(sizeof(ioset_t) == 32);

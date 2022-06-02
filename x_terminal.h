@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include	<stdint.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -24,13 +22,13 @@ extern "C" {
 
 typedef union {
 	struct __attribute__((packed)) {
-		uint8_t	CurX ;
-		uint8_t	CurY ;
-		uint8_t	MaxX ;
-		uint8_t	MaxY ;
+		u8_t	CurX ;
+		u8_t	CurY ;
+		u8_t	MaxX ;
+		u8_t	MaxY ;
 	} ;
-	uint8_t		x8[4] ;
-	uint32_t	x32 ;
+	u8_t		x8[4] ;
+	u32_t	x32 ;
 } terminfo_t ;
 
 // ###################################### Global variables #########################################
@@ -52,13 +50,14 @@ void vANSIclearhome(void);
 
 void vANSIhome(void) ;
 
-char * pcANSIattrib(char * pBuf, uint8_t FG, uint8_t BG) ;
-char * pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) ;
+char * pcANSIattrib(char * pBuf, u8_t FG, u8_t BG) ;
+char * pcANSIlocate(char * pBuf, u8_t Row, u8_t Col) ;
 
-void vANSIattrib(uint8_t FG, uint8_t BG);
-void vANSIlocate(uint8_t x, uint8_t y);
+int xANSIupdatecursor(int cChr);
+void vANSIattrib(u8_t FG, u8_t BG);
+void vANSIlocate(u8_t x, u8_t y);
 
-void vTerminalSetSize(uint16_t x, uint16_t y) ;
+void vTerminalSetSize(u16_t x, u16_t y) ;
 void vTerminalGetInfo(terminfo_t * psTermInfo) ;
 
 void vANSItestcode(void) ;

@@ -48,7 +48,7 @@ void vANSIclearhome(void) { vANSIclearscreen() ; vANSIhome() ; }
 
 void vANSIhome(void) { vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
 
-char * pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
+char * pcANSIattrib(char * pBuf, u8_t a1, u8_t a2) {
 	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
 		*pBuf++	= CHR_ESC;
 		*pBuf++	= CHR_L_SQUARE;
@@ -63,7 +63,7 @@ char * pcANSIattrib(char * pBuf, uint8_t a1, uint8_t a2) {
 	return pBuf;
 }
 
-char * pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) {
+char * pcANSIlocate(char * pBuf, u8_t Row, u8_t Col) {
 	if (Row > 0 && Col > 0) {
 		*pBuf++	= CHR_ESC;
 		*pBuf++	= CHR_L_SQUARE;
@@ -78,12 +78,12 @@ char * pcANSIlocate(char * pBuf, uint8_t Row, uint8_t Col) {
 	return pBuf;
 }
 
-void vANSIattrib(uint8_t a1, uint8_t a2) {
+void vANSIattrib(u8_t a1, u8_t a2) {
 	char Buffer[sizeof("E[yyy;xxxH0")] ;
 	if (pcANSIattrib(Buffer, a1, a2) != Buffer) vANSIputs(Buffer) ;
 }
 
-void vANSIlocate(uint8_t Row, uint8_t Col) {
+void vANSIlocate(u8_t Row, u8_t Col) {
 	char Buffer[sizeof("E[yyy;xxxH0")];
 	if (pcANSIlocate(Buffer, Row, Col) != Buffer) vANSIputs(Buffer);
 }
@@ -93,7 +93,7 @@ void vANSIlocate(uint8_t Row, uint8_t Col) {
  * @param x		columns
  * @param y		rows
  */
-void vTerminalSetSize(uint16_t x, uint16_t y) {
+void vTerminalSetSize(u16_t x, u16_t y) {
 	sTI.MaxX = x ? x : TERMINAL_DEFAULT_MAX_X ;
 	sTI.MaxY = y ? y : TERMINAL_DEFAULT_MAX_Y ;
 }
@@ -120,8 +120,8 @@ int xTerminalAttached(void) {
 #if 0
 // ################################### Graphical plot ##############################################
 
-void	TerminalPlot(int16_t * dat, uint32_t len) {
-	uint32_t	i ;
+void	TerminalPlot(int16_t * dat, u32_t len) {
+	u32_t	i ;
 	TerminalClear() ;
 	for (i = 0; i < len; i++) { }
 }

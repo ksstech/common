@@ -28,18 +28,18 @@ typedef enum {
 // ############################# common complex data types/ structures #############################
 
 typedef union __attribute__((packed)) ow_rom_t {
-	uint64_t	Value ;
-	uint8_t		HexChars[8] ;
+	u64_t	Value ;
+	u8_t	HexChars[8] ;
 	union {
 		struct __attribute__((packed)) {
-			uint8_t		Family ;
-			uint8_t		TagNum[6] ;
-			uint8_t		CRC ;
+			u8_t	Family ;
+			u8_t	TagNum[6] ;
+			u8_t	CRC ;
 		} ;
 		struct __attribute__((packed)) {
-			uint8_t		buf1	: 8 ;
-			uint64_t	Tagval	: 48 ;
-			uint8_t		buf2	: 8 ;
+			u8_t	buf1	: 8 ;
+			u64_t	Tagval	: 48 ;
+			u8_t	buf2	: 8 ;
 		} ;
 	};
 } ow_rom_t ;
@@ -47,33 +47,33 @@ DUMB_STATIC_ASSERT( sizeof(ow_rom_t) == 8) ;
 
 typedef union __attribute__((packed)) mac_addr_t {
 	struct __attribute__((packed)) {
-		uint8_t		str6hex[6] ;
-		uint8_t		filler1[2] ;
+		u8_t	str6hex[6] ;
+		u8_t	filler1[2] ;
 	} ;
 	struct __attribute__((packed)) {
-		uint64_t	value	: 48 ;
-		uint16_t	filler2 : 16 ;
+		u64_t	value	: 48 ;
+		u16_t	filler2 : 16 ;
 	} ;
 } mac_addr_t ;
 DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8) ;
 
 typedef	union __attribute__((packed)) xVer_u {			// Version numbers
 	struct __attribute__((packed)) {
-		uint8_t		ver_rev ;			// Revision of Sub
-		uint8_t		ver_sub ;			// Sub version
-		uint8_t		ver_min ;			// Minor version
-		uint8_t		ver_maj ;			// Major version
+		u8_t	ver_rev ;			// Revision of Sub
+		u8_t	ver_sub ;			// Sub version
+		u8_t	ver_min ;			// Minor version
+		u8_t	ver_maj ;			// Major version
 	} ;
-	u32_t	val ;
-}  xVer_t ;
-DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4) ;
+	u32_t val;
+}  xVer_t;
+DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4);
 #define	MAKE_VERSION(Maj, Min, Sub, Rev)	((Maj << 24) + (Min << 16) + (Sub << 8) + Rev)
 
 // ######################################### 8 bit types ###########################################
 
 typedef union x8_t {
-	uint8_t		u8 ;
-	int8_t		i8 ;
+	u8_t		u8 ;
+	s8_t		i8 ;
 	char		c8 ;
 } x8_t ;
 DUMB_STATIC_ASSERT(sizeof(x8_t) == 1) ;
@@ -81,33 +81,33 @@ DUMB_STATIC_ASSERT(sizeof(x8_t) == 1) ;
 // ######################################### 16 bit types ##########################################
 
 typedef union x16_t {
-	uint16_t	u16 ;
-	int16_t		i16 ;
-	x8_t		x8[2] ;
-} x16_t ;
-DUMB_STATIC_ASSERT(sizeof(x16_t) == 2) ;
+	u16_t	u16 ;
+	s16_t	i16 ;
+	x8_t	x8[2] ;
+} x16_t;
+DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ########################################## x32 types ############################################
 
 typedef union x32_t {
 	u32_t	u32 ;
-	int32_t		i32 ;
-	float		f32 ;
-	x16_t		x16[2] ;
-	x8_t		x8[4] ;
-} x32_t ;
-DUMB_STATIC_ASSERT(sizeof(x32_t) == 4) ;
+	s32_t	i32 ;
+	float	f32 ;
+	x16_t	x16[2] ;
+	x8_t	x8[4] ;
+} x32_t;
+DUMB_STATIC_ASSERT(sizeof(x32_t) == 4);
 
 // ########################################## x64 types ############################################
 
 typedef union x64_t {
-	uint64_t	u64 ;
-	int64_t		i64 ;
- 	double		f64 ;
- 	x32_t		x32[2] ;
-	x16_t		x16[4] ;
-	x8_t		x8[8] ;
-} x64_t ;
+	u64_t	u64 ;
+	s64_t	i64 ;
+ 	double	f64 ;
+ 	x32_t	x32[2] ;
+	x16_t	x16[4] ;
+	x8_t	x8[8] ;
+} x64_t;
 DUMB_STATIC_ASSERT(sizeof(x64_t) == 8) ;
 
 // ########################################## Other types ##########################################
@@ -127,31 +127,31 @@ typedef struct __attribute__((packed)) {
 // ###################################### px (32/64) pointer types #################################
 
 typedef union px_t {
-	void *		pv ;
-	void * *	ppv ;
+	void * pv ;
+	void * * ppv ;
 // pointers to x64
-	x64_t * 	px64 ;
-	u64_t *		pu64 ;
-	s64_t *		pi64 ;
-	double *	pf64 ;
+	x64_t * px64 ;
+	u64_t *	pu64 ;
+	s64_t *	pi64 ;
+	double * pf64 ;
 // pointers to x32
-	x32_t * 	px32 ;
+	x32_t * px32 ;
 	u32_t *	pu32 ;
-	int32_t *	pi32 ;
-	float *		pf32 ;
+	s32_t *	pi32 ;
+	float *	pf32 ;
 // pointer to x16
-	x16_t *		px16 ;
-	uint16_t *	pu16 ;
-	int16_t *	pi16 ;
+	x16_t *	px16 ;
+	u16_t *	pu16 ;
+	s16_t *	pi16 ;
 // pointers to x08
-	x8_t *		px8 ;
-	uint8_t *	pu8 ;
-	int8_t *	pi8 ;
-	const char *pcc8 ;
-	seconds_t *	psec ;
-	char *		pc8 ;
-	char **		ppc8 ;
-} px_t ;
+	x8_t *	px8 ;
+	u8_t *	pu8 ;
+	s8_t *	pi8 ;
+	const char *pcc8;
+	seconds_t *	psec;
+	char * pc8;
+	char ** ppc8;
+} px_t;
 DUMB_STATIC_ASSERT(sizeof(px_t) == __SIZEOF_POINTER__) ;
 
 // ################################## Structure pointer container ##################################
@@ -194,7 +194,7 @@ DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
 
 // ##################################### CLI related structures ####################################
 
-enum {			// {flags}{counter}
+enum {								// {flags}{counter}
 	maskCOUNT	= 0x007FFFFF,		// counter value or mask
 	mfbCOUNT	= (1 << 23),		// Prefix 23x LSB uCount
 	mfbCOLOR	= (1 << 24),		// Use colours where applicable
@@ -238,16 +238,16 @@ typedef	union {
 		u32_t	h:1, g:1, f:1, e:1, d:1, c:1, b:1, a:1;
 	};
 	struct __attribute__((packed)) {					// Printing control
-		u32_t	uCount	: 23 ;								// Task # mask
-		u32_t	bCount	: 1 ;								// Task #
-		u32_t	bColor	: 1 ;								// Use colour
-		u32_t	bPrioX	: 1 ;								// Priorities
-		u32_t	bState	: 1 ;								// Task state RBPS
-		u32_t	bStack	: 1 ;								// Low Stack value
-		u32_t	bCore	: 1 ;								// MCU 01X
-		u32_t	bXtras	: 1 ;								// Ticks
-		u32_t	bNL		: 1 ;								// terminating NL
-		u32_t	bRT		: 1 ;								// Runtime
+		u32_t	uCount:23;								// Task # mask
+		u32_t	bCount:1;								// Task #
+		u32_t	bColor:1;								// Use colour
+		u32_t	bPrioX:1;								// Priorities
+		u32_t	bState:1;								// Task state RBPS
+		u32_t	bStack:1;								// Low Stack value
+		u32_t	bCore:1;								// MCU 01X
+		u32_t	bXtras:1;								// Ticks
+		u32_t	bNL:1;									// terminating NL
+		u32_t	bRT:1;									// Runtime
 	};
 	struct __attribute__((packed)) {					// vRtosReportMemory() & halMCU_ReportMemory()
 		u32_t	rmSpare:21;
@@ -277,8 +277,6 @@ DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
 	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|K<<21|(L&0x01FFFFF)))
 #define	makeMASK12x20(A,B,C,D,E,F,G,H,I,J,K,L,M) \
 	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|K<<21|L<<20|(M&0x00FFFFF)))
-
-//#define	makeMASKFLAG(A,B,C,D,E,F,G,H,I,J) (flagmask_t) { .a=A, .b=B, .c=C, .d=D, .e=E, .f=F, .g=G, .h=H, .b01=I, .b00=J }
 
 #ifdef __cplusplus
 }
