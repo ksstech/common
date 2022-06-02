@@ -5,6 +5,7 @@
 #pragma	once
 
 #include <errno.h>
+#include "esp_err.h"
 
 #ifdef __cplusplus
 extern "C" {
