@@ -247,18 +247,20 @@ int 	_tmpnam(char * name, int sig, unsigned maxlen) { return 0 ; /* fail, not su
 #endif
 
 void vStdioDiagsReportFileInfo(const char * pName, struct stat *psStat) {
-	printfx(" %s : dev=%d  ino=%u  mode=%0x  nlink=%u  uid=%d  gid=%u  rdev=%d  size=%d", pName, psStat->st_dev,
-		psStat->st_ino, psStat->st_mode, psStat->st_nlink, psStat->st_uid, psStat->st_gid, psStat->st_rdev, psStat->st_size) ;
-	printfx("  aT=%R  mT=%R  cT=%R  bsize=%d  blocks=%d",
+	printfx_lock();
+	printfx_nolock(" %s : dev=%d  ino=%u  mode=%0x  nlink=%u  uid=%d  gid=%u  rdev=%d  size=%d", pName, psStat->st_dev,
+		psStat->st_ino, psStat->st_mode, psStat->st_nlink, psStat->st_uid, psStat->st_gid, psStat->st_rdev, psStat->st_size);
+	printfx_nolock("  aT=%R  mT=%R  cT=%R  bsize=%d  blocks=%d",
 		xTimeMakeTimestamp(psStat->st_atime, 0),
 		xTimeMakeTimestamp(psStat->st_mtime, 0),
 		xTimeMakeTimestamp(psStat->st_ctime, 0),
-		psStat->st_blksize, psStat->st_blocks) ;
-	printfx("  %sFILE  %sBLOCK  %sFIFO  %sCHR\n",
+		psStat->st_blksize, psStat->st_blocks);
+	printfx_nolock("  %sFILE  %sBLOCK  %sFIFO  %sCHR\n",
 		S_ISREG(psStat->st_mode) ? "" : "non",
 		S_ISBLK(psStat->st_mode) ? "" : "non",
 		S_ISFIFO(psStat->st_mode) ? "" : "non",
-		S_ISCHR(psStat->st_mode) ? "" : "non") ;
+		S_ISCHR(psStat->st_mode) ? "" : "non");
+	printfx_unlock();
 }
 
 void vStdioDiags(void) {
