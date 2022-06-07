@@ -112,7 +112,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_52,
 	ioB1_53,
 	ioB1_54,
-	ioB1_55,
+	dbgTRACKER,						// dbgRTOSsema
 	ioB1_56,
 	ioWLantenna,					// external antenna 1=enable
 	ioWLhidden,
