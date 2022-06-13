@@ -100,10 +100,12 @@ int xOptionsSetDirect(int ON, int OV) {
 		if (ioB1GET(ON) != OV) ioB1SET(ON, OV) else iRV = 0;
 	}
 	if (iRV) {					// Something changed, do exception processing
-		if (INRANGE(ioU0Speed, ON, ioU2Speed, int)) {	// UARTx speed change
-			halUART_SetSpeed(ON - ioU0Speed);
-		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf, int)) {// UARTx TX/RX buffer size change
-			halUART_CalcBuffersSizes();
+		if (ON == ioHostMQTT) {
+			setSYSFLAGS(sfOPT_MQTT);					// MQTT host changed
+		} else if (INRANGE(ioU0Speed, ON, ioU2Speed, int)) {
+			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
+		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf, int)) {
+			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
 		}
 		#if	(HW_VARIANT == HW_WIPY)
 		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
