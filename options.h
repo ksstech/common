@@ -31,7 +31,8 @@ extern "C" {
 	.B2_2	= hostDEV,						\
 	.B2_3	= hostDEV,						\
 	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
+	.B4_1	= 7,
 
 #define iosetDEFAULT_PROD					\
 	.B1_4	= 0,							\
@@ -41,7 +42,8 @@ extern "C" {
 	.B2_2	= hostPROD,						\
 	.B2_3	= hostPROD,						\
 	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
+	.B4_1	= 1,
 
 #define iosetDEFAULT	\
 	.B1_32	= 1,		\
@@ -51,8 +53,7 @@ extern "C" {
 	.B3_3	= 1,		\
 	.B3_6	= 1,		\
 	.B3_17	= 4,		\
-	.B4_0	= 5,		\
-	.B4_1	= 7
+	.B4_0	= 5,
 
 // ######################################### enumerations ##########################################
 
