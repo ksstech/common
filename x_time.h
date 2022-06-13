@@ -6,7 +6,6 @@
 #pragma once
 
 #include	<time.h>									// struct tm
-#include	<sys/time.h>
 #include	"definitions.h"								// no nested includes
 
 #ifdef __cplusplus
