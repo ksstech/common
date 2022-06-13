@@ -61,7 +61,7 @@ void int2mac(uint64_t mac, uint8_t * hwaddr) {
 }
 
 void MemDump(uint8_t ** pMemAddr, int32_t cChr, size_t Size) {
-	printfx("MemDump:\n%#`+B", Size, *pMemAddr) ;
+	printfx("MemDump:\r\n%#`+B", Size, *pMemAddr) ;
 	*pMemAddr = (cChr == CHR_PLUS) ? (*pMemAddr + Size) : (cChr == CHR_MINUS) ? (*pMemAddr - Size) : *pMemAddr ;
 }
 
@@ -83,7 +83,7 @@ void xGenerateUUID(char * pBuf) {
 	    else
 	    	*pBuf = szHex[r] ;
 	}
-	IF_P(debugRESULT, "%.36s\n", pBuf);
+	IF_P(debugRESULT, "%.36s\r\n", pBuf);
 }
 
 // ################################ Random number & string support #################################

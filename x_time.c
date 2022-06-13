@@ -206,36 +206,36 @@ void xTimeTest(void) {
 
 #if		(timexEPOCH_SELECTED == timexEPOCH_U32NTP)
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
-	printfx("1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.unit = CurSecs.unit ;
-	printfx("1968-01-20 03:14:07.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("1968-01-20 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
-	printfx("2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
-	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.usecs	= xTimeMakeTimestamp(946684799, 0) ;
-	printfx("1999-12-31 23:59:59.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("1999-12-31 23:59:59.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.usecs += MICROS_IN_SECOND ;
-	printfx("2000-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("2000-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
-	printfx("2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_U32UNIX)
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
-	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.usecs	= xTimeMakeTimestamp(315532800, 0) ;
-	printfx("1980-01-01 00:00:00.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("1980-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
-	printfx("2106-02-07 06:28:15.000Z (+00.00 UTC) = %Z\n", &sTSZtemp) ;
+	printfx("2106-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
 
 #endif
 }

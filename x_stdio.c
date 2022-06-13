@@ -255,7 +255,7 @@ void vStdioDiagsReportFileInfo(const char * pName, struct stat *psStat) {
 		xTimeMakeTimestamp(psStat->st_mtime, 0),
 		xTimeMakeTimestamp(psStat->st_ctime, 0),
 		psStat->st_blksize, psStat->st_blocks);
-	printfx_nolock("  %sFILE  %sBLOCK  %sFIFO  %sCHR\n",
+	printfx_nolock("  %sFILE  %sBLOCK  %sFIFO  %sCHR\r\n",
 		S_ISREG(psStat->st_mode) ? "" : "non",
 		S_ISBLK(psStat->st_mode) ? "" : "non",
 		S_ISFIFO(psStat->st_mode) ? "" : "non",

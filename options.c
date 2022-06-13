@@ -52,7 +52,7 @@ const char ioBXmes[] =
 "DS1990Dly\0"	"CLIbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
-const char ioSxMes[] = "Non-bit options:\n133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\n\n";
+const char ioSxMes[] = "Non-bit options:\r\n133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\r\n\n";
 
 // ###################################### private variables ########################################
 
@@ -129,7 +129,7 @@ exit:
 
 int	xOptionsSet(int	ON, int OV, int PF) {
 	int iRV = erSUCCESS ;
-	IF_P(debugTRACK, "IOSET %d=%d (%d)\n", ON, OV, PF);
+	IF_P(debugTRACK, "IOSET %d=%d (%d)\r\n", ON, OV, PF);
 	if (ON <= ioB4_15) {
 		iRV = xOptionsSetDirect(ON, OV);
 		// If nothing changed, force persistence flag to false
@@ -171,23 +171,23 @@ void vOptionsShow(void) {
 		Def = xOptionGetDefault(Num);
 		Col = (Cur == Def) ? 0 : colourBG_CYAN;
 		if (Num == ioB1_0) {
-			printfx_nolock("1-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB1);
+			printfx_nolock("1-Bit options: 0x%llX\r\n", sNVSvars.ioBX.ioB1);
 			Idx = 0 ;
 		} else if (Num == ioB2_0) {
-			printfx_nolock("2-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB2);
+			printfx_nolock("2-Bit options: 0x%llX\r\n", sNVSvars.ioBX.ioB2);
 			Idx = 0 ;
 		} else if (Num == ioB3_0) {
-			printfx_nolock("3-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB3);
+			printfx_nolock("3-Bit options: 0x%llX\r\n", sNVSvars.ioBX.ioB3);
 			Idx = 0 ;
 		} else if (Num == ioB4_0) {
-			printfx_nolock("\n4-Bit options: 0x%llX\n", sNVSvars.ioBX.ioB4);
+			printfx_nolock("\r\n4-Bit options: 0x%llX\r\n", sNVSvars.ioBX.ioB4);
 			Idx = 0 ;
 		}
 		printfx_nolock("%3d=%C%x%C/", Num, Col, Cur, 0);
 		Len = printfx_nolock("%s", pcMess);
 		pcMess += Len + 1;
 		if (Idx == 7) {
-			printfx_nolock("\n");
+			printfx_nolock("\r\n");
 			Idx = 0;
 		} else {
 			printfx_nolock("%.*s", 12-Len, "            ");
