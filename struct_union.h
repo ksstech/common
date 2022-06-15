@@ -81,9 +81,10 @@ typedef struct __attribute__((packed)) {
 
 // ###################################### px (32/64) pointer types #################################
 
-typedef union px_t {
+typedef union {
 	void * pv ;
 	void * * ppv ;
+	int * piX;
 // pointers to x64
 	x64_t * px64 ;
 	u64_t *	pu64 ;
@@ -107,7 +108,7 @@ typedef union px_t {
 	char * pc8;
 	char ** ppc8;
 } px_t;
-DUMB_STATIC_ASSERT(sizeof(px_t) == __SIZEOF_POINTER__) ;
+DUMB_STATIC_ASSERT(sizeof(px_t) == sizeof(void *));
 
 // ################################## Structure pointer container ##################################
 
@@ -117,8 +118,9 @@ struct x32stat_t ;
 struct pcnt_t ;
 struct tsz_s ;
 struct vt_enum_t ;
+union ow_rom_t ;
 
-typedef union ps_t {
+typedef union {
 	struct x32mma_t *	pMMA ;
 	struct x32mmab_t *	pMMAB ;
 	struct x32stat_t *	pSTAT ;
@@ -126,26 +128,17 @@ typedef union ps_t {
 	struct tsz_s *		pTSZ ;
 	struct vt_enum_t *	psCX ;
 	union ow_rom_t *	pOW_ROM ;
-} ps_t ;
-DUMB_STATIC_ASSERT(sizeof(ps_t) == __SIZEOF_POINTER__) ;
+} ps_t;
+DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *)) ;
 
 // #################################### All-In-One container #######################################
 
-typedef	union z32_t {
-#if (__SIZEOF_POINTER__ == 4)
-	px_t	px ;
-	ps_t	ps ;
-#endif
-	x32_t	x32 ;
-} z32_t ;
-DUMB_STATIC_ASSERT(sizeof(z32_t) == 4) ;
 
-typedef	union z64_t {
-	px_t	px ;
-	ps_t	ps ;
-	x64_t	x64 ;
-} z64_t ;
-DUMB_STATIC_ASSERT(sizeof(z64_t) == 8) ;
+typedef	union { px_t px; ps_t ps; x32_t x32; } z32_t;
+DUMB_STATIC_ASSERT(sizeof(z32_t) == 4);
+
+typedef	union { px_t px; ps_t ps; x64_t x64; } z64_t;
+DUMB_STATIC_ASSERT(sizeof(z64_t) == 8);
 
 // ##################################### CLI related structures ####################################
 
@@ -220,7 +213,7 @@ typedef	union {
 	};
 	u32_t	u32Val;
 } flagmask_t;
-DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4) ;
+DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4);
 
 #define	makeMASK08x24(A,B,C,D,E,F,G,H,I)	\
 	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x0FFFFFF)))
