@@ -25,7 +25,8 @@ void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 } ;
 	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1)) ;
 	++caActivity[i] ;
-	if (caActivity[i] == 0x3A) caActivity[i] = CHR_0;
+	if (caActivity[i] == 0x3A)
+		caActivity[i] = CHR_0;
 	printfx_lock();
 	vANSIcursorsave();
 	vANSIlocate(1, 120);
@@ -35,32 +36,34 @@ void vShowActivity(int i) {
 }
 
 void vUtilPrintCharacterSet(void) {
-	uint8_t Buffer[256] ;
+	u8_t Buffer[256] ;
 	for (int cChr = 0; cChr < sizeof(Buffer); cChr++) Buffer[cChr] = cChr;
 	printfx("%!`+B", sizeof(Buffer), Buffer) ;
 }
 
 /**
- * Convert hex mac address to uint64_t
- * @param[in] hwaddr hex mac address
- * @return mac address as uint64_t
+ * @brief	Convert hex mac address to u64_t
+ * @param	hwaddr hex mac address
+ * @return	mac address as u64_t
  */
-uint64_t mac2int(uint8_t * hwaddr) {
-	uint64_t iRV = 0 ;
-	for (int8_t i = 5; i >= 0; --i) iRV |= (uint64_t) *hwaddr++ << (BITS_IN_BYTE * i);
+u64_t mac2int(u8_t * hwaddr) {
+	u64_t iRV = 0 ;
+	for (int i = 5; i >= 0; --i)
+		iRV |= (u64_t) *hwaddr++ << (BITS_IN_BYTE * i);
 	return iRV;
 }
 
 /**
- * Convert uint64_t mac address to hex
- * @param[in] mac uint64_t mac address
+ * Convert u64_t mac address to hex
+ * @param[in] mac u64_t mac address
  * @param[out] hwaddr hex mac address
  */
-void int2mac(uint64_t mac, uint8_t * hwaddr) {
-	for (int8_t i = 5; i >= 0; --i) *hwaddr++ = mac >> (BITS_IN_BYTE * i);
+void int2mac(u64_t mac, u8_t * hwaddr) {
+	for (s8_t i = 5; i >= 0; --i)
+		*hwaddr++ = mac >> (BITS_IN_BYTE * i);
 }
 
-void MemDump(uint8_t ** pMemAddr, int32_t cChr, size_t Size) {
+void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) {
 	printfx("MemDump:\r\n%#`+B", Size, *pMemAddr) ;
 	*pMemAddr = (cChr == CHR_PLUS) ? (*pMemAddr + Size) : (cChr == CHR_MINUS) ? (*pMemAddr - Size) : *pMemAddr ;
 }
@@ -108,7 +111,7 @@ void xGenerateUUID(char * pBuf) {
 const char charset[] = { ALPHA_UC ALPHA_LC NUMERICS SYMBOLS1 SYMBOLS2 };
 DUMB_STATIC_ASSERT(sizeof(charset) == (OPTN3_SIZE + 1));
 
-void vBuildRandomSXX(uint8_t * pu8, int len, int set) {
+void vBuildRandomSXX(u8_t * pu8, int len, int set) {
 	if (len && pu8) {
 		int size = (set >= 3) ?	OPTN3_SIZE :
 					(set == 2) ? OPTN2_SIZE :
@@ -117,7 +120,7 @@ void vBuildRandomSXX(uint8_t * pu8, int len, int set) {
 	}
 }
 
-void vBuildRandomStr(uint8_t * pu8, int len, int set) {
+void vBuildRandomStr(u8_t * pu8, int len, int set) {
 	if (len && pu8) {
 		vBuildRandomSXX(pu8, --len, set) ;
 		pu8[len] = CHR_NUL ;
@@ -152,19 +155,19 @@ x64_t xBuildRandomX64(void) {
 
 // ############################## Ixx and Uxx manipulation support #################################
 
-uint32_t u32pow(uint32_t base, uint32_t exp) {
-	uint32_t res ;
+u32_t u32pow(u32_t base, u32_t exp) {
+	u32_t res ;
 	for(res = 1; exp > 0; res *= base, --exp) ;
 	return res ;
 }
 
-uint64_t u64pow(uint32_t base, uint32_t exp) {
-	uint64_t res ;
+u64_t u64pow(u32_t base, u32_t exp) {
+	u64_t res ;
 	for(res = 1; exp > 0; res *= base, --exp) ;
 	return res ;
 }
 
-int u32Trailing0(uint32_t U32) {
+int u32Trailing0(u32_t U32) {
 	int iRV = 0 ;
 	while (U32 > 0) {
 		if (U32 % 10) break;
@@ -174,7 +177,7 @@ int u32Trailing0(uint32_t U32) {
 	return iRV ;
 }
 
-int u64Trailing0(uint64_t U64) {
+int u64Trailing0(u64_t U64) {
 	int iRV = 0 ;
 	while (U64 > 0) {
 		if (U64 % 10) break ;
@@ -206,7 +209,7 @@ int	xDigitsInI32(int32_t I32, bool grouping) {
 	return x + ((x - 1) / 3) ;
 }
 
-int	xDigitsInU32(uint32_t U32, bool grouping) {
+int	xDigitsInU32(u32_t U32, bool grouping) {
 	int x;
 	if (U32 >= 10000) {
 		if (U32 >= 10000000) {
@@ -229,10 +232,10 @@ int	xDigitsInU32(uint32_t U32, bool grouping) {
     return x + ((x - 1) / 3);
 }
 
-int	xDigitsInU64(uint64_t U64, bool grouping) {
+int	xDigitsInU64(u64_t U64, bool grouping) {
 	int x ;
 	if (U64 <= UINT32_MAX)
-		return xDigitsInU32((uint32_t) U64, grouping) ;
+		return xDigitsInU32((u32_t) U64, grouping) ;
 	if (U64 >= 100000000000000ULL) {
 		if (U64 >= 100000000000000000ULL) {
 			if (U64 >= 1000000000000000000ULL)
@@ -254,10 +257,10 @@ int	xDigitsInU64(uint64_t U64, bool grouping) {
 	return x + ((x - 1) / 3);
 }
 
-int	xU32ToDecStr(uint32_t Value, char * pBuf) {
+int	xU32ToDecStr(u32_t Value, char * pBuf) {
 	int	Len = 0 ;
 	if (Value) {
-		uint32_t	iTemp, Div = 1000000000UL ;
+		u32_t	iTemp, Div = 1000000000UL ;
 		do {
 			iTemp = Value / Div ;
 			if (iTemp != 0 || Len > 0) {
@@ -275,8 +278,8 @@ int	xU32ToDecStr(uint32_t Value, char * pBuf) {
 	return Len ;
 }
 
-uint32_t xU32Round(uint32_t u32V, uint32_t u32P) {
-	uint32_t u32F = u32V % u32P;
+u32_t xU32Round(u32_t u32V, u32_t u32P) {
+	u32_t u32F = u32V % u32P;
 	u32V -= u32F;
 	return (u32F >= (u32P / 2)) ? (u32V + u32P) : u32V;
 }
@@ -284,9 +287,11 @@ uint32_t xU32Round(uint32_t u32V, uint32_t u32P) {
 // ################################### 1/2/4 bit field array support ###############################
 
 ba_t * pvBitArrayCreate(size_t Count, size_t Size) {
-	if (Size != 1 || Size != 2 || Size != 4) return pvFAILURE;
+	if (Size != 1 || Size != 2 || Size != 4)
+		return pvFAILURE;
 	size_t szBA = Count * Size ;						// size in total # of bits
-	if (szBA & 0x00000007) return pvFAILURE;			// not on a byte boundary
+	if (szBA & 0x00000007)
+		return pvFAILURE;								// not on a byte boundary
 	szBA >>= 3 ;										// size in bytes
 	ba_t * psBA = pvRtosMalloc(sizeof(ba_t) + szBA) ;
 	psBA->ByteSize	= szBA ;
@@ -294,7 +299,7 @@ ba_t * pvBitArrayCreate(size_t Count, size_t Size) {
 	psBA->BitSize	= Size ;
 	psBA->Fields	= Size == 1	? 8		: Size == 2 ?	4		: 2 ;
 	psBA->Mask		= Size == 1	? 0x01	: Size == 2 ?	0x03	: 0x0F ;
-	psBA->pvBA	= (uint8_t *) psBA + sizeof(ba_t) ;
+	psBA->pvBA	= (u8_t *) psBA + sizeof(ba_t) ;
 	memset(psBA->pvBA, 0, szBA) ;
 	return psBA ;
 }
@@ -305,21 +310,23 @@ void xBitArrayDelete(ba_t * psBA) {
 	vRtosFree(psBA) ;
 }
 
-int	xBitArraySet(ba_t * psBA, int32_t baI, uint8_t baV) {
-	if (baI >= psBA->Count || baV > psBA->Mask) return erFAILURE;
-	uint8_t	Xidx = baI / psBA->Fields ;
-	uint8_t	Sidx = baI % psBA->Fields ;
-	uint8_t Mask = psBA->Mask << Sidx ;
+int	xBitArraySet(ba_t * psBA, int baI, u8_t baV) {
+	if (baI >= psBA->Count || baV > psBA->Mask)
+		return erFAILURE;
+	u8_t	Xidx = baI / psBA->Fields ;
+	u8_t	Sidx = baI % psBA->Fields ;
+	u8_t Mask = psBA->Mask << Sidx ;
 	psBA->pvBA[Xidx]	&= ~Mask ;						// Remove THIS field bits
 	psBA->pvBA[Xidx]	|= (baV << Sidx) ;				// add in new THIS field bits
 	return erSUCCESS ;
 }
 
-int	xBitArrayGet(ba_t * psBA, int32_t baI) {
-	if (baI >= psBA->Count) return erFAILURE;
-	uint8_t	Xidx = baI / psBA->Fields ;
-	uint8_t	Sidx = baI % psBA->Fields ;
-	uint8_t Mask = psBA->Mask << Sidx ;
-	uint8_t u8Val = psBA->pvBA[Xidx] & (Mask << Sidx) ;	// strip out OTHER field bits
+int	xBitArrayGet(ba_t * psBA, int baI) {
+	if (baI >= psBA->Count)
+		return erFAILURE;
+	u8_t	Xidx = baI / psBA->Fields ;
+	u8_t	Sidx = baI % psBA->Fields ;
+	u8_t Mask = psBA->Mask << Sidx ;
+	u8_t u8Val = psBA->pvBA[Xidx] & (Mask << Sidx) ;	// strip out OTHER field bits
 	return u8Val >> Sidx ;								// return THIS field value in LSB(s)
 }
