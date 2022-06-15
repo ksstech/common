@@ -1,6 +1,9 @@
 /*
- * options.h
+ * options.c
+ * Copyright (c) 2020-2022 Andre M. Maree/KSS Technologies (Pty) Ltd.
  */
+
+//#include	"string.h"
 
 #include	"hal_variables.h"
 #include	"hal_network.h"
@@ -10,8 +13,6 @@
 #include	"printfx.h"
 #include	"syslog.h"
 #include	"x_errors_events.h"
-
-#include	"string.h"
 
 // ####################################### MACRO definitions #######################################
 
@@ -33,11 +34,11 @@
 const char ioBXmes[] =
 "TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"P_Token\0"
 "P_Param\0"		"P_Syntax\0"	"P_JSON\0"		"W_JSON\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"\0"
-"DB Match\0"	"DB Error\0"	"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"OW Scan\0"		"Actuate\0"		"Alerts\0"
+"DB Match\0"	"DB Error\0"	"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"\0"			"Actuate\0"		"Alerts\0"
 "Memory\0"		"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
 "TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"MBstart\0"
-"DS18x20\0"		"DS1990x\0"		"DS24check\0"	"M90write\0"	"M90offset\0"	"LIS2HH12\0"	"\0"			"\0"
-"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"dbgTracker\0"
+"\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
+"LIS2HH12\0"	"\0"			"\0"			"\0"			"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"
 "\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"
 
 "HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0-2\0"		"\0"			"\0"			"\0"
@@ -47,7 +48,7 @@ const char ioBXmes[] =
 
 "U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"
 "U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"
+"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"	// only 21x 3bit options
 
 "DS1990Dly\0"	"CLIbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
