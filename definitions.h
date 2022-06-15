@@ -268,9 +268,9 @@ extern "C" {
 // https://stackoverflow.com/questions/3553296/c-sizeof-single-struct-member
 #define SO_MEM(T,M)					sizeof(((T *)0)->M)
 // return the number of elements in an array
-#define	NO_MEM(A)					(sizeof(A) / sizeof(A[0]))
+#define	NO_MEM(A)					((int)(sizeof(A) / sizeof(A[0])))
 // return the number of elements in an array that is a member of a structure
-#define NO_ELEM(S,M)				(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0]))
+#define NO_ELEM(S,M)				((int)(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0])))
 
 #define	UNUSED(x)					(void) (x) ;
 #define	STRING_NULL					(char *) "null"
