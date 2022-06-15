@@ -27,24 +27,6 @@ typedef enum {
 
 // ############################# common complex data types/ structures #############################
 
-typedef union __attribute__((packed)) ow_rom_t {
-	u64_t	Value ;
-	u8_t	HexChars[8] ;
-	union {
-		struct __attribute__((packed)) {
-			u8_t	Family ;
-			u8_t	TagNum[6] ;
-			u8_t	CRC ;
-		} ;
-		struct __attribute__((packed)) {
-			u8_t	buf1	: 8 ;
-			u64_t	Tagval	: 48 ;
-			u8_t	buf2	: 8 ;
-		} ;
-	};
-} ow_rom_t ;
-DUMB_STATIC_ASSERT( sizeof(ow_rom_t) == 8) ;
-
 typedef union __attribute__((packed)) mac_addr_t {
 	struct __attribute__((packed)) {
 		u8_t	str6hex[6] ;
