@@ -27,17 +27,11 @@ typedef enum {
 
 // ############################# common complex data types/ structures #############################
 
-typedef union __attribute__((packed)) mac_addr_t {
-	struct __attribute__((packed)) {
-		u8_t	str6hex[6] ;
-		u8_t	filler1[2] ;
-	} ;
-	struct __attribute__((packed)) {
-		u64_t	value	: 48 ;
-		u16_t	filler2 : 16 ;
-	} ;
-} mac_addr_t ;
-DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8) ;
+typedef union mac_addr_t {
+	struct __attribute__((packed)) { u8_t str6hex[6], filler1[2]; };
+	struct __attribute__((packed)) { u64_t value:48; u16_t filler2:16; };
+} mac_addr_t;
+DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8);
 
 typedef	union __attribute__((packed)) xVer_u {			// Version numbers
 	struct __attribute__((packed)) {
@@ -53,44 +47,23 @@ DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4);
 
 // ######################################### 8 bit types ###########################################
 
-typedef union x8_t {
-	u8_t		u8 ;
-	s8_t		i8 ;
-	char		c8 ;
-} x8_t ;
-DUMB_STATIC_ASSERT(sizeof(x8_t) == 1) ;
+typedef union { u8_t u8; s8_t i8; char c8; } x8_t;
+DUMB_STATIC_ASSERT(sizeof(x8_t) == 1);
 
 // ######################################### 16 bit types ##########################################
 
-typedef union x16_t {
-	u16_t	u16 ;
-	s16_t	i16 ;
-	x8_t	x8[2] ;
-} x16_t;
+typedef union { u16_t u16 ; s16_t i16; x8_t x8[2]; } x16_t;
 DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ########################################## x32 types ############################################
 
-typedef union x32_t {
-	u32_t	u32 ;
-	s32_t	i32 ;
-	float	f32 ;
-	x16_t	x16[2] ;
-	x8_t	x8[4] ;
-} x32_t;
+typedef union { int	iX; u32_t u32; s32_t i32; float	f32; x16_t x16[2]; x8_t x8[4]; } x32_t;
 DUMB_STATIC_ASSERT(sizeof(x32_t) == 4);
 
 // ########################################## x64 types ############################################
 
-typedef union x64_t {
-	u64_t	u64 ;
-	s64_t	i64 ;
- 	double	f64 ;
- 	x32_t	x32[2] ;
-	x16_t	x16[4] ;
-	x8_t	x8[8] ;
-} x64_t;
-DUMB_STATIC_ASSERT(sizeof(x64_t) == 8) ;
+typedef union { u64_t u64; s64_t i64; double f64; x32_t x32[2]; x16_t x16[4]; x8_t x8[8]; } x64_t;
+DUMB_STATIC_ASSERT(sizeof(x64_t) == 8);
 
 // ########################################## Other types ##########################################
 
