@@ -1,22 +1,19 @@
 /*
- * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
  * x_stdio.c
+ * Copyright (c) 2014-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-#include	"hal_variables.h"
-#include	"x_stdio.h"
+#include <errno.h>
+#include <sys/stat.h>
 
-#include	"x_ubuf.h"
-#include 	"printfx.h"
+#include "hal_variables.h"
+#include "x_stdio.h"
+#include "x_ubuf.h"
+#include "printfx.h"
+#include "x_errors_events.h"
+#include "x_time.h"
 
-#include	"x_errors_events.h"
-#include	"x_time.h"
-
-#include	"esp_attr.h"
-
-#include	<string.h>
-#include	<errno.h>
-#include	<sys/stat.h>
+#include "esp_attr.h"
 
 // ############################################### Macros ##########################################
 
@@ -41,7 +38,7 @@
 #if 0
 #if		defined(__ARM_CC)
 
-	#include	"rt_misc.h"
+	#include "rt_misc.h"
 
 #elif	defined( __TI_ARM__ )
 
