@@ -3,16 +3,14 @@
  * Copyright (c) 2020-2022 Andre M. Maree/KSS Technologies (Pty) Ltd.
  */
 
-//#include	"string.h"
+#include "hal_variables.h"
+#include "hal_network.h"
+#include "hal_usart.h"
+#include "hal_gpio.h"
 
-#include	"hal_variables.h"
-#include	"hal_network.h"
-#include	"hal_usart.h"
-#include	"hal_gpio.h"
-
-#include	"printfx.h"
-#include	"syslog.h"
-#include	"x_errors_events.h"
+#include "printfx.h"
+#include "syslog.h"
+#include "x_errors_events.h"
 
 // ####################################### MACRO definitions #######################################
 
