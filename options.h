@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <stdint.h>
 #include "definitions.h"
 
 #ifdef __cplusplus
