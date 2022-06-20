@@ -1,13 +1,14 @@
 /*
- * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
+ * x_time.c
+ * Copyright (c) 2014-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-#include	"x_time.h"
-#include 	"printfx.h"
-#include	"x_string_general.h"
-#include	"x_errors_events.h"
+#include <string.h>
 
-#include	<string.h>
+#include "x_time.h"
+#include "printfx.h"
+#include "x_string_general.h"
+#include "x_errors_events.h"
 
 #define	debugFLAG					0xC000
 
@@ -35,10 +36,14 @@ const char DaysPerMonth[]	= { 31,	28,	31,	30,	31,	30,	31,	31,	30,	31,	30,	31 } ;
 int	xTimeIsLeapYear(int year) {
 	if ((year % 4) == 0) {						// if a multiple of 4
 		if ((year % 100) == 0) {				// AND a multiple of 100 (CENTURY year)
-			if ((year % 400) == 0) return 1;	// AND a multiple of 400 then IS a leap year
-			else return 0;						// NOT a leap year
-		} else return 1;						// multiple of 4 but NOT of 100,definitely a leap year
-	} else return 0;							// NOT a multiple of 4, definitely NOT a leap year
+			if ((year % 400) == 0)
+				return 1;			// AND a multiple of 400 then IS a leap year
+			else
+				return 0;			// NOT a leap year
+		} else
+			return 1;				// multiple of 4 but NOT of 100,definitely a leap year
+	} else
+		return 0;					// NOT a multiple of 4, definitely NOT a leap year
 }
 
 /**
@@ -48,12 +53,14 @@ int	xTimeIsLeapYear(int year) {
  * @return		number of leap years, FAILURE if parameter out of range
  */
 int	xTimeCountLeapYears(int NowYear) {
-	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX, seconds_t))return erFAILURE;
+	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX, seconds_t))
+		return erFAILURE;
 	int	Leaps, TestYear ;
-	for(TestYear = YEAR_BASE_MIN, Leaps = 0; TestYear < NowYear; TestYear++) {
-		if (xTimeIsLeapYear(TestYear)) ++Leaps;
+	for (TestYear = YEAR_BASE_MIN, Leaps = 0; TestYear < NowYear; TestYear++) {
+		if (xTimeIsLeapYear(TestYear))
+			++Leaps;
 	}
-	return Leaps ;
+	return Leaps;
 }
 
 /**
@@ -85,11 +92,10 @@ char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num]
  */
 void xTimeGMTime(seconds_t tValue, struct tm * psTM, int fElapsed) {
     memset(psTM, 0, sizeof(struct tm)) ;
-#if 	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
-	if (tValue < 0)	{									// if time prior to 1970
-		return ;
-	}
-#endif
+	#if (timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
+	if (tValue < 0)										// if time prior to 1970
+		return;
+	#endif
     psTM->tm_sec	= tValue % SECONDS_IN_MINUTE ;		// calculate seconds
     tValue		/= SECONDS_IN_MINUTE ;
     psTM->tm_min	= tValue % MINUTES_IN_HOUR ;	    // calculate minutes
