@@ -1,16 +1,16 @@
 /*
- * Copyright 2014-21 Andre M. Maree / KSS Technologies (Pty) Ltd.
+ * x_utilities.c
+ * Copyright (c) 2014-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-#include	"hal_config.h"
-#include	"FreeRTOS_Support.h"
-#include 	"printfx.h"
-#include	"x_utilities.h"
-#include	"x_terminal.h"
-#include	"x_errors_events.h"
+#include <string.h>
 
-#include	<stdlib.h>
-#include	<string.h>
+#include "hal_config.h"
+#include "FreeRTOS_Support.h"
+#include "printfx.h"
+#include "x_utilities.h"
+#include "x_terminal.h"
+#include "x_errors_events.h"
 
 #define	debugFLAG					0xC000
 
