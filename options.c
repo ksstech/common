@@ -106,7 +106,7 @@ int xOptionsSetDirect(int ON, int OV) {
 		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf, int)) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
 		}
-		#if	(HW_VARIANT == HW_WIPY)
+		#if	(halVARIANT == HW_WIPY)
 		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
 			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
 		}
