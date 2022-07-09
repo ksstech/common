@@ -60,7 +60,7 @@ extern "C" {
 enum {								// enumerated option numbers used by ioBxSET
 	ioTZlocal, ioB1_0 = ioTZlocal,
 	ioI2Cinit,
-	ioI2Cdly,						// I2C task auto remove Delay if 0.
+	ioI2Cdly,						// Auto remove I2C task Delay if 0, compact operations
 	ioFOTA,
 	ioFlags,						// Log flag changes 0=DISable 1=ENable
 	ioTimeout,
@@ -97,8 +97,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_36,
 	ioB1_37,
 	ioB1_38,
+	ioB1_39,
 	ioMBstart,						// 1 = start ModBus
-	ioB1_40,
 	ioB1_41,
 	ioB1_42,
 	ioM90write,
