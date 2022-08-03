@@ -34,9 +34,9 @@ const char ioBXmes[] =
 "P_Param\0"		"P_Syntax\0"	"P_JSON\0"		"W_JSON\0"		"Sense\0"		"Mode\0"		"EndPoint\0"	"\0"
 "DB Match\0"	"DB Error\0"	"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"\0"			"Actuate\0"		"Alerts\0"
 "Memory\0"		"SensTrack\0"	"RuleTable\0"	"RuleSched\0"	"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
-"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"MBstart\0"
-"MBstart\0"		"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
-"LIS2HH12\0"	"\0"			"\0"			"\0"			"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"
+"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"
+"\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
+"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"
 "\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"
 
 "HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0-2\0"		"\0"			"\0"			"\0"
@@ -48,7 +48,7 @@ const char ioBXmes[] =
 "U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"	// only 21x 3bit options
 
-"DS1990Dly\0"	"CLIbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+"DS1990Dly\0"	"CLIbuf\0"		"ioMBews\0"		"\0"			"\0"			"\0"			"\0"			"\0"
 "GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
 const char ioSxMes[] = "Non-bit options:\r\n133=WL Mode\t134=AP detail\t135=MQTT Proxy\t136=Mem PEEK\t137=IOSet Def\r\n\n";

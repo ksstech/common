@@ -53,6 +53,7 @@ extern "C" {
 	.B3_6	= 1,		\
 	.B3_17	= 4,		\
 	.B4_0	= 5,		\
+	.B4_2	= 8,		\
 	.B4_8	= 8,
 
 // ######################################### enumerations ##########################################
@@ -98,7 +99,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_37,
 	ioB1_38,
 	ioB1_39,
-	ioMBstart,						// 1 = start ModBus
+	ioB1_40,
 	ioB1_41,
 	ioB1_42,
 	ioM90write,
@@ -109,7 +110,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	dbgLIS2HH12,
 	ioB1_49,
 	ioB1_50,
-	ioB1_51,
+	dbgMODBUS,
 	dbgDS1820,
 	dbgDS1990x,
 	dbgOWscan,
@@ -180,7 +181,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	// 4-bit options
 	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
 	ioCLIbuf, ioB4_1=ioCLIbuf, 		// 0=disable, 1+ = (n+1)*128 bytes in size
-	ioB4_2,
+	ioMBews,
 	ioB4_3,
 	ioB4_4,
 	ioB4_5,
