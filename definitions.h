@@ -314,14 +314,6 @@ extern "C" {
 	#define	UINT64_MIN				0x0000000000000000
 #endif
 
-typedef	const char ci8_t ;
-typedef	const unsigned char cu8_t ;
-
-typedef	char * pi8_t ;
-typedef	const char * pci8_t ;
-typedef	unsigned char * pu8_t ;
-typedef	const unsigned char * pcu8_t ;
-
 #ifndef s8_t
 	typedef	__int8_t s8_t;
 #endif
@@ -346,31 +338,24 @@ typedef	const unsigned char * pcu8_t ;
 #ifndef u64_t
 	typedef __uint64_t u64_t;
 #endif
+#ifndef f32_t
+typedef float f32_t;
+#endif
+#ifndef f64_t
+typedef double f64_t;
+#endif
+
+typedef	u8_t * pu8_t;
+typedef	s8_t * ps8_t;
+
+typedef	char * pc_t;
+typedef	const char * pcc_t;
+typedef	const unsigned char * pcuc_t;
 
 // ######################### common & standard network related definitions #########################
 
 #define	configSSID_MAX_LENGTH		32
 #define	lenMAC_ADDRESS				6
-
-// #################################################################################################
-
-#define	EQ_RETURN(x,y)				if (x == y) return x ;
-#define	NE_RETURN(x,y)				if (x != y) return x ;
-#define	LT_RETURN(x,y)				if (x < y) return x ;
-#define	GT_RETURN(x,y)				if (x > y) return x ;
-
-#define	EQ_GOTO(x,y,L)				if (x == y) goto L ;
-#define	NE_GOTO(x,y,L)				if (x != y) goto L ;
-#define	LT_GOTO(x,y,L)				if (x < y) goto L ;
-#define	GT_GOTO(x,y,L)				if (x > y) goto L ;
-
-#define	EQ_BREAK(x,y)				if (x == y) break ;
-#define	NE_BREAK(x,y)				if (x != y) break ;
-#define	LT_BREAK(x,y)				if (x < y) break ;
-#define	GT_BREAK(x,y)				if (x > y) break ;
-
-#define	IF_EQ_GOTO(T,x,y,L)			if (T) { if (x == y) goto L ; }
-#define	IF_NE_GOTO(T,x,y,L)			if (T) { if (x != y) goto L ; }
 
 // ################################ Strings in Macros manipulation #################################
 
