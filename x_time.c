@@ -53,7 +53,7 @@ int	xTimeIsLeapYear(int year) {
  * @return		number of leap years, FAILURE if parameter out of range
  */
 int	xTimeCountLeapYears(int NowYear) {
-	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX, seconds_t))
+	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX))
 		return erFAILURE;
 	int	Leaps, TestYear ;
 	for (TestYear = YEAR_BASE_MIN, Leaps = 0; TestYear < NowYear; TestYear++) {
@@ -90,8 +90,8 @@ char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num]
  * @param[in]	Elapsed - flag indicating if tValue is epoch (zero) or elapsed (non zero) seconds.
  * @return		none
  */
-void xTimeGMTime(seconds_t tValue, struct tm * psTM, int fElapsed) {
-    memset(psTM, 0, sizeof(struct tm)) ;
+void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
+    memset(psTM, 0, sizeof(tm_t)) ;
 	#if (timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	if (tValue < 0)										// if time prior to 1970
 		return;
@@ -142,14 +142,14 @@ int xTimeCalcDaysMonth(int Year, int Month) {			// handle February of a leap yea
  * @param psTM
  * @return
  */
-int	xTimeCalcDaysInMonth(struct tm * psTM) { return xTimeCalcDaysMonth(psTM->tm_year, psTM->tm_mon); }
+int	xTimeCalcDaysInMonth(tm_t * psTM) { return xTimeCalcDaysMonth(psTM->tm_year, psTM->tm_mon); }
 
 /**
  * @brief
  * @param psTM
  * @return
  */
-int	xTimeCalcDaysYTD(struct tm *psTM) {				// handle day AFTER February of leap year
+int	xTimeCalcDaysYTD(tm_t *psTM) {				// handle day AFTER February of leap year
 	return DaysToMonth[psTM->tm_mon] + (psTM->tm_mday-1) + ((xTimeIsLeapYear(psTM->tm_year+YEAR_BASE_MIN) && (psTM->tm_mon > 1)) ? 1 : 0) ;
 }
 
@@ -158,7 +158,7 @@ int	xTimeCalcDaysYTD(struct tm *psTM) {				// handle day AFTER February of leap 
  * @param psTM
  * @return
  */
-int	xTimeCalcDaysToDate(struct tm *psTM) {
+int	xTimeCalcDaysToDate(tm_t *psTM) {
 	return (psTM->tm_year*DAYS_IN_YEAR) + xTimeCountLeapYears(psTM->tm_year+YEAR_BASE_MIN) + xTimeCalcDaysYTD(psTM) ;
 }
 
@@ -168,7 +168,7 @@ int	xTimeCalcDaysToDate(struct tm *psTM) {
  * @param fElapsed
  * @return
  */
-seconds_t xTimeCalcSeconds(struct tm *psTM, int fElapsed) {
+seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 	// calculate seconds for hh:mm:ss portion
 	seconds_t Seconds	= psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR) ;
 

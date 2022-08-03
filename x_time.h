@@ -127,6 +127,8 @@ extern "C" {
 
 // ####################################### structures & unions #####################################
 
+typedef struct tm tm_t ;
+
 /*
  * TIME ZONE STRUCTURE DEFINITION
  */
@@ -158,17 +160,17 @@ int	xTimeCountLeapYears(int) ;
 int	xTimeGetDayNumber(char *) ;
 int	xTimeGetMonthNumber(char *) ;
 int xTimeCalcDaysMonth(int Year, int Month);
-int	xTimeCalcDaysInMonth(struct tm *) ;
-int	xTimeCalcDaysYTD(struct tm *) ;
-int	xTimeCalcDaysToDate(struct tm *) ;
+int	xTimeCalcDaysInMonth(tm_t *) ;
+int	xTimeCalcDaysYTD(tm_t *);
+int	xTimeCalcDaysToDate(tm_t *);
 char * xTimeGetDayName(int) ;
 char * xTimeGetMonthName(int) ;
-void xTimeGMTime(seconds_t, struct tm *, int) ;
-seconds_t xTimeCalcSeconds(struct tm *, int) ;
-seconds_t xTimeCalcLocalTimeSeconds(tsz_t *) ;
+void xTimeGMTime(seconds_t, tm_t *, int);
+seconds_t xTimeCalcSeconds(tm_t *, int);
+seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
 
-inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / (u64_t) MICROS_IN_SECOND) ; }
-inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) { return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros ; }
+inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / (u64_t) MICROS_IN_SECOND); }
+inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) { return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros; }
 
 void xTime_Test(void) ;
 

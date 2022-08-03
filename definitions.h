@@ -206,13 +206,14 @@ extern "C" {
 #define	BASE16						16
 
 // true/false range tests
-#define	INRANGE(x,y,z,c)			(((x) <= (y)) && ((y) <= (z)) ? 1 : 0)
-#define	BETWEEN(x,y,z,c)			(((x) <  (y)) && ((y) <  (z)) ? 1 : 0)
-#define	OUTSIDE(x,y,z,c)			(((x) >  (y)) || ((y) >  (z)) ? 1 : 0)
-//#define	INRANGE(x,y,z,c)			(((c)(x) <= (c)(y)) && ((c)(y) <= (c)(z)) ? 1 : 0)
-//#define	BETWEEN(x,y,z,c)			(((c)(x) <  (c)(y)) && ((c)(y) <  (c)(z)) ? 1 : 0)
-//#define	OUTSIDE(x,y,z,c)			(((c)(x) >  (c)(y)) || ((c)(y) >  (c)(z)) ? 1 : 0)
-
+#define	INRANGE(x,y,z)				(((x) <= (y)) && ((y) <= (z)) ? 1 : 0)
+#define	BETWEEN(x,y,z)				(((x) <  (y)) && ((y) <  (z)) ? 1 : 0)
+#define	OUTSIDE(x,y,z)				(((x) >  (y)) || ((y) >  (z)) ? 1 : 0)
+/*
+#define	INRANGE(x,y,z,c)			(((c)(x) <= (c)(y)) && ((c)(y) <= (c)(z)) ? 1 : 0)
+#define	BETWEEN(x,y,z,c)			(((c)(x) <  (c)(y)) && ((c)(y) <  (c)(z)) ? 1 : 0)
+#define	OUTSIDE(x,y,z,c)			(((c)(x) >  (c)(y)) || ((c)(y) >  (c)(z)) ? 1 : 0)
+*/
 // normalise a value to be in the range specified
 #define	FIT2RANGE(x,y,z,c)			( y = ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
 #define	TRIMMED(x,y,z,c)			( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
@@ -227,7 +228,7 @@ extern "C" {
 #define	POWER_OF_10(x)			((x==1 || x==10 || x==100 || x==1000 ||	x==10000 || x==100000 || x==1000000	|| x==10000000 || \
 								 x==100000000 || x==1000000000 || x==10000000000 || x==100000000000) ? 1 : 0)
 
-#define	SWAP(v1, v2, t)				{t vx = v1 ; v1 = v2 ; v2 = vx ; }
+#define	SWAP(v1, v2, t)				{t vx = v1; v1 = v2; v2 = vx; }
 
 #define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
 #define	IF_EXEC_0(T,F)				if (T) { do { F(); } while (0); }

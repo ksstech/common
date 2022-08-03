@@ -112,32 +112,34 @@ DUMB_STATIC_ASSERT(sizeof(px_t) == sizeof(void *));
 
 // ################################## Structure pointer container ##################################
 
-struct x32mma_t ;
-struct x32mmab_t ;
-struct x32stat_t ;
-struct pcnt_t ;
-struct tsz_s ;
-struct vt_enum_t ;
-union ow_rom_t ;
+struct x32mma_t;
+struct x32mmab_t;
+struct x32stat_t;
+struct pcnt_t;
+struct tsz_s;
+struct vt_enum_t;
+union ow_rom_t;
+struct mb_srv_t;
 
 typedef union {
-	struct x32mma_t *	pMMA ;
-	struct x32mmab_t *	pMMAB ;
-	struct x32stat_t *	pSTAT ;
-	struct pcnt_t *		psPCNT ;
-	struct tsz_s *		pTSZ ;
-	struct vt_enum_t *	psCX ;
-	union ow_rom_t *	pOW_ROM ;
+	struct x32mma_t *	pMMA;
+	struct x32mmab_t *	pMMAB;
+	struct x32stat_t *	pSTAT;
+	struct pcnt_t *		psPCNT;
+	struct tsz_s *		pTSZ;
+	const struct vt_enum_t * psCX;
+	union ow_rom_t *	pOW_ROM;
+	struct mb_srv_t *	psMBC;
 } ps_t;
-DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *)) ;
+DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *));
 
 // #################################### All-In-One container #######################################
 
 
-typedef	union { px_t px; ps_t ps; x32_t x32; } z32_t;
+typedef	union { x32_t x32; px_t px; ps_t ps; } z32_t;
 DUMB_STATIC_ASSERT(sizeof(z32_t) == 4);
 
-typedef	union { px_t px; ps_t ps; x64_t x64; } z64_t;
+typedef	union { x64_t x64; px_t px; ps_t ps; } z64_t;
 DUMB_STATIC_ASSERT(sizeof(z64_t) == 8);
 
 // ##################################### CLI related structures ####################################

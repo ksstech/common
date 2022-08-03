@@ -83,9 +83,9 @@ int xOptionsSetDirect(int ON, int OV) {
 	IF_EXIT_MX(ON > ioB4_15, "Invalid option number", erINVALID_OPERATION);
 
 	int EVL = (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1;
-	IF_EXIT_MX(OUTSIDE(0, OV, EVL, int), "Invalid option value", erINVALID_VALUE);
+	IF_EXIT_MX(OUTSIDE(0, OV, EVL), "Invalid option value", erINVALID_VALUE);
 
-	IF_EXIT_MX(ON == ioMQTT_QoS && OUTSIDE(0, OV, 2, int), "MQTT QoS 0->2", erINVALID_VALUE);
+	IF_EXIT_MX(ON == ioMQTT_QoS && OUTSIDE(0, OV, 2), "MQTT QoS 0->2", erINVALID_VALUE);
 
 	// to avoid unnecessary flash writes, only write if value is different.
 	iRV = 1;
@@ -101,9 +101,9 @@ int xOptionsSetDirect(int ON, int OV) {
 	if (iRV) {					// Something changed, do exception processing
 		if (ON == ioHostMQTT) {
 			setSYSFLAGS(sfOPT_MQTT);					// MQTT host changed
-		} else if (INRANGE(ioU0Speed, ON, ioU2Speed, int)) {
+		} else if (INRANGE(ioU0Speed, ON, ioU2Speed)) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
-		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf, int)) {
+		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf)) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
 		}
 		#if	(halVARIANT == HW_WIPY)
@@ -138,7 +138,7 @@ int	xOptionsSet(int	ON, int OV, int PF) {
 			PF = 0;
 		}
 	} else if (ON == ioS_NWMO) {
-		iRV = INRANGE(WIFI_MODE_NULL, OV, WIFI_MODE_APSTA, int) ? halWL_SetMode(OV) : erFAILURE ;
+		iRV = INRANGE(WIFI_MODE_NULL, OV, WIFI_MODE_APSTA) ? halWL_SetMode(OV) : erFAILURE ;
 	} else if (ON == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
 	}
