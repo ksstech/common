@@ -278,10 +278,25 @@ int	xU32ToDecStr(u32_t Value, char * pBuf) {
 	return Len ;
 }
 
-u32_t xU32Round(u32_t u32V, u32_t u32P) {
-	u32_t u32F = u32V % u32P;
-	u32V -= u32F;
-	return (u32F >= (u32P / 2)) ? (u32V + u32P) : u32V;
+/**
+ * @brief	Round VAL up or down to closest multiple of MULT
+ * @param
+ * @return
+ */
+u32_t u32Round(u32_t Val, u32_t Mult) {
+	u32_t Frac = Val % Mult;
+	Val -= Frac;
+	return (Frac >= (Mult / 2)) ? (Val + Mult) : Val;
+}
+
+/**
+ * @brief	Round VAL up to closest multiple of MULT
+ * @param
+ * @return
+ */
+u32_t u32RoundUP(u32_t Val, u32_t Mult) {
+	Val += Mult - 1;
+	return (Val < Mult) ? Mult : (Val - (Val % Mult));
 }
 
 // ################################### 1/2/4 bit field array support ###############################

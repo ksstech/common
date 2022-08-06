@@ -54,8 +54,10 @@ int	xDigitsInI32(s32_t I32, bool grouping) ;
 int	xDigitsInU32(u32_t U32, bool grouping) ;
 int	xDigitsInU64(u64_t U64, bool grouping) ;
 
-int	xU32ToDecStr(u32_t Value, char *) ;
-u32_t xU32Round(u32_t u32V, u32_t u32P);
+int	xU32ToDecStr(u32_t Value, char *);
+
+u32_t u32Round(u32_t u32V, u32_t u32P);
+u32_t u32RoundUP(u32_t u32V, u32_t u32P);
 
 // ################################### 1/2/4 bit field array support ###############################
 
