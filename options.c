@@ -188,7 +188,7 @@ void vOptionsShow(void) {
 		Len = printfx_nolock("%s", pcMess);
 		pcMess += Len + 1;
 		if (Idx == 7) {
-			printfx_nolock("\r\n");
+			printfx_nolock(strCRLF);
 			Idx = 0;
 		} else {
 			printfx_nolock("%.*s", 12-Len, "            ");

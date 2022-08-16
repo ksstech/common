@@ -143,6 +143,8 @@ extern "C" {
 #define	CHR_TILDE					0x7E		// '~'
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
+#define	strCRLF						"\r\n"
+
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
 #define MICROS_IN_MILLISEC			1000
