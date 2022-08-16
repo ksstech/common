@@ -33,7 +33,7 @@ typedef union mac_addr_t {
 } mac_addr_t;
 DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8);
 
-typedef	union __attribute__((packed)) xVer_u {			// Version numbers
+typedef	union xVer_u {				// Version numbers
 	struct __attribute__((packed)) {
 		u8_t	ver_rev ;			// Revision of Sub
 		u8_t	ver_sub ;			// Sub version
@@ -129,7 +129,7 @@ typedef union {
 	struct tsz_s *		pTSZ;
 	const struct vt_enum_t * psCX;
 	union ow_rom_t *	pOW_ROM;
-	struct mb_srv_t *	psMBC;
+	struct mb_srv_t *	psMBSrv;
 } ps_t;
 DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *));
 
@@ -214,8 +214,8 @@ typedef	union {
 		u32_t	rmColor:1;
 	};
 	u32_t	u32Val;
-} flagmask_t;
-DUMB_STATIC_ASSERT(sizeof(flagmask_t) == 4);
+} fm_t;
+DUMB_STATIC_ASSERT(sizeof(fm_t) == 4);
 
 #define	makeMASK08x24(A,B,C,D,E,F,G,H,I)	\
 	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x0FFFFFF)))
