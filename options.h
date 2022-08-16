@@ -194,7 +194,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB4_12,
 	ioB4_13,
 	ioB4_14,
-	ioB4_15,
+	toConsole, ioB4_15 = toConsole,
 	ioS_NWMO,						// 133 {0->3} 			(network mode)
 	ioS_WIFI,						// 134 {ssid} {pswd}
 	ioS_MQTT,						// 135 {w.x.y.z[:???]}	(mqtt broker/proxy)
