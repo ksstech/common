@@ -22,6 +22,7 @@ extern "C" {
 #define	ioB3SET(i,x)				maskSET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), x, u64_t)
 #define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, u64_t)
 
+// Settings specifically for DEVelopment code builds
 #define iosetDEFAULT_DEV					\
 	.B1_4	= 1,							\
 	.B1_34	= 0,							\
@@ -33,6 +34,7 @@ extern "C" {
 	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
 	.B4_1	= 7,
 
+// Settings specifically for PRODuction code builds
 #define iosetDEFAULT_PROD					\
 	.B1_4	= 0,							\
 	.B1_34	= 1,							\
@@ -44,7 +46,9 @@ extern "C" {
 	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
 	.B4_1	= 1,
 
+// Settings common to both DEVelopment and PRODuction code builds
 #define iosetDEFAULT	\
+	.B1_6	= 1,		\
 	.B1_32	= 1,		\
 	.B1_33	= 1,		\
 	.B1_58	= 1,		\
@@ -54,7 +58,8 @@ extern "C" {
 	.B3_17	= 4,		\
 	.B4_0	= 5,		\
 	.B4_2	= 8,		\
-	.B4_8	= 8,
+	.B4_8	= 8,		\
+	.B4_15	= 2,
 
 // ######################################### enumerations ##########################################
 
@@ -176,8 +181,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	B3_16,
 	ioWLretry,
 	ioWLauth,
-	ioSLhost,						// Highest PRI sent to host (must <= ioSLOGhi)
-	ioSLOGhi,						// Highest PRI evaluated
+	ioSLhost,						// Highest # (lowest PRI) sent to host (must <= ioSLOGhi)
+	ioSLOGhi,						// Highest # (lowest PRI) evaluated
 	// 4-bit options
 	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
 	ioCLIbuf, ioB4_1=ioCLIbuf, 		// 0=disable, 1+ = (n+1)*128 bytes in size
