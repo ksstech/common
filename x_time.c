@@ -68,7 +68,7 @@ int	xTimeCountLeapYears(int NowYear) {
  * @param	str - pointer to the name string
  * @return	0 to 6 for Sun to Sat or FAILURE if not matched
  */
-int	xTimeGetDayNumber(char * str) { return xstrindex(str, (char * *) DayNames) ; }
+int	xTimeGetDayNumber(char * str) { return xstrindex(str, (char * *) DayNames); }
 
 /**
  * @brief	calculate the month number based on the 3 char string supplied
