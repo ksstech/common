@@ -19,8 +19,8 @@
 
 // #################################################################################################
 
-const char * const DayNames[]		= { "Sun",	"Mon",	"Tue",	"Wed",	"Thu",	"Fri",	"Sat", 0 } ;
-const char * const MonthNames[]	= { "Jan",	"Feb",	"Mar",	"Apr",	"May",	"Jun",	"Jul",	"Aug",	"Sep",	"Oct",	"Nov",	"Dec", 0 } ;
+const char * const DayNames[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri",	"Sat", 0 } ;
+const char * const MonthNames[]	= { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",	"Sep", "Oct", "Nov", "Dec", 0 } ;
 // Number of days in a year at the beginning of each month of the year, in a non-leap year.
 const short	DaysToMonth[12]	= { 0,	31,	59,	90,120,151,181,212,243,273,304,334 } ;
 // Number of days in a month for each month of the year, in a non-leap year.
