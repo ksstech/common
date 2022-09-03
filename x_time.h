@@ -169,6 +169,9 @@ void xTimeGMTime(seconds_t, tm_t *, int);
 seconds_t xTimeCalcSeconds(tm_t *, int);
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
 
+inline u32_t u32TS_Seconds(u64_t TS) { return (u32_t) (TS / (u64_t) MICROS_IN_SECOND); }
+inline u32_t u32TS_FracMillis(u64_t TS) { return (u32_t) ((TS%MICROS_IN_SECOND)/MICROS_IN_MILLISEC); }
+
 inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / (u64_t) MICROS_IN_SECOND); }
 inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) { return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros; }
 
