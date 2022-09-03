@@ -74,27 +74,27 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioFlags,						// Log flag changes 0=DISable 1=ENable
 	ioTimeout,
 	ioUpDown,						// shutdown/restart tracking
-	ioToken,
-	ioParse,
-	ioSyntax,
-	ioJSONpar,
-	ioW_JSON,
-	ioSense,
-	ioMode,
-	ioEndPoint,
-	ioB1_15,
-	ioDBmatch,
-	ioDBerr,
+	dbgToken,
+	dbgParam,
+	dbgSyntax,
+	dbgHTTPreq,
+	dbgJSONwr,
+	dbgSense,
+	dbgMode,
+	dbgEPinfo,
+	dbgREflow,
+	ioB1_16,
+	ioB1_17,
 	ioMQcon,
 	ioMQsub,
 	ioMQpub,
 	ioB1_21,
 	ioB1_22,
-	ioAlert,
+	dbgAlert,
 	ioMemory,
-	ioSENSOR,						// vTaskSensor()
+	ioB1_25,
 	ioREtable,
-	ioREsched,
+	ioB1_27,
 	ioB1_28,
 	ioLFS,
 	ioTNETtrack,
@@ -157,8 +157,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB2_22,
 	ioB2_23,
 	dbgIdent,
-	dbgActuate,						// RulesEngine * TaskActuator
-	ioB2_26,
+	dbgActuate,						// 0=Off, 1=RuleEngine, 2=TaskAct, 3=Both
+	dbgDBase,						// 0=Off, 1=Match, 2=Errors, 3=Both
 	ioB2_27,
 	ioB2_28,
 	ioB2_29,
@@ -183,11 +183,11 @@ enum {								// enumerated option numbers used by ioBxSET
 	B3_15,
 	B3_16,
 	ioWLretry,
-	ioWLauth,
+	ioWLauth,						// OPEN->WEP->WPA_PSK->WPA2_PSK->WPA_WPA2_PSK->WPA2_ENTERPRISE etc...
 	ioSLhost,						// Highest # (lowest PRI) sent to host (must <= ioSLOGhi)
 	ioSLOGhi,						// Highest # (lowest PRI) evaluated
 	// 4-bit options
-	ioDS1990Dly,ioB4_0=ioDS1990Dly,	// delay (sec) between successive read same tag
+	dlyDS1990,ioB4_0=dlyDS1990,	// delay (sec) between successive read same tag
 	ioCLIbuf, ioB4_1=ioCLIbuf, 		// 0=disable, 1+ = (n+1)*128 bytes in size
 	ioMBews,
 	ioB4_3,
