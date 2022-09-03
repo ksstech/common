@@ -34,6 +34,8 @@ enum {
 	erINV_RGSTR,
 	erINV_SCALE,
 	erINV_UNIT,
+	erINV_SSID,
+	erINV_PSWD,
 	erHOSTNAME,
 	erOUT_OF_RANGE,
 
