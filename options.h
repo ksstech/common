@@ -16,11 +16,13 @@ extern "C" {
 #define	ioB2GET(i)					maskGET2B(sNVSvars.ioBX.ioB2, (i-ioB2_0), u64_t)
 #define	ioB3GET(i)					maskGET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), u64_t)
 #define	ioB4GET(i)					maskGET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), u64_t)
+#define	ioB8GET(i)					maskGET8B(sNVSvars.ioBX.ioB8, (i-ioB8_0), u64_t)
 
 #define	ioB1SET(i,x)				maskSET1B(sNVSvars.ioBX.ioB1, (i-ioB1_0), x, u64_t)
 #define	ioB2SET(i,x)				maskSET2B(sNVSvars.ioBX.ioB2, (i-ioB2_0), x, u64_t)
 #define	ioB3SET(i,x)				maskSET3B(sNVSvars.ioBX.ioB3, (i-ioB3_0), x, u64_t)
 #define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, u64_t)
+#define	ioB8SET(i,x)				maskSET8B(sNVSvars.ioBX.ioB8, (i-ioB8_0), x, u64_t)
 
 // Settings specifically for DEVelopment code builds
 #define iosetDEFAULT_DEV					\
@@ -59,7 +61,8 @@ extern "C" {
 	.B4_0	= 5,		\
 	.B4_2	= 8,		\
 	.B4_8	= 8,		\
-	.B4_15	= 2,
+	.B4_15	= 2,		\
+	.B8_0	= 30,
 
 // ######################################### enumerations ##########################################
 
@@ -199,12 +202,20 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB4_12,
 	ioB4_13,
 	ioB4_14,
-	toConsole, ioB4_15 = toConsole,
-	ioS_NWMO,						// 133 {0->3} 			(network mode)
-	ioS_WIFI,						// 134 {ssid} {pswd}
-	ioS_MQTT,						// 135 {w.x.y.z[:???]}	(mqtt broker/proxy)
-	ioS_PEEK,						// 136 {addr} {size}
-	ioS_IOdef,						// 137 					(reset to defaults)
+	toConsole, ioB4_15=toConsole,
+	dlyMBpoll, ioB8_0=dlyMBpoll,
+	ioB8_1,
+	ioB8_2,
+	ioB8_3,
+	ioB8_4,
+	ioB8_5,
+	ioB8_6,
+	ioB8_7,
+	ioBXlast, ioS_NWMO=ioBXlast,	// 141 {0->3} 			(network mode)
+	ioS_WIFI,						// 142 {ssid} {pswd}
+	ioS_MQTT,						// 143 {w.x.y.z[:???]}	(mqtt broker/proxy)
+	ioS_PEEK,						// 144 {addr} {size}
+	ioS_IOdef,						// 145 					(reset to defaults)
 	ioS_LAST = ioS_IOdef,
 } ;
 
@@ -212,7 +223,7 @@ enum {								// enumerated option numbers used by ioBxSET
 
 #pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
 
-typedef struct __attribute__((packed)) {	// 1/2/3/4 bit option variables
+typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
 	union {							// 4-bit option variables
 		struct __attribute__((packed)) {
 			u8_t B4_0	: 4 ;
@@ -367,8 +378,21 @@ typedef struct __attribute__((packed)) {	// 1/2/3/4 bit option variables
 		};
 		u64_t ioB1;
 	};
+	union {							// 8-bit option variables (added at end)
+		struct __attribute__((packed)) {
+			u8_t B8_0:8;
+			u8_t B8_1:8;
+			u8_t B8_2:8;
+			u8_t B8_3:8;
+			u8_t B8_4:8;
+			u8_t B8_5:8;
+			u8_t B8_6:8;
+			u8_t B8_7:8;
+		};
+		u64_t ioB8;
+	};
 } ioset_t;
-DUMB_STATIC_ASSERT(sizeof(ioset_t) == 32);
+DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
 
 // ####################################### public variables ########################################
 
