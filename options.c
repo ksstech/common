@@ -87,7 +87,7 @@ void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(iose
  */
 int xOptionsSetDirect(int ON, int OV) {
 	int iRV;
-	IF_EXIT_MX(ON > ioB8_7, "Invalid option number", erINV_OPERATION);
+	IF_EXIT_MX(ON >= ioBXlast, "Invalid option number", erINV_OPERATION);
 
 	// determine the max option value, based on size, and check validity
 	int EVL = (ON >= ioB8_0) ? 255 : (ON >= ioB4_0) ? 15 : (ON >= ioB3_0) ? 7 : (ON >= ioB2_0) ? 3 : 1;
