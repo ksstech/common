@@ -36,7 +36,10 @@ enum {
 	erINV_UNIT,
 	erINV_SSID,
 	erINV_PSWD,
-	erHOSTNAME,
+	erINV_COMMAND,
+	erHOST_NOTFOUND,
+	erINV_HOST,
+	erDUP_HOST,
 	erOUT_OF_RANGE,
 
 	erTABLE_FULL,
