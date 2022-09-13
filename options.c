@@ -51,7 +51,7 @@ const char ioBXmes[] =
 "dlyDS1990\0"	"CLIbuf\0"		"ioMBews\0"		"\0"			"\0"			"\0"			"\0"			"\0"
 "GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"toConsole\0"
 // 8 bit options
-"dlyMBp2p\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
+"dlyMBread\0"	"dlyMBpoll\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
 const char ioSxMes[] = "Non-bit options:\r\n"
 						"141=WL Mode\t"
@@ -198,7 +198,7 @@ void vOptionsShow(void) {
 			printfx_nolock("3-Bit options: 0x%0llX\r\n", sNVSvars.ioBX.ioB3);
 			Idx = 0;
 		} else if (Num == ioB4_0) {
-			printfx_nolock("4-Bit options: 0x%0llX\r\n", sNVSvars.ioBX.ioB4);
+			printfx_nolock("\r\n4-Bit options: 0x%0llX\r\n", sNVSvars.ioBX.ioB4);
 			Idx = 0;
 		} else if (Num == ioB8_0) {
 			printfx_nolock("8-Bit options: 0x%0llX\r\n", sNVSvars.ioBX.ioB8);

@@ -62,7 +62,8 @@ extern "C" {
 	.B4_2	= 8,		\
 	.B4_8	= 8,		\
 	.B4_15	= 2,		\
-	.B8_0	= 30,
+	.B8_0	= 50,		\
+	.B8_1	= 50,
 
 // ######################################### enumerations ##########################################
 
@@ -203,8 +204,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB4_13,
 	ioB4_14,
 	toConsole, ioB4_15=toConsole,
-	dlyMBpoll, ioB8_0=dlyMBpoll,
-	ioB8_1,
+	dlyMBread, ioB8_0=dlyMBread,
+	dlyMBpoll,
 	ioB8_2,
 	ioB8_3,
 	ioB8_4,
