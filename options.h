@@ -75,8 +75,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioFlags,						// Log flag changes 0=DISable 1=ENable
 	ioTimeout,
 	ioUpDown,						// shutdown/restart tracking
-	dbgToken,
-	dbgParam,
+	ioB1_7,
+	ioB1_8,
 	dbgSyntax,
 	dbgHTTPreq,
 	dbgJSONwr,

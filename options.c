@@ -30,8 +30,8 @@
 // ###################################### private constants ########################################
 
 const char ioBXmes[] =
-"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"dbgToken\0"
-"dbgParam\0"	"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"
+"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"
+"\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"
 "\0"			"\0"			"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"\0"			"\0"			"Alerts\0"
 "Memory\0"		"\0"			"RuleTable\0"	"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
 "TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"
