@@ -144,6 +144,9 @@ extern "C" {
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
 #define	strCRLF						"\r\n"
+#define	strPARSE					"~[%s]"
+#define	strPARSE_P					"~[%*s]"
+#define	strINV_CVI					"Invalid cvI"
 
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
@@ -295,6 +298,7 @@ extern "C" {
 #define	sepSPACE_COMMA_LF_CR		" ,\n\r"
 #define	sepSPACE_COMMA_LF			" ,\n"
 #define	sepSPACE_COMMA_CR			" ,\r"
+#define	sepSPACE_SEMICOLON			" ;"
 #define	sepSPACE_COMMA				" ,"
 #define	sepSPACE_LF_CR				" \n\r"
 #define	sepSPACE_LF					" \n"
