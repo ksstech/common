@@ -335,14 +335,14 @@ extern "C" {
 #ifndef u16_t
 	typedef __uint16_t u16_t;
 #endif
-#ifndef s32_t
-	typedef	__int32_t s32_t;
+#ifndef i32_t
+	typedef	__int32_t i32_t;
 #endif
 #ifndef u32_t
 	typedef __uint32_t u32_t;
 #endif
-#ifndef s64_t
-	typedef	__int64_t s64_t;
+#ifndef i64_t
+	typedef	__int64_t i64_t;
 #endif
 #ifndef u64_t
 	typedef __uint64_t u64_t;

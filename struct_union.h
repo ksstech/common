@@ -57,12 +57,12 @@ DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ########################################## x32 types ############################################
 
-typedef union { int	iX; u32_t u32; s32_t i32; float	f32; x16_t x16[2]; x8_t x8[4]; } x32_t;
+typedef union { int	iX; u32_t u32; i32_t i32; float	f32; x16_t x16[2]; x8_t x8[4]; } x32_t;
 DUMB_STATIC_ASSERT(sizeof(x32_t) == 4);
 
 // ########################################## x64 types ############################################
 
-typedef union { u64_t u64; s64_t i64; double f64; x32_t x32[2]; x16_t x16[4]; x8_t x8[8]; } x64_t;
+typedef union { u64_t u64; i64_t i64; double f64; x32_t x32[2]; x16_t x16[4]; x8_t x8[8]; } x64_t;
 DUMB_STATIC_ASSERT(sizeof(x64_t) == 8);
 
 // ########################################## Other types ##########################################
@@ -88,12 +88,12 @@ typedef union {
 // pointers to x64
 	x64_t * px64 ;
 	u64_t *	pu64 ;
-	s64_t *	pi64 ;
+	i64_t *	pi64 ;
 	double * pf64 ;
 // pointers to x32
 	x32_t * px32 ;
 	u32_t *	pu32 ;
-	s32_t *	pi32 ;
+	i32_t *	pi32 ;
 	float *	pf32 ;
 // pointer to x16
 	x16_t *	px16 ;
