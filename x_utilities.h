@@ -50,9 +50,9 @@ u64_t u64pow(u32_t base, u32_t exp) ;
 int u32Trailing0(u32_t U32) ;
 int u64Trailing0(u64_t U64) ;
 
-int	xDigitsInU32(u32_t U32, bool grouping) ;
-int	xDigitsInU64(u64_t U64, bool grouping) ;
 int	xDigitsInI32(i32_t I32, bool grouping);
+int	xDigitsInU32(u32_t U32, bool grouping);
+int	xDigitsInU64(u64_t U64, bool grouping);
 
 int	xU32ToDecStr(u32_t Value, char *);
 
