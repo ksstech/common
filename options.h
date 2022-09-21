@@ -1,4 +1,5 @@
 /*
+
  * options.h
  */
 
@@ -50,7 +51,6 @@ extern "C" {
 
 // Settings common to both DEVelopment and PRODuction code builds
 #define iosetDEFAULT	\
-	.B1_6	= 1,		\
 	.B1_32	= 1,		\
 	.B1_33	= 1,		\
 	.B1_58	= 1,		\
