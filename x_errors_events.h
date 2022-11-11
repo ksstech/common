@@ -37,6 +37,7 @@ enum {
 	erINV_SSID,
 	erINV_PSWD,
 	erINV_COMMAND,
+	erINV_ADDRESS,
 	erHOST_NOTFOUND,
 	erINV_HOST,
 	erDUP_HOST,
