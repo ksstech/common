@@ -65,15 +65,11 @@ const char ioSxMes[] = "Non-bit options:\r\n"
 
 // ####################################### public variables ########################################
 
-ioset_t const ioDefaults = {
-	#if (configPRODUCTION == 0)
-	iosetDEFAULT_DEV
-	iosetDEFAULT
-	#else
-	iosetDEFAULT_PROD
-	iosetDEFAULT
-	#endif
-};
+#if (configPRODUCTION == 0)
+ioset_t const ioDefaults = { iosetDEFAULT_DEV };
+#else
+ioset_t const ioDefaults = { iosetDEFAULT_PROD };
+#endif
 
 // ####################################### public functions ########################################
 

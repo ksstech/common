@@ -25,46 +25,6 @@ extern "C" {
 #define	ioB4SET(i,x)				maskSET4B(sNVSvars.ioBX.ioB4, (i-ioB4_0), x, u64_t)
 #define	ioB8SET(i,x)				maskSET8B(sNVSvars.ioBX.ioB8, (i-ioB8_0), x, u64_t)
 
-// Settings specifically for DEVelopment code builds
-#define iosetDEFAULT_DEV					\
-	.B1_4	= 1,							\
-	.B1_34	= 0,							\
-	.B2_0	= hostDEV,						\
-	.B2_1	= hostDEV,						\
-	.B2_2	= hostDEV,						\
-	.B2_3	= hostDEV,						\
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
-	.B4_1	= 7,
-
-// Settings specifically for PRODuction code builds
-#define iosetDEFAULT_PROD					\
-	.B1_4	= 0,							\
-	.B1_34	= 1,							\
-	.B2_0	= hostPROD,						\
-	.B2_1	= hostPROD,						\
-	.B2_2	= hostPROD,						\
-	.B2_3	= hostPROD,						\
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
-	.B4_1	= 1,
-
-// Settings common to both DEVelopment and PRODuction code builds
-#define iosetDEFAULT	\
-	.B1_32	= 1,		\
-	.B1_33	= 1,		\
-	.B1_58	= 1,		\
-	.B1_62	= 1,		\
-	.B3_3	= 1,		\
-	.B3_6	= 1,		\
-	.B3_17	= 4,		\
-	.B4_0	= 5,		\
-	.B4_2	= 8,		\
-	.B4_8	= 8,		\
-	.B4_15	= 2,		\
-	.B8_0	= 50,		\
-	.B8_1	= 50,
-
 // ######################################### enumerations ##########################################
 
 enum {								// enumerated option numbers used by ioBxSET
@@ -175,14 +135,14 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioU0TXbuf,						// UARTx TX buffers
 	ioU1TXbuf,
 	ioU2TXbuf,
-	B3_9,
-	B3_10,
-	B3_11,
-	B3_12,
-	B3_13,
-	B3_14,
-	B3_15,
-	B3_16,
+	ioB3_9,
+	ioB3_10,
+	ioB3_11,
+	ioB3_12,
+	ioB3_13,
+	ioB3_14,
+	ioB3_15,
+	ioB3_16,
 	ioWLretry,
 	ioWLauth,						// OPEN->WEP->WPA_PSK->WPA2_PSK->WPA_WPA2_PSK->WPA2_ENTERPRISE etc...
 	ioSLhost,						// Highest # (lowest PRI) sent to host (must <= ioSLOGhi)
@@ -396,6 +356,58 @@ typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
 DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
 
 // ####################################### public variables ########################################
+
+// Settings specifically for DEVelopment code builds
+#define iosetDEFAULT_DEV	\
+	.B1_4	= 1,			\
+	.B1_31	= 0,			\
+	.B1_32	= 1,			\
+	.B1_33	= 1,			\
+	.B1_34	= 0,			\
+	.B1_58	= 1,			\
+	.B1_62	= 1,			\
+	.B2_0	= hostDEV,		\
+	.B2_1	= hostDEV,		\
+	.B2_2	= hostDEV,		\
+	.B2_3	= hostDEV,		\
+	.B3_3	= 1,			\
+	.B3_6	= 1,			\
+	.B3_17	= 4,			\
+	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
+	.B4_0	= 5,			\
+	.B4_1	= 7,			\
+	.B4_2	= 8,			\
+	.B4_8	= 8,			\
+	.B4_15	= 2,			\
+	.B8_0	= 50,			\
+	.B8_1	= 50
+
+// Settings specifically for PRODuction code builds
+#define iosetDEFAULT_PROD	\
+	.B1_4	= 0,			\
+	.B1_31	= 0,			\
+	.B1_32	= 1,			\
+	.B1_33	= 1,			\
+	.B1_34	= 1,			\
+	.B1_58	= 1,			\
+	.B1_62	= 1,			\
+	.B2_0	= hostPROD,		\
+	.B2_1	= hostPROD,		\
+	.B2_2	= hostPROD,		\
+	.B2_3	= hostPROD,		\
+	.B3_3	= 1,			\
+	.B3_6	= 1,			\
+	.B3_17	= 4,			\
+	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,	\
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
+	.B4_0	= 5,			\
+	.B4_1	= 1,			\
+	.B4_2	= 8,			\
+	.B4_8	= 8,			\
+	.B4_15	= 2,			\
+	.B8_0	= 50,			\
+	.B8_1	= 50
 
 extern ioset_t const ioDefaults;
 
