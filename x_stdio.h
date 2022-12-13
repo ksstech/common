@@ -11,8 +11,6 @@
 //	#define		__CUSTOM_FILE_IO__
 #endif
 
-#include	"FreeRTOS_Support.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -22,10 +20,10 @@ extern "C" {
 
 // ##################################### MACRO definitions #########################################
 
-#if		defined( __CC_ARM )
+#if defined( __CC_ARM )
 	#error "CC ARM: Undefined toolset !!!"
 
-#elif 	defined( __GNUC__ )
+#elif defined( __GNUC__ )
 // macros to manipulate the file flags
 	#define		FF_STCHK(stream, flag)		((stream->_flags) & (flag))
 	#define		FF_UNSET(stream, flag)		((stream->_flags) &= ~(flag))
@@ -56,7 +54,7 @@ extern "C" {
 	#define		FF_FROMISR					0x40000000				// indicate being called from ISR
 	#define		FF_TXRUNNING				0x80000000				// indicate UART/I2C/DMA interrupt running
 
-#elif	defined( __TI_ARM__ )
+#elif defined( __TI_ARM__ )
 // macros to manipulate the file flags
 	#define		FF_STCHK(stream, flag)		(((stream)->flags) & (flag))
 	#define		FF_UNSET(stream, flag)		(((stream)->flags) &= ~(flag))
@@ -90,7 +88,7 @@ extern "C" {
 
 // #################################### Global/public functions ####################################
 
-void fDiags(void) ;
+void fDiags(void);
 
 #ifdef __cplusplus
 } /* extern "C" */

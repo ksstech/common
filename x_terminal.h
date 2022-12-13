@@ -22,14 +22,14 @@ extern "C" {
 
 typedef union {
 	struct __attribute__((packed)) {
-		u8_t	CurX ;
-		u8_t	CurY ;
-		u8_t	MaxX ;
-		u8_t	MaxY ;
-	} ;
-	u8_t		x8[4] ;
-	u32_t	x32 ;
-} terminfo_t ;
+		u8_t CurX;
+		u8_t CurY;
+		u8_t MaxX;
+		u8_t MaxY;
+	};
+	u8_t x8[4];
+	u32_t x32;
+} terminfo_t;
 
 // ###################################### Global variables #########################################
 

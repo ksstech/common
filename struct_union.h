@@ -4,7 +4,7 @@
 
 #pragma	once
 
-#include	"x_time.h"				// time x_definitions
+#include "x_time.h"				// time x_definitions
 
 #ifdef __cplusplus
 extern "C" {
@@ -135,7 +135,6 @@ DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *));
 
 // #################################### All-In-One container #######################################
 
-
 typedef	union { x32_t x32; px_t px; ps_t ps; } z32_t;
 DUMB_STATIC_ASSERT(sizeof(z32_t) == 4);
 
@@ -218,9 +217,9 @@ typedef	union {
 DUMB_STATIC_ASSERT(sizeof(fm_t) == 4);
 
 #define	makeMASK08x24(A,B,C,D,E,F,G,H,I)	\
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x0FFFFFF)))
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x00FFFFFF)))
 #define	makeMASK09x23(A,B,C,D,E,F,G,H,I,J)	\
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|(J&0x07FFFFF)))
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|(J&0x007FFFFF)))
 #define	makeMASK10x22(A,B,C,D,E,F,G,H,I,J,K) \
 	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|(K&0x03FFFFF)))
 #define	makeMASK11x21(A,B,C,D,E,F,G,H,I,J,K,L) \

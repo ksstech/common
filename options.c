@@ -32,7 +32,7 @@
 const char ioBXmes[] =
 "TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"
 "\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"
-"\0"			"\0"			"MQTT Con\0"	"MQTT Sub\0"	"MQTT Pub\0"	"\0"			"\0"			"Alerts\0"
+"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"
 "Memory\0"		"\0"			"RuleTable\0"	"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
 "TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"
 "\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
@@ -54,11 +54,11 @@ const char ioBXmes[] =
 "dlyMBread\0"	"dlyMBpoll\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
 
 const char ioSxMes[] = "Non-bit options:\r\n"
-						"141=WL Mode\t"
-						"142=AP detail\t"
-						"143=MQTT Proxy\t"
-						"144=Mem PEEK\t"
-						"145=IOSet Def\r\n\n";
+						"141=WLmode\t"
+						"142=APdetail\t"
+						"143=MQTTproxy\t"
+						"144=MEMpeek\t"
+						"145=Defaults\r\n\n";
 
 // ###################################### private variables ########################################
 

@@ -36,13 +36,13 @@ void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) ;
 
 void xGenerateUUID(char * pBuf) ;
 
-void vBuildRandomSXX(u8_t * pu8, int len, int set) ;
-void vBuildRandomStr(u8_t * pu8, int len, int set) ;
+void vBuildRandomSXX(u8_t * pu8, int len, int set);
+void vBuildRandomStr(u8_t * pu8, int len, int set);
 
-x8_t	xBuildRandomX8(void) ;
-x16_t	xBuildRandomX16(void) ;
-x32_t	xBuildRandomX32(void) ;
-x64_t	xBuildRandomX64(void) ;
+x8_t xBuildRandomX8(void);
+x16_t xBuildRandomX16(void);
+x32_t xBuildRandomX32(void);
+x64_t xBuildRandomX64(void);
 
 u32_t u32pow(u32_t base, u32_t exp) ;
 u64_t u64pow(u32_t base, u32_t exp) ;

@@ -127,7 +127,7 @@ extern "C" {
 
 // ####################################### structures & unions #####################################
 
-typedef struct tm tm_t ;
+typedef struct tm tm_t;
 
 /*
  * TIME ZONE STRUCTURE DEFINITION
