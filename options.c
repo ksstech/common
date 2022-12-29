@@ -29,47 +29,12 @@
 
 // ###################################### private constants ########################################
 
-const char ioBXmes[] =
-"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"
-"\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"
-"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"
-"Memory\0"		"\0"			"RuleTable\0"	"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"
-"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"
-"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"
-"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"
-// 2 bit options
-"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0-2\0"		"\0"			"\0"			"\0"
-"APindex\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"dbgIdent\0"	"dbgActuate\0"	"dbgDBase\0"	"\0"			"\0"			"\0"			"\0"			"dbgDS248X\0"
-// 3 bit options
-"U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"
-"U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
-"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"	// only 21x 3bit options
-// 4 bit options
-"dlyDS1990\0"	"CLIbuf\0"		"ioMBews\0"		"\0"			"\0"			"\0"			"\0"			"\0"
-"GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"toConsole\0"
-// 8 bit options
-"dlyMBread\0"	"dlyMBpoll\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0";
-
-const char ioSxMes[] = "Non-bit options:\r\n"
-						"141=WLmode\t"
-						"142=APdetail\t"
-						"143=MQTTproxy\t"
-						"144=MEMpeek\t"
-						"145=Defaults\r\n\n";
 
 // ###################################### private variables ########################################
 
 
 // ####################################### public variables ########################################
 
-#if (configPRODUCTION == 0)
-ioset_t const ioDefaults = { iosetDEFAULT_DEV };
-#else
-ioset_t const ioDefaults = { iosetDEFAULT_PROD };
-#endif
 
 // ####################################### public functions ########################################
 
