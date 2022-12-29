@@ -3,7 +3,7 @@
  * Copyright (c) 2020-2022 Andre M. Maree/KSS Technologies (Pty) Ltd.
  */
 
-#include "hal_variables.h"
+#include "main.h"
 #include "hal_network.h"
 #include "hal_usart.h"
 #include "hal_gpio.h"
@@ -12,7 +12,7 @@
 #include "syslog.h"
 #include "x_errors_events.h"
 
-// ####################################### MACRO definitions #######################################
+// ######################################## BUILD macros ###########################################
 
 #define	debugFLAG					0xF000
 
@@ -20,6 +20,9 @@
 #define	debugTRACK					(debugFLAG_GLOBAL & debugFLAG & 0x2000)
 #define	debugPARAM					(debugFLAG_GLOBAL & debugFLAG & 0x4000)
 #define	debugRESULT					(debugFLAG_GLOBAL & debugFLAG & 0x8000)
+
+// ############################################ macros #############################################
+
 
 // ######################################### enumerations ##########################################
 
