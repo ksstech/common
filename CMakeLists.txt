@@ -8,6 +8,7 @@ set( priv_requires
 	buffers 
 	hal_esp32 
 	http 
+	main
 	printfx
 	stringsX 
 	syslog
