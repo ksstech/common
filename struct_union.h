@@ -198,7 +198,7 @@ typedef	union {
 		u32_t	bNL:1;									// terminating NL
 		u32_t	bRT:1;									// Runtime
 	};
-	struct __attribute__((packed)) {					// vRtosReportMemory() & halMCU_ReportMemory()
+	struct __attribute__((packed)) {					// xRtosReportMemory() & halMCU_ReportMemory()
 		u32_t	rmSpare:21;
 		u32_t	rmDefault:1;
 		u32_t	rmInternal:1;
