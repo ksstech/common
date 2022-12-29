@@ -176,6 +176,6 @@ void vOptionsShow(void) {
 			++Idx;
 		}
 	}
-	printfx_nolock(ioSxMes);
+	printfx_nolock(ioSXmes);
 	printfx_unlock();
 }
