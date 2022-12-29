@@ -33,91 +33,6 @@ extern "C" {
 #pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
 
 typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
-	union {							// 4-bit option variables
-		struct __attribute__((packed)) {
-			u8_t B4_0	: 4 ;
-			u8_t B4_1	: 4 ;
-			u8_t B4_2	: 4 ;
-			u8_t B4_3	: 4 ;
-			u8_t B4_4	: 4 ;
-			u8_t B4_5	: 4 ;
-			u8_t B4_6	: 4 ;
-			u8_t B4_7	: 4 ;
-			u8_t B4_8	: 4 ;
-			u8_t B4_9	: 4 ;
-			u8_t B4_10	: 4 ;
-			u8_t B4_11	: 4 ;
-			u8_t B4_12	: 4 ;
-			u8_t B4_13	: 4 ;
-			u8_t B4_14	: 4 ;
-			u8_t B4_15	: 4 ;
-		};
-		u64_t ioB4 ;
-	};
-	union {							// 3-bit option variables
-		struct __attribute__((packed)) {
-			u16_t B3_0	: 3 ;
-			u16_t B3_1	: 3 ;
-			u16_t B3_2	: 3 ;
-			u16_t B3_3	: 3 ;
-			u16_t B3_4	: 3 ;
-			u16_t B3_5	: 3 ;
-			u16_t B3_6	: 3 ;
-			u16_t B3_7	: 3 ;
-			u16_t B3_8	: 3 ;
-			u16_t B3_9	: 3 ;
-			u16_t B3_10	: 3 ;
-			u16_t B3_11	: 3 ;
-			u16_t B3_12	: 3 ;
-			u16_t B3_13	: 3 ;
-			u16_t B3_14	: 3 ;
-			u16_t B3_15	: 3 ;
-			u16_t B3_16	: 3 ;
-			u16_t B3_17	: 3 ;
-			u16_t B3_18	: 3 ;
-			u16_t B3_19	: 3 ;
-			u16_t B3_20	: 3 ;
-			u16_t B3_xx	: 1 ;
-		};
-		u64_t ioB3 ;
-	};
-	union {							// 2-bit option variables
-		struct __attribute__((packed)) {
-			u8_t B2_0	: 2 ;
-			u8_t B2_1	: 2 ;
-			u8_t B2_2	: 2 ;
-			u8_t B2_3	: 2 ;
-			u8_t B2_4	: 2 ;
-			u8_t B2_5	: 2 ;
-			u8_t B2_6	: 2 ;
-			u8_t B2_7	: 2 ;
-			u8_t B2_8	: 2 ;
-			u8_t B2_9	: 2 ;
-			u8_t B2_10	: 2 ;
-			u8_t B2_11	: 2 ;
-			u8_t B2_12	: 2 ;
-			u8_t B2_13	: 2 ;
-			u8_t B2_14	: 2 ;
-			u8_t B2_15	: 2 ;
-			u8_t B2_16	: 2 ;
-			u8_t B2_17	: 2 ;
-			u8_t B2_18	: 2 ;
-			u8_t B2_19	: 2 ;
-			u8_t B2_20	: 2 ;
-			u8_t B2_21	: 2 ;
-			u8_t B2_22	: 2 ;
-			u8_t B2_23	: 2 ;
-			u8_t B2_24	: 2 ;
-			u8_t B2_25	: 2 ;
-			u8_t B2_26	: 2 ;
-			u8_t B2_27	: 2 ;
-			u8_t B2_28	: 2 ;
-			u8_t B2_29	: 2 ;
-			u8_t B2_30	: 2 ;
-			u8_t B2_31	: 2 ;
-		};
-		u64_t ioB2 ;
-	};
 	union {							// 1-bit option variables
 		struct __attribute__((packed)) {
 			u8_t B1_0	: 1 ;
@@ -186,6 +101,91 @@ typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
 			u8_t B1_63	: 1 ;
 		};
 		u64_t ioB1;
+	};
+	union {							// 2-bit option variables
+		struct __attribute__((packed)) {
+			u8_t B2_0	: 2 ;
+			u8_t B2_1	: 2 ;
+			u8_t B2_2	: 2 ;
+			u8_t B2_3	: 2 ;
+			u8_t B2_4	: 2 ;
+			u8_t B2_5	: 2 ;
+			u8_t B2_6	: 2 ;
+			u8_t B2_7	: 2 ;
+			u8_t B2_8	: 2 ;
+			u8_t B2_9	: 2 ;
+			u8_t B2_10	: 2 ;
+			u8_t B2_11	: 2 ;
+			u8_t B2_12	: 2 ;
+			u8_t B2_13	: 2 ;
+			u8_t B2_14	: 2 ;
+			u8_t B2_15	: 2 ;
+			u8_t B2_16	: 2 ;
+			u8_t B2_17	: 2 ;
+			u8_t B2_18	: 2 ;
+			u8_t B2_19	: 2 ;
+			u8_t B2_20	: 2 ;
+			u8_t B2_21	: 2 ;
+			u8_t B2_22	: 2 ;
+			u8_t B2_23	: 2 ;
+			u8_t B2_24	: 2 ;
+			u8_t B2_25	: 2 ;
+			u8_t B2_26	: 2 ;
+			u8_t B2_27	: 2 ;
+			u8_t B2_28	: 2 ;
+			u8_t B2_29	: 2 ;
+			u8_t B2_30	: 2 ;
+			u8_t B2_31	: 2 ;
+		};
+		u64_t ioB2;
+	};
+	union {							// 3-bit option variables
+		struct __attribute__((packed)) {
+			u16_t B3_0	: 3 ;
+			u16_t B3_1	: 3 ;
+			u16_t B3_2	: 3 ;
+			u16_t B3_3	: 3 ;
+			u16_t B3_4	: 3 ;
+			u16_t B3_5	: 3 ;
+			u16_t B3_6	: 3 ;
+			u16_t B3_7	: 3 ;
+			u16_t B3_8	: 3 ;
+			u16_t B3_9	: 3 ;
+			u16_t B3_10	: 3 ;
+			u16_t B3_11	: 3 ;
+			u16_t B3_12	: 3 ;
+			u16_t B3_13	: 3 ;
+			u16_t B3_14	: 3 ;
+			u16_t B3_15	: 3 ;
+			u16_t B3_16	: 3 ;
+			u16_t B3_17	: 3 ;
+			u16_t B3_18	: 3 ;
+			u16_t B3_19	: 3 ;
+			u16_t B3_20	: 3 ;
+			u16_t B3_xx	: 1 ;
+		};
+		u64_t ioB3;
+	};
+	union {							// 4-bit option variables
+		struct __attribute__((packed)) {
+			u8_t B4_0	: 4 ;
+			u8_t B4_1	: 4 ;
+			u8_t B4_2	: 4 ;
+			u8_t B4_3	: 4 ;
+			u8_t B4_4	: 4 ;
+			u8_t B4_5	: 4 ;
+			u8_t B4_6	: 4 ;
+			u8_t B4_7	: 4 ;
+			u8_t B4_8	: 4 ;
+			u8_t B4_9	: 4 ;
+			u8_t B4_10	: 4 ;
+			u8_t B4_11	: 4 ;
+			u8_t B4_12	: 4 ;
+			u8_t B4_13	: 4 ;
+			u8_t B4_14	: 4 ;
+			u8_t B4_15	: 4 ;
+		};
+		u64_t ioB4;
 	};
 	union {							// 8-bit option variables (added at end)
 		struct __attribute__((packed)) {
