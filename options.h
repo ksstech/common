@@ -205,59 +205,6 @@ DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
 
 // ####################################### public variables ########################################
 
-// Settings specifically for DEVelopment code builds
-#define iosetDEFAULT_DEV	\
-	.B1_4	= 1,			\
-	.B1_31	= 0,			\
-	.B1_32	= 1,			\
-	.B1_33	= 1,			\
-	.B1_34	= 0,			\
-	.B1_58	= 1,			\
-	.B1_62	= 1,			\
-	.B2_0	= hostDEV,		\
-	.B2_1	= hostDEV,		\
-	.B2_2	= hostDEV,		\
-	.B2_3	= hostDEV,		\
-	.B3_3	= 1,			\
-	.B3_6	= 1,			\
-	.B3_17	= 4,			\
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
-	.B4_0	= 5,			\
-	.B4_1	= 7,			\
-	.B4_2	= 8,			\
-	.B4_8	= 8,			\
-	.B4_15	= 2,			\
-	.B8_0	= 50,			\
-	.B8_1	= 50
-
-// Settings specifically for PRODuction code builds
-#define iosetDEFAULT_PROD	\
-	.B1_4	= 0,			\
-	.B1_31	= 0,			\
-	.B1_32	= 1,			\
-	.B1_33	= 1,			\
-	.B1_34	= 1,			\
-	.B1_58	= 1,			\
-	.B1_62	= 1,			\
-	.B2_0	= hostPROD,		\
-	.B2_1	= hostPROD,		\
-	.B2_2	= hostPROD,		\
-	.B2_3	= hostPROD,		\
-	.B3_3	= 1,			\
-	.B3_6	= 1,			\
-	.B3_17	= 4,			\
-	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
-	.B4_0	= 5,			\
-	.B4_1	= 1,			\
-	.B4_2	= 8,			\
-	.B4_8	= 8,			\
-	.B4_15	= 2,			\
-	.B8_0	= 50,			\
-	.B8_1	= 50
-
-extern ioset_t const ioDefaults;
 
 // ####################################### public functions ########################################
 
