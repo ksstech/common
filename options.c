@@ -110,7 +110,7 @@ exit:
 }
 
 int	xOptionsSet(int	OptNum, int OptVal, int Persist) {
-	int iRV = erSUCCESS ;
+	int iRV = erSUCCESS;
 	IF_P(debugTRACK, "IOSET %d=%d (%d)\r\n", OptNum, OptVal, Persist);
 	if (OptNum < ioBXlast) {
 		iRV = xOptionsSetDirect(OptNum, OptVal);
@@ -122,7 +122,7 @@ int	xOptionsSet(int	OptNum, int OptVal, int Persist) {
 	} else if (OptNum == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
 	}
-	if ((iRV > erFAILURE) && Persist == 1)
+	if ((iRV >= erSUCCESS) && Persist == 1)
 		setSYSFLAGS(vfIOSET);
 	return iRV;
 }
