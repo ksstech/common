@@ -5,6 +5,7 @@
 #pragma	once
 
 #include "x_time.h"				// time x_definitions
+#include <stdarg.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,6 +27,8 @@ typedef enum {
 } ep_scale_t ;
 
 // ############################# common complex data types/ structures #############################
+
+typedef union va_fake_t { char * pa ; va_list va; } va_fake_t;
 
 typedef union mac_addr_t {
 	struct __attribute__((packed)) { u8_t str6hex[6], filler1[2]; };
