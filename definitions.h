@@ -292,6 +292,7 @@ extern "C" {
 
 // ######################################## delimiter strings ######################################
 
+/*
 #define	sepSPACE_COMMA_TAB_LF_CR	" ,\t\n\r"
 #define	sepSPACE_COMMA_TAB_LF		" ,\t\n"
 #define	sepSPACE_COMMA_TAB_CR		" ,\t\r"
@@ -299,12 +300,14 @@ extern "C" {
 #define	sepSPACE_COMMA_LF_CR		" ,\n\r"
 #define	sepSPACE_COMMA_LF			" ,\n"
 #define	sepSPACE_COMMA_CR			" ,\r"
-#define	sepSPACE_SEMICOLON			" ;"
 #define	sepSPACE_COMMA				" ,"
+#define	sepSPACE_SEMICOLON			" ;"
 #define	sepSPACE_LF_CR				" \n\r"
 #define	sepSPACE_LF					" \n"
 #define	sepSPACE_CR					" \r"
+*/
 #define	sepSPACE					" "
+#define	sepSPACE_SEMICOLON_CR_LF	" ;\r\n"
 
 // ################################### missing standard definitions ################################
 
