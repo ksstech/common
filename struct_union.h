@@ -64,7 +64,7 @@ enum {								// {flags}{counter}
 };
 
 typedef	union {
-	struct __attribute__((packed)) {					// Generic structure for init
+	struct __attribute__((packed)) {	// 8:24 Generic
 		union {
 			struct __attribute__((packed)) { u32_t z00:1, z01:1, z02:1, z03:1, zv04:1, z05:1, z06:1, z07:1, z08:1, z09:1, z10:1, z11:1, z12:1, z13:1, z14:1, z15:1, z16:1, z17:1, z18:1, z19:1, z20:1, z21:1, z22:1, z23:1; };
 			struct __attribute__((packed)) { u32_t y00:2, y01:1, y02:1, y03:1, yv04:1, y05:1, y06:1, y07:1, y08:1, y09:1, y10:1, y11:1, y12:1, y13:1, y14:1, y15:1, y16:1, y17:1, y18:1, y19:1, y20:1, y21:1, y22:1; };
@@ -93,24 +93,24 @@ typedef	union {
 		};
 		u32_t	h:1, g:1, f:1, e:1, d:1, c:1, b:1, a:1;
 	};
-	struct __attribute__((packed)) {					// Printing control
-		u32_t	uCount:23;								// Task # mask
-		u32_t	bTskNum:1;								// Task #
-		u32_t	bColor:1;								// Use colour
-		u32_t	bPrioX:1;								// Priorities
-		u32_t	bState:1;								// Task state RBPS
-		u32_t	bStack:1;								// Low Stack value
-		u32_t	bCore:1;								// MCU 01X
+	struct __attribute__((packed)) {	// 9:23 Printing tasks
+		u32_t	uCount:23;			// Task # mask
+		u32_t	bTskNum:1;			// Task #
+		u32_t	bColor:1;			// Use colour
+		u32_t	bPrioX:1;			// Priorities
+		u32_t	bState:1;			// Task state RBPS
+		u32_t	bStack:1;			// Low Stack value
+		u32_t	bCore:1;			// MCU 01X
 		u32_t	bXtras:1;
 		u32_t	bNL:1;
 		u32_t	bRT:1;
 	};
-	struct __attribute__((packed)) {// xRtosReportMemory() & halMCU_ReportMemory()
+	struct __attribute__((packed)) {	// 11:21 xRtosReportMemory & halMCU_ReportMemory
 		u32_t	rmSpare:21;
 		u32_t	rmDefault:1;
 		u32_t	rmInternal:1;
 		u32_t	rmPSram:1;
-		u32_t	rmColor:1;
+		u32_t	rmColor:1;			// same as bColor
 		u32_t	rmIram:1;
 		u32_t	rmExec:1;
 		u32_t	rmDma:1;
@@ -118,6 +118,21 @@ typedef	union {
 		u32_t 	rm32b:1;
 		u32_t	rmTotal:1;
 		u32_t	rmSmall:1;
+	};
+	struct __attribute__((packed)) {	// 12:20 xRtosSensorsReport
+		u32_t	senSpare:20;
+		u32_t	senNL:1;
+		u32_t 	senInfo:1;
+		u32_t 	senCfg:1;
+		u32_t	senTlog:1;
+		u32_t	senTsen:1;
+		u32_t	senColor:1;			// same as bColor
+		u32_t 	senDev:1;
+		u32_t 	senAvg:1;
+		u32_t 	senSum:1;
+		u32_t 	senMMP:1;
+		u32_t	senUnit:1;
+		u32_t	senURI:1;
 	};
 	u32_t	u32Val;
 } fm_t;
