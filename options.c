@@ -1,9 +1,10 @@
 /*
- * options.c
- * Copyright (c) 2020-2022 Andre M. Maree/KSS Technologies (Pty) Ltd.
+ * Copyright (c) 2020-2023 Andre M. Maree/KSS Technologies (Pty) Ltd.
  */
 
-#include "main.h"
+#include "hal_variables.h"			// required by options.h
+
+#include "options.h"
 #include "hal_network.h"
 #include "hal_usart.h"
 #include "hal_gpio.h"
@@ -32,6 +33,16 @@
 
 // ###################################### private constants ########################################
 
+const char ioBXmes[] = iosetHELP_MESSAGE;
+
+const char ioSXmes[] = "Non-bit options:\r\n"
+						"141=WLmode\t"
+						"142=APdetail\t"
+						"143=MQTTproxy\t"
+						"144=MEMpeek\t"
+						"145=Defaults\r\n\n";
+
+ioset_t const ioDefaults = { iosetDEFAULTS };
 
 // ###################################### private variables ########################################
 
@@ -41,7 +52,7 @@
 
 // ####################################### public functions ########################################
 
-void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(ioset_t)); }
+static void xOptionsSetDefaults(void) { memcpy(&sNVSvars.ioBX, &ioDefaults, sizeof(ioset_t)); }
 
 /**
  * @brief	Set value of 1, 2, 3 or 4 bit option values

@@ -7,6 +7,8 @@
 
 #include "definitions.h"
 
+#include "priv/options_appl.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -208,8 +210,6 @@ DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
 
 // ####################################### public functions ########################################
 
-void xOptionsSetDefaults(void);
-int xOptionsSetDirect(int ON, int OV);
 int	xOptionsSet(int	ON, int OV, int PF);
 void vOptionsShow(void);
 
