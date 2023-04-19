@@ -122,7 +122,7 @@ exit:
 
 int	xOptionsSet(int	OptNum, int OptVal, int Persist) {
 	int iRV = erSUCCESS;
-	IF_P(debugTRACK, "IOSET %d=%d (%d)\r\n", OptNum, OptVal, Persist);
+	IF_P(debugTRACK && ioB1GET(dbgSyntax), "\rioset %d=%d (%d)\r\n", OptNum, OptVal, Persist);
 	if (OptNum < ioBXlast) {
 		iRV = xOptionsSetDirect(OptNum, OptVal);
 		// If nothing changed, force persistence flag to false
