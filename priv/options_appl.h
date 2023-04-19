@@ -65,24 +65,24 @@ extern "C" {
 #endif
 
 #define iosetHELP_MESSAGE \
-	"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"			\
-	"\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"	\
-	"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"		\
-	"Memory\0"		"\0"			"REtable\0"		"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"	\
-	"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"			\
-	"\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"			\
-	"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"	\
-	"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"		\
-	"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0-2\0"		"\0"			"\0"			"\0"			\
-	"APindex\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
-	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
-	"dbgIdent\0"	"dbgActuate\0"	"dbgGUI\0"		"\0"			"\0"			"\0"			"\0"			"dbgDS248X\0"	\
-	"U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"		\
-	"U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
-	"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"													\
-	"dlyDS1990\0"	"CLIbuf\0"		"ioMBews\0"		"dbgDBase\0"	"\0"			"\0"			"\0"			"\0"			\
-	"GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"toConsole\0"	\
-	"dlyMBread\0"	"dlyMBpoll\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
+/*1*/	"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"			\
+		"\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"	\
+		"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"		\
+		"Memory\0"		"\0"			"REtable\0"		"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"	\
+		"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"			\
+		"\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"			\
+		"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"	\
+		"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"		\
+/*2*/	"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0~2\0"		"Port 0~3\0"	"\0"			"\0"			\
+		"APindex\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
+		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
+		"dbgIdent\0"	"dbgActuate\0"	"dbgGUI\0"		"dbgGPI\0"		"\0"			"\0"			"\0"			"dbgDS248X\0"	\
+/*3*/	"U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"		\
+		"U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
+		"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"													\
+/*4*/	"dlyDS1990\0"	"CLIbuf\0"		"ioMBews\0"		"dbgDBase\0"	"\0"			"\0"			"\0"			"\0"			\
+		"GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"toConsole\0"	\
+/*8*/	"dlyMBread\0"	"dlyMBpoll\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 
 // ######################################### enumerations ##########################################
 
@@ -159,7 +159,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioHostSLOG,
 	ioHostCONF,
 	ioMQTT_QoS,
-	ioB2_5,
+	ioMQTTport,
 	ioB2_6,
 	ioB2_7,
 	ioAPindex,
@@ -181,7 +181,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	dbgIdent,						// debug/track iDENT activities
 	dbgActuate,						// 0=Off, 1=RuleEngine, 2=TaskAct, 3=Both
 	dbgGUI,							// 0=OFF, 1=  , 2=  , 3=ALL
-	ioB2_27,
+	dbgGPI,							// 0=OFF, 1=ISR, 2=EVT, 3=BOTH
 	ioB2_28,
 	ioB2_29,
 	ioB2_30,
