@@ -120,10 +120,9 @@ typedef	union {
 		u32_t	rmSmall:1;
 	};
 	struct __attribute__((packed)) {	// 12:20 xRtosSensorsReport
-		u32_t	senSpare:20;
+		u32_t	senFree2:20;
 		u32_t	senNL:1;
-		u32_t 	senInfo:1;
-		u32_t 	senCfg:1;
+		u32_t 	senFree1:2;
 		u32_t	senTlog:1;
 		u32_t	senTsen:1;
 		u32_t	senColor:1;			// same as bColor
