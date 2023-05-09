@@ -19,12 +19,12 @@
 
 // #################################################################################################
 
-const char * const DayNames[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri",	"Sat", 0 } ;
-const char * const MonthNames[]	= { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",	"Sep", "Oct", "Nov", "Dec", 0 } ;
+const char * const DayNames[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri",	"Sat", 0 };
+const char * const MonthNames[]	= { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",	"Sep", "Oct", "Nov", "Dec", 0 };
 // Number of days in a year at the beginning of each month of the year, in a non-leap year.
-const short	DaysToMonth[12]	= { 0,	31,	59,	90,120,151,181,212,243,273,304,334 } ;
+const short	DaysToMonth[12]	= { 0,	31,	59,	90,120,151,181,212,243,273,304,334 };
 // Number of days in a month for each month of the year, in a non-leap year.
-const char DaysPerMonth[]	= { 31,	28,	31,	30,	31,	30,	31,	31,	30,	31,	30,	31 } ;
+const char DaysPerMonth[]	= { 31,	28,	31,	30,	31,	30,	31,	31,	30,	31,	30,	31 };
 
 // #################################################################################################
 
@@ -55,7 +55,7 @@ int	xTimeIsLeapYear(int year) {
 int	xTimeCountLeapYears(int NowYear) {
 	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX))
 		return erFAILURE;
-	int	Leaps, TestYear ;
+	int	Leaps, TestYear;
 	for (TestYear = YEAR_BASE_MIN, Leaps = 0; TestYear < NowYear; TestYear++) {
 		if (xTimeIsLeapYear(TestYear))
 			++Leaps;
@@ -75,11 +75,11 @@ int	xTimeGetDayNumber(char * str) { return xstrindex(str, (char * *) DayNames); 
  * @param	str - pointer to the name string
  * @return	0 to 11 for Jan to Dec or FAILURE if not matched
  */
-int	xTimeGetMonthNumber(char * str) { return xstrindex(str, (char * *) MonthNames) ; }
+int	xTimeGetMonthNumber(char * str) { return xstrindex(str, (char * *) MonthNames); }
 
-char * xTimeGetDayName(int num) { return (num < 7) ? (char *) DayNames[num] : pcFAILURE ; }
+char * xTimeGetDayName(int num) { return (num < 7) ? (char *) DayNames[num] : pcFAILURE; }
 
-char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num] : pcFAILURE ; }
+char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num] : pcFAILURE; }
 
 /**
  * @brief	Converts epoch seconds to components of date and time.
@@ -91,35 +91,35 @@ char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num]
  * @return		none
  */
 void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
-    memset(psTM, 0, sizeof(tm_t)) ;
+    memset(psTM, 0, sizeof(tm_t));
 	#if (timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	if (tValue < 0)										// if time prior to 1970
 		return;
 	#endif
-    psTM->tm_sec	= tValue % SECONDS_IN_MINUTE ;		// calculate seconds
-    tValue		/= SECONDS_IN_MINUTE ;
-    psTM->tm_min	= tValue % MINUTES_IN_HOUR ;	    // calculate minutes
-    tValue		/= MINUTES_IN_HOUR ;
-    psTM->tm_hour	= tValue % HOURS_IN_DAY ;		    // calculate hours
-    tValue		/= HOURS_IN_DAY ;
+    psTM->tm_sec	= tValue % SECONDS_IN_MINUTE;		// calculate seconds
+    tValue		/= SECONDS_IN_MINUTE;
+    psTM->tm_min	= tValue % MINUTES_IN_HOUR;	    	// calculate minutes
+    tValue		/= MINUTES_IN_HOUR;
+    psTM->tm_hour	= tValue % HOURS_IN_DAY;		    // calculate hours
+    tValue		/= HOURS_IN_DAY;
     if (fElapsed) {
-    	psTM->tm_mday = tValue ;						// elapsed time, leave as is
-    	return ;
+    	psTM->tm_mday = tValue;							// elapsed time, leave as is
+    	return;
     }
     // calculate day# of week (0 -> 6)
-	psTM->tm_wday = (tValue + timeEPOCH_DAY_0_NUM) % DAYS_IN_WEEK ;
+	psTM->tm_wday = (tValue + timeEPOCH_DAY_0_NUM) % DAYS_IN_WEEK;
 	// Calculate the current year
-	int	leap ;
-	int year = YEAR_BASE_MIN ;
+	int	leap;
+	int year = YEAR_BASE_MIN;
     while (tValue >= (DAYS_IN_YEAR + (leap = xTimeIsLeapYear(year)))) {	// sufficient days left for a full year?
-		tValue -= (DAYS_IN_YEAR + leap) ;				// yes, adjust remaining days
-		++year ;										// and step to next year
+		tValue -= (DAYS_IN_YEAR + leap);				// yes, adjust remaining days
+		++year;											// and step to next year
     }
-    psTM->tm_year = year - YEAR_BASE_MIN ;				// Adjust year for correct epoch
-	psTM->tm_yday = tValue ;							// and store the day # of the year
+    psTM->tm_year = year - YEAR_BASE_MIN;				// Adjust year for correct epoch
+	psTM->tm_yday = tValue;								// and store the day # of the year
 	// calculate the month of the year
     while (1) {
-    	int	DaysInMonth = DaysPerMonth[psTM->tm_mon] ;
+    	int	DaysInMonth = DaysPerMonth[psTM->tm_mon];
     	// if date is in Feb and year is a leap year, add day for 29th Feb
     	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year))
     		++DaysInMonth;
@@ -127,14 +127,14 @@ void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
     		break;
     	}
    		tValue -= DaysInMonth;
-   		++psTM->tm_mon ;
+   		++psTM->tm_mon;
     }
     // remaining days are day of month
-	psTM->tm_mday = tValue + 1 ;						// range is 1 -> 31
+	psTM->tm_mday = tValue + 1;							// range is 1 -> 31
 }
 
 int xTimeCalcDaysMonth(int Year, int Month) {			// handle February of a leap year
-	return DaysPerMonth[Month] + ((xTimeIsLeapYear(Year + YEAR_BASE_MIN) && (Month == 1)) ? 1 : 0) ;
+	return DaysPerMonth[Month] + ((xTimeIsLeapYear(Year + YEAR_BASE_MIN) && (Month == 1)) ? 1 : 0);
 }
 
 /**
@@ -150,7 +150,7 @@ int	xTimeCalcDaysInMonth(tm_t * psTM) { return xTimeCalcDaysMonth(psTM->tm_year,
  * @return
  */
 int	xTimeCalcDaysYTD(tm_t *psTM) {				// handle day AFTER February of leap year
-	return DaysToMonth[psTM->tm_mon] + (psTM->tm_mday-1) + ((xTimeIsLeapYear(psTM->tm_year+YEAR_BASE_MIN) && (psTM->tm_mon > 1)) ? 1 : 0) ;
+	return DaysToMonth[psTM->tm_mon] + (psTM->tm_mday-1) + ((xTimeIsLeapYear(psTM->tm_year+YEAR_BASE_MIN) && (psTM->tm_mon > 1)) ? 1 : 0);
 }
 
 /**
@@ -159,40 +159,40 @@ int	xTimeCalcDaysYTD(tm_t *psTM) {				// handle day AFTER February of leap year
  * @return
  */
 int	xTimeCalcDaysToDate(tm_t *psTM) {
-	return (psTM->tm_year*DAYS_IN_YEAR) + xTimeCountLeapYears(psTM->tm_year+YEAR_BASE_MIN) + xTimeCalcDaysYTD(psTM) ;
+	return (psTM->tm_year*DAYS_IN_YEAR) + xTimeCountLeapYears(psTM->tm_year+YEAR_BASE_MIN) + xTimeCalcDaysYTD(psTM);
 }
 
 /**
- * @brief
- * @param psTM
- * @param fElapsed
- * @return
+ * @brief	Convert time component values into [epoch] seconds
+ * @param	psTM - structure containing time components
+ * @param	fElapsed - flag indicating if structure represent elapsed time
+ * @return	time in seconds
  */
 seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 	// calculate seconds for hh:mm:ss portion
-	seconds_t Seconds	= psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR) ;
+	seconds_t Seconds	= psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
 
 	// Then add seconds for MM/DD values (check elapsed time/not, to handle DoM correctly 0/1 relative)
-	Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY ;
+	Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
 
 	// lastly, handle the years
 	if (fElapsed) {
-		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR_AVG) ;
+		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR_AVG);
 	} else {
-		int32_t Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0 ;
-		int32_t Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap ;		// calculate the number of leap years
-		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY) ; // add seconds in previous years
+		i32_t Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
+		i32_t Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;		// calculate the number of leap years
+		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY); // add seconds in previous years
 	}
-	return Seconds ;
+	return Seconds;
 }
 
 /**
  * @brief
  * @param	psTSZ
- * @return	Timestamp as seconds (uint32_t)
+ * @return	Timestamp as seconds
  */
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
-	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight ;
+	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight;
 }
 
 // ##################################### functional tests ##########################################
@@ -201,47 +201,47 @@ seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
 
 void xTimeTest(void) {
 #if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
-	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .pcTZName = "Africa/Johannesburg", .pcDSTName = "South Africa Standard Time" } ;
+	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .pcTZName = "Africa/Johannesburg", .pcDSTName = "South Africa Standard Time" };
 #elif	(timexTZTYPE_SELECTED == timexTZTYPE_FOURCHARS)
-	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .tzname = { 'S', 'A', 'S', 'T' }, .dstname = { 'N', 'O', 'N', 'E' } } ;
+	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .tzname = { 'S', 'A', 'S', 'T' }, .dstname = { 'N', 'O', 'N', 'E' } };
 #endif
 
-	tsz_t	sTSZtemp ;
-	tz_t	sTZtemp ;
-	sTSZtemp.pTZ = &sTZtemp ;
+	tsz_t	sTSZtemp;
+	tz_t	sTZtemp;
+	sTSZtemp.pTZ = &sTZtemp;
 
 #if		(timexEPOCH_SELECTED == timexEPOCH_U32NTP)
-	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
-	printfx("1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0);
+	printfx("1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.unit = CurSecs.unit ;
-	printfx("1968-01-20 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.unit = CurSecs.unit;
+	printfx("1968-01-20 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
-	printfx("2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0);
+	printfx("2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
-	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
-	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0);
+	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.usecs	= xTimeMakeTimestamp(946684799, 0) ;
-	printfx("1999-12-31 23:59:59.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs	= xTimeMakeTimestamp(946684799, 0);
+	printfx("1999-12-31 23:59:59.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.usecs += MICROS_IN_SECOND ;
-	printfx("2000-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs += MICROS_IN_SECOND;
+	printfx("2000-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
-	printfx("2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0);
+	printfx("2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_U32UNIX)
-	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0) ;
-	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_PAST, 0);
+	printfx("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.usecs	= xTimeMakeTimestamp(315532800, 0) ;
-	printfx("1980-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs	= xTimeMakeTimestamp(315532800, 0);
+	printfx("1980-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
-	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0) ;
-	printfx("2106-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp) ;
+	sTSZtemp.usecs = xTimeMakeTimestamp(SECONDS_IN_EPOCH_FUTURE, 0);
+	printfx("2106-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 #endif
 }
