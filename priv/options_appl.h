@@ -70,7 +70,7 @@ extern "C" {
 		"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"		\
 		"Memory\0"		"\0"			"REtable\0"		"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"	\
 		"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"			\
-		"\0"			"\0"			"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"			\
+		"dbgGDIO\0"		"dbgGAIO\0"		"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"			\
 		"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"	\
 		"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"		\
 /*2*/	"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0~2\0"		"Port 0~3\0"	"\0"			"\0"			\
@@ -128,8 +128,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB1_37,
 	ioB1_38,
 	ioB1_39,
-	ioB1_40,
-	ioB1_41,
+	dbgGDIO,
+	dbgGAIO,
 	ioB1_42,
 	ioM90write,
 	ioM90offset,
