@@ -311,6 +311,7 @@ extern "C" {
 
 // ################################### missing standard definitions ################################
 
+#define pvNULL						((void *) NULL)
 #define	pvFAILURE					((void *) 0xFFFFFFFF)
 #define	pcFAILURE					((char *) 0xFFFFFFFF)
 
