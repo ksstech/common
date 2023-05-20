@@ -152,7 +152,7 @@ typedef struct report_t { char * pcBuf; size_t Size; fm_t sFM; } report_t;
 
 // ######################################### 8 bit types ###########################################
 
-typedef union { u8_t u8; s8_t i8; char c8; } x8_t;
+typedef union { u8_t u8; s8_t s8; i8_t i8; char c8; } x8_t;
 DUMB_STATIC_ASSERT(sizeof(x8_t) == 1);
 
 // ######################################### 16 bit types ##########################################
