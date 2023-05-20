@@ -331,6 +331,9 @@ extern "C" {
 #ifndef s8_t
 	typedef	__int8_t s8_t;
 #endif
+#ifndef i8_t
+	typedef	__int8_t i8_t;
+#endif
 #ifndef u8_t
 	typedef __uint8_t u8_t;
 #endif
