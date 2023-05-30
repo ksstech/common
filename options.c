@@ -39,8 +39,11 @@ const char ioSXmes[] = "Non-bit options:\r\n"
 						"141=WLmode\t"
 						"142=APdetail\t"
 						"143=MQTTproxy\t"
+						#if (configPRODUCTION == 0)
 						"144=MEMpeek\t"
-						"145=Defaults\r\n\n";
+						"145=MEMpoke\t"
+						#endif
+						"146=Defaults\r\n\n";
 
 ioset_t const ioDefaults = { iosetDEFAULTS };
 

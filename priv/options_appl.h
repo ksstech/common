@@ -243,7 +243,8 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioS_WIFI,						// 142 {ssid} {pswd}
 	ioS_MQTT,						// 143 {w.x.y.z[:???]}	(mqtt broker/proxy)
 	ioS_PEEK,						// 144 {addr} {size}
-	ioS_IOdef,						// 145 					(reset to defaults)
+	ioS_POKE,						// 145 {addr} u8 [u8 ... u8]
+	ioS_IOdef,						// 146 					(reset to defaults)
 	ioS_LAST = ioS_IOdef,
 } ;
 
