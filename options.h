@@ -6,7 +6,6 @@
 #pragma once
 
 #include "definitions.h"
-
 #include "priv/options_appl.h"
 
 #ifdef __cplusplus
