@@ -1,5 +1,5 @@
 /*
- * main_options.h
+ * options_appl.h
  */
 
 #pragma once
@@ -64,6 +64,14 @@ extern "C" {
 	.B8_1	= 50
 #endif
 
+#if (halHAS_ADE7953 > 0)
+	#define mesB2_9 "ade7953NVS\0"
+#elif (halHAS_M90E26 > 0)
+	#define mesB2_9 "m90e26NVS\0"
+#else
+	#define mesB2_9 "\0"
+#endif
+
 #define iosetHELP_MESSAGE \
 /*1*/	"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"			\
 		"\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"	\
@@ -74,7 +82,7 @@ extern "C" {
 		"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"	\
 		"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"		\
 /*2*/	"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0~2\0"		"Port 0~3\0"	"\0"			"\0"			\
-		"APindex\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
+		"APindex\0"		mesB2_9			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
 		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
 		"dbgIdent\0"	"dbgActuate\0"	"dbgGUI\0"		"dbgGPI\0"		"\0"			"\0"			"\0"			"dbgDS248X\0"	\
 /*3*/	"U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"		\
@@ -163,7 +171,13 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB2_6,
 	ioB2_7,
 	ioAPindex,
+#if (halHAS_ADE7953 > 0)
+	ade7953NVS,
+#elif (halHAS_M90E26 > 0)
+	m90e26NVS,
+#else
 	ioB2_9,
+#endif
 	ioB2_10,
 	ioB2_11,
 	ioB2_12,
