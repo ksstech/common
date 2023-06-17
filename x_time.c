@@ -170,15 +170,21 @@ int	xTimeCalcDaysToDate(tm_t *psTM) {
  */
 seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 	// calculate seconds for hh:mm:ss portion
+	IF_myASSERT(debugPARAM, psTM->tm_sec < SECONDS_IN_MINUTE &&
+							psTM->tm_min < MINUTES_IN_HOUR &&
+							psTM->tm_hour < HOURS_IN_DAY);
 	seconds_t Seconds	= psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
 
 	// Then add seconds for MM/DD values (check elapsed time/not, to handle DoM correctly 0/1 relative)
+	IF_myASSERT(debugPARAM, psTM->tm_mon < MONTHS_IN_YEAR &&
+							psTM->tm_mday <= DAYS_IN_MONTH_MAX);
 	Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
 
 	// lastly, handle the years
 	if (fElapsed) {
 		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR_AVG);
 	} else {
+		IF_myASSERT(debugPARAM, psTM->tm_year < (YEAR_BASE_MAX - YEAR_BASE_MIN));
 		i32_t Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
 		i32_t Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;		// calculate the number of leap years
 		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY); // add seconds in previous years
