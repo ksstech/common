@@ -285,8 +285,9 @@ extern "C" {
 #define NO_ELEM(S,M)				((int)(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0])))
 
 #define	UNUSED(x)					(void) (x) ;
-#define	STRING_NULL					(char *) "null"
-#define	STRING_OOR					(char *) "pOOR"
+#define strNUL						(char *) ""
+#define	strNULL						(char *) "null"
+#define	strOOR						(char *) "pOOR"
 
 #define	debugAPPL_PLACE				"I'm LOST!!\n"
 
