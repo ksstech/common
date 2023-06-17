@@ -3,12 +3,13 @@
  * Copyright (c) 2014-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-#include <string.h>
-
-#include "x_time.h"
+#include "hal_config.h"
 #include "printfx.h"
 #include "x_string_general.h"
+#include "x_time.h"
 #include "x_errors_events.h"
+
+#include <string.h>
 
 #define	debugFLAG					0xC000
 
@@ -186,8 +187,8 @@ seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 	} else {
 		IF_myASSERT(debugPARAM, psTM->tm_year < (YEAR_BASE_MAX - YEAR_BASE_MIN));
 		i32_t Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
-		i32_t Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;		// calculate the number of leap years
-		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY); // add seconds in previous years
+		i32_t Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;	// calc # of leap years
+		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY); // add seconds in prev years
 	}
 	return Seconds;
 }
