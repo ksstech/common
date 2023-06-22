@@ -212,7 +212,6 @@ extern "C" {
 
 // true/false range tests
 #define INRANGE(x,y,z)				(((x) <= (y)) && ((y) <= (z)) ? 1 : 0)
-//#define INRANGE(x,y,z)				(((y) >= (x)) && ((y) <= (z)) ? 1 : 0)
 #define	BETWEEN(x,y,z)				(((y) >  (x)) && ((y) <  (z)) ? 1 : 0)
 #define	OUTSIDE(x,y,z)				(((y) <  (x)) || ((y) >  (z)) ? 1 : 0)
 /*
