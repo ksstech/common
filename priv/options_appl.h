@@ -65,10 +65,16 @@ extern "C" {
 #endif
 
 #if (halHAS_ADE7953 > 0)
+	#define mesB1_43 "ade7953W\0"
+	#define mesB1_44 "ade7953R\0"
 	#define mesB2_9 "ade7953NVS\0"
 #elif (halHAS_M90E26 > 0)
+	#define mesB1_43 "m90e26Wr\0"
+	#define mesB1_44 "m90e26Of\0"
 	#define mesB2_9 "m90e26NVS\0"
 #else
+	#define mesB1_43 "\0"
+	#define mesB1_44 "\0"
 	#define mesB2_9 "\0"
 #endif
 
@@ -78,7 +84,7 @@ extern "C" {
 		"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"		\
 		"Memory\0"		"\0"			"REtable\0"		"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"	\
 		"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"			\
-		"dbgGDIO\0"		"dbgGAIO\0"		"\0"			"M90write\0"	"M90offset\0"	"\0"			"\0"			"\0"			\
+		"dbgGDIO\0"		"dbgGAIO\0"		"\0"			mesB1_43		mesB1_44		"\0"			"\0"			"\0"			\
 		"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"	\
 		"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"		\
 /*2*/	"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0~2\0"		"Port 0~3\0"	"\0"			"\0"			\
@@ -139,8 +145,16 @@ enum {								// enumerated option numbers used by ioBxSET
 	dbgGDIO,
 	dbgGAIO,
 	ioB1_42,
+#if (halHAS_ADE7953 > 0)
+	dbgADE7953W,
+	dbgADE7953R,
+#elif (halHAS_M90E26 > 0)
 	ioM90write,
 	ioM90offset,
+#else
+	ioB1_43,
+	ioB1_44,
+#endif
 	ioB1_45,
 	ioB1_46,
 	ioB1_47,
