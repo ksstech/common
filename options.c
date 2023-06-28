@@ -42,6 +42,9 @@ const char ioSXmes[] = "Non-bit options:\r\n"
 						#if (configPRODUCTION == 0)
 						"144=MEMpeek\t"
 						"145=MEMpoke\t"
+						#else
+						"144=Unused\t"
+						"145=Unused\t"
 						#endif
 						"146=Defaults\r\n\n";
 
