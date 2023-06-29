@@ -26,11 +26,11 @@ typedef enum {
 	epSCALE_KILO	= 1,
 	epSCALE_MEGA	= 2,
 	epSCALE_GIGA	= 3,
-} ep_scale_t ;
+} ep_scale_t;
 
 // ############################# common complex data types/ structures #############################
 
-typedef union va_fake_t { char * pa ; va_list va; } va_fake_t;
+typedef union va_fake_t { char * pa; va_list va; } va_fake_t;
 
 typedef union mac_addr_t {
 	struct __attribute__((packed)) { u8_t str6hex[6], filler1[2]; };
@@ -40,11 +40,11 @@ DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8);
 
 typedef	union xVer_u {				// Version numbers
 	struct __attribute__((packed)) {
-		u8_t	ver_rev ;			// Revision of Sub
-		u8_t	ver_sub ;			// Sub version
-		u8_t	ver_min ;			// Minor version
-		u8_t	ver_maj ;			// Major version
-	} ;
+		u8_t	ver_rev;			// Revision of Sub
+		u8_t	ver_sub;			// Sub version
+		u8_t	ver_min;			// Minor version
+		u8_t	ver_maj;			// Major version
+	};
 	u32_t val;
 }  xVer_t;
 DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4);
@@ -157,7 +157,7 @@ DUMB_STATIC_ASSERT(sizeof(x8_t) == 1);
 
 // ######################################### 16 bit types ##########################################
 
-typedef union { u16_t u16 ; s16_t i16; x8_t x8[2]; } x16_t;
+typedef union { u16_t u16; s16_t i16; x8_t x8[2]; } x16_t;
 DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ########################################## x32 types ############################################
@@ -187,27 +187,27 @@ typedef struct __attribute__((packed)) {
 // ###################################### px (32/64) pointer types #################################
 
 typedef union {
-	void * pv ;
-	void * * ppv ;
+	void * pv;
+	void * * ppv;
 	int * piX;
 // pointers to x64
-	x64_t * px64 ;
-	u64_t *	pu64 ;
-	i64_t *	pi64 ;
-	double * pf64 ;
+	x64_t * px64;
+	u64_t *	pu64;
+	i64_t *	pi64;
+	double * pf64;
 // pointers to x32
-	x32_t * px32 ;
-	u32_t *	pu32 ;
-	i32_t *	pi32 ;
-	float *	pf32 ;
+	x32_t * px32;
+	u32_t *	pu32;
+	i32_t *	pi32;
+	float *	pf32;
 // pointer to x16
-	x16_t *	px16 ;
-	u16_t *	pu16 ;
-	s16_t *	pi16 ;
+	x16_t *	px16;
+	u16_t *	pu16;
+	s16_t *	pi16;
 // pointers to x08
-	x8_t *	px8 ;
-	u8_t *	pu8 ;
-	s8_t *	pi8 ;
+	x8_t *	px8;
+	u8_t *	pu8;
+	s8_t *	pi8;
 	const char *pcc8;
 	seconds_t *	psec;
 	char * pc8;
