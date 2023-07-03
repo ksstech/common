@@ -30,6 +30,8 @@ typedef enum {
 
 // ############################# common complex data types/ structures #############################
 
+typedef union {	struct { u32_t LSW, MSW; }; u64_t U64; } u64rt_t; // LSW then MSW sequence critical
+
 typedef union va_fake_t { char * pa; va_list va; } va_fake_t;
 
 typedef union mac_addr_t {
