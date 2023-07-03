@@ -12,7 +12,7 @@
 #include "x_terminal.h"
 #include "x_errors_events.h"
 
-#define	debugFLAG					0xC000
+#define	debugFLAG					0xF000
 
 #define	debugTIMING					(debugFLAG_GLOBAL & debugFLAG & 0x1000)
 #define	debugTRACK					(debugFLAG_GLOBAL & debugFLAG & 0x2000)
