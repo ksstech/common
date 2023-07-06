@@ -29,7 +29,7 @@ extern "C" {
 	.B3_6	= 1,			\
 	.B3_17	= 4,			\
 	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 3,	\
 	.B4_0	= 5,			\
 	.B4_1	= 7,			\
 	.B4_2	= 8,			\
@@ -54,7 +54,7 @@ extern "C" {
 	.B3_6	= 1,			\
 	.B3_17	= 4,			\
 	.B3_19	= CONFIG_LOG_DEFAULT_LEVEL + 0,	\
-	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 1,	\
+	.B3_20	= CONFIG_LOG_DEFAULT_LEVEL + 2,	\
 	.B4_0	= 5,			\
 	.B4_1	= 1,			\
 	.B4_2	= 8,			\
@@ -85,7 +85,7 @@ extern "C" {
 		"Memory\0"		"\0"			"REtable\0"		"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"	\
 		"TNETstart\0"	"HTTPstart\0"	"TNETauth\0"	"\0"			"\0"			"\0"			"\0"			"\0"			\
 		"dbgGDIO\0"		"dbgGAIO\0"		"\0"			mesB1_43		mesB1_44		"\0"			"\0"			"\0"			\
-		"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgTracker\0"	\
+		"LIS2HH12\0"	"\0"			"\0"			"dbgMODBUS\0"	"dbgDS1820\0"	"dbgDS1990\0"	"dbgOWscan\0"	"dbgJSONrd\0"	\
 		"\0"			"WL ExtAnt\0"	"WLhidden\0"	"WLmode\0"		"WLevents\0"	"WLram\0"		"WLscan\0"		"WLsort\0"		\
 /*2*/	"HostMQTT\0"	"HostFOTA\0"	"HostSLOG\0"	"HostCONF\0"	"QoS 0~2\0"		"Port 0~3\0"	"\0"			"\0"			\
 		"APindex\0"		mesB2_9			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
@@ -165,7 +165,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	dbgDS1820,
 	dbgDS1990x,
 	dbgOWscan,
-	dbgTRACKER,						// dbgRTOSsema
+	dbgJSONrd,
 	ioB1_56,
 	ioWLantenna,					// external antenna 1=enable
 	ioWLhidden,						// scan show hidden APs
