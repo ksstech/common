@@ -93,11 +93,14 @@ int xOptionsSetDirect(int ON, int OV) {
 	if (iRV) {					// Something changed, do exception processing
 		if (ON == ioHostMQTT) {
 			setSYSFLAGS(sfOPT_MQTT);					// MQTT host changed
+
 		} else if (ON == ioAPindex) {
 			WLstate.Retry = 0;
 			WLstate.Index = ioB2GET(ioAPindex);
-			halWL_ConfigSTA(NULL, NULL);
 			halWL_Stop();								// Change in AP being connected to
+			halWL_Start();
+			halWL_ConfigSTA(NULL, NULL);
+
 		} else if (INRANGE(ioU0Speed, ON, ioU2Speed)) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
 		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf)) {
