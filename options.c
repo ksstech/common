@@ -134,8 +134,6 @@ int	xOptionsSet(int	OptNum, int OptVal, int Persist) {
 		// If nothing changed, force persistence flag to false
 		if (iRV == 0)
 			Persist = 0;
-	} else if (OptNum == ioS_NWMO) {
-		iRV = INRANGE(WIFI_MODE_NULL, OptVal, WIFI_MODE_APSTA) ? halWL_SetMode(OptVal) : erFAILURE;
 	} else if (OptNum == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
 	}
