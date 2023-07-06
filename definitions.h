@@ -144,9 +144,14 @@ extern "C" {
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
 #define	strCRLF						"\r\n"
-#define	strPARSE					"~[%s]"
-#define	strPARSE_P					"~[%*s]"
 #define	strINV_CVI					"Invalid cvI"
+
+#define	strPARSE_s					"~[%s]"
+#define	strPARSE_Ps					"~[%*s]"
+#define strPARSE_d					"~[%d]"
+#define strPARSE_lu					"~[]"
+#define strPARSE_I					"~[%-I]"
+#define strPARSE_b					"~[%b]"				// dynamic format
 
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
