@@ -95,7 +95,18 @@ typedef	union {
 		};
 		u32_t	h:1, g:1, f:1, e:1, d:1, c:1, b:1, a:1;
 	};
-	struct __attribute__((packed)) {	// 9:23 Printing tasks
+	struct __attribute__((packed)) {// 8:24 General printing
+		u32_t	aCount:24;			// Counter
+		u32_t	aColor:1;			// Use colour
+		u32_t	aPrioX:1;			// Priorities
+		u32_t	aState:1;			// Task state RBPS
+		u32_t	aStack:1;			// Low Stack value
+		u32_t	aCore:1;			// MCU 01X
+		u32_t	aXtras:1;
+		u32_t	aNL:1;
+		u32_t	aRT:1;
+	};
+	struct __attribute__((packed)) {// 9:23 Printing tasks
 		u32_t	uCount:23;			// Task # mask
 		u32_t	bTskNum:1;			// Task #
 		u32_t	bColor:1;			// Use colour
