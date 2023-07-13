@@ -43,6 +43,12 @@ enum {
 	erINV_HOST,
 	erDUP_HOST,
 	erOUT_OF_RANGE,
+	erWL_CFG_STA,
+	erWL_CFG_MODE,
+	erWL_CFG_SAVE,
+	erTO_L1toL2,
+	erTO_L2toL3,
+	erTO_L3toLX,
 
 	erTABLE_FULL,
 	// Insert additional application error codes above here
