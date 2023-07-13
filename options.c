@@ -97,9 +97,7 @@ int xOptionsSetDirect(int ON, int OV) {
 		} else if (ON == ioAPindex) {
 			WLstate.Retry = 0;
 			WLstate.Index = ioB2GET(ioAPindex);
-			halWL_Stop();								// Change in AP being connected to
-			halWL_Start();
-			halWL_ConfigSTA(NULL, NULL);
+			halWL_SetMode(WIFI_MODE_STA, 1);
 
 		} else if (INRANGE(ioU0Speed, ON, ioU2Speed)) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
