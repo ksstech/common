@@ -101,6 +101,7 @@ int xOptionsSetDirect(int ON, int OV) {
 
 		} else if (INRANGE(ioU0Speed, ON, ioU2Speed)) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
+
 		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf)) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
 		}
@@ -110,12 +111,14 @@ int xOptionsSetDirect(int ON, int OV) {
 			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
 		}
 		#endif
+
 		#if	(configCONSOLE_TELNET == 1)
 		else if (ON == ioTNETstart) {					// TNET task start/stop
 			#include "x_telnet_server.h"
 			vTnetStartStop();
 		}
 		#endif
+
 		#if	(configCONSOLE_HTTP == 1)
 		else if (ON == ioHTTPstart) {					// HTTP task start/stop
 			#include "x_http_server.h"
