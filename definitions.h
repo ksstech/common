@@ -533,7 +533,7 @@ enum {								// ANSI standard terminal colors
 	attrSTRIKE_ON		= 9,
 
 	attrULINE_OFF		= 24,
-	attrREV_OF			= 27,
+	attrREV_OFF			= 27,
 	attrREVEAL			= 28,
 	attrSTRIKE_OFF		= 29,
 
