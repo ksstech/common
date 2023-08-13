@@ -104,25 +104,18 @@ int xOptionsSetDirect(int ON, int OV) {
 
 		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf)) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
-		}
 
+		} else if (ON == ioTNETstart) {					// TNET task start/stop
+			#include "x_telnet_server.h"
+			vTnetStartStop();
+
+		} else if (ON == ioHTTPstart) {					// HTTP task start/stop
+			#include "x_http_server.h"
+			vHttpStartStop();
+		}
 		#if	(cmakePLTFRM == HW_WIPY3)
 		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
 			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
-		}
-		#endif
-
-		#if	(configCONSOLE_TELNET == 1)
-		else if (ON == ioTNETstart) {					// TNET task start/stop
-			#include "x_telnet_server.h"
-			vTnetStartStop();
-		}
-		#endif
-
-		#if	(configCONSOLE_HTTP == 1)
-		else if (ON == ioHTTPstart) {					// HTTP task start/stop
-			#include "x_http_server.h"
-			vHttpStartStop();
 		}
 		#endif
 	} // end (iRV)
