@@ -109,46 +109,43 @@ typedef	union {
 	struct __attribute__((packed)) {// 9:23 Printing tasks
 		u32_t	uCount:23;			// Task # mask
 		u32_t	bTskNum:1;			// Task #
-		u32_t	bColor:1;			// Use colour
+		u32_t	bColor:1;
 		u32_t	bPrioX:1;			// Priorities
 		u32_t	bState:1;			// Task state RBPS
 		u32_t	bStack:1;			// Low Stack value
 		u32_t	bCore:1;			// MCU 01X
 		u32_t	bXtras:1;
-		u32_t	bNL:1;
-		u32_t	bRT:1;
+		u32_t	bNL:1;				// NewLine
+		u32_t	bRT:1;				// RunTime
 	};
-	struct __attribute__((packed)) {// 11:21 xRtosReportMemory & halMCU_ReportMemory
-		u32_t	rmSpare:21;
-		u32_t	rmDefault:1;
-		u32_t	rmInternal:1;
-		u32_t	rmPSram:1;
-		u32_t	rmColor:1;			// same as bColor
-		u32_t	rmIram:1;
-		u32_t	rmExec:1;
-		u32_t	rmDma:1;
-		u32_t	rm8b:1;
-		u32_t 	rm32b:1;
-		u32_t	rmTotal:1;
-		u32_t	rmSmall:1;
+	struct __attribute__((packed)) {// 9:23 Memory reporting
+		u32_t	rmCAPS:23;
+		u32_t	rmDetail:1;			// individual block details
+		u32_t	rmColor:1;
+		u32_t	rmCompact:1;
+		u32_t	rwF:1;
+		u32_t	rmE:1;
+		u32_t	rmD:1;
+		u32_t 	rmC:1;
+		u32_t	rmB:1;
+		u32_t	rmA:1;
 	};
-	struct __attribute__((packed)) {// 12:20 xRtosSensorsReport
-		u32_t	senFree2:20;
-		u32_t	senNL:1;
-		u32_t 	senFree1:2;
+	struct __attribute__((packed)) {// 10:22 Sensors reporting
+		u32_t	senFree:22;
 		u32_t	senTlog:1;
 		u32_t	senTsen:1;
-		u32_t	senColor:1;			// same as bColor
+		u32_t	senColor:1;
 		u32_t 	senDev:1;
 		u32_t 	senAvg:1;
 		u32_t 	senSum:1;
 		u32_t 	senMMP:1;
 		u32_t	senUnit:1;
+		u32_t	senNL:1;
 		u32_t	senURI:1;
 	};
 	u32_t	u32Val;
 } fm_t;
-DUMB_STATIC_ASSERT(sizeof(fm_t) == 4);
+DUMB_STATIC_ASSERT(sizeof(fm_t) == sizeof(u32_t));
 
 #define	makeMASK08x24(A,B,C,D,E,F,G,H,I)	\
 	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x00FFFFFF)))
