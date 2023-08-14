@@ -27,12 +27,12 @@ void vShowActivity(int i) {
 	++caActivity[i] ;
 	if (caActivity[i] == 0x3A)
 		caActivity[i] = CHR_0;
-	printfx_lock();
+	printfx_lock(NULL);
 	vANSIcursorsave();
 	vANSIlocate(1, 120);
 	vANSIputs(caActivity) ;
 	vANSIcursorback();
-	printfx_unlock();
+	printfx_unlock(NULL);
 }
 
 void vUtilPrintCharacterSet(void) {

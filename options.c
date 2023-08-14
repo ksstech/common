@@ -159,7 +159,7 @@ int xOptionGetDefault(int ON) {
 void vOptionsShow(void) {
 	const char * pcMess = ioBXmes;
 	int Cur, Def, Col, Len, Idx = 0;
-	printfx_lock();
+	printfx_lock(NULL);
 	for (int Num = ioB1_0; Num < ioBXlast; ++Num) {
 		Cur = xOptionGetCurrent(Num);
 		Def = xOptionGetDefault(Num);
@@ -192,5 +192,5 @@ void vOptionsShow(void) {
 		}
 	}
 	printfx_nolock(ioSXmes);
-	printfx_unlock();
+	printfx_unlock(NULL);
 }
