@@ -342,8 +342,8 @@ extern "C" {
 #ifndef u8_t
 	typedef __uint8_t u8_t;
 #endif
-#ifndef s16_t
-	typedef	__int16_t s16_t;
+#ifndef i16_t
+	typedef	__int16_t i16_t;
 #endif
 #ifndef u16_t
 	typedef __uint16_t u16_t;
@@ -361,10 +361,10 @@ extern "C" {
 	typedef __uint64_t u64_t;
 #endif
 #ifndef f32_t
-typedef float f32_t;
+	typedef float f32_t;
 #endif
 #ifndef f64_t
-typedef double f64_t;
+	typedef double f64_t;
 #endif
 
 typedef	u8_t * pu8_t;

@@ -167,7 +167,7 @@ DUMB_STATIC_ASSERT(sizeof(x8_t) == 1);
 
 // ######################################### 16 bit types ##########################################
 
-typedef union { u16_t u16; s16_t i16; x8_t x8[2]; } x16_t;
+typedef union { u16_t u16; i16_t i16; x8_t x8[2]; } x16_t;
 DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ########################################## x32 types ############################################
@@ -213,7 +213,7 @@ typedef union {
 // pointer to x16
 	x16_t *	px16;
 	u16_t *	pu16;
-	s16_t *	pi16;
+	i16_t *	pi16;
 // pointers to x08
 	x8_t *	px8;
 	u8_t *	pu8;
