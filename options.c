@@ -8,7 +8,12 @@
 #include "hal_network.h"
 #include "hal_usart.h"
 #include "hal_gpio.h"
-
+#if	(halHAS_ADE7953 > 0)
+	#include "ade7953.h"
+#endif
+#if	(halHAS_m90e26 > 0)
+	#include "m90e26.h"
+#endif
 #include "printfx.h"
 #include "syslog.h"
 #include "x_errors_events.h"
@@ -116,6 +121,18 @@ int xOptionsSetDirect(int ON, int OV) {
 		#if	(cmakePLTFRM == HW_WIPY3)
 		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
 			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
+		}
+		#endif
+		#if	(halHAS_M90E26 > 0)
+		else if (ON == m90e26NVS) {						// NVS calibration option
+			IF_EXEC_2(halHAS_M90E26 > 0, m90e26LoadNVSConfig, 0, OV);
+			IF_EXEC_2(halHAS_M90E26 == 2, m90e26LoadNVSConfig, 1, OV);
+		}
+		#endif
+		#if	(halHAS_ADE7953 > 0)
+		else if (ON == ade7953NVS) {						// NVS calibration option
+			IF_EXEC_2(halHAS_ADE7953 > 0, ade7953LoadNVSConfig, 0, OV);
+			IF_EXEC_2(halHAS_ADE7953 == 2, ade7953LoadNVSConfig, 1, OV);
 		}
 		#endif
 	} // end (iRV)
