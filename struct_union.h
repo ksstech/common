@@ -170,14 +170,38 @@ DUMB_STATIC_ASSERT(sizeof(x8_t) == 1);
 typedef union { u16_t u16; i16_t i16; x8_t x8[2]; } x16_t;
 DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
+// ######################################### 24 bit types ##########################################
+
+
+typedef union __attribute__((packed)) { u32_t u24:24; } u24_t;
+
+typedef union __attribute__((packed)) { i32_t i24:24; } i24_t;
+
+typedef union __attribute__((packed)) {
+	u32_t u24:24;
+	i32_t i24:24;
+	x8_t x8[3];
+} x24_t;
+DUMB_STATIC_ASSERT(sizeof(x24_t) == 3);
+
 // ########################################## x32 types ############################################
 
-typedef union { int	iX; u32_t u32; i32_t i32; float	f32; x16_t x16[2]; x8_t x8[4]; } x32_t;
+typedef union {
+	int	iX;
+	u32_t u32;
+	i32_t i32;
+	f32_t f32;
+	struct __attribute__((packed)) { x24_t x24; x8_t X8; };
+	struct __attribute__((packed)) { u24_t u24; x8_t U8; };
+	struct __attribute__((packed)) { i24_t i24; x8_t I8; };
+	x16_t x16[2];
+	x8_t x8[4];
+} x32_t;
 DUMB_STATIC_ASSERT(sizeof(x32_t) == 4);
 
 // ########################################## x64 types ############################################
 
-typedef union { u64_t u64; i64_t i64; double f64; x32_t x32[2]; x16_t x16[4]; x8_t x8[8]; } x64_t;
+typedef union { u64_t u64; i64_t i64; f64_t f64; x32_t x32[2]; x16_t x16[4]; x8_t x8[8]; } x64_t;
 DUMB_STATIC_ASSERT(sizeof(x64_t) == 8);
 
 // ########################################## Other types ##########################################
@@ -210,6 +234,10 @@ typedef union {
 	u32_t *	pu32;
 	i32_t *	pi32;
 	float *	pf32;
+// pointers to x32
+	x24_t * px24;
+	u24_t * pu24;
+	i24_t * pi24;
 // pointer to x16
 	x16_t *	px16;
 	u16_t *	pu16;
