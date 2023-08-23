@@ -11,7 +11,7 @@
 #if	(halHAS_ADE7953 > 0)
 	#include "ade7953.h"
 #endif
-#if	(halHAS_m90e26 > 0)
+#if	(halHAS_M90E26 > 0)
 	#include "m90e26.h"
 #endif
 #include "printfx.h"
