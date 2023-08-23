@@ -134,7 +134,7 @@ int xOptionsSetDirect(int ON, int OV) {
 		#if	(halHAS_ADE7953 > 0)
 		else if (ON == ade7953NVS) {						// NVS calibration option
 			IF_EXEC_2(halHAS_ADE7953 > 0, ade7953LoadNVSConfig, 0, OV);
-			IF_EXEC_2(halHAS_ADE7953 == 2, ade7953LoadNVSConfig, 1, OV);
+//			IF_EXEC_2(halHAS_ADE7953 == 2, ade7953LoadNVSConfig, 1, OV);
 		}
 		#endif
 	} // end (iRV)
