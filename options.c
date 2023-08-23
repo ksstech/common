@@ -100,9 +100,11 @@ int xOptionsSetDirect(int ON, int OV) {
 			setSYSFLAGS(sfOPT_MQTT);					// MQTT host changed
 
 		} else if (ON == ioAPindex) {
-			WLstate.Retry = 0;
-			WLstate.Index = ioB2GET(ioAPindex);
-			halWL_SetMode(WIFI_MODE_STA, 1);
+			iRV = halWL_ConfigSTA(ioB2GET(ioAPindex), NULL, NULL);	// set the new AP config
+			if (iRV > erFAILURE)
+				iRV = halWL_SetMode(WLstate.CurMode);	// Activate new AP config, same mode
+			if (iRV > erFAILURE)
+				iRV = 1;								// force to persist on return
 
 		} else if (INRANGE(ioU0Speed, ON, ioU2Speed)) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
@@ -146,7 +148,7 @@ int	xOptionsSet(int	OptNum, int OptVal, int Persist) {
 	if (OptNum < ioBXlast) {
 		iRV = xOptionsSetDirect(OptNum, OptVal);
 		// If nothing changed, force persistence flag to false
-		if (iRV == 0)
+		if (iRV <= 0)
 			Persist = 0;
 	} else if (OptNum == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
