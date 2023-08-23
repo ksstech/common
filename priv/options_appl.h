@@ -14,12 +14,15 @@ extern "C" {
 	#define iosetDEFAULTS	\
 	.B1_1	= 0,			\
 	.B1_4	= 1,			\
+	.B1_5	= 0,			\
 	.B1_6	= 0,			\
 	.B1_31	= 0,			\
 	.B1_32	= 1,			\
 	.B1_33	= 1,			\
 	.B1_34	= 0,			\
-	.B1_58	= 1,			\
+	.B1_59	= 0,			\
+	.B1_60	= 0,			\
+	.B1_61	= 1,			\
 	.B1_62	= 1,			\
 	.B2_0	= hostDEV,		\
 	.B2_1	= hostDEV,		\
@@ -33,6 +36,7 @@ extern "C" {
 	.B4_0	= 5,			\
 	.B4_1	= 7,			\
 	.B4_2	= 8,			\
+	.B4_4	= WIFI_AUTH_WPA2_PSK,	\
 	.B4_8	= 8,			\
 	.B4_15	= 2,			\
 	.B8_0	= 50,			\
@@ -45,6 +49,9 @@ extern "C" {
 	.B1_33	= 1,			\
 	.B1_34	= 1,			\
 	.B1_58	= 1,			\
+	.B1_59	= 0,			\
+	.B1_60	= 0,			\
+	.B1_61	= 1,			\
 	.B1_62	= 1,			\
 	.B2_0	= hostPROD,		\
 	.B2_1	= hostPROD,		\
@@ -58,6 +65,7 @@ extern "C" {
 	.B4_0	= 5,			\
 	.B4_1	= 1,			\
 	.B4_2	= 8,			\
+	.B4_4	= WIFI_AUTH_WPA2_PSK,	\
 	.B4_8	= 8,			\
 	.B4_15	= 2,			\
 	.B8_0	= 50,			\
@@ -93,8 +101,8 @@ extern "C" {
 		"dbgIdent\0"	"dbgActuate\0"	"dbgGUI\0"		"dbgGPI\0"		"\0"			"\0"			"\0"			"dbgDS248X\0"	\
 /*3*/	"U0speed\0"		"U1speed\0"		"U2speed\0"		"U0RXbuf\0"		"U1RXbuf\0"		"U2RXbuf\0"		"U0TXbuf\0"		"U1TXbuf\0"		\
 		"U2TXbuf\0"		"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			\
-		"\0"			"WLretry\0"		"WL Auth\0"		"SlHostMax\0"	"SlShowMax\0"													\
-/*4*/	"dlyDS1990\0"	"CLIbuf\0"		"ioMBews\0"		"dbgDBase\0"	"\0"			"\0"			"\0"			"\0"			\
+		"\0"			"WLretry\0"		"\0"			"SlHostMax\0"	"SlShowMax\0"													\
+/*4*/	"dlyDS1990\0"	"CLIbuf\0"		"ioMBews\0"		"dbgDBase\0"	"WL Auth\0"		"\0"			"\0"			"\0"			\
 		"GUIintval\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"			"toConsole\0"	\
 /*8*/	"dlyMBread\0"	"dlyMBpoll\0"	"\0"			"\0"			"\0"			"\0"			"\0"			"\0"
 
@@ -174,8 +182,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioWLram,						// storage 0=FLASH 1=RAM
 	ioWLscan,						// 0=Fast 1=All
 	ioWLsort,						// 0=SIGnal, 1=SECurity
-
-	ioB2_0 = 64,					// 2-bit options (64 -> 95)
+	ioB2_0 = 64,					// 2-bit options (64 -> 95) ####################################
 	ioHostMQTT = ioB2_0,
 	ioHostFOTA,
 	ioHostSLOG,
@@ -214,8 +221,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB2_29,
 	ioB2_30,
 	dbgDS248X,
-
-	ioB3_0 = 96, 					// 3-bit options (21x 96->116)
+	ioB3_0 = 96, 					// 3-bit options (21x 96->116) #################################
 	ioU0Speed = ioB3_0,				// UARTx speed
 	ioU1Speed,
 	ioU2Speed,
@@ -234,16 +240,15 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB3_15,
 	ioB3_16,
 	ioWLretry,
-	ioWLauth,						// OPEN->WEP->WPA_PSK->WPA2_PSK->WPA_WPA2_PSK->WPA2_ENTERPRISE etc...
+	ioB3_18,
 	ioSLhost,						// Highest # (lowest PRI) sent to host (must <= ioSLOGhi)
 	ioSLOGhi,						// Highest # (lowest PRI) evaluated
-
-	ioB4_0 = 117,					// 4-bit options (16x 117->132)
+	ioB4_0 = 117,					// 4-bit options (16x 117->132) ################################
 	dlyDS1990 = ioB4_0,				// delay (sec) between successive read same tag
 	ioCLIbuf, 						// 0=disable, 1+ = (n+1)*128 bytes in size
 	ioMBews,
 	dbgDBase,						// 1=Match, 2=Fields, 4=Records, 8=Database
-	ioB4_4,
+	ioWLauth,						// OPEN->WEP->WPA_PSK->WPA2_PSK->WPA_WPA2_PSK->WPA2_ENTERPRISE etc...
 	ioB4_5,
 	ioB4_6,
 	ioB4_7,
@@ -255,8 +260,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB4_13,
 	ioB4_14,
 	toConsole,
-
-	ioB8_0 = 133, 					// 8-bit options (8x 133->140)
+	ioB8_0 = 133, 					// 8-bit options (8x 133->140) #################################
 	dlyMBread = ioB8_0,
 	dlyMBpoll,
 	ioB8_2,
@@ -265,8 +269,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioB8_5,
 	ioB8_6,
 	ioB8_7,
-
-	ioBXlast = 141, 				// Non NVS options....
+	ioBXlast = 141, 				// Non NVS options #############################################
 	ioS_NWMO = ioBXlast,			// 141 {0->3} 			(network mode)
 	ioS_WIFI,						// 142 {ssid} {pswd}
 	ioS_MQTT,						// 143 {w.x.y.z[:???]}	(mqtt broker/proxy)
