@@ -255,6 +255,7 @@ DUMB_STATIC_ASSERT(sizeof(px_t) == sizeof(void *));
 
 // ################################## Structure pointer container ##################################
 
+struct epw_t;
 struct x32mma_t;
 struct x32mmab_t;
 struct x32stat_t;
@@ -265,14 +266,16 @@ union ow_rom_t;
 struct mb_srv_t;
 
 typedef union {
-	struct x32mma_t *	pMMA;
-	struct x32mmab_t *	pMMAB;
-	struct x32stat_t *	pSTAT;
-	struct pcnt_t *		psPCNT;
-	struct tsz_s *		pTSZ;
+	struct epw_t * psEPW;
+	struct x32mma_t * pMMA;
+	struct x32mmab_t * pMMAB;
+	struct x32stat_t * pSTAT;
+	struct pcnt_t * psPCNT;
+	struct tsz_s * pTSZ;
 	const struct vt_enum_t * psCX;
-	union ow_rom_t *	pOW_ROM;
-	struct mb_srv_t *	psMBSrv;
+	union ow_rom_t * pOW_ROM;
+	struct mb_srv_t * psMBSrv;
+	px_t pX;
 } ps_t;
 DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *));
 
