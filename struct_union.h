@@ -181,6 +181,8 @@ typedef union __attribute__((packed)) {
 	u32_t u24:24;
 	i32_t i24:24;
 	x8_t x8[3];
+	struct  __attribute__((packed)) { u16_t u16; u8_t u8a; };
+	struct  __attribute__((packed)) { i16_t i16; u8_t u8b; };
 } x24_t;
 DUMB_STATIC_ASSERT(sizeof(x24_t) == 3);
 
@@ -234,7 +236,7 @@ typedef union {
 	u32_t *	pu32;
 	i32_t *	pi32;
 	float *	pf32;
-// pointers to x32
+// pointers to x24
 	x24_t * px24;
 	u24_t * pu24;
 	i24_t * pi24;
