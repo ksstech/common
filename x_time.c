@@ -83,32 +83,32 @@ char * xTimeGetDayName(int num) { return (num < 7) ? (char *) DayNames[num] : pc
 char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num] : pcFAILURE; }
 
 /**
- * @brief	Converts epoch seconds to components of date and time.
- * @brief	This function converts a number of seconds since 1970-01-01T00:00:00.000Z
- * @brief	into the equivalent year, month, day, hours, minutes, and seconds representation.
- * @param[in]	timer - epoch seconds.
- * @param[out]	tm - pointer to tm structure to be filled with date & time components.
- * @param[in]	Elapsed - flag indicating if tValue is epoch (zero) or elapsed (non zero) seconds.
- * @return		none
+ * @brief	Converts seconds to date/time components based on epoch selected..
+ * @brief	U32NTP 1900-01-01T00:00:00.000Z onwards
+ * 			I32UNIX 1970-01-01T00:00:00.000Z before and after
+ * 			U32UNIX 1970-01-01T00:00:00.000Z onwards
+ * @param	tValue - epoch seconds.
+ * @param	psTM - pointer to tm structure to be filled with date & time components.
+ * @param	Elapsed - flag indicating if tValue is epoch (zero) or elapsed (non zero) seconds.
+ * @return	none
  */
 void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
     memset(psTM, 0, sizeof(tm_t));
 	#if (timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
-	if (tValue < 0)										// if time prior to 1970
-		return;
+	if (tValue < 0)	return;								// time prior to 1970 not supported
 	#endif
-    psTM->tm_sec	= tValue % SECONDS_IN_MINUTE;		// calculate seconds
-    tValue		/= SECONDS_IN_MINUTE;
-    psTM->tm_min	= tValue % MINUTES_IN_HOUR;	    	// calculate minutes
-    tValue		/= MINUTES_IN_HOUR;
-    psTM->tm_hour	= tValue % HOURS_IN_DAY;		    // calculate hours
-    tValue		/= HOURS_IN_DAY;
+    psTM->tm_sec = tValue % 60;							// calculate seconds
+    tValue /= 60;
+    psTM->tm_min = tValue % 60;							// calculate minutes
+    tValue /= 60;
+    psTM->tm_hour = tValue % 24;						// calculate hours
+    tValue /= 24;
     if (fElapsed) {
     	psTM->tm_mday = tValue;							// elapsed time, leave as is
     	return;
     }
     // calculate day# of week (0 -> 6)
-	psTM->tm_wday = (tValue + timeEPOCH_DAY_0_NUM) % DAYS_IN_WEEK;
+	psTM->tm_wday = (tValue + timeEPOCH_DAY_0_NUM) % 7;
 	// Calculate the current year
 	int	leap;
 	int year = YEAR_BASE_MIN;
@@ -122,11 +122,8 @@ void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
     while (1) {
     	int	DaysInMonth = DaysPerMonth[psTM->tm_mon];
     	// if date is in Feb and year is a leap year, add day for 29th Feb
-    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year))
-    		++DaysInMonth;
-    	if (tValue < DaysInMonth) {
-    		break;
-    	}
+    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year)) ++DaysInMonth;
+    	if (tValue < DaysInMonth) break;
    		tValue -= DaysInMonth;
    		++psTM->tm_mon;
     }
@@ -171,14 +168,11 @@ int	xTimeCalcDaysToDate(tm_t *psTM) {
  */
 seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 	// calculate seconds for hh:mm:ss portion
-	IF_myASSERT(debugPARAM, psTM->tm_sec < SECONDS_IN_MINUTE &&
-							psTM->tm_min < MINUTES_IN_HOUR &&
-							psTM->tm_hour < HOURS_IN_DAY);
+	IF_myASSERT(debugPARAM, psTM->tm_sec < 60 && psTM->tm_min < 60 && psTM->tm_hour < 24);
 	seconds_t Seconds	= psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
 
 	// Then add seconds for MM/DD values (check elapsed time/not, to handle DoM correctly 0/1 relative)
-	IF_myASSERT(debugPARAM, psTM->tm_mon < MONTHS_IN_YEAR &&
-							psTM->tm_mday <= DAYS_IN_MONTH_MAX);
+	IF_myASSERT(debugPARAM, psTM->tm_mon < 12 && psTM->tm_mday <= 31);
 	Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
 
 	// lastly, handle the years
