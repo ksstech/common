@@ -87,7 +87,7 @@ extern "C" {
 #endif
 
 #define iosetHELP_MESSAGE \
-/*1*/	"TZlocal\0"		"I2Cinit\0"		"I2Cdly\0"		"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"			\
+/*1*/	"TZlocal\0"		"I2Cinit\0"		"ioPrintFx\0"	"FOTA\0"		"Flags\0"		"Timeout\0"		"UpDown\0"		"\0"			\
 		"\0"			"dbgSyntax\0"	"dbgHTTPreq\0"	"dbgJSONwr\0"	"dbgSense\0"	"dbgMode\0"		"dbgEPinfo\0"	"dbgREflow\0"	\
 		"\0"			"\0"			"MQTTcon\0"		"MQTTsub\0"		"MQTTpub\0"		"\0"			"\0"			"Alerts\0"		\
 		"Memory\0"		"\0"			"REtable\0"		"\0"			"\0"			"LittleFS\0"	"TNETtrack\0"	"HTTPtrack\0"	\
@@ -111,9 +111,9 @@ extern "C" {
 enum {								// enumerated option numbers used by ioBxSET
 	ioB1_0 = 0,						// 1-bit options (64x 0->63)
 	ioTZlocal = ioB1_0,
-	ioI2Cinit,
-	ioI2Cdly,						// Auto remove I2C task Delay if 0, compact operations
-	ioFOTA,
+	ioI2Cinit,						// display I2C init debug data
+	ioPrintFx,
+	ioFOTA,							// Internal FOTA specific info
 	ioFlags,						// Log flag changes 0=DISable 1=ENable
 	ioTimeout,
 	ioUpDown,						// shutdown/restart tracking
