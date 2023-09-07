@@ -10,12 +10,11 @@ extern "C" {
 
 // ###################################### BUILD : CONFIG definitions ##############################
 
-#define	buildTERMINAL_CONTROLS_CURSOR		1
 
 // ##################################### MACRO definitions #########################################
 
-#define	TERMINAL_DEFAULT_MAX_X				80
-#define	TERMINAL_DEFAULT_MAX_Y				25
+#define	TERMINAL_DEFAULT_MAX_X				132
+#define	TERMINAL_DEFAULT_MAX_Y				48
 
 // ####################################### structures ##############################################
 
