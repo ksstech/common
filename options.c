@@ -113,13 +113,15 @@ int xOptionsSetDirect(int ON, int OV) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
 
 		} else if (ON == ioTNETstart) {					// TNET task start/stop
-			#include "x_telnet_server.h"
+			#include "tnet_server.h"
 			vTnetStartStop();
-
-		} else if (ON == ioHTTPstart) {					// HTTP task start/stop
+		}
+		#if (includeHTTP_TASK > 0)
+		else if (ON == ioHTTPstart) {					// HTTP task start/stop
 			#include "x_http_server.h"
 			vHttpStartStop();
 		}
+		#endif
 		#if	(cmakePLTFRM == HW_WIPY3)
 		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
 			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
