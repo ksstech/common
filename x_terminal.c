@@ -1,52 +1,50 @@
 /*
- * Copyright 2014-22 (c) Andre M. Maree / KSS Technologies (Pty) Ltd.
- * x_terminal.c
+ * x_terminal.c - Copyright (c) 2014-23 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
-#include	"hal_config.h"
-#include	"hal_usart.h"
-
-#include	"x_terminal.h"
-#include	"x_utilities.h"
+#include "hal_config.h"
+#include "hal_usart.h"
+#include "x_terminal.h"
+#include "x_utilities.h"
 
 // #################################### Global/public variables ####################################
 
 terminfo_t	sTI = {
-	.CurX=0,
-	.CurY=0,
-	.MaxX=TERMINAL_DEFAULT_MAX_X,
-	.MaxY=TERMINAL_DEFAULT_MAX_Y
-} ;
+	.CurX = 0,
+	.CurY = 0,
+	.MaxX = TERMINAL_DEFAULT_MAX_X,
+	.MaxY = TERMINAL_DEFAULT_MAX_Y
+};
 
 // ################################# Terminal (VT100) support routines #############################
 
-int	vANSIgets(char * pcBuf) { return 0 ; }
+int	vANSIgets(char * pcBuf) { return 0; }
 
 void vANSIputs(char * pStr) { while (*pStr) putcharX(*pStr++, configSTDIO_UART_CHAN); }
 
-void vANSIcursorsave(void) { vANSIputs("\033[s") ; }
+void vANSIcursorsave(void) { vANSIputs("\033[s"); }
 
-void vANSIcursorback(void) { vANSIputs("\033[u") ; }
+void vANSIcursorback(void) { vANSIputs("\033[u"); }
 
 void vANSIcursorread(void) {
-	char Buf[16] ;
-	vANSIputs("\033[6n") ;
+	char Buf[16];
+	vANSIputs("\033[6n");
 	vANSIgets(Buf);
 	// Add logic to read the buffer and return a string
 	// see http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
 }
 
-void vANSIclear2EOL(void) { vANSIputs("\033[0K") ; }
+void vANSIclear2EOL(void) { vANSIputs("\033[0K"); }
 
-void vANSIclear2BOL(void) { vANSIputs("\033[1K") ; }
+void vANSIclear2BOL(void) { vANSIputs("\033[1K"); }
 
-void vANSIclearline(void) { vANSIputs("\033[2K") ; }
+void vANSIclearline(void) { vANSIputs("\033[2K"); }
 
-void vANSIclearscreen(void) { vANSIputs("\033[2J") ; }
+void vANSIclearscreen(void) { vANSIputs("\033[2J"); }
 
-void vANSIclearhome(void) { vANSIclearscreen() ; vANSIhome() ; }
+void vANSIclearhome(void) { vANSIclearscreen(); vANSIhome(); }
 
-void vANSIhome(void) { vANSIputs("\033[1;1H") ; sTI.CurX = sTI.CurY = 1 ; }
+void vANSIhome(void) { vANSIputs("\033[1;1H"); sTI.CurX = sTI.CurY = 1; }
 
 char * pcANSIattrib(char * pBuf, u8_t a1, u8_t a2) {
 	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
@@ -100,8 +98,8 @@ int xANSIupdatecursor(int cChr) {
 }
 
 void vANSIattrib(u8_t a1, u8_t a2) {
-	char Buffer[sizeof("E[yyy;xxxH0")] ;
-	if (pcANSIattrib(Buffer, a1, a2) != Buffer) vANSIputs(Buffer) ;
+	char Buffer[sizeof("E[yyy;xxxH0")];
+	if (pcANSIattrib(Buffer, a1, a2) != Buffer) vANSIputs(Buffer);
 }
 
 void vANSIlocate(u8_t Row, u8_t Col) {
@@ -115,34 +113,33 @@ void vANSIlocate(u8_t Row, u8_t Col) {
  * @param y		rows
  */
 void vTerminalSetSize(u16_t x, u16_t y) {
-	sTI.MaxX = x ? x : TERMINAL_DEFAULT_MAX_X ;
-	sTI.MaxY = y ? y : TERMINAL_DEFAULT_MAX_Y ;
+	sTI.MaxX = x ? x : TERMINAL_DEFAULT_MAX_X;
+	sTI.MaxY = y ? y : TERMINAL_DEFAULT_MAX_Y;
 }
 
-void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32 ; }
+void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32; }
 
 int xTerminalAttached(void) {
-	int iRV = 0;
 	if (halUART_RxFifoUsed(configSTDIO_UART_CHAN) == 0) {
-		halUART_Flush(configSTDIO_UART_CHAN) ;			// nothing to read, ensure TX buffer is empty
-		putcharX(CHR_ENQ, configSTDIO_UART_CHAN) ;		// send ENQ to illicit a response
+		halUART_Flush(configSTDIO_UART_CHAN);			// nothing to read, ensure TX buffer is empty
+		putcharX(CHR_ENQ, configSTDIO_UART_CHAN);		// send ENQ to illicit a response
 		for (int i = 0; i < 5; ++i) {
-			vTaskDelay(pdMS_TO_TICKS(1)) ;				// wait a short while for a response
+			vTaskDelay(pdMS_TO_TICKS(1));				// wait a short while for a response
 			if (getcharX(configSTDIO_UART_CHAN) == CHR_ENQ) {
-				iRV = 1;
+				// add code to determine specific terminal type.
+				return 1;
 			}
 		}
 	}
-	// add code to determine specific terminal type.
-	return (iRV == 0) ? iRV : false;
+	return 0;
 }
 
 #if 0
 // ################################### Graphical plot ##############################################
 
 void	TerminalPlot(int16_t * dat, u32_t len) {
-	u32_t	i ;
-	TerminalClear() ;
+	u32_t	i;
+	TerminalClear();
 	for (i = 0; i < len; i++) { }
 }
 #endif
@@ -150,29 +147,29 @@ void	TerminalPlot(int16_t * dat, u32_t len) {
 // ##################################### functional tests ##########################################
 
 void vANSItestcode(void) {
-	vANSIputs("Waiting to clear the screen...") ;
+	vANSIputs("Waiting to clear the screen...");
 
-	vTaskDelay(5000) ;
+	vTaskDelay(5000);
 
-	vANSIclearhome() ;
-	vANSIlocate(5, 5) ;
-	vANSIputs("Normal text at 5,5") ;
+	vANSIclearhome();
+	vANSIlocate(5, 5);
+	vANSIputs("Normal text at 5,5");
 
-	vANSIlocate(7, 7) ;
-	vANSIattrib(colourFG_WHITE, colourBG_BLACK) ;
-	vANSIputs("White text on Black background at 7,7") ;
+	vANSIlocate(7, 7);
+	vANSIattrib(colourFG_WHITE, colourBG_BLACK);
+	vANSIputs("White text on Black background at 7,7");
 
-	vANSIlocate(9, 9) ;
-	vANSIattrib(attrREV_ON, attrULINE_ON) ;
-	vANSIputs("Normal underlined text at 9,9") ;
+	vANSIlocate(9, 9);
+	vANSIattrib(attrREV_ON, attrULINE_ON);
+	vANSIputs("Normal underlined text at 9,9");
 
-	vTaskDelay(5000) ;
-	vANSIlocate(9, 19) ;
-	vANSIputs("!!! OVERPRINTED TEXT !!!") ;
+	vTaskDelay(5000);
+	vANSIlocate(9, 19);
+	vANSIputs("!!! OVERPRINTED TEXT !!!");
 
-	vTaskDelay(5000) ;
-	vANSIlocate(9, 25) ;
-	vANSIclear2EOL() ;
+	vTaskDelay(5000);
+	vANSIlocate(9, 25);
+	vANSIclear2EOL();
 
-	vANSIattrib(attrRESET, 0) ;
+	vANSIattrib(attrRESET, 0);
 }
