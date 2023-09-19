@@ -181,7 +181,7 @@ enum {								// enumerated option numbers used by ioBxSET
 	ioWLevt,						// events track 0=DISABLE 1=ENABLE
 	ioWLram,						// storage 0=FLASH 1=RAM
 	ioWLscan,						// 0=Fast 1=All
-	ioWLsort,						// 0=SIGnal, 1=SECurity
+	ioWLsort,						// 0=SIGnal, 1=SECurity based AP selection
 	ioB2_0 = 64,					// 2-bit options (64 -> 95) ####################################
 	ioHostMQTT = ioB2_0,
 	ioHostFOTA,
