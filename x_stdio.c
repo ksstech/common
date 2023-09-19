@@ -6,7 +6,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include "hal_variables.h"
+#include "hal_config.h"
 #include "x_stdio.h"
 #include "x_ubuf.h"
 #include "printfx.h"
