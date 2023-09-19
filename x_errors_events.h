@@ -39,6 +39,9 @@ enum {
 	erINV_COMMAND,
 	erINV_ADDRESS,
 	erINV_FLDNUM,
+	erINV_DEVICE,
+	erINV_VERSION,
+	erINV_WHOAMI,
 	erHOST_NOTFOUND,
 	erINV_HOST,
 	erDUP_HOST,
@@ -49,7 +52,7 @@ enum {
 	erTO_L1toL2,
 	erTO_L2toL3,
 	erTO_L3toLX,
-
+	erNO_MEM,
 	erTABLE_FULL,
 	// Insert additional application error codes above here
 
@@ -60,8 +63,8 @@ enum {
 	erTFTP_FAILED,
 	// Below here MUST have messages defined, used in syslog functionality
 	erTX_QUEUE_SEND,
-	erFAILURE				= -1,	// general failure code
-	erSUCCESS				= 0,	// neutral success code
+	erFAILURE = -1,					// general failure code
+	erSUCCESS = 0,					// neutral success code
 } ;
 
 // ####################################### Structures ##############################################
