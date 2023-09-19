@@ -100,11 +100,13 @@ int xOptionsSetDirect(int ON, int OV) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
 		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf)) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
-
-		} else if (ON == ioTNETstart) {					// TNET task start/stop
+		}
+		#if (includeTNET_TASK > 0)
+		else if (ON == ioTNETstart) {					// TNET task start/stop
 			#include "tnet_server.h"
 			vTnetStartStop();
 		}
+		#endif
 
 		#if (includeHTTP_TASK > 0)
 		else if (ON == ioHTTPstart) {					// HTTP task start/stop
