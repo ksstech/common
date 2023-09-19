@@ -13,6 +13,7 @@ extern "C" {
 #if (configPRODUCTION == 0)			// Settings specifically for DEVelopment code builds
 	#define iosetDEFAULTS	\
 	.B1_1	= 0,			\
+	.B1_3	= 0,			\
 	.B1_4	= 1,			\
 	.B1_5	= 0,			\
 	.B1_6	= 0,			\
