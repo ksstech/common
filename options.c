@@ -2,18 +2,12 @@
  * Copyright (c) 2020-2023 Andre M. Maree/KSS Technologies (Pty) Ltd.
  */
 
-#include "hal_variables.h"			// required by options.h
+#include "hal_config.h"
 
-#include "options.h"
+#include "hal_device_includes.h"
+#include "hal_i2c_common.h"
 #include "hal_network.h"
 #include "hal_usart.h"
-#include "hal_gpio.h"
-#if	(halHAS_ADE7953 > 0)
-	#include "ade7953.h"
-#endif
-#if	(halHAS_M90E26 > 0)
-	#include "m90e26.h"
-#endif
 #include "printfx.h"
 #include "syslog.h"
 #include "x_errors_events.h"
@@ -98,17 +92,12 @@ int xOptionsSetDirect(int ON, int OV) {
 	if (iRV) {					// Something changed, do exception processing
 		if (ON == ioHostMQTT) {
 			setSYSFLAGS(sfOPT_MQTT);					// MQTT host changed
-
 		} else if (ON == ioAPindex) {
 			iRV = halWL_ConfigSTA(ioB2GET(ioAPindex), NULL, NULL);	// set the new AP config
-			if (iRV > erFAILURE)
-				iRV = halWL_SetMode(WLstate.CurMode);	// Activate new AP config, same mode
-			if (iRV > erFAILURE)
-				iRV = 1;								// force to persist on return
-
+			if (iRV > erFAILURE) iRV = halWL_SetMode(WLstate.CurMode);	// Activate new AP config, same mode
+			if (iRV > erFAILURE) iRV = 1;				// force to persist on return
 		} else if (INRANGE(ioU0Speed, ON, ioU2Speed)) {
 			halUART_SetSpeed(ON - ioU0Speed);			// UARTx speed change
-
 		} else if (INRANGE(ioU0RXbuf, ON, ioU2TXbuf)) {
 			halUART_CalcBuffersSizes();					// UARTx TX/RX buffer size change
 
@@ -116,23 +105,27 @@ int xOptionsSetDirect(int ON, int OV) {
 			#include "tnet_server.h"
 			vTnetStartStop();
 		}
+
 		#if (includeHTTP_TASK > 0)
 		else if (ON == ioHTTPstart) {					// HTTP task start/stop
 			#include "x_http_server.h"
 			vHttpStartStop();
 		}
 		#endif
+
 		#if	(cmakePLTFRM == HW_WIPY3)
 		else if (ON == ioWLantenna) {					// Ext Antenna en/disable
 			ESP_ERROR_CHECK(gpio_set_level(GPIO_NUM_21, ioB1GET(ioWLantenna)));
 		}
 		#endif
+
 		#if	(halHAS_M90E26 > 0)
 		else if (ON == m90e26NVS) {						// NVS calibration option
 			IF_EXEC_2(halHAS_M90E26 > 0, m90e26LoadNVSConfig, 0, OV);
 			IF_EXEC_2(halHAS_M90E26 == 2, m90e26LoadNVSConfig, 1, OV);
 		}
 		#endif
+
 		#if	(halHAS_ADE7953 > 0)
 		else if (ON == ade7953NVS) {						// NVS calibration option
 			IF_EXEC_2(halHAS_ADE7953 > 0, ade7953LoadNVSConfig, 0, OV);
@@ -155,8 +148,7 @@ int	xOptionsSet(int	OptNum, int OptVal, int Persist) {
 	} else if (OptNum == ioS_IOdef) {						// reset ALL IOSet values to defaults
 		xOptionsSetDefaults();
 	}
-	if ((iRV >= erSUCCESS) && Persist == 1)
-		setSYSFLAGS(vfIOSET);
+	if ((iRV >= erSUCCESS) && Persist == 1) setSYSFLAGS(vfNVSBLOB);
 	return iRV;
 }
 
