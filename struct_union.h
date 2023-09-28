@@ -13,10 +13,23 @@
 extern "C" {
 #endif
 
-// See http://www.catb.org/esr/structure-packing/
-// Also http://c0x.coding-guidelines.com/6.7.2.1.html
+// ########################################### Macros ##############################################
 
-// ###################################### enumerations #############################################
+#define	MAKE_VERSION(Maj, Min, Sub, Rev)	((Maj << 24) + (Min << 16) + (Sub << 8) + Rev)
+
+#define	makeMASK08x24(A,B,C,D,E,F,G,H,I)	\
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x00FFFFFF)))
+#define	makeMASK09x23(A,B,C,D,E,F,G,H,I,J)	\
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|(J&0x007FFFFF)))
+#define	makeMASK10x22(A,B,C,D,E,F,G,H,I,J,K) \
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|(K&0x03FFFFF)))
+#define	makeMASK11x21(A,B,C,D,E,F,G,H,I,J,K,L) \
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|K<<21|(L&0x01FFFFF)))
+#define	makeMASK12x20(A,B,C,D,E,F,G,H,I,J,K,L,M) \
+	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|K<<21|L<<20|(M&0x00FFFFF)))
+
+
+// ######################################## enumerations ###########################################
 
 typedef enum {
 	epSCALE_NANO	= -3,
@@ -28,7 +41,23 @@ typedef enum {
 	epSCALE_GIGA	= 3,
 } ep_scale_t;
 
+enum {								// {flags}{counter}
+	maskCOUNT	= 0x007FFFFF,		// counter value or mask
+	mfbCOUNT	= (1 << 23),		// Prefix 23x LSB uCount
+	mfbCOLOR	= (1 << 24),		// Use colours where applicable
+	mfbPRIOX	= (1 << 25),
+	mfbSTATE	= (1 << 26),
+	mfbSTACK	= (1 << 27),
+	mfbCORE		= (1 << 28),
+	mfbXTRAS	= (1 << 29),
+	mfbNL		= (1 << 30),		// PostFix 'n'
+	mfbRT		= (1 << 31),		// prefix RunTime
+};
+
 // ############################# common complex data types/ structures #############################
+
+// See http://www.catb.org/esr/structure-packing/
+// Also http://c0x.coding-guidelines.com/6.7.2.1.html
 
 typedef union {	struct { u32_t LSW, MSW; }; u64_t U64; } u64rt_t; // LSW then MSW sequence critical
 
@@ -50,20 +79,6 @@ typedef	union xVer_u {				// Version numbers
 	u32_t val;
 }  xVer_t;
 DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4);
-#define	MAKE_VERSION(Maj, Min, Sub, Rev)	((Maj << 24) + (Min << 16) + (Sub << 8) + Rev)
-
-enum {								// {flags}{counter}
-	maskCOUNT	= 0x007FFFFF,		// counter value or mask
-	mfbCOUNT	= (1 << 23),		// Prefix 23x LSB uCount
-	mfbCOLOR	= (1 << 24),		// Use colours where applicable
-	mfbPRIOX	= (1 << 25),
-	mfbSTATE	= (1 << 26),
-	mfbSTACK	= (1 << 27),
-	mfbCORE		= (1 << 28),
-	mfbXTRAS	= (1 << 29),
-	mfbNL		= (1 << 30),		// PostFix 'n'
-	mfbRT		= (1 << 31),		// prefix RunTime
-};
 
 typedef	union {
 	struct __attribute__((packed)) {// 8:24 Generic
@@ -147,18 +162,180 @@ typedef	union {
 } fm_t;
 DUMB_STATIC_ASSERT(sizeof(fm_t) == sizeof(u32_t));
 
-#define	makeMASK08x24(A,B,C,D,E,F,G,H,I)	\
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|(I&0x00FFFFFF)))
-#define	makeMASK09x23(A,B,C,D,E,F,G,H,I,J)	\
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|(J&0x007FFFFF)))
-#define	makeMASK10x22(A,B,C,D,E,F,G,H,I,J,K) \
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|(K&0x03FFFFF)))
-#define	makeMASK11x21(A,B,C,D,E,F,G,H,I,J,K,L) \
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|K<<21|(L&0x01FFFFF)))
-#define	makeMASK12x20(A,B,C,D,E,F,G,H,I,J,K,L,M) \
-	((u32_t) (A<<31|B<<30|C<<29|D<<28|E<<27|F<<26|G<<25|H<<24|I<<23|J<<22|K<<21|L<<20|(M&0x00FFFFF)))
-
 typedef struct report_t { char * pcBuf; size_t Size; fm_t sFM; } report_t;
+
+#pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
+
+typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
+	union {							// 1-bit option variables
+		struct __attribute__((packed)) {
+			u8_t B1_0	: 1 ;
+			u8_t B1_1	: 1 ;
+			u8_t B1_2	: 1 ;
+			u8_t B1_3	: 1 ;
+			u8_t B1_4	: 1 ;
+			u8_t B1_5	: 1 ;
+			u8_t B1_6	: 1 ;
+			u8_t B1_7	: 1 ;
+			u8_t B1_8	: 1 ;
+			u8_t B1_9	: 1 ;
+			u8_t B1_10	: 1 ;
+			u8_t B1_11	: 1 ;
+			u8_t B1_12	: 1 ;
+			u8_t B1_13	: 1 ;
+			u8_t B1_14	: 1 ;
+			u8_t B1_15	: 1 ;
+			u8_t B1_16	: 1 ;
+			u8_t B1_17	: 1 ;
+			u8_t B1_18	: 1 ;
+			u8_t B1_19	: 1 ;
+			u8_t B1_20	: 1 ;
+			u8_t B1_21	: 1 ;
+			u8_t B1_22	: 1 ;
+			u8_t B1_23	: 1 ;
+			u8_t B1_24	: 1 ;
+			u8_t B1_25	: 1 ;
+			u8_t B1_26	: 1 ;
+			u8_t B1_27	: 1 ;
+			u8_t B1_28	: 1 ;
+			u8_t B1_29	: 1 ;
+			u8_t B1_30	: 1 ;
+			u8_t B1_31	: 1 ;
+			u8_t B1_32	: 1 ;
+			u8_t B1_33	: 1 ;
+			u8_t B1_34	: 1 ;
+			u8_t B1_35	: 1 ;
+			u8_t B1_36	: 1 ;
+			u8_t B1_37	: 1 ;
+			u8_t B1_38	: 1 ;
+			u8_t B1_39	: 1 ;
+			u8_t B1_40	: 1 ;
+			u8_t B1_41	: 1 ;
+			u8_t B1_42	: 1 ;
+			u8_t B1_43	: 1 ;
+			u8_t B1_44	: 1 ;
+			u8_t B1_45	: 1 ;
+			u8_t B1_46	: 1 ;
+			u8_t B1_47	: 1 ;
+			u8_t B1_48	: 1 ;
+			u8_t B1_49	: 1 ;
+			u8_t B1_50	: 1 ;
+			u8_t B1_51	: 1 ;
+			u8_t B1_52	: 1 ;
+			u8_t B1_53	: 1 ;
+			u8_t B1_54	: 1 ;
+			u8_t B1_55	: 1 ;
+			u8_t B1_56	: 1 ;
+			u8_t B1_57	: 1 ;
+			u8_t B1_58	: 1 ;
+			u8_t B1_59	: 1 ;
+			u8_t B1_60	: 1 ;
+			u8_t B1_61	: 1 ;
+			u8_t B1_62	: 1 ;
+			u8_t B1_63	: 1 ;
+		};
+		u64_t ioB1;
+	};
+	union {							// 2-bit option variables
+		struct __attribute__((packed)) {
+			u8_t B2_0	: 2 ;
+			u8_t B2_1	: 2 ;
+			u8_t B2_2	: 2 ;
+			u8_t B2_3	: 2 ;
+			u8_t B2_4	: 2 ;
+			u8_t B2_5	: 2 ;
+			u8_t B2_6	: 2 ;
+			u8_t B2_7	: 2 ;
+			u8_t B2_8	: 2 ;
+			u8_t B2_9	: 2 ;
+			u8_t B2_10	: 2 ;
+			u8_t B2_11	: 2 ;
+			u8_t B2_12	: 2 ;
+			u8_t B2_13	: 2 ;
+			u8_t B2_14	: 2 ;
+			u8_t B2_15	: 2 ;
+			u8_t B2_16	: 2 ;
+			u8_t B2_17	: 2 ;
+			u8_t B2_18	: 2 ;
+			u8_t B2_19	: 2 ;
+			u8_t B2_20	: 2 ;
+			u8_t B2_21	: 2 ;
+			u8_t B2_22	: 2 ;
+			u8_t B2_23	: 2 ;
+			u8_t B2_24	: 2 ;
+			u8_t B2_25	: 2 ;
+			u8_t B2_26	: 2 ;
+			u8_t B2_27	: 2 ;
+			u8_t B2_28	: 2 ;
+			u8_t B2_29	: 2 ;
+			u8_t B2_30	: 2 ;
+			u8_t B2_31	: 2 ;
+		};
+		u64_t ioB2;
+	};
+	union {							// 3-bit option variables
+		struct __attribute__((packed)) {
+			u16_t B3_0	: 3 ;
+			u16_t B3_1	: 3 ;
+			u16_t B3_2	: 3 ;
+			u16_t B3_3	: 3 ;
+			u16_t B3_4	: 3 ;
+			u16_t B3_5	: 3 ;
+			u16_t B3_6	: 3 ;
+			u16_t B3_7	: 3 ;
+			u16_t B3_8	: 3 ;
+			u16_t B3_9	: 3 ;
+			u16_t B3_10	: 3 ;
+			u16_t B3_11	: 3 ;
+			u16_t B3_12	: 3 ;
+			u16_t B3_13	: 3 ;
+			u16_t B3_14	: 3 ;
+			u16_t B3_15	: 3 ;
+			u16_t B3_16	: 3 ;
+			u16_t B3_17	: 3 ;
+			u16_t B3_18	: 3 ;
+			u16_t B3_19	: 3 ;
+			u16_t B3_20	: 3 ;
+			u16_t B3_xx	: 1 ;
+		};
+		u64_t ioB3;
+	};
+	union {							// 4-bit option variables
+		struct __attribute__((packed)) {
+			u8_t B4_0	: 4 ;
+			u8_t B4_1	: 4 ;
+			u8_t B4_2	: 4 ;
+			u8_t B4_3	: 4 ;
+			u8_t B4_4	: 4 ;
+			u8_t B4_5	: 4 ;
+			u8_t B4_6	: 4 ;
+			u8_t B4_7	: 4 ;
+			u8_t B4_8	: 4 ;
+			u8_t B4_9	: 4 ;
+			u8_t B4_10	: 4 ;
+			u8_t B4_11	: 4 ;
+			u8_t B4_12	: 4 ;
+			u8_t B4_13	: 4 ;
+			u8_t B4_14	: 4 ;
+			u8_t B4_15	: 4 ;
+		};
+		u64_t ioB4;
+	};
+	union {							// 8-bit option variables (added at end)
+		struct __attribute__((packed)) {
+			u8_t B8_0;
+			u8_t B8_1;
+			u8_t B8_2;
+			u8_t B8_3;
+			u8_t B8_4;
+			u8_t B8_5;
+			u8_t B8_6;
+			u8_t B8_7;
+		};
+		u64_t ioB8;
+	};
+} ioset_t;
+DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
 
 // ######################################### 8 bit types ###########################################
 
@@ -171,7 +348,6 @@ typedef union { u16_t u16; i16_t i16; x8_t x8[2]; } x16_t;
 DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ######################################### 24 bit types ##########################################
-
 
 typedef union __attribute__((packed)) { u32_t u24:24; } u24_t;
 
