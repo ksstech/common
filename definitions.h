@@ -291,6 +291,8 @@ extern "C" {
 // return the number of elements in an array that is a member of a structure
 #define NO_ELEM(S,M)				((int)(sizeof(((S *)0)->M) / sizeof(((S *)0)->M[0])))
 
+#define ADR_TO_IDX(array, addr)		((addr - &array[0]) / sizeof(array[0]))
+
 #define	UNUSED(x)					(void) (x) ;
 #define strNUL						(char *) ""
 #define	strNULL						(char *) "null"
