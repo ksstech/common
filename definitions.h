@@ -259,9 +259,7 @@ extern "C" {
 
 // ################################## variable bit field flags #####################################
 
-/* Based on 32bit variables used as flags
- * Support primarily 1/2/4 bit sized flags
- */
+// Based on 32/64bit variables, support primarily 1/2/4 bit sized flags
 #define	mask1B						0x01
 #define	mask2B						0x03
 #define	mask3B						0x07

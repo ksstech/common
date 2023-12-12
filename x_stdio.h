@@ -1,7 +1,5 @@
 /*
- * Copyright 2014-21 Andre M Maree / KSS Technologies (Pty) Ltd.
- *
- * x_stdio.h
+ * x_stdio.h - Copyright (c) 2014-23 Andre M Maree / KSS Technologies (Pty) Ltd.
  */
 
 #pragma once

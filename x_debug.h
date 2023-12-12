@@ -1,6 +1,5 @@
 /*
- * Copyright 2014-21 Andre M. Maree/KSS Technologies (Pty) Ltd.
- * x_debug.h
+ * x_debug.h - Copyright (c) 2014-23 Andre M. Maree/KSS Technologies (Pty) Ltd.
  */
 
 #pragma once
