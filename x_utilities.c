@@ -309,12 +309,10 @@ u32_t u32RoundUP(u32_t Val, u32_t Mult) {
 // ################################### 1/2/4 bit field array support ###############################
 
 ba_t * pvBitArrayCreate(size_t Count, size_t Size) {
-	if (Size != 1 || Size != 2 || Size != 4)
-		return pvFAILURE;
-	size_t szBA = Count * Size;						// size in total # of bits
-	if (szBA & 0x00000007)
-		return pvFAILURE;								// not on a byte boundary
-	szBA >>= 3;										// size in bytes
+	if (Size != 1 || Size != 2 || Size != 4) return pvFAILURE;
+	size_t szBA = Count * Size;							// size in total # of bits
+	if (szBA & 0x00000007) return pvFAILURE;			// not on a byte boundary
+	szBA >>= 3;											// size in bytes
 	ba_t * psBA = pvRtosMalloc(sizeof(ba_t) + szBA);
 	psBA->ByteSize	= szBA;
 	psBA->Count		= Count;
