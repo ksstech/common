@@ -1,6 +1,5 @@
 /*
- * x_utilities.c
- * Copyright (c) 2014-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
+ * x_utilities.c - Copyright (c) 2014-23 Andre M. Maree / KSS Technologies (Pty) Ltd.
  */
 
 #include <string.h>
@@ -25,8 +24,7 @@ void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 };
 	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1));
 	++caActivity[i];
-	if (caActivity[i] == 0x3A)
-		caActivity[i] = CHR_0;
+	if (caActivity[i] == 0x3A) caActivity[i] = CHR_0;
 	printfx_lock(NULL);
 	vANSIcursorsave();
 	vANSIlocate(1, 120);
