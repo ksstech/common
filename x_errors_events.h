@@ -54,6 +54,7 @@ enum {
 	erTO_L3toLX,
 	erNO_MEM,
 	erTABLE_FULL,
+	erTIMEOUT,
 	// Insert additional application error codes above here
 
 	// tftp client
