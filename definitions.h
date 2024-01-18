@@ -144,6 +144,8 @@ extern "C" {
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
 #define	strCRLF						"\r\n"
+#define	strCR2xLF         "\r\n\n"
+
 #define	strINV_CVI					"Invalid cvI"
 
 #define	strPARSE_s					"~[%s]"
