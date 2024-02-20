@@ -1,6 +1,4 @@
-/*
- * definitions.h
- */
+// definitions.h
 
 #pragma once
 
@@ -104,12 +102,12 @@ extern "C" {
 #define	CHR_X						0x58
 #define	CHR_Y						0x59
 #define	CHR_Z						0x5A
-#define	CHR_L_SQUARE				0x5B		// '['
-#define	CHR_BACKSLASH				0x5C		// '\'
-#define	CHR_R_SQUARE				0x5D		// ']'
-#define	CHR_CARET					0x5E		// '^'
-#define	CHR_UNDERSCORE				0x5F		// '_'
-#define	CHR_GRAVE					0x60		// '`'
+#define	CHR_L_SQUARE		0x5B		// '['
+#define	CHR_BACKSLASH		0x5C		// '\'
+#define	CHR_R_SQUARE		0x5D		// ']'
+#define	CHR_CARET				0x5E		// '^'
+#define	CHR_UNDERSCORE	0x5F		// '_'
+#define	CHR_GRAVE				0x60		// '`'
 // Lowercase a-z
 #define	CHR_a						0x61
 #define	CHR_b						0x62
@@ -137,23 +135,23 @@ extern "C" {
 #define	CHR_x						0x78
 #define	CHR_y						0x79
 #define	CHR_z						0x7A
-#define	CHR_L_CURLY					0x7B		// '{'
-#define	CHR_VERT_BAR				0x7C		// '|'
-#define	CHR_R_CURLY					0x7D		// '}'
-#define	CHR_TILDE					0x7E		// '~'
-#define	CHR_DEL						0x7F		// c-8 = non printing !!!!
+#define	CHR_L_CURLY			0x7B		// '{'
+#define	CHR_VERT_BAR		0x7C		// '|'
+#define	CHR_R_CURLY			0x7D		// '}'
+#define	CHR_TILDE				0x7E		// '~'
+#define	CHR_DEL					0x7F		// c-8 = non printing !!!!
 
-#define	strCRLF						"\r\n"
-#define	strCR2xLF         "\r\n\n"
+#define	strCRLF					"\r\n"
+#define	strCR2xLF       "\r\n\n"
 
-#define	strINV_CVI					"Invalid cvI"
+#define	strINV_CVI			"Invalid cvI"
 
-#define	strPARSE_s					"~[%s]"
-#define	strPARSE_Ps					"~[%*s]"
-#define strPARSE_d					"~[%d]"
-#define strPARSE_lu					"~[]"
-#define strPARSE_I					"~[%-I]"
-#define strPARSE_b					"~[%b]"				// dynamic format
+#define	strPARSE_s			"~[%s]"
+#define	strPARSE_Ps			"~[%*s]"
+#define strPARSE_d			"~[%d]"
+#define strPARSE_lu			"~[]"
+#define strPARSE_I			"~[%-I]"
+#define strPARSE_b			"~[%b]"				// dynamic format
 
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
@@ -231,8 +229,7 @@ extern "C" {
 #define	TRIMMED(x,y,z,c)			( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
 
 /* Used to check build configuration where only 1 of 2 or 3 option may be selected
- * does not yet work correctly if a negative number is used in a definition..
- */
+ * does not yet work correctly if a negative number is used in a definition */
 #define	MORETHAN1of2(y,z)		((y==0 || y==1) && (z==0 || z==1) && ((y+z)==1)) ? 0 : 1
 #define	MORETHAN1of3(x,y,z)		((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((x+y+z)==1)) ? 0 : 1
 #define	MORETHAN1of4(w,x,y,z)	((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((w+x+y+z)==1)) ? 0 : 1
@@ -252,9 +249,14 @@ extern "C" {
 #define	IF_EXEC_5(T,F,a,b,c,d,e)	if (T) { do { F(a,b,c,d,e); } while (0); }
 #define	IF_EXEC_6(T,F,a,b,c,d,e,f)	if (T) { do { F(a,b,c,d,e,f); } while (0); }
 
-// ###################### macros to create variable width 32 & 64 bit masks ########################
-
-#define BIT_MASK8(a,b)				((0xFF >> (7-(b))) & ~((0x01 << (a))-1))
+// ##################### macros to create variable width 8/16/32/64 bit masks ######################
+/* a is the starting bit number 0 -> 7/15/31/63
+ * b is the ending bit number 0 -> 7/15/31/63
+ * a: 0->xFF, 1->xFE, 2->xFC, 3->xF8, 4->xF0, 5->xE0, 6->xC0, 7->x80
+ * b: 0->x01, 1->x03, 2->x07, 4->x0F, 4->x1F, 5->x3F, 6->x7F, 7->xFF
+ * m: 0,0->x01  0,1->0x03  0,4->x1F  3,4->x18  4,7->xF0  5,5->x20  5,7->xE0  6,7->xC0  7,7->x80
+ */
+#define BIT_MASK8(a,b)				(u8_t) ((u8_t)(0xFF >> (7-(b))) & ~((u8_t)(0x01 << (a))-1))
 #define BIT_MASK16(a,b)				((0xFFFF >> (15-(b))) & ~((0x0001 << (a))-1))
 #define BIT_MASK32(a,b)				((0xFFFFFFFF >> (31-(b))) & ~((1UL << (a))-1))
 #define BIT_MASK64(a,b)				((0xFFFFFFFFFFFFFFFF >> (63-(b))) & ~((1ULL << (a))-1))
