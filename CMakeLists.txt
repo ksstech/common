@@ -4,8 +4,8 @@ set( srcs "x_errors_events.c" "x_stdio.c" "x_terminal.c" "x_time.c" "x_utilities
 set( include_dirs "." )
 set( priv_include_dirs )
 idf_build_get_property( EXTRA_REQUIRES EXTRA_REQUIRES )
-set( requires ${EXTRA_REQUIRES})
-set( priv_requires "buffers http stringsX telnet_server printfx syslog systiming" )
+set( requires )
+set( priv_requires "buffers telnet_server" )
 
 idf_component_register(
 	SRCS ${srcs}
