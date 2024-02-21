@@ -145,7 +145,7 @@ typedef	struct __attribute__((__packed__)) tz_s {
 	char	dstname[4];
 #endif
 } tz_t;
-DUMB_STATIC_ASSERT(sizeof(tz_t) == (6 + configTIME_MAX_LEN_TZNAME + configTIME_MAX_LEN_DSTNAME));
+DUMB_STATIC_ASSERT((configTIME_MAX_LEN_TZNAME + configTIME_MAX_LEN_DSTNAME + 6) == sizeof(tz_t));
 
 typedef	struct tsz_s {
 	u64_t usecs;					// Must ALWAYS be UTC based value, adjust for local TZ
