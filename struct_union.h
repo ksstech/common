@@ -59,7 +59,7 @@ enum {								// {flags}{counter}
 // See http://www.catb.org/esr/structure-packing/
 // Also http://c0x.coding-guidelines.com/6.7.2.1.html
 
-typedef union {	struct { u32_t LSW, MSW; }; u64_t U64; } u64rt_t; // LSW then MSW sequence critical
+typedef union {	struct { u32_t LSW, MSW; }; u64_t U64val; } u64rt_t; // LSW then MSW sequence critical
 
 typedef union va_fake_t { char * pa; va_list va; } va_fake_t;
 
@@ -369,9 +369,9 @@ typedef union {
 	u32_t u32;
 	i32_t i32;
 	f32_t f32;
-	struct __attribute__((packed)) { x24_t x24; x8_t X8; };
-	struct __attribute__((packed)) { u24_t u24; x8_t U8; };
-	struct __attribute__((packed)) { i24_t i24; x8_t I8; };
+	struct __attribute__((packed)) { x24_t x24; x8_t X8val; };
+	struct __attribute__((packed)) { u24_t u24; x8_t U8val; };
+	struct __attribute__((packed)) { i24_t i24; x8_t I8val; };
 	x16_t x16[2];
 	x8_t x8[4];
 } x32_t;
