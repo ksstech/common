@@ -1,9 +1,4 @@
-/*
- * custom_file.h
- *
- * Used by x_stdio module to provide support for pseudo file functionality
- *
- */
+// custom_file.h
 
 #include	<stdint.h>
 
