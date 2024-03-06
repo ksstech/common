@@ -1,6 +1,6 @@
 #COMMON
 
-set( srcs "x_errors_events.c" "x_stdio.c" "x_terminal.c" "x_time.c" "x_utilities.c" )
+set( srcs "x_errors_events.c" "x_terminal.c" "x_time.c" "x_utilities.c" )
 set( include_dirs "." )
 set( priv_include_dirs )
 set( requires "main" )
