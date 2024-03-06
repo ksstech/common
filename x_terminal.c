@@ -1,8 +1,7 @@
-/*
- * x_terminal.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
- */
+// x_terminal.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_config.h"
+#include "hal_stdio.h"
 #include "hal_usart.h"
 #include "x_terminal.h"
 #include "x_utilities.h"
@@ -20,7 +19,7 @@ terminfo_t	sTI = {
 
 int	vANSIgets(char * pcBuf) { return 0; }
 
-void vANSIputs(char * pStr) { while (*pStr) putcharX(*pStr++, configSTDIO_UART_CHAN); }
+void vANSIputs(char * pStr) { while (*pStr) putchar(*pStr++); }
 
 void vANSIcursorsave(void) { vANSIputs("\033[s"); }
 
@@ -122,10 +121,10 @@ void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32; }
 int xTerminalAttached(void) {
 	if (halUART_RxFifoUsed(configSTDIO_UART_CHAN) == 0) {
 		halUART_Flush(configSTDIO_UART_CHAN);			// nothing to read, ensure TX buffer is empty
-		putcharX(CHR_ENQ, configSTDIO_UART_CHAN);		// send ENQ to illicit a response
+		putchar_direct(CHR_ENQ);						// send ENQ to illicit a response
 		for (int i = 0; i < 5; ++i) {
 			vTaskDelay(pdMS_TO_TICKS(1));				// wait a short while for a response
-			if (getcharX(configSTDIO_UART_CHAN) == CHR_ENQ) {
+			if (getchar() == CHR_ENQ) {
 				// add code to determine specific terminal type.
 				return 1;
 			}
