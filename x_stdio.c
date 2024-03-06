@@ -1,7 +1,4 @@
-/*
- * x_stdio.c
- * Copyright (c) 2014-22 Andre M. Maree / KSS Technologies (Pty) Ltd.
- */
+// x_stdio.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include <errno.h>
 #include <sys/stat.h>
@@ -35,7 +32,6 @@
 
 // ######################################## global functions #######################################
 
-#if 0
 #if		defined(__ARM_CC)
 
 	#include "rt_misc.h"
@@ -72,7 +68,7 @@ int		__fgetc (FILE * stream) {
 			return ch_saved ;						// and re-return last character
 		}
 		ch_saved = getchar_stdin() ; 				// nothing there, read & save as last char
-		putcharX(ch_saved, configSTDIO_UART_CHAN);	// echo to STDOUT
+		putchar(ch_saved);							// echo to STDOUT
     	return ch_saved ;							// and return...
 	}
 #if		(buildSTDIO_FILEIO == 1)
@@ -191,7 +187,7 @@ int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
     		return ((int)(len | 0x80000000U)) ;
     	}
     	*buf++ = (uint8_t) ch ;
-		putcharX(ch_saved, configSTDIO_UART_CHAN);	// echo to STDOUT
+		putchar(ch_saved);								// echo to STDOUT
     	len--;
     	return ((int)(len)) ;
     case FH_STDOUT:
@@ -241,48 +237,3 @@ int 	_ensure(int fh) { return 0 ; /* success*/ }
 
 int 	_tmpnam(char * name, int sig, unsigned maxlen) { return 0 ; /* fail, not supported*/ }
 
-#endif
-
-void vStdioDiagsReportFileInfo(const char * pName, struct stat *psStat) {
-	printfx_lock(NULL);
-	printfx_nolock(" %s : dev=%d  ino=%u  mode=%0x  nlink=%u  uid=%d  gid=%u  rdev=%d  size=%d", pName, psStat->st_dev,
-		psStat->st_ino, psStat->st_mode, psStat->st_nlink, psStat->st_uid, psStat->st_gid, psStat->st_rdev, psStat->st_size);
-	printfx_nolock("  aT=%R  mT=%R  cT=%R  bsize=%d  blocks=%d",
-		xTimeMakeTimestamp(psStat->st_atime, 0),
-		xTimeMakeTimestamp(psStat->st_mtime, 0),
-		xTimeMakeTimestamp(psStat->st_ctime, 0),
-		psStat->st_blksize, psStat->st_blocks);
-	printfx_nolock("  %sFILE  %sBLOCK  %sFIFO  %sCHR\r\n",
-		S_ISREG(psStat->st_mode) ? "" : "non",
-		S_ISBLK(psStat->st_mode) ? "" : "non",
-		S_ISFIFO(psStat->st_mode) ? "" : "non",
-		S_ISCHR(psStat->st_mode) ? "" : "non");
-	printfx_unlock(NULL);
-}
-
-void vStdioDiags(void) {
-	struct stat fs ;
-	int iRV = fstat(fileno(stdin), &fs) ;
-	IF_myASSERT(debugRESULT, iRV == 0) ;
-	vStdioDiagsReportFileInfo("stdin", &fs) ;
-
-	iRV = stat("stdin", &fs) ;
-	IF_myASSERT(debugRESULT, iRV == 0) ;
-	vStdioDiagsReportFileInfo("stdin", &fs) ;
-
-	iRV = fstat(fileno(stdout), &fs) ;
-	IF_myASSERT(debugRESULT, iRV == 0) ;
-	vStdioDiagsReportFileInfo("stdout", &fs) ;
-
-	iRV = stat("STDOUT", &fs) ;
-	IF_myASSERT(debugRESULT, iRV == 0) ;
-	vStdioDiagsReportFileInfo("stdout", &fs) ;
-
-	iRV = fstat(fileno(stderr), &fs) ;
-	IF_myASSERT(debugRESULT, iRV == 0) ;
-	vStdioDiagsReportFileInfo("stderr", &fs) ;
-
-	iRV = stat("stderr", &fs) ;
-	IF_myASSERT(debugRESULT, iRV == 0) ;
-	vStdioDiagsReportFileInfo("stderr", &fs) ;
-}
