@@ -116,7 +116,11 @@ void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32; }
 int xTerminalAttached(void) {
 	if (halUART_RxFifoUsed(configSTDIO_UART_CHAN) == 0) {
 		halUART_Flush(configSTDIO_UART_CHAN);			// nothing to read, ensure TX buffer is empty
-		putchar_direct(CHR_ENQ);						// send ENQ to illicit a response
+		#if (buildSTDOUT_LEVEL == 0)					// send ENQ to illicit a response
+		putchar(CHR_ENQ);							
+		#else
+		putchar_direct(CHR_ENQ);
+		#endif
 		for (int i = 0; i < 5; ++i) {
 			vTaskDelay(pdMS_TO_TICKS(1));				// wait a short while for a response
 			if (getchar() == CHR_ENQ) {
