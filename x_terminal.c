@@ -75,25 +75,20 @@ char * pcANSIlocate(char * pBuf, u8_t Row, u8_t Col) {
 	return pBuf;
 }
 
-int xANSIupdatecursor(int cChr) {
-	if (cChr == CHR_FF) {
-		sTI.CurX = sTI.CurY = 0;
-	} else if (cChr == CHR_CR) {
-		sTI.CurX = 0;
-	} else if (cChr == CHR_LF) {
+void xANSIupdatecursor(int cChr) {
+	if (cChr == CHR_FF) sTI.CurX = sTI.CurY = 0;
+	else if (cChr == CHR_CR) sTI.CurX = 0;
+	else if (cChr == CHR_LF) {
 		++sTI.CurY;
-		if (sTI.CurY == sTI.MaxY)
-			sTI.CurY = sTI.MaxY - 1;
+		if (sTI.CurY == sTI.MaxY) sTI.CurY = sTI.MaxY - 1;
 	} else if (cChr != CHR_NUL) {
 		++sTI.CurX;
 		if (sTI.CurX == sTI.MaxX) {
 			sTI.CurX = 0;
 			++sTI.CurY;
-			if (sTI.CurY == sTI.MaxY)
-				sTI.CurY = sTI.MaxY - 1;
+			if (sTI.CurY == sTI.MaxY) sTI.CurY = sTI.MaxY - 1;
 		}
 	}
-	return cChr;
 }
 
 void vANSIattrib(u8_t a1, u8_t a2) {
