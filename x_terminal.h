@@ -48,7 +48,7 @@ void vANSIhome(void) ;
 char * pcANSIattrib(char * pBuf, u8_t FG, u8_t BG) ;
 char * pcANSIlocate(char * pBuf, u8_t Row, u8_t Col) ;
 
-int xANSIupdatecursor(int cChr);
+void xANSIupdatecursor(int cChr);
 void vANSIattrib(u8_t FG, u8_t BG);
 void vANSIlocate(u8_t x, u8_t y);
 
