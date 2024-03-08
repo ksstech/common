@@ -71,13 +71,14 @@ DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8);
 
 typedef	union xVer_u {				// Version numbers
 	struct __attribute__((packed)) {
-		u8_t	ver_rev;			// Revision of Sub
-		u8_t	ver_sub;			// Sub version
-		u8_t	ver_min;			// Minor version
-		u8_t	ver_maj;			// Major version
+		u8_t ver_rev;				// Revision of Sub
+		u8_t ver_sub;				// Sub version
+		u8_t ver_min;				// Minor version
+		u8_t ver_maj;				// Major version
 	};
+	u8_t U8[4];
 	u32_t val;
-}  xVer_t;
+} xVer_t;
 DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4);
 
 typedef	union {
@@ -353,7 +354,7 @@ typedef union __attribute__((packed)) { u32_t u24:24; } u24_t;
 
 typedef union __attribute__((packed)) { i32_t i24:24; } i24_t;
 
-typedef union __attribute__((packed)) {
+typedef union __attribute__((packed)) x24_t {
 	u32_t u24:24;
 	i32_t i24:24;
 	x8_t x8[3];
@@ -364,22 +365,29 @@ DUMB_STATIC_ASSERT(sizeof(x24_t) == 3);
 
 // ########################################## x32 types ############################################
 
-typedef union {
+typedef union __attribute__((packed)) x32_t {
 	int	iX;
 	u32_t u32;
 	i32_t i32;
 	f32_t f32;
+	x16_t x16[2];
+	x8_t x8[4];
 	struct __attribute__((packed)) { x24_t x24; x8_t X8val; };
 	struct __attribute__((packed)) { u24_t u24; x8_t U8val; };
 	struct __attribute__((packed)) { i24_t i24; x8_t I8val; };
-	x16_t x16[2];
-	x8_t x8[4];
 } x32_t;
 DUMB_STATIC_ASSERT(sizeof(x32_t) == 4);
 
 // ########################################## x64 types ############################################
 
-typedef union { u64_t u64; i64_t i64; f64_t f64; x32_t x32[2]; x16_t x16[4]; x8_t x8[8]; } x64_t;
+typedef union __attribute__((packed)) x64_t {
+	u64_t u64; 
+	i64_t i64; 
+	f64_t f64; 
+	x32_t x32[2]; 
+	x16_t x16[4]; 
+	x8_t x8[8];
+} x64_t;
 DUMB_STATIC_ASSERT(sizeof(x64_t) == 8);
 
 // ########################################## Other types ##########################################
@@ -402,32 +410,27 @@ typedef union {
 	void * pv;
 	void * * ppv;
 	int * piX;
-// pointers to x64
-	x64_t * px64;
+	x64_t * px64;					// pointers to x64
 	u64_t *	pu64;
 	i64_t *	pi64;
 	double * pf64;
-// pointers to x32
-	x32_t * px32;
+	x32_t * px32;					// pointers to x32
 	u32_t *	pu32;
 	i32_t *	pi32;
 	float *	pf32;
-// pointers to x24
-	x24_t * px24;
+	x24_t * px24;					// pointers to x24
 	u24_t * pu24;
 	i24_t * pi24;
-// pointer to x16
-	x16_t *	px16;
+	x16_t *	px16;					// pointer to x16
 	u16_t *	pu16;
 	i16_t *	pi16;
-// pointers to x08
-	x8_t *	px8;
+	x8_t *	px8;					// pointers to x08
 	u8_t *	pu8;
 	s8_t *	pi8;
-	const char *pcc8;
-	seconds_t *	psec;
 	char * pc8;
 	char ** ppc8;
+	const char *pcc8;
+	seconds_t *	psec;
 } px_t;
 DUMB_STATIC_ASSERT(sizeof(px_t) == sizeof(void *));
 
