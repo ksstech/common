@@ -114,8 +114,8 @@ void vTerminalSetSize(u16_t x, u16_t y) {
 void vTerminalGetInfo(terminfo_t * psTI) { psTI->x32 = sTI.x32; }
 
 int xTerminalAttached(void) {
-	if (halUART_RxFifoUsed(configSTDIO_UART_CHAN) == 0) {
-		halUART_Flush(configSTDIO_UART_CHAN);			// nothing to read, ensure TX buffer is empty
+	if ((configCONSOLE_UART >= 0) && halUART_RxFifoUsed(configCONSOLE_UART) == 0) {
+		halUART_Flush(configCONSOLE_UART);				// nothing to read, ensure TX buffer is empty
 		#if (buildSTDOUT_LEVEL == 0)					// send ENQ to illicit a response
 		putchar(CHR_ENQ);							
 		#else
