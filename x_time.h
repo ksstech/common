@@ -147,10 +147,11 @@ typedef	struct __attribute__((__packed__)) tz_s {
 } tz_t;
 DUMB_STATIC_ASSERT((configTIME_MAX_LEN_TZNAME + configTIME_MAX_LEN_DSTNAME + 6) == sizeof(tz_t));
 
-typedef	struct tsz_s {
+typedef	struct __attribute__((__packed__)) tsz_t {
 	u64_t usecs;					// Must ALWAYS be UTC based value, adjust for local TZ
 	tz_t * pTZ;						// TZ info to be used for local DTZ calculation
 } tsz_t;
+DUMB_STATIC_ASSERT(sizeof(tsz_t) == (8 + sizeof(void*)));
 
 // ###################################### x_time related ###########################################
 
@@ -174,7 +175,7 @@ inline u32_t u32TS_FracMillis(u64_t TS) { return (u32_t) ((TS%MICROS_IN_SECOND)/
 inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / (u64_t) MICROS_IN_SECOND); }
 inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) { return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros; }
 
-void xTime_Test(void);
+void xTimeTest(void);
 
 #ifdef __cplusplus
 }
