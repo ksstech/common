@@ -3,7 +3,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include "hal_config.h"
+#include "hal_platform.h"
 #include "x_stdio.h"
 #include "x_ubuf.h"
 #include "printfx.h"

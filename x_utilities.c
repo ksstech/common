@@ -4,7 +4,7 @@
 
 #include <string.h>
 
-#include "hal_config.h"
+#include "hal_platform.h"
 #include "FreeRTOS_Support.h"
 #include "printfx.h"
 #include "x_utilities.h"
