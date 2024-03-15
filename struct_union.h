@@ -59,7 +59,7 @@ enum {								// {flags}{counter}
 // See http://www.catb.org/esr/structure-packing/
 // Also http://c0x.coding-guidelines.com/6.7.2.1.html
 
-typedef union {	struct { u32_t LSW, MSW; }; u64_t U64val; } u64rt_t; // LSW then MSW sequence critical
+typedef union u64rt_t {	struct { u32_t LSW, MSW; }; u64_t U64val; } u64rt_t; // LSW then MSW sequence critical
 
 typedef union va_fake_t { char * pa; va_list va; } va_fake_t;
 
@@ -69,17 +69,16 @@ typedef union mac_addr_t {
 } mac_addr_t;
 DUMB_STATIC_ASSERT(sizeof(mac_addr_t) == 8);
 
-typedef	union xVer_u {				// Version numbers
+typedef	union ver_t {				// Version numbers
 	struct __attribute__((packed)) {
-		u8_t ver_rev;				// Revision of Sub
-		u8_t ver_sub;				// Sub version
-		u8_t ver_min;				// Minor version
-		u8_t ver_maj;				// Major version
+		u8_t rev;					// Revision of Sub
+		u8_t sub;					// Sub version
+		u8_t min;					// Minor version
+		u8_t maj;					// Major version
 	};
-	u8_t U8[4];
 	u32_t val;
-} xVer_t;
-DUMB_STATIC_ASSERT(sizeof(xVer_t) == 4);
+} ver_t;
+DUMB_STATIC_ASSERT(sizeof(ver_t) == 4);
 
 typedef	union {
 	struct __attribute__((packed)) {// 8:24 Generic
@@ -141,10 +140,10 @@ typedef	union {
 		u32_t	rmCompact:1;
 		u32_t	rwF:1;
 		u32_t	rmE:1;
-		u32_t	rmD:1;
-		u32_t 	rmC:1;
-		u32_t	rmB:1;
-		u32_t	rmA:1;
+		u32_t	rmHdr2:1;
+		u32_t 	rmHdr1:1;
+		u32_t	rmNL:1;
+		u32_t	rmRT:1;
 	};
 	struct __attribute__((packed)) {// 10:22 Sensors reporting
 		u32_t	senFree:22;
@@ -164,8 +163,6 @@ typedef	union {
 DUMB_STATIC_ASSERT(sizeof(fm_t) == sizeof(u32_t));
 
 typedef struct report_t { char * pcBuf; size_t Size; fm_t sFM; } report_t;
-
-#pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
 
 typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
 	union {							// 1-bit option variables
@@ -337,6 +334,8 @@ typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
 	};
 } ioset_t;
 DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
+//#pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
+//#pragma GCC diagnostic pop
 
 // ######################################### 8 bit types ###########################################
 
@@ -350,9 +349,11 @@ DUMB_STATIC_ASSERT(sizeof(x16_t) == 2);
 
 // ######################################### 24 bit types ##########################################
 
-typedef union __attribute__((packed)) { u32_t u24:24; } u24_t;
+typedef union __attribute__((packed)) u24_t { u32_t u24:24; } u24_t;
+DUMB_STATIC_ASSERT(sizeof(u24_t) == 3);
 
-typedef union __attribute__((packed)) { i32_t i24:24; } i24_t;
+typedef union __attribute__((packed)) i24_t { i32_t i24:24; } i24_t;
+DUMB_STATIC_ASSERT(sizeof(i24_t) == 3);
 
 typedef union __attribute__((packed)) x24_t {
 	u32_t u24:24;
@@ -392,13 +393,13 @@ DUMB_STATIC_ASSERT(sizeof(x64_t) == 8);
 
 // ########################################## Other types ##########################################
 
-typedef struct __attribute__((packed)) {
+typedef struct __attribute__((packed)) Q8dot4_t {
 	int	res1 : 4;					// LSB
 	int fract : 4;
 	int integ : 8;
 } Q8dot4_t;
 
-typedef struct __attribute__((packed)) {
+typedef struct __attribute__((packed)) Q18dot2_t {
 	int	res1 : 4;					// LSB
 	int fract : 2;
 	int integ : 18;
@@ -406,7 +407,7 @@ typedef struct __attribute__((packed)) {
 
 // ###################################### px (32/64) pointer types #################################
 
-typedef union {
+typedef union px_t {
 	void * pv;
 	void * * ppv;
 	int * piX;
@@ -441,18 +442,18 @@ struct x32mma_t;
 struct x32mmab_t;
 struct x32stat_t;
 struct pcnt_t;
-struct tsz_s;
+struct tsz_t;
 struct vt_enum_t;
 union ow_rom_t;
 struct mb_srv_t;
 
-typedef union {
+typedef union ps_t {
 	struct epw_t * psEPW;
 	struct x32mma_t * pMMA;
 	struct x32mmab_t * pMMAB;
 	struct x32stat_t * pSTAT;
 	struct pcnt_t * psPCNT;
-	struct tsz_s * pTSZ;
+	struct tsz_t * pTSZ;
 	const struct vt_enum_t * psCX;
 	union ow_rom_t * pOW_ROM;
 	struct mb_srv_t * psMBSrv;
@@ -462,10 +463,10 @@ DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *));
 
 // #################################### All-In-One container #######################################
 
-typedef	union { x32_t x32; px_t px; ps_t ps; } z32_t;
+typedef	union z32_t { x32_t x32; px_t px; ps_t ps; } z32_t;
 DUMB_STATIC_ASSERT(sizeof(z32_t) == 4);
 
-typedef	union { x64_t x64; px_t px; ps_t ps; } z64_t;
+typedef	union z64_t { x64_t x64; px_t px; ps_t ps; } z64_t;
 DUMB_STATIC_ASSERT(sizeof(z64_t) == 8);
 
 #ifdef __cplusplus
