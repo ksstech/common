@@ -1,6 +1,4 @@
-/*
- * x_time.h - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
- */
+// x_time.h
 
 #pragma once
 
@@ -104,10 +102,10 @@ extern "C" {
 
 /*
  * xTimeFractionToMillis()
- * \brief		convert NTP fractions of a second to milliseconds
- * \param[in]	fraction of a second
- * \param[out]	none
- * \return		fraction of a second as a number of milliseconds
+ * @brief		convert NTP fractions of a second to milliseconds
+ * @param[in]	fraction of a second
+ * @param[out]	none
+ * @return		fraction of a second as a number of milliseconds
  */
 #define	xTimeFractionToMillis(x)	((u32_t) x / (u32_t) FRACTIONS_PER_MILLISEC)
 
@@ -115,10 +113,10 @@ extern "C" {
 
 /*
  * xTimeFractionToMicros()
- * \brief		convert NTP fractions of a second to microseconds
- * \param[in]	fraction of a second
- * \param[out]	none
- * \return		fraction of a second as a number of microseconds
+ * @brief		convert NTP fractions of a second to microseconds
+ * @param[in]	fraction of a second
+ * @param[out]	none
+ * @return		fraction of a second as a number of microseconds
  */
 #define	xTimeFractionToMicros(x)	((u32_t) x / (u32_t) FRACTIONS_PER_MICROSEC)
 
