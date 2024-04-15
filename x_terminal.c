@@ -60,13 +60,18 @@ char * pcANSIattrib(char * pBuf, u8_t a1, u8_t a2) {
 	return pBuf;
 }
 
+/**
+ * @brief	generate ANSI terminal cursor locate string
+ * @param	
+ * @return	[Adjusted] pointer	
+ */
 char * pcANSIlocate(char * pBuf, u8_t Row, u8_t Col) {
 	if (Row > 0 && Col > 0) {
 		*pBuf++	= CHR_ESC;
 		*pBuf++	= CHR_L_SQUARE;
-		pBuf	+= xU32ToDecStr(Row, pBuf);
+		pBuf += xU32ToDecStr(Row, pBuf);
 		*pBuf++	= CHR_SEMICOLON;
-		pBuf	+= xU32ToDecStr(Col, pBuf);
+		pBuf += xU32ToDecStr(Col, pBuf);
 		*pBuf++	= CHR_H;
 		sTI.CurX = (Col %= sTI.MaxX);
 		sTI.CurY = (Row %= sTI.MaxY);
@@ -75,6 +80,10 @@ char * pcANSIlocate(char * pBuf, u8_t Row, u8_t Col) {
 	return pBuf;
 }
 
+/**
+ * @brief 
+ * @param cChr
+ */
 void xANSIupdatecursor(int cChr) {
 	if (cChr == CHR_FF) sTI.CurX = sTI.CurY = 0;
 	else if (cChr == CHR_CR) sTI.CurX = 0;
