@@ -24,13 +24,13 @@ void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 };
 	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1));
 	++caActivity[i];
-	if (caActivity[i] == 0x3A) caActivity[i] = CHR_0;
-	printfx_lock(NULL);
-	vANSIcursorsave();
-	vANSIlocate(1, 120);
-	vANSIputs(caActivity);
-	vANSIcursorback();
-	printfx_unlock(NULL);
+	if (caActivity[i] == 0x3A) {
+		caActivity[i] = CHR_0;
+	}
+	vTermCursorSave();
+	vTermLocate(1, 120);
+	xTermPuts(caActivity, termBUILD_CTRL(1,1,1,termWAIT_MS));
+	vTermCursorBack();
 }
 
 void vUtilPrintCharacterSet(void) {
