@@ -265,12 +265,12 @@ int	xDigitsInU64(u64_t U64val, bool grouping) {
 int	xU32ToDecStr(u32_t U32val, char * pBuf) {
 	int	Len = 0;
 	if (U32val) {
-		u32_t	iTemp, Div = 1000000000UL;
+		u32_t iTemp, Div = 1000000000UL;
 		do {
 			iTemp = U32val / Div;
 			if (iTemp != 0 || Len > 0) {
 				*pBuf++	= iTemp + CHR_0;
-				U32val 	-= iTemp * Div;
+				U32val -= iTemp * Div;
 				++Len;
 			}
 			Div /= 10;
@@ -279,7 +279,7 @@ int	xU32ToDecStr(u32_t U32val, char * pBuf) {
 		*pBuf++ = CHR_0;									// answer is single '0'
 		++Len;
 	}
-	*pBuf	= 0;										// terminate
+	*pBuf = 0;						// terminate
 	return Len;
 }
 
@@ -300,7 +300,7 @@ u32_t u32Round(u32_t U32val, u32_t Mult) {
  * @return
  */
 u32_t u32RoundUP(u32_t U32val, u32_t Mult) {
-	U32val += Mult - 1;
+	U32val += (Mult - 1);
 	return (U32val < Mult) ? Mult : (U32val - (U32val % Mult));
 }
 
