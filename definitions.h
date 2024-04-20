@@ -37,7 +37,7 @@ extern "C" {
 #define	CHR_CAN						0x18		// c-X
 #define	CHR_EM						0x19		// c-Y
 #define	CHR_SUB						0x1A		// c-Z
-#define	CHR_ESC						0x1B		// c-3 #
+#define	CHR_ESC						0x1B		// c-3    \t
 #define	CHR_FS						0x1C		// c-4				c-FWD SLASH
 #define	CHR_GS						0x1D		// c-5		c-]
 #define	CHR_RS						0x1E		// c-6		c-"
@@ -240,13 +240,13 @@ extern "C" {
 
 #define	SWAP(v1, v2, t)				{t vx = v1; v1 = v2; v2 = vx; }
 
-#define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
-#define	IF_EXEC_0(T,F)				if (T) { do { F(); } while (0); }
-#define	IF_EXEC_1(T,F,a)			if (T) { do { F(a); } while (0); }
-#define	IF_EXEC_2(T,F,a,b)			if (T) { do { F(a,b); } while (0); }
-#define	IF_EXEC_3(T,F,a,b,c)		if (T) { do { F(a,b,c); } while (0); }
-#define	IF_EXEC_4(T,F,a,b,c,d)		if (T) { do { F(a,b,c,d); } while (0); }
-#define	IF_EXEC_5(T,F,a,b,c,d,e)	if (T) { do { F(a,b,c,d,e); } while (0); }
+#define	IF_EXEC(T,C)				        if (T) { do { C; } while (0); }
+#define	IF_EXEC_0(T,F)				      if (T) { do { F(); } while (0); }
+#define	IF_EXEC_1(T,F,a)			      if (T) { do { F(a); } while (0); }
+#define	IF_EXEC_2(T,F,a,b)			    if (T) { do { F(a,b); } while (0); }
+#define	IF_EXEC_3(T,F,a,b,c)		    if (T) { do { F(a,b,c); } while (0); }
+#define	IF_EXEC_4(T,F,a,b,c,d)		  if (T) { do { F(a,b,c,d); } while (0); }
+#define	IF_EXEC_5(T,F,a,b,c,d,e)	  if (T) { do { F(a,b,c,d,e); } while (0); }
 #define	IF_EXEC_6(T,F,a,b,c,d,e,f)	if (T) { do { F(a,b,c,d,e,f); } while (0); }
 
 // ##################### macros to create variable width 8/16/32/64 bit masks ######################
@@ -264,23 +264,23 @@ extern "C" {
 // ################################## variable bit field flags #####################################
 
 // Based on 32/64bit variables, support primarily 1/2/4 bit sized flags
-#define	mask1B						0x01
-#define	mask2B						0x03
-#define	mask3B						0x07
-#define	mask4B						0x0F
-#define	mask8B						0xFF
+#define	mask1B						        0x01
+#define	mask2B						        0x03
+#define	mask3B						        0x07
+#define	mask4B						        0x0F
+#define	mask8B						        0xFF
 
-#define	maskGET1B(f,i,s)			(((s)f >> ((i)*1)) & (s)mask1B)
-#define	maskGET2B(f,i,s)			(((s)f >> ((i)*2)) & (s)mask2B)
-#define	maskGET3B(f,i,s)			(((s)f >> ((i)*3)) & (s)mask3B)
-#define	maskGET4B(f,i,s)			(((s)f >> ((i)*4)) & (s)mask4B)
-#define	maskGET8B(f,i,s)			(((s)f >> ((i)*8)) & (s)mask8B)
+#define	maskGET1B(f,i,s)			    (((s)f >> ((i)*1)) & (s)mask1B)
+#define	maskGET2B(f,i,s)			    (((s)f >> ((i)*2)) & (s)mask2B)
+#define	maskGET3B(f,i,s)			    (((s)f >> ((i)*3)) & (s)mask3B)
+#define	maskGET4B(f,i,s)			    (((s)f >> ((i)*4)) & (s)mask4B)
+#define	maskGET8B(f,i,s)			    (((s)f >> ((i)*8)) & (s)mask8B)
 
-#define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<((i)*1); f&=~m; f|=((((s)x)<<((i)*1))&m);}
-#define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<((i)*2); f&=~m; f|=((((s)x)<<((i)*2))&m);}
-#define	maskSET3B(f,i,x,s)			{s m=(s)mask3B<<((i)*3); f&=~m; f|=((((s)x)<<((i)*3))&m);}
-#define	maskSET4B(f,i,x,s)			{s m=(s)mask4B<<((i)*4); f&=~m; f|=((((s)x)<<((i)*4))&m);}
-#define	maskSET8B(f,i,x,s)			{s m=(s)mask8B<<((i)*8); f&=~m; f|=((((s)x)<<((i)*8))&m);}
+#define	maskSET1B(f,i,x,s)			  {s m=(s)mask1B<<((i)*1); f&=~m; f|=((((s)x)<<((i)*1))&m);}
+#define	maskSET2B(f,i,x,s)			  {s m=(s)mask2B<<((i)*2); f&=~m; f|=((((s)x)<<((i)*2))&m);}
+#define	maskSET3B(f,i,x,s)			  {s m=(s)mask3B<<((i)*3); f&=~m; f|=((((s)x)<<((i)*3))&m);}
+#define	maskSET4B(f,i,x,s)			  {s m=(s)mask4B<<((i)*4); f&=~m; f|=((((s)x)<<((i)*4))&m);}
+#define	maskSET8B(f,i,x,s)			  {s m=(s)mask8B<<((i)*8); f&=~m; f|=((((s)x)<<((i)*8))&m);}
 
 // ###################################### General Use Macros #######################################
 
@@ -532,25 +532,20 @@ enum {								// 64bit bit masks
 } ;
 
 enum {								// ANSI standard terminal colors
-	attrRESET			= 0,
+	attrRESET			  = 0,
 	attrBRIGHT			= 1,
-	attrDIM				= 2,
+	attrDIM				  = 2,  attrNORM_INTEN  = 22,    
 	atrITALICS			= 3,
-	attrULINE_ON		= 4,
-	attrSLOW_BLINK		= 5,
-	attrRAPID_BLINK		= 6,
-	attrREV_ON			= 7,
-	attrHIDDEN			= 8,
-	attrSTRIKE_ON		= 9,
-
-	attrULINE_OFF		= 24,
-	attrREV_OFF			= 27,
-	attrREVEAL			= 28,
-	attrSTRIKE_OFF		= 29,
+	attrULINE_ON		= 4,  attrULINE_OFF		= 24,
+	attrSLOW_BLINK	= 5,
+	attrRAPID_BLINK	= 6,
+	attrREV_ON			= 7,  attrREV_OFF			= 27,
+	attrHIDDEN			= 8,  attrREVEAL			= 28,
+	attrSTRIKE_ON		= 9,  attrSTRIKE_OFF	= 29,
 
 // foreground colors
 	colourFOREGND		= 30,
-	colourFG_BLACK 		= colourFOREGND,
+	colourFG_BLACK 	= colourFOREGND,
 	colourFG_RED,
 	colourFG_GREEN,
 	colourFG_YELLOW,
@@ -560,7 +555,7 @@ enum {								// ANSI standard terminal colors
 	colourFG_WHITE,										// 30 + 7 = 37
 // background colors
 	colourBACKGND		= 40,
-	colourBG_BLACK		= colourBACKGND,
+	colourBG_BLACK	= colourBACKGND,
 	colourBG_RED,
 	colourBG_GREEN,
 	colourBG_YELLOW,
