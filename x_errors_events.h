@@ -1,6 +1,4 @@
-/*
- * x_errors_events.h
- */
+// x_errors_events.h
 
 #pragma	once
 
@@ -14,6 +12,30 @@ extern "C" {
 // ########################################### Macros ##############################################
 
 #define	TABLE_ENTRY_INT(x,y,z)		{ .iVal1=x , .iVal2=y , .pMess=z }
+
+/* ###################################### MBED error codes #########################################
+ *	High level error codes
+ *	======================
+ *	ssl.h			-0x5E80	-0x7F80	
+ *	cipher.h		-0x6080	-0x6380		Gap in ssl.h above
+ *	pkcs7.h			-0x5300	-0x5880
+ *	md.h			-0x5080	-0x5200
+ *	ecp.h			-0x4B00	-0x4F80
+ *	rsa.h			-0x4080	-0x4480
+ *	pk.h			-0x3880	-0x3F80
+ *	dhm.h			-0x3080	-0x3580
+ *	pkcs5			-0x2e00	-0x2F80		Gap in x509.h below
+ *	x509.h			-0x2080	-0x2980		And	-0x3000
+ *	pkcs12.h		-0x1E00	-0x1F80
+ *	pem.h			-0x1080	-0x1480
+ *
+ *	Low level error codes
+ *	=====================
+ * Bottom 7 digits (0->7F) of the complete code
+ */
+
+#define	mbedERROR_SMALLEST	(-0x7F80)	// MBEDTLS_ERR_SSL_HW_ACCEL_FAILED
+#define	mbedERROR_BIGGEST	(-0x1080)	// MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT
 
 // ######################################## Error and Event codes ##################################
 
