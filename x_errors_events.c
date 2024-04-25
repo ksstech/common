@@ -1,6 +1,4 @@
-/*
- * x_errors_events.c
- */
+// x_errors_events.c
 
 #include "x_errors_events.h"
 
