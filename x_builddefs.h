@@ -1,6 +1,4 @@
-/*
- * x_builddefs.h
- */
+// x_builddefs.h
 
 #pragma once
 
