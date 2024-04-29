@@ -43,38 +43,38 @@ extern "C" {
 #define	CHR_RS						0x1E		// c-6		c-"
 #define	CHR_US						0x1F		// c-7		c--		c-BACK SLASH
 #define	CHR_SPACE					0x20		// ' '
-#define	CHR_EXCLAMATION				0x21		// !
-#define	CHR_DOUBLE_QUOTE			0x22		// "
+#define	CHR_EXCLAMATION   0x21		// !
+#define	CHR_DOUBLE_QUOTE  0x22		// "
 #define	CHR_HASH					0x23		// #
-#define	CHR_DOLLAR					0x24		// $
-#define	CHR_PERCENT					0x25		// %
-#define	CHR_AMPERSAND				0x26		// &
-#define	CHR_SINGLE_QUOTE			0x27		// '
-#define	CHR_L_ROUND					0x28		// (
-#define	CHR_R_ROUND					0x29		// )
-#define	CHR_ASTERISK				0x2A		// *
+#define	CHR_DOLLAR				0x24		// $
+#define	CHR_PERCENT				0x25		// %
+#define	CHR_AMPERSAND			0x26		// &
+#define	CHR_SINGLE_QUOTE	0x27		// '
+#define	CHR_L_ROUND				0x28		// (
+#define	CHR_R_ROUND				0x29		// )
+#define	CHR_ASTERISK			0x2A		// *
 #define	CHR_PLUS					0x2B		// +
 #define	CHR_COMMA					0x2C		// ,
 #define	CHR_MINUS					0x2D		// -
-#define	CHR_FULLSTOP				0x2E		// .
-#define	CHR_FWDSLASH				0x2F		// /
-#define	CHR_0						0x30
-#define	CHR_1						0x31
-#define	CHR_2						0x32
-#define	CHR_3						0x33
-#define	CHR_4						0x34
-#define	CHR_5						0x35
-#define	CHR_6						0x36
-#define	CHR_7						0x37
-#define	CHR_8						0x38
-#define	CHR_9						0x39
+#define	CHR_FULLSTOP			0x2E		// .
+#define	CHR_FWDSLASH			0x2F		// /
+#define	CHR_0						  0x30
+#define	CHR_1 						0x31
+#define	CHR_2	  					0x32
+#define	CHR_3		  				0x33
+#define	CHR_4			  			0x34
+#define	CHR_5				  		0x35
+#define	CHR_6					  	0x36
+#define	CHR_7						  0x37
+#define	CHR_8			  			0x38
+#define	CHR_9				  		0x39
 #define	CHR_COLON					0x3A		// :
-#define	CHR_SEMICOLON				0x3B		// ;
-#define	CHR_L_ANGLED				0x3C		// <
-#define	CHR_EQUALS					0x3D		// =
-#define	CHR_R_ANGLED				0x3E		// >
-#define	CHR_QUESTION				0x3F		// ?
-#define	CHR_AT_SIGN					0x40		// @
+#define	CHR_SEMICOLON			0x3B		// ;
+#define	CHR_L_ANGLED			0x3C		// <
+#define	CHR_EQUALS				0x3D		// =
+#define	CHR_R_ANGLED			0x3E		// >
+#define	CHR_QUESTION			0x3F		// ?
+#define	CHR_AT_SIGN				0x40		// @
 // Uppercase A-Z
 #define	CHR_A						0x41		// Cursor UP
 #define	CHR_B						0x42		// Cursor DOWN
