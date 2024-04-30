@@ -170,8 +170,21 @@ seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
 inline u32_t u32TS_Seconds(u64_t TS) { return (u32_t) (TS / (u64_t) MICROS_IN_SECOND); }
 inline u32_t u32TS_FracMillis(u64_t TS) { return (u32_t) ((TS%MICROS_IN_SECOND)/MICROS_IN_MILLISEC); }
 
-inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / (u64_t) MICROS_IN_SECOND); }
-inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) { return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros; }
+/**
+ * @brief	Convert 64_t timestamp to u32_t seconds value
+ * @return	u32_t seconds value
+*/
+inline u32_t xTimeStampAsSeconds(u64_t Timestamp) {
+	return (u32_t) (Timestamp / MICROS_IN_SECOND);
+}
+
+/**
+ * @brief	Convert u32_t seconds & microseconds values to u64_t timestamp
+ * @return	u64_t timestamp representing the seconds & microseconds combined
+*/
+inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) {
+	return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros; 
+}
 
 void xTimeTest(void);
 
