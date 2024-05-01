@@ -193,6 +193,13 @@ seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
 	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight;
 }
 
+seconds_t xTimeReport(tm_t *psTM) {
+	seconds_t sRV = xTimeCalcSeconds(psTM, 0);
+	wprintfx(NULL, "%d/%02d/%02d %d:%02d:%02d DoW=%d DoY=%d (%lu)\r\n", psTM->tm_year+1970, psTM->tm_mon+1,
+		psTM->tm_mday, psTM->tm_hour, psTM->tm_min, psTM->tm_sec, psTM->tm_wday, psTM->tm_yday, sRV);
+	return sRV;
+}
+
 // ##################################### functional tests ##########################################
 
 //	http://www.timeanddate.com/countdown/to?p0=198&year=1900&month=1&day=1&hour=0&min=0&sec=0
