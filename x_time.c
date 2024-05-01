@@ -8,8 +8,9 @@
 
 #include <string.h>
 
-#define	debugFLAG					0xF000
+// ########################################## Macros ###############################################
 
+#define	debugFLAG					0xF000
 #define	debugTIMING					(debugFLAG_GLOBAL & debugFLAG & 0x1000)
 #define	debugTRACK					(debugFLAG_GLOBAL & debugFLAG & 0x2000)
 #define	debugPARAM					(debugFLAG_GLOBAL & debugFLAG & 0x4000)
@@ -164,12 +165,32 @@ int	xTimeCalcDaysToDate(tm_t *psTM) {
  * @return	time in seconds
  */
 seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
+	#if (buildNEW_CODE > 0)
+	seconds_t Seconds;
+	if (psTM->tm_sec<60 && psTM->tm_min<60 && psTM->tm_hour<24 && psTM->tm_mon<12 && psTM->tm_mday<=31) {
+		Seconds = psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
+		Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
+		if (fElapsed) {
+			Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR_AVG);
+		} else {
+			// calc # of leap years
+			int Leap;
+			Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
+			Leap += xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN);
+			// add seconds in prev years
+			Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Leap * SECONDS_IN_DAY);
+		}
+	} else {
+		Seconds = 0;
+	}
+	#else
 	// calculate seconds for hh:mm:ss portion
 	IF_myASSERT(debugPARAM, psTM->tm_sec < 60 && psTM->tm_min < 60 && psTM->tm_hour < 24);
-	seconds_t Seconds	= psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
+	seconds_t Seconds = psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
 
 	// Then add seconds for MM/DD values (check elapsed time/not, to handle DoM correctly 0/1 relative)
-	IF_myASSERT(debugPARAM, psTM->tm_mon < 12 && psTM->tm_mday <= 31);
+	IF_myASSERT(debugPARAM, psTM->tm_mon < 12);
+	IF_myASSERT(debugPARAM, psTM->tm_mday <= 31);
 	Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
 
 	// lastly, handle the years
@@ -177,10 +198,11 @@ seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR_AVG);
 	} else {
 		IF_myASSERT(debugPARAM, psTM->tm_year < (YEAR_BASE_MAX - YEAR_BASE_MIN));
-		i32_t Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
-		i32_t Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;	// calc # of leap years
+		int Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
+		int Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;	// calc # of leap years
 		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY); // add seconds in prev years
 	}
+	#endif
 	return Seconds;
 }
 
