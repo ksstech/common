@@ -182,7 +182,7 @@ inline u32_t xTimeStampAsSeconds(u64_t Timestamp) {
  * @brief	Convert u32_t seconds & microseconds values to u64_t timestamp
  * @return	u64_t timestamp representing the seconds & microseconds combined
 */
-inline u64_t xTimeMakeTimestamp(u32_t Seconds, u32_t Micros) {
+inline u64_t xTimeMakeTimeStamp(u32_t Seconds, u32_t Micros) {
 	return ((u64_t) Seconds * (u64_t) MICROS_IN_SECOND) + (u64_t) Micros; 
 }
 
