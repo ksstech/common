@@ -563,7 +563,7 @@ enum {								// ANSI standard terminal colors
 	colourBG_MAGENTA,
 	colourBG_CYAN,
 	colourBG_WHITE,										// 40 + 7 = 47
-} ;
+};
 
 #ifdef __cplusplus
 }

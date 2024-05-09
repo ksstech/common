@@ -97,8 +97,8 @@ extern "C" {
 
 // ############################### fractional seconds manipulation #################################
 
-#define FRACTIONS_PER_MILLISEC		(0x0000000100000000ULL / 1000ULL)
-#define FRACTIONS_PER_MICROSEC		(0x0000000100000000ULL / 1000000ULL)
+#define FRACTIONS_PER_MILLISEC		(0x100000000ULL / 1000ULL)
+#define FRACTIONS_PER_MICROSEC		(0x100000000ULL / 1000000ULL)
 
 /*
  * xTimeFractionToMillis()

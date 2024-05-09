@@ -73,14 +73,15 @@ void xGenerateUUID(char * pBuf) {
 	srand(clock());
 	for (int t = 0; t < 36; ++t, ++pBuf) {
 	    int r = rand() % 16;
-	    if (t == 8 || t == 13 || t == 18 || t == 23)
+	    if (t == 8 || t == 13 || t == 18 || t == 23) {
 	    	*pBuf = CHR_MINUS;
-	    else if (t == 14)
+		} else if (t == 14) {
 	    	*pBuf = CHR_4;
-	    else if (t == 19)
+		} else if (t == 19) {
 	    	*pBuf = szHex[(r & 0x03) | 0x08];
-	    else
+		} else {
 	    	*pBuf = szHex[r];
+		}
 	}
 	IF_P(debugRESULT, "%.36s\r\n", pBuf);
 }
