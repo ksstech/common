@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "hal_platform.h"
+#include "hal_memory.h"
 #include "FreeRTOS_Support.h"
 #include "printfx.h"
 #include "x_utilities.h"
@@ -83,7 +84,7 @@ void xGenerateUUID(char * pBuf) {
 	    	*pBuf = szHex[r];
 		}
 	}
-	IF_P(debugRESULT, "%.36s\r\n", pBuf);
+	IF_PX(debugRESULT, "%.36s\r\n", pBuf);
 }
 
 // ################################ Random number & string support #################################

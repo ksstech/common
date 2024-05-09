@@ -253,7 +253,7 @@ int xTermIdentify(void) {
 	char Buffer[64];
 	xTermPuts(termCSI "Z", termBUILD_CTRL(1,1,0,termWAIT_MS));
 	int iRV = xTermGets(Buffer, sizeof(Buffer), 0x7F, termBUILD_CTRL(1,0,1,500));
-	RPL(" [iRV=%d '%s']\r\n", iRV, Buffer);
+	PX(" [iRV=%d '%s']\r\n", iRV, Buffer);
 	return erSUCCESS;
 }
 
