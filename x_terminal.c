@@ -104,11 +104,13 @@ char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col) {
 }
 
 char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
-	if (a1 <= colourBG_WHITE && a2 <= colourBG_WHITE) {
-		pBuf = stpcpy(pBuf, termCSI);
+	if (a1 <= colourBG_WHITE) {							// as long as valid
+		pBuf = stpcpy(pBuf, termCSI);					// MUST process 1st param
 		pBuf += xU32ToDecStr(a1, pBuf);
-		*pBuf++ = CHR_SEMICOLON;
-		pBuf += xU32ToDecStr(a2, pBuf);
+		if (INRANGE(attrBRIGHT, a2, colourBG_WHITE)) {	// 2nd param is optional
+			*pBuf++ = CHR_SEMICOLON;
+			pBuf += xU32ToDecStr(a2, pBuf);
+		}
 		*pBuf++ = CHR_m;
 	}
 	*pBuf = 0;									// terminate
@@ -289,7 +291,7 @@ void vTermtestcode(void) {
 	xTermPuts("Normal text at 5,5", termBUILD_CTRL(1,1,1,termWAIT_MS));
 
 	vTermLocate(7, 7);
-	vTermAttrib(colourFG_WHITE, colourBG_BLACK);
+	vTermAttrib(attrRESET, colourFG_WHITE);
 	xTermPuts("White text on Black background at 7,7", termBUILD_CTRL(1,1,1,termWAIT_MS));
 
 	vTermLocate(9, 9);
