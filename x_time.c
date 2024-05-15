@@ -48,14 +48,14 @@ int	xTimeIsLeapYear(int year) {
 /**
  * @brief	calculate the number of leap days from epoch start to (year-01-01T00:00:00.000Z
  * @brief	value supplied for year date must not be before epoch start
- * @param[in]	year - ending year for calculation
- * @return		number of leap years, FAILURE if parameter out of range
+ * @param	year ending for calculation
+ * @return	number of leap years, FAILURE if parameter out of range
  */
 int	xTimeCountLeapYears(int NowYear) {
 	if (OUTSIDE(YEAR_BASE_MIN, NowYear, YEAR_BASE_MAX))
 		return erFAILURE;
-	int	Leaps, TestYear;
-	for (TestYear = YEAR_BASE_MIN, Leaps = 0; TestYear < NowYear; TestYear++) {
+	int	Leaps = 0;
+	for (int TestYear = YEAR_BASE_MIN; TestYear < NowYear; TestYear++) {
 		if (xTimeIsLeapYear(TestYear))
 			++Leaps;
 	}
@@ -121,8 +121,10 @@ void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
     while (1) {
     	int	DaysInMonth = DaysPerMonth[psTM->tm_mon];
     	// if date is in Feb and year is a leap year, add day for 29th Feb
-    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year)) ++DaysInMonth;
-    	if (tValue < DaysInMonth) break;
+    	if (psTM->tm_mon == 1 && xTimeIsLeapYear(year))
+			++DaysInMonth;
+    	if (tValue < DaysInMonth)
+			break;
    		tValue -= DaysInMonth;
    		++psTM->tm_mon;
     }
@@ -166,9 +168,9 @@ int	xTimeCalcDaysToDate(tm_t *psTM) {
  * @return	time in seconds
  */
 seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
-	#if (buildNEW_CODE > 0)
 	seconds_t Seconds;
-	if (psTM->tm_sec<60 && psTM->tm_min<60 && psTM->tm_hour<24 && psTM->tm_mon<12 && psTM->tm_mday<=31) {
+	if ((psTM->tm_sec < 60) && (psTM->tm_min < 60) && (psTM->tm_hour < 24) &&
+		(psTM->tm_mon < 12) && (psTM->tm_mday <= 31)) {
 		Seconds = psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
 		Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
 		if (fElapsed) {
@@ -184,26 +186,6 @@ seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
 	} else {
 		Seconds = 0;
 	}
-	#else
-	// calculate seconds for hh:mm:ss portion
-	IF_myASSERT(debugPARAM, psTM->tm_sec < 60 && psTM->tm_min < 60 && psTM->tm_hour < 24);
-	seconds_t Seconds = psTM->tm_sec + (psTM->tm_min * SECONDS_IN_MINUTE) + (psTM->tm_hour * SECONDS_IN_HOUR);
-
-	// Then add seconds for MM/DD values (check elapsed time/not, to handle DoM correctly 0/1 relative)
-	IF_myASSERT(debugPARAM, psTM->tm_mon < 12);
-	IF_myASSERT(debugPARAM, psTM->tm_mday <= 31);
-	Seconds	+= (DaysToMonth[psTM->tm_mon] + (psTM->tm_mday - (fElapsed ? 0 : 1))) * SECONDS_IN_DAY;
-
-	// lastly, handle the years
-	if (fElapsed) {
-		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR_AVG);
-	} else {
-		IF_myASSERT(debugPARAM, psTM->tm_year < (YEAR_BASE_MAX - YEAR_BASE_MIN));
-		int Leap = xTimeIsLeapYear(psTM->tm_year + YEAR_BASE_MIN) && (psTM->tm_mon > 1) ? 1 : 0;
-		int Count = xTimeCountLeapYears(psTM->tm_year + YEAR_BASE_MIN) + Leap;	// calc # of leap years
-		Seconds	+= (psTM->tm_year * SECONDS_IN_YEAR365) + (Count * SECONDS_IN_DAY); // add seconds in prev years
-	}
-	#endif
 	return Seconds;
 }
 
