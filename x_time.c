@@ -93,7 +93,8 @@ char * xTimeGetMonthName(int num) { return (num < 12) ? (char *) MonthNames[num]
 void xTimeGMTime(seconds_t tValue, tm_t * psTM, int fElapsed) {
     memset(psTM, 0, sizeof(tm_t));
 	#if (timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
-	if (tValue < 0)	return;								// time prior to 1970 not supported
+	if (tValue < 0)
+		return;											// time prior to 1970 not supported
 	#endif
     psTM->tm_sec = tValue % 60;							// calculate seconds
     tValue /= 60;
