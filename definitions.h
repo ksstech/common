@@ -141,6 +141,7 @@ extern "C" {
 #define	CHR_TILDE				0x7E		// '~'
 #define	CHR_DEL					0x7F		// c-8 = non printing !!!!
 
+#define	strNL					  "\r\n"      // Linux = NL, macOS = CR,  Win = CRLF
 #define	strCRLF					"\r\n"
 #define	strCR2xLF       "\r\n\n"
 
@@ -151,7 +152,7 @@ extern "C" {
 #define strPARSE_d			"~[%d]"
 #define strPARSE_lu			"~[]"
 #define strPARSE_I			"~[%-I]"
-#define strPARSE_b			"~[%b]"				// dynamic format
+#define strPARSE_b			"~[%b]"     // dynamic format
 
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
