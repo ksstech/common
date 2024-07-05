@@ -42,6 +42,7 @@ extern "C" {
 #define	CHR_GS						0x1D		// c-5		c-]
 #define	CHR_RS						0x1E		// c-6		c-"
 #define	CHR_US						0x1F		// c-7		c--		c-BACK SLASH
+
 #define	CHR_SPACE					0x20		// ' '
 #define	CHR_EXCLAMATION   0x21		// !
 #define	CHR_DOUBLE_QUOTE  0x22		// "
@@ -142,8 +143,12 @@ extern "C" {
 #define	CHR_DEL					0x7F		// c-8 = non printing !!!!
 
 #define	strNL					  "\r\n"      // Linux = NL, macOS = CR,  Win = CRLF
+#define	strNLx2         "\r\n\n"
 #define	strCRLF					"\r\n"
 #define	strCR2xLF       "\r\n\n"
+#define strNUL					(char *) ""
+#define	strNULL					(char *) "null"
+#define	strOOR					(char *) "pOOR"
 
 #define	strINV_CVI			"Invalid cvI"
 
@@ -297,9 +302,6 @@ extern "C" {
 #define ADR_TO_IDX(array, addr)		((addr - &array[0]) / sizeof(array[0]))
 
 #define	UNUSED(x)					(void) (x) ;
-#define strNUL						(char *) ""
-#define	strNULL						(char *) "null"
-#define	strOOR						(char *) "pOOR"
 
 #define	debugAPPL_PLACE				"I'm LOST!!\n"
 
