@@ -37,7 +37,7 @@ extern "C" {
 #define	CHR_CAN						0x18		// c-X
 #define	CHR_EM						0x19		// c-Y
 #define	CHR_SUB						0x1A		// c-Z
-#define	CHR_ESC						0x1B		// c-3    \t
+#define	CHR_ESC						0x1B		// c-3	\t
 #define	CHR_FS						0x1C		// c-4				c-FWD SLASH
 #define	CHR_GS						0x1D		// c-5		c-]
 #define	CHR_RS						0x1E		// c-6		c-"
@@ -47,35 +47,35 @@ extern "C" {
 #define	CHR_EXCLAMATION   0x21		// !
 #define	CHR_DOUBLE_QUOTE  0x22		// "
 #define	CHR_HASH					0x23		// #
-#define	CHR_DOLLAR				0x24		// $
-#define	CHR_PERCENT				0x25		// %
-#define	CHR_AMPERSAND			0x26		// &
-#define	CHR_SINGLE_QUOTE	0x27		// '
-#define	CHR_L_ROUND				0x28		// (
-#define	CHR_R_ROUND				0x29		// )
-#define	CHR_ASTERISK			0x2A		// *
+#define	CHR_DOLLAR					0x24		// $
+#define	CHR_PERCENT					0x25		// %
+#define	CHR_AMPERSAND				0x26		// &
+#define	CHR_SINGLE_QUOTE			0x27		// '
+#define	CHR_L_ROUND					0x28		// (
+#define	CHR_R_ROUND					0x29		// )
+#define	CHR_ASTERISK				0x2A		// *
 #define	CHR_PLUS					0x2B		// +
 #define	CHR_COMMA					0x2C		// ,
 #define	CHR_MINUS					0x2D		// -
-#define	CHR_FULLSTOP			0x2E		// .
-#define	CHR_FWDSLASH			0x2F		// /
-#define	CHR_0						  0x30
+#define	CHR_FULLSTOP				0x2E		// .
+#define	CHR_FWDSLASH				0x2F		// /
+#define	CHR_0						0x30
 #define	CHR_1 						0x31
 #define	CHR_2	  					0x32
 #define	CHR_3		  				0x33
 #define	CHR_4			  			0x34
 #define	CHR_5				  		0x35
 #define	CHR_6					  	0x36
-#define	CHR_7						  0x37
+#define	CHR_7						0x37
 #define	CHR_8			  			0x38
 #define	CHR_9				  		0x39
 #define	CHR_COLON					0x3A		// :
-#define	CHR_SEMICOLON			0x3B		// ;
-#define	CHR_L_ANGLED			0x3C		// <
-#define	CHR_EQUALS				0x3D		// =
-#define	CHR_R_ANGLED			0x3E		// >
-#define	CHR_QUESTION			0x3F		// ?
-#define	CHR_AT_SIGN				0x40		// @
+#define	CHR_SEMICOLON   			0x3B		// ;
+#define	CHR_L_ANGLED				0x3C		// <
+#define	CHR_EQUALS					0x3D		// =
+#define	CHR_R_ANGLED				0x3E		// >
+#define	CHR_QUESTION				0x3F		// ?
+#define	CHR_AT_SIGN					0x40		// @
 // Uppercase A-Z
 #define	CHR_A						0x41		// Cursor UP
 #define	CHR_B						0x42		// Cursor DOWN
@@ -103,12 +103,12 @@ extern "C" {
 #define	CHR_X						0x58
 #define	CHR_Y						0x59
 #define	CHR_Z						0x5A
-#define	CHR_L_SQUARE		0x5B		// '['
-#define	CHR_BACKSLASH		0x5C		// '\'
-#define	CHR_R_SQUARE		0x5D		// ']'
-#define	CHR_CARET				0x5E		// '^'
-#define	CHR_UNDERSCORE	0x5F		// '_'
-#define	CHR_GRAVE				0x60		// '`'
+#define	CHR_L_SQUARE				0x5B		// '['
+#define	CHR_BACKSLASH	   		0x5C		// '\'
+#define	CHR_R_SQUARE				0x5D		// ']'
+#define	CHR_CARET					0x5E		// '^'
+#define	CHR_UNDERSCORE				0x5F		// '_'
+#define	CHR_GRAVE					0x60		// '`'
 // Lowercase a-z
 #define	CHR_a						0x61
 #define	CHR_b						0x62
@@ -136,28 +136,28 @@ extern "C" {
 #define	CHR_x						0x78
 #define	CHR_y						0x79
 #define	CHR_z						0x7A
-#define	CHR_L_CURLY			0x7B		// '{'
-#define	CHR_VERT_BAR		0x7C		// '|'
-#define	CHR_R_CURLY			0x7D		// '}'
-#define	CHR_TILDE				0x7E		// '~'
-#define	CHR_DEL					0x7F		// c-8 = non printing !!!!
+#define	CHR_L_CURLY					0x7B		// '{'
+#define	CHR_VERT_BAR				0x7C		// '|'
+#define	CHR_R_CURLY					0x7D		// '}'
+#define	CHR_TILDE					0x7E		// '~'
+#define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
-#define	strNL					  "\r\n"      // Linux = NL, macOS = CR,  Win = CRLF
-#define	strNLx2         "\r\n\n"
-#define	strCRLF					"\r\n"
-#define	strCR2xLF       "\r\n\n"
-#define strNUL					(char *) ""
-#define	strNULL					(char *) "null"
-#define	strOOR					(char *) "pOOR"
+#define	strNL						"\r\n"	  // Linux = NL, macOS = CR,  Win = CRLF
+#define	strNLx2					 "\r\n\n"
+#define	strCRLF						"\r\n"
+#define	strCR2xLF				   "\r\n\n"
+#define strNUL  					(char *) ""
+#define	strNULL						(char *) "null"
+#define	strOOR						(char *) "pOOR"
 
-#define	strINV_CVI			"Invalid cvI"
+#define	strINV_CVI					"Invalid cvI"
 
-#define	strPARSE_s			"~[%s]"
-#define	strPARSE_Ps			"~[%*s]"
-#define strPARSE_d			"~[%d]"
-#define strPARSE_lu			"~[]"
-#define strPARSE_I			"~[%-I]"
-#define strPARSE_b			"~[%b]"     // dynamic format
+#define	strPARSE_s	  			"~[%s]"
+#define	strPARSE_Ps					"~[%*s]"
+#define strPARSE_d	  			"~[%d]"
+#define strPARSE_lu 				"~[]"
+#define strPARSE_I					"~[%-I]"
+#define strPARSE_b					"~[%b]"	 // dynamic format
 
 // ################ Time related constants, all based on normal (NON leap) years ###################
 
@@ -246,13 +246,13 @@ extern "C" {
 
 #define	SWAP(v1, v2, t)				{t vx = v1; v1 = v2; v2 = vx; }
 
-#define	IF_EXEC(T,C)				        if (T) { do { C; } while (0); }
-#define	IF_EXEC_0(T,F)				      if (T) { do { F(); } while (0); }
-#define	IF_EXEC_1(T,F,a)			      if (T) { do { F(a); } while (0); }
-#define	IF_EXEC_2(T,F,a,b)			    if (T) { do { F(a,b); } while (0); }
-#define	IF_EXEC_3(T,F,a,b,c)		    if (T) { do { F(a,b,c); } while (0); }
-#define	IF_EXEC_4(T,F,a,b,c,d)		  if (T) { do { F(a,b,c,d); } while (0); }
-#define	IF_EXEC_5(T,F,a,b,c,d,e)	  if (T) { do { F(a,b,c,d,e); } while (0); }
+#define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
+#define	IF_EXEC_0(T,F)				if (T) { do { F(); } while (0); }
+#define	IF_EXEC_1(T,F,a)			if (T) { do { F(a); } while (0); }
+#define	IF_EXEC_2(T,F,a,b)			if (T) { do { F(a,b); } while (0); }
+#define	IF_EXEC_3(T,F,a,b,c)		if (T) { do { F(a,b,c); } while (0); }
+#define	IF_EXEC_4(T,F,a,b,c,d)		if (T) { do { F(a,b,c,d); } while (0); }
+#define	IF_EXEC_5(T,F,a,b,c,d,e)	if (T) { do { F(a,b,c,d,e); } while (0); }
 #define	IF_EXEC_6(T,F,a,b,c,d,e,f)	if (T) { do { F(a,b,c,d,e,f); } while (0); }
 
 // ##################### macros to create variable width 8/16/32/64 bit masks ######################
@@ -270,23 +270,31 @@ extern "C" {
 // ################################## variable bit field flags #####################################
 
 // Based on 32/64bit variables, support primarily 1/2/4 bit sized flags
-#define	mask1B						        0x01
-#define	mask2B						        0x03
-#define	mask3B						        0x07
-#define	mask4B						        0x0F
-#define	mask8B						        0xFF
+#define	mask1B						0x01
+#define	mask2B						0x03
+#define	mask3B						0x07
+#define	mask4B						0x0F
+#define	mask8B						0xFF
 
-#define	maskGET1B(f,i,s)			    (((s)f >> ((i)*1)) & (s)mask1B)
-#define	maskGET2B(f,i,s)			    (((s)f >> ((i)*2)) & (s)mask2B)
-#define	maskGET3B(f,i,s)			    (((s)f >> ((i)*3)) & (s)mask3B)
-#define	maskGET4B(f,i,s)			    (((s)f >> ((i)*4)) & (s)mask4B)
-#define	maskGET8B(f,i,s)			    (((s)f >> ((i)*8)) & (s)mask8B)
+#if (buildNEW_CODE > 0)
+#define	maskGET1B(f,i,s)			((f >> ((i)*1)) & mask1B)
+#define	maskGET2B(f,i,s)			((f >> ((i)*2)) & mask2B)
+#define	maskGET3B(f,i,s)			((f >> ((i)*3)) & mask3B)
+#define	maskGET4B(f,i,s)			((f >> ((i)*4)) & mask4B)
+#define	maskGET8B(f,i,s)			((f >> ((i)*8)) & mask8B)
+#else
+#define	maskGET1B(f,i,s)			(((s)f >> ((i)*1)) & (s)mask1B)
+#define	maskGET2B(f,i,s)			(((s)f >> ((i)*2)) & (s)mask2B)
+#define	maskGET3B(f,i,s)			(((s)f >> ((i)*3)) & (s)mask3B)
+#define	maskGET4B(f,i,s)			(((s)f >> ((i)*4)) & (s)mask4B)
+#define	maskGET8B(f,i,s)			(((s)f >> ((i)*8)) & (s)mask8B)
+#endif
 
-#define	maskSET1B(f,i,x,s)			  {s m=(s)mask1B<<((i)*1); f&=~m; f|=((((s)x)<<((i)*1))&m);}
-#define	maskSET2B(f,i,x,s)			  {s m=(s)mask2B<<((i)*2); f&=~m; f|=((((s)x)<<((i)*2))&m);}
-#define	maskSET3B(f,i,x,s)			  {s m=(s)mask3B<<((i)*3); f&=~m; f|=((((s)x)<<((i)*3))&m);}
-#define	maskSET4B(f,i,x,s)			  {s m=(s)mask4B<<((i)*4); f&=~m; f|=((((s)x)<<((i)*4))&m);}
-#define	maskSET8B(f,i,x,s)			  {s m=(s)mask8B<<((i)*8); f&=~m; f|=((((s)x)<<((i)*8))&m);}
+#define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<((i)*1); f&=~m; f|=((((s)x)<<((i)*1))&m);}
+#define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<((i)*2); f&=~m; f|=((((s)x)<<((i)*2))&m);}
+#define	maskSET3B(f,i,x,s)			{s m=(s)mask3B<<((i)*3); f&=~m; f|=((((s)x)<<((i)*3))&m);}
+#define	maskSET4B(f,i,x,s)			{s m=(s)mask4B<<((i)*4); f&=~m; f|=((((s)x)<<((i)*4))&m);}
+#define	maskSET8B(f,i,x,s)			{s m=(s)mask8B<<((i)*8); f&=~m; f|=((((s)x)<<((i)*8))&m);}
 
 // ###################################### General Use Macros #######################################
 
@@ -307,20 +315,6 @@ extern "C" {
 
 // ######################################## delimiter strings ######################################
 
-/*
-#define	sepSPACE_COMMA_TAB_LF_CR	" ,\t\n\r"
-#define	sepSPACE_COMMA_TAB_LF		" ,\t\n"
-#define	sepSPACE_COMMA_TAB_CR		" ,\t\r"
-#define	sepSPACE_COMMA_TAB			" ,\t"
-#define	sepSPACE_COMMA_LF_CR		" ,\n\r"
-#define	sepSPACE_COMMA_LF			" ,\n"
-#define	sepSPACE_COMMA_CR			" ,\r"
-#define	sepSPACE_COMMA				" ,"
-#define	sepSPACE_SEMICOLON			" ;"
-#define	sepSPACE_LF_CR				" \n\r"
-#define	sepSPACE_LF					" \n"
-#define	sepSPACE_CR					" \r"
-*/
 #define	sepSPACE					" "
 #define	sepSPACE_SEMICOLON_CR_LF	" ;\r\n"
 
@@ -433,122 +427,122 @@ https://riptutorial.com/cplusplus/example/3527/macros
 // ########################################### Bit masks ##########################################
 
 enum {								// 32bit bit masks
-    B00MASK = 0x00000001,
-    B01MASK = 0x00000002,
-    B02MASK = 0x00000004,
-    B03MASK = 0x00000008,
-    B04MASK = 0x00000010,
-    B05MASK = 0x00000020,
-    B06MASK = 0x00000040,
-    B07MASK = 0x00000080,
-    B08MASK = 0x00000100,
-    B09MASK = 0x00000200,
-    B10MASK = 0x00000400,
-    B11MASK = 0x00000800,
-    B12MASK = 0x00001000,
-    B13MASK = 0x00002000,
-    B14MASK = 0x00004000,
-    B15MASK = 0x00008000,
-    B16MASK = 0x00010000,
-    B17MASK = 0x00020000,
-    B18MASK = 0x00040000,
-    B19MASK = 0x00080000,
-    B20MASK = 0x00100000,
-    B21MASK = 0x00200000,
-    B22MASK = 0x00400000,
-    B23MASK = 0x00800000,
-    B24MASK = 0x01000000,
-    B25MASK = 0x02000000,
-    B26MASK = 0x04000000,
-    B27MASK = 0x08000000,
-    B28MASK = 0x10000000,
-    B29MASK = 0x20000000,
-    B30MASK = 0x40000000,
-    B31MASK = 0x80000000,
+	B00MASK = 0x00000001,
+	B01MASK = 0x00000002,
+	B02MASK = 0x00000004,
+	B03MASK = 0x00000008,
+	B04MASK = 0x00000010,
+	B05MASK = 0x00000020,
+	B06MASK = 0x00000040,
+	B07MASK = 0x00000080,
+	B08MASK = 0x00000100,
+	B09MASK = 0x00000200,
+	B10MASK = 0x00000400,
+	B11MASK = 0x00000800,
+	B12MASK = 0x00001000,
+	B13MASK = 0x00002000,
+	B14MASK = 0x00004000,
+	B15MASK = 0x00008000,
+	B16MASK = 0x00010000,
+	B17MASK = 0x00020000,
+	B18MASK = 0x00040000,
+	B19MASK = 0x00080000,
+	B20MASK = 0x00100000,
+	B21MASK = 0x00200000,
+	B22MASK = 0x00400000,
+	B23MASK = 0x00800000,
+	B24MASK = 0x01000000,
+	B25MASK = 0x02000000,
+	B26MASK = 0x04000000,
+	B27MASK = 0x08000000,
+	B28MASK = 0x10000000,
+	B29MASK = 0x20000000,
+	B30MASK = 0x40000000,
+	B31MASK = 0x80000000,
 } ;
 
 enum {								// 64bit bit masks
 	BIT00MASK = (1ULL << 0),
-    BIT01MASK = (1ULL << 1),
-    BIT02MASK = (1ULL << 2),
-    BIT03MASK = (1ULL << 3),
-    BIT04MASK = (1ULL << 4),
-    BIT05MASK = (1ULL << 5),
-    BIT06MASK = (1ULL << 6),
-    BIT07MASK = (1ULL << 7),
+	BIT01MASK = (1ULL << 1),
+	BIT02MASK = (1ULL << 2),
+	BIT03MASK = (1ULL << 3),
+	BIT04MASK = (1ULL << 4),
+	BIT05MASK = (1ULL << 5),
+	BIT06MASK = (1ULL << 6),
+	BIT07MASK = (1ULL << 7),
   	BIT08MASK = (1ULL << 8),
-    BIT09MASK = (1ULL << 9),
+	BIT09MASK = (1ULL << 9),
 	BIT10MASK = (1ULL << 10),
-    BIT11MASK = (1ULL << 11),
-    BIT12MASK = (1ULL << 12),
-    BIT13MASK = (1ULL << 13),
-    BIT14MASK = (1ULL << 14),
-    BIT15MASK = (1ULL << 15),
-    BIT16MASK = (1ULL << 16),
-    BIT17MASK = (1ULL << 17),
+	BIT11MASK = (1ULL << 11),
+	BIT12MASK = (1ULL << 12),
+	BIT13MASK = (1ULL << 13),
+	BIT14MASK = (1ULL << 14),
+	BIT15MASK = (1ULL << 15),
+	BIT16MASK = (1ULL << 16),
+	BIT17MASK = (1ULL << 17),
   	BIT18MASK = (1ULL << 18),
-    BIT19MASK = (1ULL << 19),
+	BIT19MASK = (1ULL << 19),
 	BIT20MASK = (1ULL << 20),
-    BIT21MASK = (1ULL << 21),
-    BIT22MASK = (1ULL << 22),
-    BIT23MASK = (1ULL << 23),
-    BIT24MASK = (1ULL << 24),
-    BIT25MASK = (1ULL << 25),
-    BIT26MASK = (1ULL << 26),
-    BIT27MASK = (1ULL << 27),
+	BIT21MASK = (1ULL << 21),
+	BIT22MASK = (1ULL << 22),
+	BIT23MASK = (1ULL << 23),
+	BIT24MASK = (1ULL << 24),
+	BIT25MASK = (1ULL << 25),
+	BIT26MASK = (1ULL << 26),
+	BIT27MASK = (1ULL << 27),
   	BIT28MASK = (1ULL << 28),
-    BIT29MASK = (1ULL << 29),
+	BIT29MASK = (1ULL << 29),
 	BIT30MASK = (1ULL << 30),
-    BIT31MASK = (1ULL << 31),
-    BIT32MASK = (1ULL << 32),
-    BIT33MASK = (1ULL << 33),
-    BIT34MASK = (1ULL << 34),
-    BIT35MASK = (1ULL << 35),
-    BIT36MASK = (1ULL << 36),
-    BIT37MASK = (1ULL << 37),
+	BIT31MASK = (1ULL << 31),
+	BIT32MASK = (1ULL << 32),
+	BIT33MASK = (1ULL << 33),
+	BIT34MASK = (1ULL << 34),
+	BIT35MASK = (1ULL << 35),
+	BIT36MASK = (1ULL << 36),
+	BIT37MASK = (1ULL << 37),
   	BIT38MASK = (1ULL << 38),
-    BIT39MASK = (1ULL << 39),
+	BIT39MASK = (1ULL << 39),
 	BIT40MASK = (1ULL << 40),
-    BIT41MASK = (1ULL << 41),
-    BIT42MASK = (1ULL << 42),
-    BIT43MASK = (1ULL << 43),
-    BIT44MASK = (1ULL << 44),
-    BIT45MASK = (1ULL << 45),
-    BIT46MASK = (1ULL << 46),
-    BIT47MASK = (1ULL << 47),
+	BIT41MASK = (1ULL << 41),
+	BIT42MASK = (1ULL << 42),
+	BIT43MASK = (1ULL << 43),
+	BIT44MASK = (1ULL << 44),
+	BIT45MASK = (1ULL << 45),
+	BIT46MASK = (1ULL << 46),
+	BIT47MASK = (1ULL << 47),
   	BIT48MASK = (1ULL << 48),
-    BIT49MASK = (1ULL << 49),
+	BIT49MASK = (1ULL << 49),
 	BIT50MASK = (1ULL << 50),
-    BIT51MASK = (1ULL << 51),
-    BIT52MASK = (1ULL << 52),
-    BIT53MASK = (1ULL << 53),
-    BIT54MASK = (1ULL << 54),
-    BIT55MASK = (1ULL << 55),
-    BIT56MASK = (1ULL << 56),
-    BIT57MASK = (1ULL << 57),
+	BIT51MASK = (1ULL << 51),
+	BIT52MASK = (1ULL << 52),
+	BIT53MASK = (1ULL << 53),
+	BIT54MASK = (1ULL << 54),
+	BIT55MASK = (1ULL << 55),
+	BIT56MASK = (1ULL << 56),
+	BIT57MASK = (1ULL << 57),
   	BIT58MASK = (1ULL << 58),
-    BIT59MASK = (1ULL << 59),
+	BIT59MASK = (1ULL << 59),
 	BIT60MASK = (1ULL << 60),
-    BIT61MASK = (1ULL << 61),
-    BIT62MASK = (1ULL << 62),
-    BIT63MASK = (1ULL << 63),
+	BIT61MASK = (1ULL << 61),
+	BIT62MASK = (1ULL << 62),
+	BIT63MASK = (1ULL << 63),
 } ;
 
 enum {								// ANSI standard terminal colors
-	attrRESET			  = 0,
-	attrBRIGHT			= 1,
-	attrDIM				  = 2,  attrNORM_INTEN  = 22,    
-	atrITALICS			= 3,
-	attrULINE_ON		= 4,  attrULINE_OFF		= 24,
-	attrSLOW_BLINK	= 5,
-	attrRAPID_BLINK	= 6,
-	attrREV_ON			= 7,  attrREV_OFF			= 27,
-	attrHIDDEN			= 8,  attrREVEAL			= 28,
-	attrSTRIKE_ON		= 9,  attrSTRIKE_OFF	= 29,
+	attrRESET = 0,
+	attrBRIGHT = 1,
+	attrDIM = 2,        attrNORM_INTEN = 22,	
+	atrITALICS = 3,
+	attrULINE_ON = 4,   attrULINE_OFF = 24,
+	attrSLOW_BLINK = 5,
+	attrRAPID_BLINK = 6,
+	attrREV_ON = 7,     attrREV_OFF = 27,
+	attrHIDDEN = 8,     attrREVEAL = 28,
+	attrSTRIKE_ON = 9,  attrSTRIKE_OFF = 29,
 
 // foreground colors
-	colourFOREGND		= 30,
-	colourFG_BLACK 	= colourFOREGND,
+	colourFOREGND = 30,
+	colourFG_BLACK = colourFOREGND,
 	colourFG_RED,
 	colourFG_GREEN,
 	colourFG_YELLOW,
@@ -557,8 +551,8 @@ enum {								// ANSI standard terminal colors
 	colourFG_CYAN,
 	colourFG_WHITE,										// 30 + 7 = 37
 // background colors
-	colourBACKGND		= 40,
-	colourBG_BLACK	= colourBACKGND,
+	colourBACKGND = 40,
+	colourBG_BLACK = colourBACKGND,
 	colourBG_RED,
 	colourBG_GREEN,
 	colourBG_YELLOW,
@@ -575,29 +569,29 @@ enum {								// ANSI standard terminal colors
 #if 0
 
 /*
-    General purpose static assert.
+	General purpose static assert.
 
-    Works in/out -side of scope:
-        STATIC_ASSERT(sizeof(long)==8);
-        int main()
-        {
-            STATIC_ASSERT(sizeof(int)==4);
-        }
+	Works in/out -side of scope:
+		STATIC_ASSERT(sizeof(long)==8);
+		int main()
+		{
+			STATIC_ASSERT(sizeof(int)==4);
+		}
 */
-#define STATIC_ASSERT(X)            STATIC_ASSERT2(X,__LINE__)
+#define STATIC_ASSERT(X)			STATIC_ASSERT2(X,__LINE__)
 
 /*
-    These macros are required by STATIC_ASSERT to make token pasting work.
-    Not really useful by themselves.
+	These macros are required by STATIC_ASSERT to make token pasting work.
+	Not really useful by themselves.
 */
-#define STATIC_ASSERT2(X,L)         STATIC_ASSERT3(X,L)
-#define STATIC_ASSERT3(X,L)         STATIC_ASSERT_MSG(X,at_line_##L)
+#define STATIC_ASSERT2(X,L)		 STATIC_ASSERT3(X,L)
+#define STATIC_ASSERT3(X,L)		 STATIC_ASSERT_MSG(X,at_line_##L)
 
 /*
-    Static assertion with special error message.
-    Note: It depends on compiler whether message is visible or not!
+	Static assertion with special error message.
+	Note: It depends on compiler whether message is visible or not!
 
-    STATIC_ASSERT_MSG(sizeof(long)==8, long_is_not_eight_bytes);
+	STATIC_ASSERT_MSG(sizeof(long)==8, long_is_not_eight_bytes);
 */
 #define STATIC_ASSERT_MSG(COND,MSG) \
 	typedef char static_assertion_##MSG[(!!(COND))*2-1]
@@ -619,7 +613,7 @@ enum {								// ANSI standard terminal colors
 /// declare the access function and define enum values
 #define DECLARE_ENUM(EnumType,ENUM_DEF) \
   enum EnumType { \
-    ENUM_DEF(ENUM_VALUE) \
+	ENUM_DEF(ENUM_VALUE) \
   }; \
   const char *GetString(EnumType dummy); \
   EnumType Get##EnumType##Value(const char *string); \
@@ -628,16 +622,16 @@ enum {								// ANSI standard terminal colors
 #define DEFINE_ENUM(EnumType,ENUM_DEF) \
   const char *GetString(EnumType value) \
   { \
-    switch(value) \
-    { \
-      ENUM_DEF(ENUM_CASE) \
-      default: return ""; /* handle input error */ \
-    } \
+	switch(value) \
+	{ \
+	  ENUM_DEF(ENUM_CASE) \
+	  default: return ""; /* handle input error */ \
+	} \
   } \
   EnumType Get##EnumType##Value(const char *str) \
   { \
-    ENUM_DEF(ENUM_STRCMP) \
-    return (EnumType)0; /* handle input error */ \
+	ENUM_DEF(ENUM_STRCMP) \
+	return (EnumType)0; /* handle input error */ \
   } \
 
 
