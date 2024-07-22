@@ -1,6 +1,4 @@
-/*
- * struct_union.h
- */
+// struct_union.h
 
 #pragma	once
 
@@ -68,7 +66,7 @@ typedef	union ver_t {				// Version numbers
 } ver_t;
 DUMB_STATIC_ASSERT(sizeof(ver_t) == 4);
 
-typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
+typedef struct __attribute__((packed)) ioset_t {		// 1/2/3/4/8 bit option variables
 	union {							// 1-bit option variables
 		struct __attribute__((packed)) {
 			u8_t B1_0	: 1 ;
@@ -238,6 +236,7 @@ typedef struct __attribute__((packed)) {	// 1/2/3/4/8 bit option variables
 	};
 } ioset_t;
 DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
+
 //#pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
 //#pragma GCC diagnostic pop
 
