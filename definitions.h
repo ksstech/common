@@ -298,6 +298,12 @@ extern "C" {
 
 // ###################################### General Use Macros #######################################
 
+#define maskLOW8(x)			        ((x) & 0x000000FF)
+#define maskLOW16(x)				((x) & 0x0000FFFF)
+#define maskLOW24(x)				((x) & 0x00FFFFFF)
+
+#define	VERSION(Va,Vb,Vc,Vd)		((Va << 24) | (Vb << 16) | (Vc << 8) | Vd)
+
 // https://stackoverflow.com/questions/3553296/c-sizeof-single-struct-member
 #define SO_MEM(T,M)					sizeof(((T *)0)->M)
 
@@ -390,8 +396,10 @@ typedef	const unsigned char * pcuc_t;
 // ################################ Strings in Macros manipulation #################################
 
 #ifndef mySTRINGIFY
-	#define mySTRINGIFY_(x)			#x
-	#define mySTRINGIFY(x)			mySTRINGIFY_(x)
+	#define _mySTRINGIFY(x)			#x
+	#define mySTRINGIFY(x)			_mySTRINGIFY(x)
+	#define mySTRING_PV(x)	        (void*) mySTRINGIFY(x)
+	#define mySTRING_PC(x)	        (char*) mySTRINGIFY(x)
 #endif
 
 #define STR_FMTB(x)					"%" mySTRINGIFY(x) "s"
