@@ -8,7 +8,7 @@ extern "C" {
 
 // ##################################### MACRO definitions #########################################
 
-#define	TERMINAL_DFLT_X				132
+#define	TERMINAL_DFLT_X				160
 #define	TERMINAL_DFLT_Y				48
 #define TERMINAL_DFLT_TAB			8
 
@@ -16,13 +16,13 @@ extern "C" {
 #define	TERMINAL_MAX_Y				63
 #define TERMINAL_MAX_TAB			15
 
-#define	termWAIT_MS				100
+#define	termWAIT_MS					100
 
-#define termFLAG_CURSOR			(1 << 0)
-#define termFLAG_LOCK			(1 << 1)
-#define termFLAG_UNLOCK			(1 << 2)
+#define termFLAG_CURSOR				(1 << 0)
+#define termFLAG_LOCK				(1 << 1)
+#define termFLAG_UNLOCK				(1 << 2)
 
-#define termFLAG_ALL			(termFLAG_CURSOR|termFLAG_LOCK|termFLAG_UNLOCK)
+#define termFLAG_ALL				(termFLAG_CURSOR|termFLAG_LOCK|termFLAG_UNLOCK)
 
 #define termBUILD_CTRL(NC,LO,UL,WAIT) ((termctrl_t) { .NoCursor = NC, .Lock = LO, .Unlock = UL, .Wait = WAIT } )
 
