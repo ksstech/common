@@ -323,7 +323,7 @@ ba_t * pvBitArrayCreate(size_t Count, size_t Size) {
 }
 
 void xBitArrayDelete(ba_t * psBA) {
-	IF_myASSERT(debugPARAM, halCONFIG_inSRAM(psBA));
+	IF_myASSERT(debugPARAM, halMemorySRAM(psBA));
 	memset(psBA, 0, sizeof(ba_t) + psBA->ByteSize);
 	free(psBA);
 }
