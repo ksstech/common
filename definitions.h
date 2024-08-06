@@ -395,14 +395,14 @@ typedef	const unsigned char * pcuc_t;
 
 // ################################ Strings in Macros manipulation #################################
 
-#ifndef mySTRINGIFY
-	#define _mySTRINGIFY(x)			#x
-	#define mySTRINGIFY(x)			_mySTRINGIFY(x)
-	#define mySTRING_PV(x)	        (void*) mySTRINGIFY(x)
-	#define mySTRING_PC(x)	        (char*) mySTRINGIFY(x)
+#ifndef toSTR
+	#define _toSTR(x)				#x
+	#define toSTR(x)				_toSTR(x)
+	#define toSTR_PV(x)				(void*) toSTR(x)
+	#define toSTR_PC(x)				(char*) toSTR(x)
 #endif
 
-#define STR_FMTB(x)					"%" mySTRINGIFY(x) "s"
+#define STR_FMTB(x)					"%" toSTR(x) "s"
 
 #define CONCAT2_(a, b)				a##b
 #define CONCAT2(a, b)				CONCAT2_(a, b)
