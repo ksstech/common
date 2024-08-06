@@ -84,11 +84,6 @@ int xTermPuts(char * pStr, termctrl_t Ctrl) {
 	return iRV;
 }
 
-/**
- * @brief	generate Term terminal cursor locate string (values are 1 relative)
- * @param	
- * @return	[Adjusted] pointer	
- */
 char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col) {
 	if (Row > 0 && Col > 0) {
 		pBuf = stpcpy(pBuf, termCSI);
@@ -131,15 +126,12 @@ void vTermAttrib(u8_t a1, u8_t a2) {
 	}
 }
 
-/**
- * @brief	Request, receive and parse current cursor location is a single lock/unlock operation
- * @return	Number of parameters parsed (should be 2) or erFAILURE if incomplete/malformed packet
-*/
 int xTermCursorRead(void) {
 	char Buf[16];
 	xTermPuts(termCSI "6n", termBUILD_CTRL(1,1,0,termWAIT_MS));
 	int iRV = xTermGets(Buf, sizeof(Buf), 'R', termBUILD_CTRL(1,0,1,termWAIT_MS));
-	if (iRV < 6) return erFAILURE;
+	if (iRV < 6)
+		return erFAILURE;
 	int row = 0, col = 0;
 	iRV = sscanf(Buf, termCSI "%d;%dR", &row, &col);
 //	RPL(" [iRV=%d row=%d col=%d num=%d]\r\n", iRV, row, col, num);
@@ -152,21 +144,18 @@ void vTermCursorSave(void) { xTermPuts(termCSI "s", termBUILD_CTRL(1,1,1,termWAI
 
 void vTermCursorBack(void) { xTermPuts(termCSI "u", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
 
-void vTermclear2EOL(void) { xTermPuts(termCSI "0K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClear2EOL(void) { xTermPuts(termCSI "0K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
 
-void vTermclear2BOL(void) { xTermPuts(termCSI "1K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClear2BOL(void) { xTermPuts(termCSI "1K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
 
-void vTermclearline(void) { xTermPuts(termCSI "2K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClearline(void) { xTermPuts(termCSI "2K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
 
-void vTermclearscreen(void) { xTermPuts(termCSI "2J", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClearScreen(void) { xTermPuts(termCSI "2J", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
 
-void vTermhome(void) { xTermPuts(termCSI "1;1H", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermHome(void) { xTermPuts(termCSI "1;1H", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
 
-void vTermclearhome(void) { vTermclearscreen(); vTermhome(); }
+void vTermClearHome(void) { vTermClearScreen(); vTermHome(); }
 
-/**
- * @brief	Update cursor location into window title bar (XTERM only)
-*/
 void vTermOpSysCom(char * pStr) {
 	xTermPuts(termOSC, termBUILD_CTRL(1,1,0,termWAIT_MS));
 	xTermPuts(pStr, termBUILD_CTRL(1,0,0,0));
@@ -197,11 +186,7 @@ void vTermDisplayLocation(void) {
 	vTermLocate(sTI.SavY, sTI.SavX);
 }
 
-/* ################################# Cursor position updating ######################################
- * @brief 
- * @param cChr
- */
-void xTermcheckcursor(void) {
+void vTermCheckCursor(void) {
 	if (sTI.CurX >= sTI.MaxX) {
 		sTI.CurX = 0;
 		++sTI.CurY;
@@ -226,25 +211,20 @@ void xTermProcessChr(int cChr) {
 		break;
 	case CHR_TAB:
 		sTI.CurY = u32RoundUP(sTI.CurX, sTI.Tabs);
-		xTermcheckcursor();
+		vTermCheckCursor();
 		break;
 	default:
 		if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
 			++sTI.CurX;
-			xTermcheckcursor();
+			vTermCheckCursor();
 		}
 		break;
 	}
 }
 
-/**
- * @brief	vTermSetSize() - set terminal row & column size (0 = reset to default)
- * @param	x columns
- * @param	y rows
- */
-void vTermSetSize(u16_t x, u16_t y) {
-	sTI.MaxX = (x < TERMINAL_MAX_X) ? x : TERMINAL_DFLT_X;
-	sTI.MaxY = (y < TERMINAL_MAX_Y) ? y : TERMINAL_DFLT_Y;
+void vTermSetSize(u16_t Rows, u16_t Columns) {
+	sTI.MaxX = (Columns < TERMINAL_MAX_X) ? Columns : TERMINAL_DFLT_X;
+	sTI.MaxY = (Rows < TERMINAL_MAX_Y) ? Rows : TERMINAL_DFLT_Y;
 }
 
 void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
@@ -284,9 +264,9 @@ void	TerminalPlot(int16_t * dat, u32_t len) {
 
 // ##################################### functional tests ##########################################
 
-void vTermtestcode(void) {
+void vTermTestCode(void) {
 	xTermPuts("Waiting to clear the screen...", termBUILD_CTRL(1,1,1,termWAIT_MS));
-	vTermclearhome();
+	vTermClearHome();
 	vTermLocate(5, 5);
 	xTermPuts("Normal text at 5,5", termBUILD_CTRL(1,1,1,termWAIT_MS));
 
@@ -304,7 +284,7 @@ void vTermtestcode(void) {
 
 	vTaskDelay(5000);
 	vTermLocate(9, 25);
-	vTermclear2EOL();
+	vTermClear2EOL();
 
 	vTermAttrib(attrRESET, 0);
 }

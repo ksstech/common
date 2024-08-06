@@ -47,32 +47,145 @@ typedef struct __attribute__((packed)) termctrl_t {
 
 // ###################################### Public functions #########################################
 
+/**
+ * @brief	input a string directly from the UART/terminal
+ * @param	pBuf - buffer to store characters
+ * @param	Size - size of buffer
+ * @param	Match - character/key to be treated as end-of-line EOL
+ * @param	flag - control flags specifying [un]lock actions, wait periods etc.. 
+ * @return	number of characters in the buffer, terminator (if there) excluded
+ */
 int	xTermGets(char * pcBuf, size_t Size, int Match, termctrl_t flag);
+
+/**
+ * @brief	output a string directly to the UART/terminal
+ * @param	pStr - string to be output
+ * @param	flag - control flags specifying [un]lock actions, wait periods etc.. 
+ * @return	Number of characers processed
+ */
 int xTermPuts(char * pStr, termctrl_t flag);
-void vTermCursorSave(void);
-void vTermCursorBack(void);
+
+/**
+ * @brief	generate cursor location control/ESC string
+ * @param	pBuf pointer to buffer where string is to be built
+ * @param	Row - 1 relative row value
+ * @param	Col - 1 relative column value
+ * @return	[Adjusted] pointer	
+ */
+char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col);
+
+/**
+ * @brief	generate text attribute control/ESC string
+ * @param	pBuf pointer to buffer where string is to be built
+ * @param	a1 - first attribute
+ * @param	a2 - second attribute
+ * @return	[Adjusted] pointer	
+ */
+char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2);
+
+/**
+ * @brief	generate & output cursor location control/ESC string
+ * @param	Row - 1 relative row value
+ * @param	Col - 1 relative column value
+ */
+void vTermLocate(u8_t Row, u8_t Col);
+
+/**
+ * @brief	generate & output cursor location control/ESC string
+ * @param	a1 - first attribute
+ * @param	a2 - second attribute
+ */
+void vTermAttrib(u8_t a1, u8_t a2);
+
+/**
+ * @brief	Request, receive and parse current cursor location in a single lock/unlock operation
+ * @return	Number of parameters parsed (should be 2) or erFAILURE if incomplete/malformed packet
+*/
 int xTermCursorRead(void);
 
-void vTermclear2EOL(void);
-void vTermclear2BOL(void);
-void vTermclearline(void);
-void vTermclearscreen(void);
-void vTermclearhome(void);
+/**
+ * @brief
+ */
+void vTermCursorSave(void);
 
-void vTermhome(void) ;
+/**
+ * @brief
+ */
+void vTermCursorBack(void);
 
-char * pcTermAttrib(char * pBuf, u8_t FG, u8_t BG) ;
-char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col) ;
+/**
+ * @brief
+ */
+void vTermClear2EOL(void);
 
+/**
+ * @brief
+ */
+void vTermClear2BOL(void);
+
+/**
+ * @brief
+ */
+void vTermClearline(void);
+
+/**
+ * @brief
+ */
+void vTermClearScreen(void);
+
+/**
+ * @brief
+ */
+void vTermHome(void);
+
+/**
+ * @brief
+ */
+void vTermClearHome(void);
+
+/**
+ * @brief	Update cursor location into window title bar (XTERM only)
+*/
+void vTermOpSysCom(char * pStr);
+
+void vTermWinTleCursor(void);
+
+void vTermDisplayLocation(void);
+
+/**
+ * @brief	Check column and adjust column & row if required
+ */
+void vTermCheckCursor(void);
+
+/**
+ * @brief	Update row and/or column tracking values based on the specific character being processed
+ * @param	cChr - character to be processed
+ */
 void xTermProcessChr(int cChr);
-void vTermAttrib(u8_t FG, u8_t BG);
-void vTermLocate(u8_t x, u8_t y);
 
-void vTermSetSize(u16_t x, u16_t y) ;
+/**
+ * @brief	vTermSetSize() - set terminal row & column size (0 = reset to default)
+ * @param	Rows - number of rows/lines
+ * @param	Columns - number of columns
+ */
+void vTermSetSize(u16_t Rows, u16_t Columns) ;
+
+/**
+ * @brief
+ */
 void vTermGetInfo(terminfo_t * psTermInfo) ;
+
+/**
+ * @brief
+ */
 int xTermIdentify(void);
 
-void vTermtestcode(void) ;
+int xTermAttached(void);
+
+/**
+ * @brief
+ */
+void vTermTestCode(void) ;
 
 #ifdef __cplusplus
 }
