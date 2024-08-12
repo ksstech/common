@@ -96,19 +96,20 @@ enum {
 // ####################################### Structures ##############################################
 
 typedef struct {
-	int			iVal1 ;
-	int			iVal2 ;
-	const char * pMess ;
-} eTable_t ;
+	int iVal1;
+	int iVal2;
+	const char * pMess;
+} eTable_t;
 
 // ################################### Global/public variable(s) ###################################
 
 
 // ################################### Global/public functions #####################################
 
-int	ErrorSet(int eCode) ;
-int	ErrorGet(void) ;
-char * pcCodeToMessage(int eCode, const eTable_t * eTable) ;
+int	ErrorSet(int eCode);
+int	ErrorGet(void);
+const char * pcCodeToMessage(int eCode, const eTable_t * eTable);
+const char * pcStrError(int iRV);
 
 #ifdef __cplusplus
 }
