@@ -11,7 +11,7 @@ extern "C" {
 
 // ########################################### Macros ##############################################
 
-#define	TABLE_ENTRY_INT(x,y,z)		{ .iVal1=x , .iVal2=y , .pMess=z }
+#define	TABLE_ENTRY_INT(c,m)		{ .code=c, .pMess=m }
 
 /* ###################################### MBED error codes #########################################
  *	High level error codes
@@ -65,21 +65,22 @@ enum {
 	erINV_DEVICE,
 	erINV_VERSION,
 	erINV_WHOAMI,
+	erINV_HOST,
 	erFILE_READ,
 	erFILE_WRITE,
-	erHOST_NOTFOUND,
-	erINV_HOST,
-	erDUP_HOST,
 	erOUT_OF_RANGE,
+
 	erWL_CFG_STA,
 	erWL_CFG_MODE,
 	erWL_CFG_SAVE,
+
 	erTO_L1toL2,
 	erTO_L2toL3,
 	erTO_L3toLX,
+	erTIMEOUT,
+
 	erNO_MEM,
 	erTABLE_FULL,
-	erTIMEOUT,
 	// Insert additional application error codes above here
 
 	// tftp client
@@ -96,8 +97,7 @@ enum {
 // ####################################### Structures ##############################################
 
 typedef struct {
-	int iVal1;
-	int iVal2;
+	int code;
 	const char * pMess;
 } eTable_t;
 
@@ -108,8 +108,8 @@ typedef struct {
 
 int	ErrorSet(int eCode);
 int	ErrorGet(void);
-const char * pcCodeToMessage(int eCode, const eTable_t * eTable);
-const char * pcStrError(int iRV);
+const char * pcCodeToMessage(int eCode);
+const char * pcStrError(int eCode);
 
 #ifdef __cplusplus
 }
