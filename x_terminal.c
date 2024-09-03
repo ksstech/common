@@ -108,7 +108,7 @@ char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
 		}
 		*pBuf++ = CHR_m;
 	}
-	*pBuf = 0;									// terminate
+	*pBuf = 0;											// terminate
 	return pBuf;
 }
 
