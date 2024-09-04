@@ -142,10 +142,13 @@ extern "C" {
 #define	CHR_TILDE					0x7E		// '~'
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
-#define	strNL						"\r\n"	  // Linux = NL, macOS = CR,  Win = CRLF
-#define	strNLx2					 "\r\n\n"
-#define	strCRLF						"\r\n"
-#define	strCR2xLF				   "\r\n\n"
+#if 1
+	#define	strNL					"\n"		/* Linux = LF, macOS = CR,  Win = CRLF */
+	#define	strNLx2					"\n\n"
+#else
+	#define	strNL					"\r\n"		/* Linux = LF, macOS = CR,  Win = CRLF */
+	#define	strNLx2					"\r\n\n"
+#endif
 #define strNUL  					(char *) ""
 #define	strNULL						(char *) "null"
 #define	strOOR						(char *) "pOOR"
