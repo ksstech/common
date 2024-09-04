@@ -44,7 +44,7 @@ extern "C" {
 #define	CHR_US						0x1F		// c-7		c--		c-BACK SLASH
 
 #define	CHR_SPACE					0x20		// ' '
-#define	CHR_EXCLAMATION   0x21		// !
+#define	CHR_EXCLAMATION	0x21		// !
 #define	CHR_DOUBLE_QUOTE  0x22		// "
 #define	CHR_HASH					0x23		// #
 #define	CHR_DOLLAR					0x24		// $
@@ -70,7 +70,7 @@ extern "C" {
 #define	CHR_8			  			0x38
 #define	CHR_9				  		0x39
 #define	CHR_COLON					0x3A		// :
-#define	CHR_SEMICOLON   			0x3B		// ;
+#define	CHR_SEMICOLON				0x3B		// ;
 #define	CHR_L_ANGLED				0x3C		// <
 #define	CHR_EQUALS					0x3D		// =
 #define	CHR_R_ANGLED				0x3E		// >
@@ -104,7 +104,7 @@ extern "C" {
 #define	CHR_Y						0x59
 #define	CHR_Z						0x5A
 #define	CHR_L_SQUARE				0x5B		// '['
-#define	CHR_BACKSLASH	   		0x5C		// '\'
+#define	CHR_BACKSLASH				0x5C		// '\'
 #define	CHR_R_SQUARE				0x5D		// ']'
 #define	CHR_CARET					0x5E		// '^'
 #define	CHR_UNDERSCORE				0x5F		// '_'
@@ -152,9 +152,9 @@ extern "C" {
 
 #define	strINV_CVI					"Invalid cvI"
 
-#define	strPARSE_s	  			"~[%s]"
+#define	strPARSE_s	  				"~[%s]"
 #define	strPARSE_Ps					"~[%*s]"
-#define strPARSE_d	  			"~[%d]"
+#define strPARSE_d	  				"~[%d]"
 #define strPARSE_lu 				"~[]"
 #define strPARSE_I					"~[%-I]"
 #define strPARSE_b					"~[%b]"	 // dynamic format
@@ -298,7 +298,7 @@ extern "C" {
 
 // ###################################### General Use Macros #######################################
 
-#define maskLOW8(x)			        ((x) & 0x000000FF)
+#define maskLOW8(x)					((x) & 0x000000FF)
 #define maskLOW16(x)				((x) & 0x0000FFFF)
 #define maskLOW24(x)				((x) & 0x00FFFFFF)
 
@@ -539,13 +539,13 @@ enum {								// 64bit bit masks
 enum {								// ANSI standard terminal colors
 	attrRESET = 0,
 	attrBRIGHT = 1,
-	attrDIM = 2,        attrNORM_INTEN = 22,	
+	attrDIM = 2,		attrNORM_INTEN = 22,	
 	atrITALICS = 3,
-	attrULINE_ON = 4,   attrULINE_OFF = 24,
+	attrULINE_ON = 4,	attrULINE_OFF = 24,
 	attrSLOW_BLINK = 5,
 	attrRAPID_BLINK = 6,
-	attrREV_ON = 7,     attrREV_OFF = 27,
-	attrHIDDEN = 8,     attrREVEAL = 28,
+	attrREV_ON = 7,		attrREV_OFF = 27,
+	attrHIDDEN = 8,		attrREVEAL = 28,
 	attrSTRIKE_ON = 9,  attrSTRIKE_OFF = 29,
 
 // foreground colors
