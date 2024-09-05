@@ -45,9 +45,7 @@ terminfo_t sTI = {
 int	xTermGets(char * pcBuf, size_t Size, int Match, termctrl_t Ctrl) { 
 	int iRV, Len = 0;
 	TickType_t tNow = 0, tStart = xTaskGetTickCount();
-	if (Ctrl.Lock) {
-		xRtosSemaphoreTake(&shUARTmux, pdMS_TO_TICKS(Ctrl.Wait));
-	}
+	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	do {
 		iRV = getchar();
 		if (iRV != EOF) {
@@ -60,27 +58,19 @@ int	xTermGets(char * pcBuf, size_t Size, int Match, termctrl_t Ctrl) {
 		taskYIELD();
 		tNow = xTaskGetTickCount() - tStart;
 	} while (tNow < pdMS_TO_TICKS(Ctrl.Wait));
-	if (Len < (Size - 1)) {
-		pcBuf[Len] = CHR_NUL;
-	}
-	if (Ctrl.Unlock) {
-		xRtosSemaphoreGive(&shUARTmux);
-	}
+	if (Len < (Size - 1)) pcBuf[Len] = CHR_NUL;
+	if (Ctrl.Unlock) halUartUnLock();
 	return Len;
 }
 
 int xTermPuts(char * pStr, termctrl_t Ctrl) {
 	int iRV = 0;
-	if (Ctrl.Lock) {
-		xRtosSemaphoreTake(&shUARTmux, pdMS_TO_TICKS(Ctrl.Wait));
-	}
+	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	while (*pStr) {
 		putchar_cursor(*pStr++, Ctrl.NoCursor);
 		++iRV;
 	}
-	if (Ctrl.Unlock) {
-		xRtosSemaphoreGive(&shUARTmux);
-	}
+	if (Ctrl.Unlock) halUartUnLock();
 	return iRV;
 }
 
