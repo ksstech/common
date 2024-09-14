@@ -325,9 +325,9 @@ typedef union px_t {
 	x16_t *	px16;					// pointer to x16
 	u16_t *	pu16;
 	i16_t *	pi16;
-	x8_t *	px8;					// pointers to x08
-	u8_t *	pu8;
-	s8_t *	pi8;
+	x8_t * px8;						// pointers to x08
+	u8_t * pu8;
+	s8_t * pi8;
 	char * pc8;
 	char ** ppc8;
 	const char *pcc8;
@@ -346,6 +346,9 @@ struct tsz_t;
 struct vt_enum_t;
 union ow_rom_t;
 struct mb_srv_t;
+union vd_t;
+struct v32_t;
+struct v64_t;
 
 typedef union ps_t {
 	struct epw_t * psEPW;
@@ -357,7 +360,11 @@ typedef union ps_t {
 	const struct vt_enum_t * psCX;
 	union ow_rom_t * pOW_ROM;
 	struct mb_srv_t * psMBSrv;
+	union vd_t * psVD;
+	struct v32_t * psV32;
+	struct v64_t * psV64;
 	px_t pX;
+	void * pV;
 } ps_t;
 DUMB_STATIC_ASSERT(sizeof(ps_t) == sizeof(void *));
 
