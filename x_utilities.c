@@ -168,7 +168,8 @@ u64_t u64pow(u32_t base, u32_t exp) {
 int u32Trailing0(u32_t U32val) {
 	int iRV = 0;
 	while (U32val > 0) {
-		if (U32val % 10) break;
+		if (U32val % 10)
+			break;
 		++iRV;
 		U32val /= 10;
 	}
@@ -178,7 +179,8 @@ int u32Trailing0(u32_t U32val) {
 int u64Trailing0(u64_t U64val) {
 	int iRV = 0;
 	while (U64val > 0) {
-		if (U64val % 10) break;
+		if (U64val % 10)
+			break;
 		++iRV;
 		U64val /= 10;
 	}
@@ -283,22 +285,12 @@ int	xU32ToDecStr(u32_t U32val, char * pBuf) {
 	return Len;
 }
 
-/**
- * @brief	Round VAL up or down to closest multiple of MULT
- * @param
- * @return
- */
 u32_t u32Round(u32_t U32val, u32_t Mult) {
 	u32_t Frac = U32val % Mult;
 	U32val -= Frac;
 	return (Frac >= (Mult / 2)) ? (U32val + Mult) : U32val;
 }
 
-/**
- * @brief	Round VAL up to closest multiple of MULT
- * @param
- * @return
- */
 u32_t u32RoundUP(u32_t U32val, u32_t Mult) {
 	U32val += (Mult - 1);
 	return (U32val < Mult) ? Mult : (U32val - (U32val % Mult));

@@ -45,16 +45,58 @@ x64_t xBuildRandomX64(void);
 u32_t u32pow(u32_t base, u32_t exp) ;
 u64_t u64pow(u32_t base, u32_t exp) ;
 
+/**
+ * @brief	Calculate number of trailing 0's in U32 value
+ * @param	U32val value to evaluate
+ * @return	number of trailing 0's
+ */
 int u32Trailing0(u32_t U32val) ;
+
+/**
+ * @brief	Calculate number of trailing 0's in U64 value
+ * @param	U64val value to evaluate
+ * @return	number of trailing 0's
+ */
 int u64Trailing0(u64_t U64val) ;
 
+/**
+ * @brief	Calculate number of digits (including sign) in I32 value
+ * @param	I32val - value of which length (number of digits) is to be calculated
+ * @param	grouping - 1 if number of digits calculated should include SI separators
+ * @return	number of digits that value (if  printed) would consist of
+ */
 int	xDigitsInI32(i32_t I32val, bool grouping);
+
+/**
+ * @brief	Calculate number of digits in U32 value
+ * @param	U32val - value of which length (number of digits) is to be calculated
+ * @param	grouping - 1 if number of digits calculated should include SI separators
+ * @return	number of digits that value (if  printed) would consist of
+ */
 int	xDigitsInU32(u32_t U32val, bool grouping);
+
+/**
+ * @brief	Calculate number of digits in U64 value
+ * @param	U64val - value of which length (number of digits) is to be calculated
+ * @param	grouping - 1 if number of digits calculated should include SI separators
+ * @return	number of digits that value (if  printed) would consist of
+ */
 int	xDigitsInU64(u64_t U64val, bool grouping);
 
 int	xU32ToDecStr(u32_t Value, char *);
 
+/**
+ * @brief	Round VAL up or down to closest multiple of MULT
+ * @param
+ * @return
+ */
 u32_t u32Round(u32_t u32V, u32_t u32P);
+
+/**
+ * @brief	Round VAL up to closest multiple of MULT
+ * @param
+ * @return
+ */
 u32_t u32RoundUP(u32_t u32V, u32_t u32P);
 
 // ################################### 1/2/4 bit field array support ###############################
