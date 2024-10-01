@@ -99,6 +99,15 @@ u32_t u32Round(u32_t u32V, u32_t u32P);
  */
 u32_t u32RoundUP(u32_t u32V, u32_t u32P);
 
+/**
+ * @brief	Increment the value and return the modulus/wrapped result
+ * @param	V32 - value to be incremented
+ * @param	L32 - limit to be used for wrapping
+ * @return	modulus of the incremented value
+ */
+inline __attribute__((always_inline)) u32_t u32IncrementWrap(u32_t U32val, u32_t U32lim) { ++U32val; return U32val % U32lim; }
+inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t I32val, i32_t I32lim) { ++I32val; return I32val % I32lim; }
+
 // ################################### 1/2/4 bit field array support ###############################
 
 ba_t * pvBitArrayCreate(size_t Count, size_t Size) ;
