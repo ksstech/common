@@ -256,7 +256,7 @@ int main() {
 */
 
 // true/false range tests
-#define INRANGE(x,y,z)				(((x) <= (y)) && ((y) <= (z)) ? 1 : 0)
+#define INRANGE(x,y,z)				(((y) >= (x)) && ((y) <= (z)) ? 1 : 0)
 #define	BETWEEN(x,y,z)				(((y) >  (x)) && ((y) <  (z)) ? 1 : 0)
 #define	OUTSIDE(x,y,z)				(((y) <  (x)) || ((y) >  (z)) ? 1 : 0)
 /*
@@ -581,7 +581,6 @@ enum {								// ANSI standard terminal colors
 	attrREV_ON = 7,		attrREV_OFF = 27,
 	attrHIDDEN = 8,		attrREVEAL = 28,
 	attrSTRIKE_ON = 9,  attrSTRIKE_OFF = 29,
-
 // foreground colors
 	colourFOREGND = 30,
 	colourFG_BLACK = colourFOREGND,
