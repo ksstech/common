@@ -59,6 +59,7 @@ enum {
 	erINV_SIZE,
 	erINV_SSID,
 	erINV_PSWD,
+	erINV_APNUM,
 	erINV_COMMAND,
 	erINV_ADDRESS,
 	erINV_FLDNUM,
