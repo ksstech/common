@@ -80,6 +80,7 @@ enum {
 	erTO_L3toLX,
 	erTIMEOUT,
 
+	erNO_SPACE,
 	erNO_MEM,
 	erTABLE_FULL,
 	// Insert additional application error codes above here
