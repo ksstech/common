@@ -129,7 +129,7 @@ typedef struct tm tm_t;
 /*
  * TIME ZONE STRUCTURE DEFINITION
  */
-typedef	struct __attribute__((__packed__)) tz_s {
+typedef	struct __attribute__((__packed__)) tz_t {
 	short	daylight;
 	int		timezone;
 #if	(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
@@ -176,8 +176,8 @@ inline u32_t u32TS_FracMillis(u64_t TS) { return (u32_t) ((TS%MICROS_IN_SECOND)/
  * @brief	Convert 64_t timestamp to u32_t seconds value
  * @return	u32_t seconds value
 */
-inline u32_t xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / MICROS_IN_SECOND); }
-inline u32_t xTimeStampAsMillis(u64_t Timestamp) { return (u32_t) (Timestamp / MILLIS_IN_SECOND); }
+static inline u32_t __attribute__((always_inline)) xTimeStampAsSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / MICROS_IN_SECOND); }
+static inline u32_t __attribute__((always_inline)) xTimeStampAsMillis(u64_t Timestamp) { return (u32_t) (Timestamp / MILLIS_IN_SECOND); }
 
 /**
  * @brief	Convert u32_t seconds & microseconds values to u64_t timestamp
