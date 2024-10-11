@@ -67,7 +67,7 @@ int xTermPuts(char * pStr, termctrl_t Ctrl) {
 	int iRV = 0;
 	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	while (*pStr) {
-		putchar_cursor(*pStr++, Ctrl.NoCursor);
+		__real_putchar(*pStr++);
 		++iRV;
 	}
 	if (Ctrl.Unlock) halUartUnLock();
@@ -230,7 +230,7 @@ int xTermIdentify(void) {
 int xTermAttached(void) {
 	if ((configCONSOLE_UART >= 0) && halUART_RxFifoUsed(configCONSOLE_UART) == 0) {
 		halUART_Flush(configCONSOLE_UART);				// nothing to read, ensure TX buffer is empty
-		putchar_cursor(CHR_ENQ, 1);
+		putchar(CHR_ENQ);
 		for (int i = 0; i < 5; ++i) {
 			vTaskDelay(pdMS_TO_TICKS(1));				// wait a short while for a response
 			if (getchar() == CHR_ENQ) {
