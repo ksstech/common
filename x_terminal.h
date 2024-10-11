@@ -24,7 +24,7 @@ extern "C" {
 
 #define termFLAG_ALL				(termFLAG_CURSOR|termFLAG_LOCK|termFLAG_UNLOCK)
 
-#define termBUILD_CTRL(NC,LO,UL,WAIT) ((termctrl_t) { .NoCursor = NC, .Lock = LO, .Unlock = UL, .Wait = WAIT } )
+#define termBUILD_CTRL(LO,UL,WAIT) ((termctrl_t) { .Lock = LO, .Unlock = UL, .Wait = WAIT } )
 
 // ####################################### structures ##############################################
 
@@ -36,7 +36,7 @@ typedef union {
 
 typedef struct __attribute__((packed)) termctrl_t {
 	union {
-		struct { bool NoCursor; bool Lock; bool Unlock; u16_t Spare:13; };
+		struct { bool Lock; bool Unlock; };
 		u16_t u16Val;
 	};
 	u16_t Wait;

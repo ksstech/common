@@ -105,21 +105,21 @@ char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
 void vTermLocate(u8_t Row, u8_t Col) {
 	char Buffer[sizeof("E[yyy;xxxH0")];
 	if (pcTermLocate(Buffer, Row, Col) != Buffer) {
-		xTermPuts(Buffer, termBUILD_CTRL(1,1,1,termWAIT_MS));
+		xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
 	}
 }
 
 void vTermAttrib(u8_t a1, u8_t a2) {
 	char Buffer[sizeof("E[yyy;xxxH0")];
 	if (pcTermAttrib(Buffer, a1, a2) != Buffer) {
-		xTermPuts(Buffer, termBUILD_CTRL(1,1,1,termWAIT_MS));
+		xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
 	}
 }
 
 int xTermCursorRead(void) {
 	char Buf[16];
-	xTermPuts(termCSI "6n", termBUILD_CTRL(1,1,0,termWAIT_MS));
-	int iRV = xTermGets(Buf, sizeof(Buf), 'R', termBUILD_CTRL(1,0,1,termWAIT_MS));
+	xTermPuts(termCSI "6n", termBUILD_CTRL(1,0,termWAIT_MS));
+	int iRV = xTermGets(Buf, sizeof(Buf), 'R', termBUILD_CTRL(0,1,termWAIT_MS));
 	if (iRV < 6)
 		return erFAILURE;
 	int row = 0, col = 0;
@@ -130,26 +130,26 @@ int xTermCursorRead(void) {
 	return iRV;
 }
 
-void vTermCursorSave(void) { xTermPuts(termCSI "s", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermCursorSave(void) { xTermPuts(termCSI "s", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
-void vTermCursorBack(void) { xTermPuts(termCSI "u", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermCursorBack(void) { xTermPuts(termCSI "u", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
-void vTermClear2EOL(void) { xTermPuts(termCSI "0K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClear2EOL(void) { xTermPuts(termCSI "0K", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
-void vTermClear2BOL(void) { xTermPuts(termCSI "1K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClear2BOL(void) { xTermPuts(termCSI "1K", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
-void vTermClearline(void) { xTermPuts(termCSI "2K", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClearline(void) { xTermPuts(termCSI "2K", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
-void vTermClearScreen(void) { xTermPuts(termCSI "2J", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermClearScreen(void) { xTermPuts(termCSI "2J", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
-void vTermHome(void) { xTermPuts(termCSI "1;1H", termBUILD_CTRL(1,1,1,termWAIT_MS)); }
+void vTermHome(void) { xTermPuts(termCSI "1;1H", termBUILD_CTRL(1,1,termWAIT_MS)); }
 
 void vTermClearHome(void) { vTermClearScreen(); vTermHome(); }
 
 void vTermOpSysCom(char * pStr) {
-	xTermPuts(termOSC, termBUILD_CTRL(1,1,0,termWAIT_MS));
-	xTermPuts(pStr, termBUILD_CTRL(1,0,0,0));
-	xTermPuts(termST, termBUILD_CTRL(1,0,1,0));
+	xTermPuts(termOSC, termBUILD_CTRL(1,0,termWAIT_MS));
+	xTermPuts(pStr, termBUILD_CTRL(0,0,0));
+	xTermPuts(termST, termBUILD_CTRL(0,1,0));
 }
 
 void vTermWinTleCursor(void) {
@@ -172,7 +172,7 @@ void vTermDisplayLocation(void) {
 	pPos = stpcpy(pPos, ",");
 	pPos += xU32ToDecStr(sTI.SavX, pPos);
 	pPos = stpcpy(pPos, "] ");
-	xTermPuts(Buffer, termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
 	vTermLocate(sTI.SavY, sTI.SavX);
 }
 
@@ -221,8 +221,8 @@ void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
 
 int xTermIdentify(void) {
 	char Buffer[64];
-	xTermPuts(termCSI "Z", termBUILD_CTRL(1,1,0,termWAIT_MS));
-	int iRV = xTermGets(Buffer, sizeof(Buffer), 0x7F, termBUILD_CTRL(1,0,1,500));
+	xTermPuts(termCSI "Z", termBUILD_CTRL(1,0,termWAIT_MS));
+	int iRV = xTermGets(Buffer, sizeof(Buffer), 0x7F, termBUILD_CTRL(0,1,500));
 	PX(" [iRV=%d '%s']\r\n", iRV, Buffer);
 	return erSUCCESS;
 }
@@ -255,22 +255,22 @@ void	TerminalPlot(int16_t * dat, u32_t len) {
 // ##################################### functional tests ##########################################
 
 void vTermTestCode(void) {
-	xTermPuts("Waiting to clear the screen...", termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts("Waiting to clear the screen...", termBUILD_CTRL(1,1,termWAIT_MS));
 	vTermClearHome();
 	vTermLocate(5, 5);
-	xTermPuts("Normal text at 5,5", termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts("Normal text at 5,5", termBUILD_CTRL(1,1,termWAIT_MS));
 
 	vTermLocate(7, 7);
 	vTermAttrib(attrRESET, colourFG_WHITE);
-	xTermPuts("White text on Black background at 7,7", termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts("White text on Black background at 7,7", termBUILD_CTRL(1,1,termWAIT_MS));
 
 	vTermLocate(9, 9);
 	vTermAttrib(attrREV_ON, attrULINE_ON);
-	xTermPuts("Normal underlined text at 9,9", termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts("Normal underlined text at 9,9", termBUILD_CTRL(1,1,termWAIT_MS));
 
 	vTaskDelay(5000);
 	vTermLocate(9, 19);
-	xTermPuts("!!! OVERPRINTED TEXT !!!", termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts("!!! OVERPRINTED TEXT !!!", termBUILD_CTRL(1,1,termWAIT_MS));
 
 	vTaskDelay(5000);
 	vTermLocate(9, 25);
