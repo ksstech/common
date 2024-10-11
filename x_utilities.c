@@ -28,7 +28,7 @@ void vShowActivity(int i) {
 	}
 	vTermCursorSave();
 	vTermLocate(1, 120);
-	xTermPuts(caActivity, termBUILD_CTRL(1,1,1,termWAIT_MS));
+	xTermPuts(caActivity, termBUILD_CTRL(1,1,termWAIT_MS));
 	vTermCursorBack();
 }
 
