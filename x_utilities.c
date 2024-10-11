@@ -68,8 +68,8 @@ void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) {
 // ####################################### UUID support ############################################
 
 // https://stackoverflow.com/questions/7399069/how-to-generate-a-guid-in-c#7399348
-void xGenerateUUID(char * pBuf) {
 // V4 template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx";
+void xGenerateUUID(char * pBuf) {
 	char szHex[] = "0123456789ABCDEF";
 	srand(clock());
 	for (int t = 0; t < 36; ++t, ++pBuf) {
