@@ -25,6 +25,16 @@ typedef struct ba_t {									// 1/2/4 bit field array
 
 // #################################################################################################
 
+/**
+ * @brief		Find a matching value in formatted charater buffer
+ * @param[in]	Value - the code/value to try and match
+ * @param[in]	pcBuf - buffer to search in for the value
+ * @param[in]	Size - size of buffer in bytes
+ * @return		pointer the the NULL terminated stricg immediately following the matching value
+ * @note		const char Buffer[] = { "\001String1\0" "\002String2\0" "\023String19\0" }
+ */
+const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size);
+
 void vShowActivity(int i) ;
 void vUtilPrintCharacterSet(void) ;
 

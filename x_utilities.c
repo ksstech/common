@@ -19,6 +19,15 @@
 
 // #################################################################################################
 
+const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size) {
+	for (int i = 0; i < Size; ++i) {
+//		RP("i=%d  Bi=%d" strNL, i, pcBuf[i]);
+		if (pcBuf[i] == Value) return pcBuf+i+1;
+		do { ++i; } while (i < Size && pcBuf[i] != 0);
+	}
+	return NULL;
+}
+
 void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 };
 	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1));
