@@ -193,12 +193,8 @@ void xTermProcessChr(int cChr) {
 		if (sTI.CurY == sTI.MaxY) 
 			sTI.CurY = sTI.MaxY - 1;
 		break;
-	case CHR_FF:
-		sTI.CurX = sTI.CurY = 0;
-		break;
-	case CHR_CR:
-		sTI.CurX = 0;
-		break;
+	case CHR_FF: sTI.CurX = sTI.CurY = 0; break;
+	case CHR_CR: sTI.CurX = 0; break;
 	case CHR_TAB:
 		sTI.CurY = u32RoundUP(sTI.CurX, sTI.Tabs);
 		vTermCheckCursor();
