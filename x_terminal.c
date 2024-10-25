@@ -73,8 +73,7 @@ void xTermProcessChr(int cChr) {
 		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1)
 			sTI.CurX = 0;
 		#endif
-		++sTI.CurY;
-		if (sTI.CurY == sTI.MaxY) sTI.CurY = sTI.MaxY - 1;
+		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
 		break;
 	case CHR_FF:
 		sTI.CurX = sTI.CurY = 0;
@@ -82,8 +81,7 @@ void xTermProcessChr(int cChr) {
 	case CHR_CR:
 		sTI.CurX = 0;
 		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1)
-			++sTI.CurY;
-			if (sTI.CurY == sTI.MaxY) sTI.CurY = sTI.MaxY - 1;
+			if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
 		#endif
 		break;
 	default:
