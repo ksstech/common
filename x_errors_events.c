@@ -20,8 +20,7 @@ const eTable_t ErrorTable[] = {
 	TABLE_ENTRY_INT(erINV_SCALE,		"InvScale"),
 	TABLE_ENTRY_INT(erINV_UNIT,			"InvUnit"),
 	TABLE_ENTRY_INT(erINV_SIZE, 		"InvSize"),
-	TABLE_ENTRY_INT(erINV_SSID,			"InvSSID"),
-	TABLE_ENTRY_INT(erINV_PSWD,			"InvPSWD"),
+    TABLE_ENTRY_INT(erINV_APNUM,        "InvAP_NUM"),
 	TABLE_ENTRY_INT(erINV_COMMAND,		"InvCommand"),
 	TABLE_ENTRY_INT(erINV_ADDRESS,		"InvAddress"),
 	TABLE_ENTRY_INT(erINV_FLDNUM,		"InvFieldNumber"),
@@ -29,7 +28,6 @@ const eTable_t ErrorTable[] = {
 	TABLE_ENTRY_INT(erINV_VERSION,		"InvVersion"),
 	TABLE_ENTRY_INT(erINV_WHOAMI,		"InvWhoAmI"),
 	TABLE_ENTRY_INT(erINV_HOST,			"InvHost"),
-//	TABLE_ENTRY_INT(erDUP_HOST,			"DuplicateHost"),
 	TABLE_ENTRY_INT(erTX_QUEUE_SEND,	"TX Queue Send Err"),
 };
 
