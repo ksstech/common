@@ -29,13 +29,13 @@ inline int xTermGetCurRowY(void) { return sTI.CurY; };
 inline int xTermGetMaxColX(void) { return sTI.MaxX; };
 inline int xTermGetMaxRowY(void) { return sTI.MaxY; };
 
-inline void vTermPushCurColRow(void) { sTI.SavY = sTI.CurY; sTI.SavX = sTI.CurX; }
-inline void vTermPullCurColRow(void) { sTI.CurY = sTI.SavY; sTI.CurX = sTI.SavX; }
-inline void vTermSetCurColRow(u16_t ColX, u16_t RowY) { sTI.CurY = RowY; sTI.CurX = ColX; };
+inline void vTermPushCurRowCol(void) { sTI.SavY = sTI.CurY; sTI.SavX = sTI.CurX; }
+inline void vTermPullCurRowCol(void) { sTI.CurY = sTI.SavY; sTI.CurX = sTI.SavX; }
+inline void vTermSetCurRowCol(u16_t RowY, u16_t ColX) { sTI.CurY = RowY; sTI.CurX = ColX; };
 
-inline void vTermPushMaxColRow(void) { sTI.SavY = sTI.MaxY; sTI.SavX = sTI.MaxX; }
-inline void vTermPullMaxColRow(void) { sTI.MaxY = sTI.SavY; sTI.MaxX = sTI.SavX; }
-inline void vTermSetMaxColRow(u16_t ColX, u16_t RowY) { sTI.MaxY = RowY; sTI.MaxX = ColX; };
+inline void vTermPushMaxRowCol(void) { sTI.SavY = sTI.MaxY; sTI.SavX = sTI.MaxX; }
+inline void vTermPullMaxRowCol(void) { sTI.MaxY = sTI.SavY; sTI.MaxX = sTI.SavX; }
+inline void vTermSetMaxRowCol(u16_t RowY, u16_t ColX) { sTI.MaxY = RowY; sTI.MaxX = ColX; };
 
 void vTermSetSize(u16_t RowY, u16_t ColX) {
     if (RowY && ColX) {

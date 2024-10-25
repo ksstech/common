@@ -77,13 +77,13 @@ int xTermGetCurRowY(void);
 int xTermGetMaxColX(void);
 int xTermGetMaxRowY(void);
 
-void vTermPushCurColRow(void);
-void vTermPullCurColRow(void);
-void vTermSetCurColRow(u16_t ColX, u16_t RowY);
+void vTermPushCurRowCol(void);
+void vTermPullCurRowCol(void);
+void vTermSetCurRowCol(u16_t RowY, u16_t ColX);
 
-void vTermPushMaxColRow(void);
-void vTermPullMaxColRow(void);
-void vTermSetMaxColRow(u16_t ColX, u16_t RowY);
+void vTermPushMaxRowCol(void);
+void vTermPullMaxRowCol(void);
+void vTermSetMaxRowCol(u16_t RowY, u16_t ColX);
 
 /**
  * @brief	Update row and/or column tracking values based on the specific character being processed
