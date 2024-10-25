@@ -18,19 +18,43 @@ extern "C" {
 
 #define	termWAIT_MS					100
 
-#define termFLAG_CURSOR				(1 << 0)
-#define termFLAG_LOCK				(1 << 1)
-#define termFLAG_UNLOCK				(1 << 2)
-
-#define termFLAG_ALL				(termFLAG_CURSOR|termFLAG_LOCK|termFLAG_UNLOCK)
-
 #define termBUILD_CTRL(LO,UL,WAIT) ((termctrl_t) { .Lock = LO, .Unlock = UL, .Wait = WAIT } )
+
+#define termUSE_7BIT			0						// C0 ~ ESC [
+#define termUSE_8BIT			1						// C1 ~ 0x80 -> 0x9F
+#define termUSE_TYPE			termUSE_7BIT
+
+#if (termUSE_TYPE == termUSE_7BIT)
+	#define termCSI	"\033["
+	#define termST	"\033\134"
+	#define termOSC "\033]"
+#else
+	#define termCSI	"\233"
+	#define termST	"\234"
+	#define termOSC "\235"
+#endif
+
+#define getCURSOR_POS	termCSI "6n"
+#define setCURSOR_HOME	termCSI "1;1H"
+#define setCURSOR_SAVE	termCSI "7"			// termCSI "s"
+#define setCURSOR_REST	termCSI "8"			// termCSI "u"
+
+#define setCLRLIN_RIGHT	termCSI "0K"
+#define setCLRLIN_LEFT	termCSI "1K"
+#define setCLRLIN_ALL	termCSI "2K"
+
+#define setCLRDSP_BELOW	termCSI "0J"
+#define setCLRDSP_ABOVE	termCSI "1J"
+#define setCLRDSP_ALL	termCSI "2J"
+
+#define getDEVICE_ATTR	termCSI "0c"
+//#define xterm
 
 // ####################################### structures ##############################################
 
 typedef union {
 	struct __attribute__((packed)) {
-		u8_t CurX, CurY, SavX, SavY, MaxX, MaxY, Tabs;
+		u16_t CurX, CurY, SavX, SavY, MaxX, MaxY, Tabs;
 	};
 } terminfo_t;
 
@@ -46,6 +70,26 @@ typedef struct __attribute__((packed)) termctrl_t {
 
 
 // ###################################### Public functions #########################################
+
+int xTermGetCurColX(void);
+int xTermGetCurRowY(void);
+
+int xTermGetMaxColX(void);
+int xTermGetMaxRowY(void);
+
+void vTermPushCurColRow(void);
+void vTermPullCurColRow(void);
+void vTermSetCurColRow(u16_t ColX, u16_t RowY);
+
+void vTermPushMaxColRow(void);
+void vTermPullMaxColRow(void);
+void vTermSetMaxColRow(u16_t ColX, u16_t RowY);
+
+/**
+ * @brief	Update row and/or column tracking values based on the specific character being processed
+ * @param	cChr - character to be processed
+ */
+void xTermProcessChr(int cChr);
 
 /**
  * @brief	input a string directly from the UART/terminal
@@ -72,7 +116,7 @@ int xTermPuts(char * pStr, termctrl_t flag);
  * @param	Col - 1 relative column value
  * @return	[Adjusted] pointer	
  */
-char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col);
+char * pcTermLocate(char * pBuf, u16_t Row, u16_t Col);
 
 /**
  * @brief	generate text attribute control/ESC string
@@ -81,21 +125,21 @@ char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col);
  * @param	a2 - second attribute
  * @return	[Adjusted] pointer	
  */
-char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2);
+char * pcTermAttrib(char * pBuf, u16_t a1, u16_t a2);
 
 /**
  * @brief	generate & output cursor location control/ESC string
  * @param	Row - 1 relative row value
  * @param	Col - 1 relative column value
  */
-void vTermLocate(u8_t Row, u8_t Col);
+void vTermLocate(u16_t Row, u16_t Col);
 
 /**
  * @brief	generate & output cursor location control/ESC string
  * @param	a1 - first attribute
  * @param	a2 - second attribute
  */
-void vTermAttrib(u8_t a1, u8_t a2);
+void vTermAttrib(u16_t a1, u16_t a2);
 
 /**
  * @brief	Request, receive and parse current cursor location in a single lock/unlock operation
@@ -151,17 +195,6 @@ void vTermOpSysCom(char * pStr);
 void vTermWinTleCursor(void);
 
 void vTermDisplayLocation(void);
-
-/**
- * @brief	Check column and adjust column & row if required
- */
-void vTermCheckCursor(void);
-
-/**
- * @brief	Update row and/or column tracking values based on the specific character being processed
- * @param	cChr - character to be processed
- */
-void xTermProcessChr(int cChr);
 
 /**
  * @brief	vTermSetSize() - set terminal row & column size (0 = reset to default)

@@ -10,31 +10,12 @@
 
 // ##################################### MACRO definitions #########################################
 
-#define termUSE_7BIT			0						// C0 ~ ESC [
-#define termUSE_8BIT			1						// C1 ~ 0x80 -> 0x9F
-#define termUSE_TYPE			termUSE_7BIT
-
-#if (termUSE_TYPE == termUSE_7BIT)
-	#define termCSI	"\033["
-	#define termST	"\033\134"
-	#define termOSC "\033]"
-#else
-	#define termCSI	"\233"
-	#define termST	"\234"
-	#define termOSC "\235"
-#endif
-
 // ######################################## Enumerations ###########################################
 // ###################################### Global variables #########################################
 
-terminfo_t sTI = {
-	.CurX = 0,
-	.CurY = 0,
-	.SavX = 0,
-	.SavY = 0,
-	.MaxX = TERMINAL_DFLT_X,
-	.MaxY = TERMINAL_DFLT_Y,
-	.Tabs = TERMINAL_DFLT_TAB,
+static terminfo_t sTI = {
+	.CurX = 0, .CurY = 0, .SavX = 0, .SavY = 0,
+	.MaxX = TERMINAL_DFLT_X, .MaxY = TERMINAL_DFLT_Y, .Tabs = TERMINAL_DFLT_TAB,
 };
 
 // ################################# Terminal (VT100) support routines #############################
@@ -42,53 +23,116 @@ terminfo_t sTI = {
 //	http://docs.smoe.org/oreilly/unix_lib/upt/ch05_05.htm
 //	http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
 
-int	xTermGets(char * pcBuf, size_t Size, int Match, termctrl_t Ctrl) { 
-	int iRV, Len = 0;
-	TickType_t tNow = 0, tStart = xTaskGetTickCount();
-	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
-	do {
-		iRV = getchar();
-		if (iRV != EOF) {
-			pcBuf[Len++] = iRV;
-			if (Len == Size || iRV == Match) {
-				break;
-			}
-			continue;
-		}
-		taskYIELD();
-		tNow = xTaskGetTickCount() - tStart;
-	} while (tNow < pdMS_TO_TICKS(Ctrl.Wait));
-	if (Len < (Size - 1)) pcBuf[Len] = CHR_NUL;
-	if (Ctrl.Unlock) halUartUnLock();
-	return Len;
+inline int xTermGetCurColX(void) { return sTI.CurX; };
+inline int xTermGetCurRowY(void) { return sTI.CurY; };
+
+inline int xTermGetMaxColX(void) { return sTI.MaxX; };
+inline int xTermGetMaxRowY(void) { return sTI.MaxY; };
+
+inline void vTermPushCurColRow(void) { sTI.SavY = sTI.CurY; sTI.SavX = sTI.CurX; }
+inline void vTermPullCurColRow(void) { sTI.CurY = sTI.SavY; sTI.CurX = sTI.SavX; }
+inline void vTermSetCurColRow(u16_t ColX, u16_t RowY) { sTI.CurY = RowY; sTI.CurX = ColX; };
+
+inline void vTermPushMaxColRow(void) { sTI.SavY = sTI.MaxY; sTI.SavX = sTI.MaxX; }
+inline void vTermPullMaxColRow(void) { sTI.MaxY = sTI.SavY; sTI.MaxX = sTI.SavX; }
+inline void vTermSetMaxColRow(u16_t ColX, u16_t RowY) { sTI.MaxY = RowY; sTI.MaxX = ColX; };
+
+void vTermSetSize(u16_t RowY, u16_t ColX) {
+    if (RowY && ColX) {
+    	sTI.MaxX = (ColX < TERMINAL_MAX_X) ? ColX : TERMINAL_DFLT_X;
+	    sTI.MaxY = (RowY < TERMINAL_MAX_Y) ? RowY : TERMINAL_DFLT_Y;
+    }
 }
 
-int xTermPuts(char * pStr, termctrl_t Ctrl) {
+void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
+
+/**
+ * @brief	Check column and adjust column & row if required
+ */
+void vTermCheckCursor(void) {
+	if (sTI.CurX >= sTI.MaxX) {
+		sTI.CurX = 1;
+		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
+	}
+}
+
+void xTermProcessChr(int cChr) {
+	switch(cChr) {
+	case CHR_BS:
+		--sTI.CurX;
+		if (sTI.CurX == 0) {
+			sTI.CurX = sTI.MaxX;
+			if (sTI.CurY > 1) --sTI.CurY;
+		}
+		break;
+	case CHR_TAB:
+		sTI.CurX = u32RoundUP(sTI.CurX, sTI.Tabs);
+		vTermCheckCursor();
+		break;
+	case CHR_LF:
+		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1)
+			sTI.CurX = 0;
+		#endif
+		++sTI.CurY;
+		if (sTI.CurY == sTI.MaxY) sTI.CurY = sTI.MaxY - 1;
+		break;
+	case CHR_FF:
+		sTI.CurX = sTI.CurY = 0;
+		break;
+	case CHR_CR:
+		sTI.CurX = 0;
+		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1)
+			++sTI.CurY;
+			if (sTI.CurY == sTI.MaxY) sTI.CurY = sTI.MaxY - 1;
+		#endif
+		break;
+	default:
+		if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
+			++sTI.CurX;
+			vTermCheckCursor();
+		}
+		break;
+	}
+}
+
+int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	int iRV = 0;
 	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
-	while (*pStr) {
-		__real_putchar(*pStr++);
+	while (*pBuf) {
+		__real_putchar(*pBuf++);
 		++iRV;
 	}
 	if (Ctrl.Unlock) halUartUnLock();
 	return iRV;
 }
 
-char * pcTermLocate(char * pBuf, u8_t Row, u8_t Col) {
-	if (Row > 0 && Col > 0) {
-		pBuf = stpcpy(pBuf, termCSI);
-		pBuf += xU32ToDecStr(Row, pBuf);
-		*pBuf++	= CHR_SEMICOLON;
-		pBuf += xU32ToDecStr(Col, pBuf);
-		*pBuf++	= CHR_H;
-		sTI.CurX = (Col %= sTI.MaxX);
-		sTI.CurY = (Row %= sTI.MaxY);
-	}
-	*pBuf = 0;
-	return pBuf;
+int	xTermGets(char * pBuf, size_t Size, int Match, termctrl_t Ctrl) { 
+	int iRV, Len = 0;
+	TickType_t tNow = 0, tStart = xTaskGetTickCount();
+	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
+	do {
+		iRV = __real_getchar();
+		if (iRV != EOF) {
+			pBuf[Len++] = iRV;
+			if (Len == Size || iRV == Match) break;
+			continue;
+		}
+		taskYIELD();
+		tNow = xTaskGetTickCount() - tStart;
+	} while (tNow < pdMS_TO_TICKS(Ctrl.Wait));
+	if (Len < (Size - 1)) pBuf[Len] = CHR_NUL;
+	if (Ctrl.Unlock) halUartUnLock();
+	return Len;
 }
 
-char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
+int xTermQuery(char * pccQuery, char * pBuf, size_t Size, int Match) {
+	int iRV1 = xTermPuts(pccQuery, termBUILD_CTRL(1, 0, termWAIT_MS));
+	int iRV2 = xTermGets(pBuf, Size, Match, termBUILD_CTRL(0, 1, 500));
+	PX(" [iRV=%d/%d %'+-hhY]" strNL, iRV1, iRV2, iRV2, pBuf);
+	return iRV2;
+}
+
+char * pcTermAttrib(char * pBuf, u16_t a1, u16_t a2) {
 	if (a1 <= colourBG_WHITE) {							// as long as valid
 		pBuf = stpcpy(pBuf, termCSI);					// MUST process 1st param
 		pBuf += xU32ToDecStr(a1, pBuf);
@@ -102,125 +146,102 @@ char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
 	return pBuf;
 }
 
-void vTermLocate(u8_t Row, u8_t Col) {
+void vTermAttrib(u16_t a1, u16_t a2) {
 	char Buffer[sizeof("E[yyy;xxxH0")];
-	if (pcTermLocate(Buffer, Row, Col) != Buffer) {
-		xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
+	if (pcTermAttrib(Buffer, a1, a2) != Buffer) xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
+}
+
+char * pcTermLocate(char * pBuf, u16_t RowY, u16_t ColX) {
+	if (RowY && ColX) {
+		pBuf = stpcpy(pBuf, termCSI);
+		pBuf += xU32ToDecStr(RowY, pBuf);
+		*pBuf++	= CHR_SEMICOLON;
+		pBuf += xU32ToDecStr(ColX, pBuf);
+		*pBuf++	= CHR_H;
+		sTI.CurY = RowY % (sTI.MaxY + 1);
+		sTI.CurX = ColX % (sTI.MaxX + 1);
 	}
+	*pBuf = 0;
+	return pBuf;
 }
 
-void vTermAttrib(u8_t a1, u8_t a2) {
-	char Buffer[sizeof("E[yyy;xxxH0")];
-	if (pcTermAttrib(Buffer, a1, a2) != Buffer) {
-		xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
-	}
+void _vTermLocate(u16_t RowY, u16_t ColX, termctrl_t sTC) {
+	char Buffer[sizeof("\e[yyy;xxxH\0")];
+	if (pcTermLocate(Buffer, RowY, ColX) != Buffer) xTermPuts(Buffer, sTC);
 }
 
-int xTermCursorRead(void) {
-	char Buf[16];
-	xTermPuts(termCSI "6n", termBUILD_CTRL(1,0,termWAIT_MS));
-	int iRV = xTermGets(Buf, sizeof(Buf), 'R', termBUILD_CTRL(0,1,termWAIT_MS));
-	if (iRV < 6)
-		return erFAILURE;
-	int row = 0, col = 0;
-	iRV = sscanf(Buf, termCSI "%d;%dR", &row, &col);
-//	RPL(" [iRV=%d row=%d col=%d num=%d]\r\n", iRV, row, col, num);
-	sTI.CurY = sTI.SavY = row;
-	sTI.CurX = sTI.SavX = col;
-	return iRV;
+void vTermLocate(u16_t RowY, u16_t ColX) { _vTermLocate(RowY, ColX, termBUILD_CTRL(1,1,termWAIT_MS)); }
+
+int xTermLocatePuts(u16_t RowY, u16_t ColX, char * pBuf) {
+	_vTermLocate(RowY, ColX, termBUILD_CTRL(1, 0, termWAIT_MS));
+	return xTermPuts(pBuf, termBUILD_CTRL(0, 1, termWAIT_MS));
 }
 
-void vTermCursorSave(void) { xTermPuts(termCSI "s", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermCursorSave(void) { xTermPuts(setCURSOR_SAVE, termBUILD_CTRL(1, 1, termWAIT_MS)); }
 
-void vTermCursorBack(void) { xTermPuts(termCSI "u", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermCursorBack(void) { xTermPuts(setCURSOR_REST, termBUILD_CTRL(1, 1, termWAIT_MS)); }
 
-void vTermClear2EOL(void) { xTermPuts(termCSI "0K", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermClear2EOL(void) { xTermPuts(setCLRLIN_RIGHT, termBUILD_CTRL(1, 1, termWAIT_MS)); }
 
-void vTermClear2BOL(void) { xTermPuts(termCSI "1K", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermClear2BOL(void) { xTermPuts(setCLRLIN_LEFT, termBUILD_CTRL(1, 1, termWAIT_MS)); }
 
-void vTermClearline(void) { xTermPuts(termCSI "2K", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermClearline(void) { xTermPuts(setCLRLIN_ALL, termBUILD_CTRL(1, 1, termWAIT_MS)); }
 
-void vTermClearScreen(void) { xTermPuts(termCSI "2J", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermClearScreen(void) { xTermPuts(setCLRDSP_ALL, termBUILD_CTRL(1, 1, termWAIT_MS)); }
 
-void vTermHome(void) { xTermPuts(termCSI "1;1H", termBUILD_CTRL(1,1,termWAIT_MS)); }
+void vTermHome(void) { 
+	xTermPuts(setCURSOR_HOME, termBUILD_CTRL(1, 1, termWAIT_MS));
+	sTI.CurX = sTI.CurY = 1;
+}
 
 void vTermClearHome(void) { vTermClearScreen(); vTermHome(); }
 
-void vTermOpSysCom(char * pStr) {
-	xTermPuts(termOSC, termBUILD_CTRL(1,0,termWAIT_MS));
-	xTermPuts(pStr, termBUILD_CTRL(0,0,0));
-	xTermPuts(termST, termBUILD_CTRL(0,1,0));
+void vTermOpSysCom(char * pBuf) {
+	xTermPuts(termOSC, termBUILD_CTRL(1, 0, termWAIT_MS));
+	xTermPuts(pBuf, termBUILD_CTRL(0, 0, 0));
+	xTermPuts(termST, termBUILD_CTRL(0, 1, 0));
 }
 
 void vTermWinTleCursor(void) {
 	char Buffer[16];
-	char * pPos = Buffer;
-	pPos = stpcpy(pPos, "0;R=");
-	pPos += xU32ToDecStr(sTI.CurY, pPos);
-	pPos = stpcpy(pPos, " C=");
-	pPos += xU32ToDecStr(sTI.CurX, pPos);
+	char * pBuf = Buffer;
+	pBuf = stpcpy(pBuf, "0;R=");
+	pBuf += xU32ToDecStr(sTI.CurY, pBuf);
+	pBuf = stpcpy(pBuf, " C=");
+	pBuf += xU32ToDecStr(sTI.CurX, pBuf);
 	vTermOpSysCom(Buffer);
 }
 
 void vTermDisplayLocation(void) {
-	xTermCursorRead();
-	vTermLocate(1,110);
 	char Buffer[16];
-	char * pPos = Buffer;
-	pPos = stpcpy(pPos, " [");
-	pPos += xU32ToDecStr(sTI.SavY, pPos);
-	pPos = stpcpy(pPos, ",");
-	pPos += xU32ToDecStr(sTI.SavX, pPos);
-	pPos = stpcpy(pPos, "] ");
-	xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
-	vTermLocate(sTI.SavY, sTI.SavX);
+	char * pBuf = Buffer;
+	pBuf = stpcpy(pBuf, " [");
+	pBuf += xU32ToDecStr(sTI.SavY, pBuf);
+	pBuf = stpcpy(pBuf, ",");
+	pBuf += xU32ToDecStr(sTI.SavX, pBuf);
+	pBuf = stpcpy(pBuf, "] ");
+	int RowY = sTI.MaxY - 10;
+	int ColX = sTI.MaxX - (pBuf - Buffer);
+//	PX("R=%d  C=%d  %s" strNL, RowY, ColX, Buffer);
+	xTermLocatePuts(RowY, ColX, Buffer);
+	_vTermLocate(sTI.SavY, sTI.SavX, termBUILD_CTRL(1, 1, termWAIT_MS));
 }
 
-void vTermCheckCursor(void) {
-	if (sTI.CurX >= sTI.MaxX) {
-		sTI.CurX = 0;
-		++sTI.CurY;
-		if (sTI.CurY == sTI.MaxY) {
-			sTI.CurY = sTI.MaxY - 1;
-		}
-	}
+int xTermCursorRead(void) {
+	char Buffer[16];
+	int iRV = xTermQuery(getCURSOR_POS, Buffer, sizeof(Buffer), 'R');
+	if (iRV < 6) return erFAILURE;
+	u16_t RowY = 0, ColX = 0;
+	iRV = sscanf(Buffer, termCSI "%hu;%huR", &RowY, &ColX);
+//	PX("[iRV=%d RowY=%d ColX=%d]" strNL, iRV, RowY, ColX);
+	sTI.CurY = sTI.SavY = RowY;
+	sTI.CurX = sTI.SavX = ColX;
+	return iRV;
 }
-
-void xTermProcessChr(int cChr) {
-	switch(cChr) {
-	case CHR_LF:
-		++sTI.CurY;
-		if (sTI.CurY == sTI.MaxY) 
-			sTI.CurY = sTI.MaxY - 1;
-		break;
-	case CHR_FF: sTI.CurX = sTI.CurY = 0; break;
-	case CHR_CR: sTI.CurX = 0; break;
-	case CHR_TAB:
-		sTI.CurY = u32RoundUP(sTI.CurX, sTI.Tabs);
-		vTermCheckCursor();
-		break;
-	default:
-		if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
-			++sTI.CurX;
-			vTermCheckCursor();
-		}
-		break;
-	}
-}
-
-void vTermSetSize(u16_t Rows, u16_t Columns) {
-	sTI.MaxX = (Columns < TERMINAL_MAX_X) ? Columns : TERMINAL_DFLT_X;
-	sTI.MaxY = (Rows < TERMINAL_MAX_Y) ? Rows : TERMINAL_DFLT_Y;
-}
-
-void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
 
 int xTermIdentify(void) {
-	char Buffer[64];
-	xTermPuts(termCSI "Z", termBUILD_CTRL(1,0,termWAIT_MS));
-	int iRV = xTermGets(Buffer, sizeof(Buffer), 0x7F, termBUILD_CTRL(0,1,500));
-	PX(" [iRV=%d '%s']\r\n", iRV, Buffer);
-	return erSUCCESS;
+	char Buffer[16];
+	return xTermQuery(getDEVICE_ATTR, Buffer, sizeof(Buffer), 'c');
 }
 
 int xTermAttached(void) {
@@ -229,24 +250,11 @@ int xTermAttached(void) {
 		putchar(CHR_ENQ);
 		for (int i = 0; i < 5; ++i) {
 			vTaskDelay(pdMS_TO_TICKS(1));				// wait a short while for a response
-			if (getchar() == CHR_ENQ) {
-				// add code to determine specific terminal type.
-				return 1;
-			}
+			if (getchar() == CHR_ENQ) return 1;
 		}
 	}
 	return 0;
 }
-
-#if 0
-// ################################### Graphical plot ##############################################
-
-void	TerminalPlot(int16_t * dat, u32_t len) {
-	u32_t	i;
-	TerminalClear();
-	for (i = 0; i < len; i++) { }
-}
-#endif
 
 // ##################################### functional tests ##########################################
 
