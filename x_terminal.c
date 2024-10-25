@@ -214,9 +214,9 @@ void vTermDisplayLocation(void) {
 	char Buffer[16];
 	char * pBuf = Buffer;
 	pBuf = stpcpy(pBuf, " [");
-	pBuf += xU32ToDecStr(sTI.SavY, pBuf);
+	pBuf += xU32ToDecStr(sTI.CurY, pBuf);
 	pBuf = stpcpy(pBuf, ",");
-	pBuf += xU32ToDecStr(sTI.SavX, pBuf);
+	pBuf += xU32ToDecStr(sTI.CurX, pBuf);
 	pBuf = stpcpy(pBuf, "] ");
 	int RowY = sTI.MaxY - 10;
 	int ColX = sTI.MaxX - (pBuf - Buffer);
