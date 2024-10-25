@@ -35,9 +35,11 @@ extern "C" {
 #endif
 
 #define getCURSOR_POS	termCSI "6n"
+#define setCURSOR_SAVE	termCSI "s"						// "7" or "s"
+#define setCURSOR_REST	termCSI "u"						// "8" or "u"
 #define setCURSOR_HOME	termCSI "1;1H"
-#define setCURSOR_SAVE	termCSI "7"			// termCSI "s"
-#define setCURSOR_REST	termCSI "8"			// termCSI "u"
+#define setCURSOR_MAX	termCSI "999;999H"
+#define getCURSOR_MAX	setCURSOR_SAVE setCURSOR_MAX getCURSOR_POS setCURSOR_REST
 
 #define setCLRLIN_RIGHT	termCSI "0K"
 #define setCLRLIN_LEFT	termCSI "1K"
@@ -77,13 +79,13 @@ int xTermGetCurRowY(void);
 int xTermGetMaxColX(void);
 int xTermGetMaxRowY(void);
 
-void vTermPushCurRowCol(void);
-void vTermPullCurRowCol(void);
-void vTermSetCurRowCol(u16_t RowY, u16_t ColX);
+void vTermPushCurRowYColX(void);
+void vTermPullCurRowYColX(void);
+void vTermSetCurRowYColX(u16_t RowY, u16_t ColX);
 
-void vTermPushMaxRowCol(void);
-void vTermPullMaxRowCol(void);
-void vTermSetMaxRowCol(u16_t RowY, u16_t ColX);
+void vTermPushMaxRowYColX(void);
+void vTermPullMaxRowYColX(void);
+void vTermSetMaxRowYColX(u16_t RowY, u16_t ColX);
 
 /**
  * @brief	Update row and/or column tracking values based on the specific character being processed
@@ -145,7 +147,7 @@ void vTermAttrib(u16_t a1, u16_t a2);
  * @brief	Request, receive and parse current cursor location in a single lock/unlock operation
  * @return	Number of parameters parsed (should be 2) or erFAILURE if incomplete/malformed packet
 */
-int xTermCursorRead(void);
+int xTermReadCurRowYColX(void);
 
 /**
  * @brief
@@ -194,7 +196,7 @@ void vTermOpSysCom(char * pStr);
 
 void vTermWinTleCursor(void);
 
-void vTermDisplayLocation(void);
+void xTermShowCurRowYColX(u16_t RowY, u16_t ColX);
 
 /**
  * @brief	vTermSetSize() - set terminal row & column size (0 = reset to default)
@@ -207,6 +209,11 @@ void vTermSetSize(u16_t Rows, u16_t Columns) ;
  * @brief
  */
 void vTermGetInfo(terminfo_t * psTermInfo) ;
+
+/**
+ * @brief		Determine current terminal window size by locating to 999,999 and reading actual value
+ */
+void xTermReadMaxRowYColX(void);
 
 /**
  * @brief

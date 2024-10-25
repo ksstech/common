@@ -14,7 +14,7 @@
 // ###################################### Global variables #########################################
 
 static terminfo_t sTI = {
-	.CurX = 0, .CurY = 0, .SavX = 0, .SavY = 0,
+	.CurX = 1, .CurY = 1, .SavX = 1, .SavY = 1,
 	.MaxX = TERMINAL_DFLT_X, .MaxY = TERMINAL_DFLT_Y, .Tabs = TERMINAL_DFLT_TAB,
 };
 
@@ -29,13 +29,13 @@ inline int xTermGetCurRowY(void) { return sTI.CurY; };
 inline int xTermGetMaxColX(void) { return sTI.MaxX; };
 inline int xTermGetMaxRowY(void) { return sTI.MaxY; };
 
-inline void vTermPushCurRowCol(void) { sTI.SavY = sTI.CurY; sTI.SavX = sTI.CurX; }
-inline void vTermPullCurRowCol(void) { sTI.CurY = sTI.SavY; sTI.CurX = sTI.SavX; }
-inline void vTermSetCurRowCol(u16_t RowY, u16_t ColX) { sTI.CurY = RowY; sTI.CurX = ColX; };
+inline void vTermPushCurRowYColX(void) { sTI.SavY = sTI.CurY; sTI.SavX = sTI.CurX; }
+inline void vTermPullCurRowYColX(void) { sTI.CurY = sTI.SavY; sTI.CurX = sTI.SavX; }
+inline void vTermSetCurRowYColX(u16_t RowY, u16_t ColX) { sTI.CurY = RowY; sTI.CurX = ColX; };
 
-inline void vTermPushMaxRowCol(void) { sTI.SavY = sTI.MaxY; sTI.SavX = sTI.MaxX; }
-inline void vTermPullMaxRowCol(void) { sTI.MaxY = sTI.SavY; sTI.MaxX = sTI.SavX; }
-inline void vTermSetMaxRowCol(u16_t RowY, u16_t ColX) { sTI.MaxY = RowY; sTI.MaxX = ColX; };
+inline void vTermPushMaxRowYColX(void) { sTI.SavY = sTI.MaxY; sTI.SavX = sTI.MaxX; }
+inline void vTermPullMaxRowYColX(void) { sTI.MaxY = sTI.SavY; sTI.MaxX = sTI.SavX; }
+inline void vTermSetMaxRowYColX(u16_t RowY, u16_t ColX) { sTI.MaxY = RowY; sTI.MaxX = ColX; };
 
 void vTermSetSize(u16_t RowY, u16_t ColX) {
     if (RowY && ColX) {
@@ -71,15 +71,15 @@ void xTermProcessChr(int cChr) {
 		break;
 	case CHR_LF:
 		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1)
-			sTI.CurX = 0;
+			sTI.CurX = 1;
 		#endif
 		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
 		break;
 	case CHR_FF:
-		sTI.CurX = sTI.CurY = 0;
+		sTI.CurX = sTI.CurY = 1;
 		break;
 	case CHR_CR:
-		sTI.CurX = 0;
+		sTI.CurX = 1;
 		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1)
 			if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
 		#endif
@@ -124,10 +124,8 @@ int	xTermGets(char * pBuf, size_t Size, int Match, termctrl_t Ctrl) {
 }
 
 int xTermQuery(char * pccQuery, char * pBuf, size_t Size, int Match) {
-	int iRV1 = xTermPuts(pccQuery, termBUILD_CTRL(1, 0, termWAIT_MS));
-	int iRV2 = xTermGets(pBuf, Size, Match, termBUILD_CTRL(0, 1, 500));
-	PX(" [iRV=%d/%d %'+-hhY]" strNL, iRV1, iRV2, iRV2, pBuf);
-	return iRV2;
+	xTermPuts(pccQuery, termBUILD_CTRL(1, 0, termWAIT_MS));
+	return xTermGets(pBuf, Size, Match, termBUILD_CTRL(0, 1, 500));
 }
 
 char * pcTermAttrib(char * pBuf, u16_t a1, u16_t a2) {
@@ -156,8 +154,8 @@ char * pcTermLocate(char * pBuf, u16_t RowY, u16_t ColX) {
 		*pBuf++	= CHR_SEMICOLON;
 		pBuf += xU32ToDecStr(ColX, pBuf);
 		*pBuf++	= CHR_H;
-		sTI.CurY = RowY % (sTI.MaxY + 1);
-		sTI.CurX = ColX % (sTI.MaxX + 1);
+		sTI.CurY = (RowY % sTI.MaxY) + 1;
+		sTI.CurX = (ColX % sTI.MaxX) + 1;
 	}
 	*pBuf = 0;
 	return pBuf;
@@ -210,34 +208,25 @@ void vTermWinTleCursor(void) {
 	vTermOpSysCom(Buffer);
 }
 
-void vTermDisplayLocation(void) {
-	char Buffer[16];
-	char * pBuf = Buffer;
-	pBuf = stpcpy(pBuf, " [");
-	pBuf += xU32ToDecStr(sTI.CurY, pBuf);
-	pBuf = stpcpy(pBuf, ",");
-	pBuf += xU32ToDecStr(sTI.CurX, pBuf);
-	pBuf = stpcpy(pBuf, "] ");
-	int RowY = sTI.MaxY - 10;
-	int ColX = sTI.MaxX - (pBuf - Buffer);
-//	PX("R=%d  C=%d  %s" strNL, RowY, ColX, Buffer);
-	vTermCursorSave();
-	xTermLocatePuts(RowY, ColX, Buffer);
-	vTermCursorBack();
-//	_vTermLocate(sTI.SavY, sTI.SavX, termBUILD_CTRL(1, 1, termWAIT_MS));
+void xTermShowCurRowYColX(u16_t RowY, u16_t ColX) {
+	#define fmtCURSOR_DISP setCURSOR_SAVE termCSI "%d;%dH [%d,%d] " setCURSOR_REST
+	char Buffer[32];
+	snprintfx(Buffer, sizeof(Buffer), fmtCURSOR_DISP, RowY, ColX, sTI.CurY, sTI.CurX);
+	xTermPuts(Buffer, termBUILD_CTRL(1, 1, termWAIT_MS));
 }
 
-int xTermCursorRead(void) {
+int _xTermReadRowYColX(char * pReq, u16_t * pRowY, u16_t * pColX) {
 	char Buffer[16];
-	int iRV = xTermQuery(getCURSOR_POS, Buffer, sizeof(Buffer), 'R');
+	int iRV = xTermQuery(pReq, Buffer, sizeof(Buffer), 'R');
 	if (iRV < 6) return erFAILURE;
-	u16_t RowY = 0, ColX = 0;
-	iRV = sscanf(Buffer, termCSI "%hu;%huR", &RowY, &ColX);
-//	PX("[iRV=%d RowY=%d ColX=%d]" strNL, iRV, RowY, ColX);
-	sTI.CurY = sTI.SavY = RowY;
-	sTI.CurX = sTI.SavX = ColX;
+	iRV = sscanf(Buffer, termCSI "%hu;%huR", pRowY, pColX);
+//	PX("[iRV=%d  RowY=%d  ColX=%d]" strNL, iRV, *pRowY, *pColX);
 	return iRV;
 }
+
+int xTermReadCurRowYColX(void) { return _xTermReadRowYColX(getCURSOR_POS, &sTI.CurY, &sTI.CurX); }
+
+void xTermReadMaxRowYColX(void) { _xTermReadRowYColX(getCURSOR_MAX, &sTI.MaxY, &sTI.MaxX); }
 
 int xTermIdentify(void) {
 	char Buffer[16];
