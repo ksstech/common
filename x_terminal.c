@@ -221,8 +221,10 @@ void vTermDisplayLocation(void) {
 	int RowY = sTI.MaxY - 10;
 	int ColX = sTI.MaxX - (pBuf - Buffer);
 //	PX("R=%d  C=%d  %s" strNL, RowY, ColX, Buffer);
+	vTermCursorSave();
 	xTermLocatePuts(RowY, ColX, Buffer);
-	_vTermLocate(sTI.SavY, sTI.SavX, termBUILD_CTRL(1, 1, termWAIT_MS));
+	vTermCursorBack();
+//	_vTermLocate(sTI.SavY, sTI.SavX, termBUILD_CTRL(1, 1, termWAIT_MS));
 }
 
 int xTermCursorRead(void) {
