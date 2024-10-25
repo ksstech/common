@@ -39,8 +39,8 @@ inline void vTermSetMaxRowCol(u16_t RowY, u16_t ColX) { sTI.MaxY = RowY; sTI.Max
 
 void vTermSetSize(u16_t RowY, u16_t ColX) {
     if (RowY && ColX) {
-    	sTI.MaxX = (ColX < TERMINAL_MAX_X) ? ColX : TERMINAL_DFLT_X;
 	    sTI.MaxY = (RowY < TERMINAL_MAX_Y) ? RowY : TERMINAL_DFLT_Y;
+    	sTI.MaxX = (ColX < TERMINAL_MAX_X) ? ColX : TERMINAL_DFLT_X;
     }
 }
 
