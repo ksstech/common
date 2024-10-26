@@ -56,7 +56,7 @@ extern "C" {
 
 typedef union {
 	struct __attribute__((packed)) {
-		u16_t CurX, CurY, SavX, SavY, MaxX, MaxY, Tabs;
+		i16_t CurX, CurY, SavX, SavY, MaxX, MaxY, Tabs;
 	};
 } terminfo_t;
 
@@ -81,17 +81,37 @@ int xTermGetMaxRowY(void);
 
 void vTermPushCurRowYColX(void);
 void vTermPullCurRowYColX(void);
-void vTermSetCurRowYColX(u16_t RowY, u16_t ColX);
+void vTermSetCurRowYColX(i16_t RowY, i16_t ColX);
 
 void vTermPushMaxRowYColX(void);
 void vTermPullMaxRowYColX(void);
-void vTermSetMaxRowYColX(u16_t RowY, u16_t ColX);
+void vTermSetMaxRowYColX(i16_t RowY, i16_t ColX);
+
+/**
+ * @brief	vTermSetSize() - set terminal row & column size (0 = reset to default)
+ * @param	Rows - number of rows/lines
+ * @param	Columns - number of columns
+ */
+void vTermSetSize(u16_t Rows, u16_t Columns) ;
+
+/**
+ * @brief
+ */
+void vTermGetInfo(terminfo_t * psTermInfo) ;
 
 /**
  * @brief	Update row and/or column tracking values based on the specific character being processed
  * @param	cChr - character to be processed
  */
 void xTermProcessChr(int cChr);
+
+/**
+ * @brief	output a string directly to the UART/terminal
+ * @param	pStr - string to be output
+ * @param	flag - control flags specifying [un]lock actions, wait periods etc.. 
+ * @return	Number of characers processed
+ */
+int xTermPuts(char * pStr, termctrl_t flag);
 
 /**
  * @brief	input a string directly from the UART/terminal
@@ -104,21 +124,13 @@ void xTermProcessChr(int cChr);
 int	xTermGets(char * pcBuf, size_t Size, int Match, termctrl_t flag);
 
 /**
- * @brief	output a string directly to the UART/terminal
- * @param	pStr - string to be output
- * @param	flag - control flags specifying [un]lock actions, wait periods etc.. 
- * @return	Number of characers processed
- */
-int xTermPuts(char * pStr, termctrl_t flag);
-
-/**
  * @brief	generate cursor location control/ESC string
  * @param	pBuf pointer to buffer where string is to be built
  * @param	Row - 1 relative row value
  * @param	Col - 1 relative column value
  * @return	[Adjusted] pointer	
  */
-char * pcTermLocate(char * pBuf, u16_t Row, u16_t Col);
+char * pcTermLocate(char * pBuf, i16_t Row, i16_t Col);
 
 /**
  * @brief	generate text attribute control/ESC string
@@ -127,21 +139,21 @@ char * pcTermLocate(char * pBuf, u16_t Row, u16_t Col);
  * @param	a2 - second attribute
  * @return	[Adjusted] pointer	
  */
-char * pcTermAttrib(char * pBuf, u16_t a1, u16_t a2);
+char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2);
 
 /**
  * @brief	generate & output cursor location control/ESC string
  * @param	Row - 1 relative row value
  * @param	Col - 1 relative column value
  */
-void vTermLocate(u16_t Row, u16_t Col);
+void vTermLocate(i16_t Row, i16_t Col);
 
 /**
  * @brief	generate & output cursor location control/ESC string
  * @param	a1 - first attribute
  * @param	a2 - second attribute
  */
-void vTermAttrib(u16_t a1, u16_t a2);
+void vTermAttrib(u8_t a1, u8_t a2);
 
 /**
  * @brief	Request, receive and parse current cursor location in a single lock/unlock operation
@@ -196,19 +208,7 @@ void vTermOpSysCom(char * pStr);
 
 void vTermWinTleCursor(void);
 
-void xTermShowCurRowYColX(u16_t RowY, u16_t ColX);
-
-/**
- * @brief	vTermSetSize() - set terminal row & column size (0 = reset to default)
- * @param	Rows - number of rows/lines
- * @param	Columns - number of columns
- */
-void vTermSetSize(u16_t Rows, u16_t Columns) ;
-
-/**
- * @brief
- */
-void vTermGetInfo(terminfo_t * psTermInfo) ;
+void xTermShowCurRowYColX(i16_t RowY, i16_t ColX);
 
 /**
  * @brief		Determine current terminal window size by locating to 999,999 and reading actual value
