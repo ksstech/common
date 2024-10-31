@@ -144,7 +144,7 @@ extern "C" {
 
 // Linux = LF, macOS = CR,  Win = CRLF
 #if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
-	#define	strNL					"\r\n"		
+	#define	strNL					"\r\n"
 	#define	strNLx2					"\r\n\n"
 #elif (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1)
 	#define	strNL					"\n"
