@@ -49,9 +49,7 @@ const char * pcStrError(int eCode) {
 		return strerror(eCode);
 #endif
 	for (int i = 0; i < NO_MEM(ErrorTable); i++) {
-		if (eCode == ErrorTable[i].code) {
-			return ErrorTable[i].pMess;
-		}
+		if (eCode == ErrorTable[i].code) return ErrorTable[i].pMess;
 	}
 	return esp_err_to_name(eCode);
 }
