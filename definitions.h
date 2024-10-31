@@ -266,11 +266,11 @@ int main() {
 #define INRANGE(x,y,z)				(((y) >= (x)) && ((y) <= (z)) ? 1 : 0)
 #define	BETWEEN(x,y,z)				(((y) >  (x)) && ((y) <  (z)) ? 1 : 0)
 #define	OUTSIDE(x,y,z)				(((y) <  (x)) || ((y) >  (z)) ? 1 : 0)
-/*
-#define	INRANGE(x,y,z,c)			(((c)(x) <= (c)(y)) && ((c)(y) <= (c)(z)) ? 1 : 0)
-#define	BETWEEN(x,y,z,c)			(((c)(x) <  (c)(y)) && ((c)(y) <  (c)(z)) ? 1 : 0)
-#define	OUTSIDE(x,y,z,c)			(((c)(x) >  (c)(y)) || ((c)(y) >  (c)(z)) ? 1 : 0)
-*/
+
+#define	IR_T(x,y,z,c)				(((c)(x) <= (c)(y)) && ((c)(y) <= (c)(z)) ? 1 : 0)
+#define	BT_T(x,y,z,c)				(((c)(x) <  (c)(y)) && ((c)(y) <  (c)(z)) ? 1 : 0)
+#define	OS_T(x,y,z,c)				(((c)(x) >  (c)(y)) || ((c)(y) >  (c)(z)) ? 1 : 0)
+
 // normalise a value to be in the range specified
 #define	FIT2RANGE(x,y,z,c)			( y = ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
 #define	TRIMMED(x,y,z,c)			( ((c) x > (c) y) ? x : ((c) y > (c) z) ? z : y )
