@@ -29,6 +29,9 @@ const eTable_t ErrorTable[] = {
 	TABLE_ENTRY_INT(erINV_WHOAMI,		"InvWhoAmI"),
 	TABLE_ENTRY_INT(erINV_HOST,			"InvHost"),
 	TABLE_ENTRY_INT(erTX_QUEUE_SEND,	"TX Queue Send Err"),
+	TABLE_ENTRY_INT(erACT_INV_CH,		"Chan out of range "),
+	TABLE_ENTRY_INT(erACT_NOT_CFG,		"Chan NOT configured"),
+	TABLE_ENTRY_INT(erACT_BLOCKED,		"Chan BLOCKED"),
 };
 
 static int LastError;

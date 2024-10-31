@@ -93,6 +93,10 @@ enum {
 	erTFTP_FAILED,
 	// Below here MUST have messages defined, used in syslog functionality
 	erTX_QUEUE_SEND,
+	// Sequence is important, used to determine seriousness/priority 
+	erACT_INV_CH = -4,
+	erACT_NOT_CFG = -3,
+	erACT_BLOCKED = -2,
 	erFAILURE = -1,					// general failure code
 	erSUCCESS = 0,					// neutral success code
 } ;
