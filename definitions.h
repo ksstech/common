@@ -12,9 +12,9 @@ extern "C" {
 // ####################################### ASCII char set ##########################################
 
 #define	CHR_NUL						0x00		// c-@
-#define	CHR_SOH						0x01		// c-A
+#define	CHR_SOH						0x01		// c-A		Edit-SelectAll
 #define	CHR_STX						0x02		// c-B
-#define	CHR_ETX						0x03		// c-C
+#define	CHR_ETX						0x03		// c-C		Edit-Copy
 #define	CHR_EOT						0x04		// c-D
 #define	CHR_ENQ						0x05		// c-E
 #define	CHR_ACK						0x06		// c-F
@@ -33,20 +33,20 @@ extern "C" {
 #define	CHR_DC3						0x13		// c-S		XOFF
 #define	CHR_DC4						0x14		// c-T
 #define	CHR_NAK						0x15		// c-U
-#define	CHR_SYN						0x16		// c-V
+#define	CHR_SYN						0x16		// c-V		Edit-Paste
 #define	CHR_ETB						0x17		// c-W
-#define	CHR_CAN						0x18		// c-X
+#define	CHR_CAN						0x18		// c-X		Edit-Delete
 #define	CHR_EM						0x19		// c-Y
 #define	CHR_SUB						0x1A		// c-Z
-#define	CHR_ESC						0x1B		// c-3	\t
-#define	CHR_FS						0x1C		// c-4				c-FWD SLASH
+#define	CHR_ESC						0x1B		// c-3		\e
+#define	CHR_FS						0x1C		// c-4		c-FWD SLASH
 #define	CHR_GS						0x1D		// c-5		c-]
 #define	CHR_RS						0x1E		// c-6		c-"
 #define	CHR_US						0x1F		// c-7		c--		c-BACK SLASH
 
 #define	CHR_SPACE					0x20		// ' '
-#define	CHR_EXCLAMATION	0x21		// !
-#define	CHR_DOUBLE_QUOTE  0x22		// "
+#define	CHR_EXCLAMATION				0x21		// !
+#define	CHR_DOUBLE_QUOTE			0x22		// "
 #define	CHR_HASH					0x23		// #
 #define	CHR_DOLLAR					0x24		// $
 #define	CHR_PERCENT					0x25		// %
