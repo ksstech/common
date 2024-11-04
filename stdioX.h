@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "definitions.h"
+#include "stddef.h"
+#include "stdbool.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,11 +12,11 @@ extern "C" {
 
 // ###################################### BUILD : CONFIG definitions ##############################
 
-
 // ##################################### MACRO definitions #########################################
 
 // #################################### Global/public functions ####################################
 
+int	xReadString(int sd, char * pcBuf, size_t Size, bool bEcho);
 
 #ifdef __cplusplus
 } /* extern "C" */

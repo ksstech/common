@@ -1,9 +1,9 @@
 #COMMON
 
-set( srcs "x_errors_events.c" "x_terminal.c" "x_time.c" "x_utilities.c" )
+set( srcs "errors_events.c" "stdioX.c" "terminalX.c" "timeX.c" "utilitiesX.c" )
 set( include_dirs "." )
 set( priv_include_dirs )
-set( requires "main" )
+set( requires "printfx rtos-support" )
 set( priv_requires )
 
 idf_component_register(

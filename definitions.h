@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "sdkconfig.h"
 #include <stdint.h>
 
 #ifdef __cplusplus

@@ -1,10 +1,10 @@
-// x_time.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// timeX.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
 #include "printfx.h"
-#include "x_string_general.h"
-#include "x_time.h"
-#include "x_errors_events.h"
+#include "string_general.h"
+#include "timeX.h"
+#include "errors_events.h"
 
 #include <string.h>
 

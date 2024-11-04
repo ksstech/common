@@ -1,16 +1,20 @@
 // x_stdio.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
+#include "stdioX.h"
+#include "FreeRTOS_Support.h"
+#include "errors_events.h"
+
+#include <string.h>
+#include <unistd.h>
 #include <errno.h>
-#include <sys/stat.h>
 
-#include "hal_platform.h"
-#include "x_stdio.h"
-#include "x_ubuf.h"
-#include "printfx.h"
-#include "x_errors_events.h"
-#include "x_time.h"
-
-#include "esp_attr.h"
+#if		defined(__ARM_CC)
+	#include "rt_misc.h"
+#elif	defined( __TI_ARM__ )
+	// nothing for now...
+#elif	defined( __GNUC__ )
+	// nothing for now...
+#endif
 
 // ############################################### Macros ##########################################
 
@@ -21,32 +25,31 @@
 #define	debugPARAM					(debugFLAG_GLOBAL & debugFLAG & 0x4000)
 #define	debugRESULT					(debugFLAG_GLOBAL & debugFLAG & 0x8000)
 
-// ###################################### BUILD : CONFIG definitions ##############################
+// ###################################### BUILD : CONFIG definitions ###############################
 
+// ###################################### Private constants ########################################
+
+const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
 
 // ###################################### Private variables ########################################
 
-
-// ###################################### Global variables #########################################
-
-
-// ######################################## global functions #######################################
-
 #if		defined(__ARM_CC)
-
-	#include "rt_misc.h"
-
+	// nothing to be done
 #elif	defined( __TI_ARM__ )
-
 	FILE	__stdin 	= { .fd = 0 , .flags = 0	} ;
 	FILE	__stdout	= {	.fd = 1 , .flags = 0	} ;
 	FILE	__stderr	= { .fd = 2 , .flags = 0	} ;
-
 #elif	defined( __GNUC__ )
-	// nothing to be done for GNU
+	// nothing to be done
 #endif
 
-static int		ch_saved ;
+// ###################################### Global variables #########################################
+
+// ######################################## global functions #######################################
+
+#if 0
+
+static int ch_saved ;
 
 /**
    Obtains the next character (if present) as an uint8_t converted to
@@ -236,4 +239,4 @@ long 	_flen (int fh) {
 int 	_ensure(int fh) { return 0 ; /* success*/ }
 
 int 	_tmpnam(char * name, int sig, unsigned maxlen) { return 0 ; /* fail, not supported*/ }
-
+#endif

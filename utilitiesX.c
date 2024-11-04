@@ -2,20 +2,11 @@
 
 #include <string.h>
 
-#include "hal_platform.h"
-#include "hal_memory.h"
+#include "errors_events.h"
 #include "FreeRTOS_Support.h"
 #include "printfx.h"
-#include "x_utilities.h"
-#include "x_terminal.h"
-#include "x_errors_events.h"
-
-#define	debugFLAG					0xF000
-
-#define	debugTIMING					(debugFLAG_GLOBAL & debugFLAG & 0x1000)
-#define	debugTRACK					(debugFLAG_GLOBAL & debugFLAG & 0x2000)
-#define	debugPARAM					(debugFLAG_GLOBAL & debugFLAG & 0x4000)
-#define	debugRESULT					(debugFLAG_GLOBAL & debugFLAG & 0x8000)
+#include "terminalX.h"
+#include "utilitiesX.h"
 
 // #################################################################################################
 
@@ -30,15 +21,14 @@ const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size) {
 
 void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 };
-	IF_myASSERT(debugPARAM, i < (sizeof(caActivity) - 1));
-	++caActivity[i];
-	if (caActivity[i] == 0x3A) {
-		caActivity[i] = CHR_0;
+	if (INRANGE(0, i, sizeof(caActivity) - 1)) {
+		++caActivity[i];
+		if (caActivity[i] == 0x3A) caActivity[i] = CHR_0;
+		vTermCursorSave();
+		vTermLocate(1, 120);
+		xTermPuts(caActivity, termBUILD_CTRL(1,1,termWAIT_MS));
+		vTermCursorBack();
 	}
-	vTermCursorSave();
-	vTermLocate(1, 120);
-	xTermPuts(caActivity, termBUILD_CTRL(1,1,termWAIT_MS));
-	vTermCursorBack();
 }
 
 void vUtilPrintCharacterSet(void) {
@@ -83,17 +73,11 @@ void xGenerateUUID(char * pBuf) {
 	srand(clock());
 	for (int t = 0; t < 36; ++t, ++pBuf) {
 	    int r = rand() % 16;
-	    if (t == 8 || t == 13 || t == 18 || t == 23) {
-	    	*pBuf = CHR_MINUS;
-		} else if (t == 14) {
-	    	*pBuf = CHR_4;
-		} else if (t == 19) {
-	    	*pBuf = szHex[(r & 0x03) | 0x08];
-		} else {
-	    	*pBuf = szHex[r];
-		}
+	    if (t == 8 || t == 13 || t == 18 || t == 23) *pBuf = CHR_MINUS;
+		else if (t == 14)		*pBuf = CHR_4;
+		else if (t == 19)		*pBuf = szHex[(r & 0x03) | 0x08];
+		else					*pBuf = szHex[r];
 	}
-	IF_PX(debugRESULT, "%.36s\r\n", pBuf);
 }
 
 // ################################ Random number & string support #################################
@@ -177,8 +161,7 @@ u64_t u64pow(u32_t base, u32_t exp) {
 int u32Trailing0(u32_t U32val) {
 	int iRV = 0;
 	while (U32val > 0) {
-		if (U32val % 10)
-			break;
+		if (U32val % 10) break;
 		++iRV;
 		U32val /= 10;
 	}
@@ -188,8 +171,7 @@ int u32Trailing0(u32_t U32val) {
 int u64Trailing0(u64_t U64val) {
 	int iRV = 0;
 	while (U64val > 0) {
-		if (U64val % 10)
-			break;
+		if (U64val % 10) break;
 		++iRV;
 		U64val /= 10;
 	}
@@ -198,28 +180,20 @@ int u64Trailing0(u64_t U64val) {
 
 int	xDigitsInI32(i32_t I32val, bool grouping) {
 	int x;
-	if (I32val == INT32_MIN) {
-		x = 10 + 1;
-	} else {	// if value is negative, and '-' counts as a digit....
-		if (I32val < 0)
-			return xDigitsInI32(-I32val, grouping) + 1;
+	if (I32val == INT32_MIN)				x = 10 + 1;
+	else {	// if value is negative, and '-' counts as a digit....
+		if (I32val < 0)						return xDigitsInI32(-I32val, grouping) + 1;
 		if (I32val >= 10000) {
 			if (I32val >= 10000000) {
-		        if (I32val >= 100000000)
-		        	x = (I32val >= 1000000000) ? 10 : 9;
-		        else
-		        	x = 8;
+		        if (I32val >= 100000000)	x = (I32val >= 1000000000) ? 10 : 9;
+		        else						x = 8;
 			} else {
-				if (I32val >= 100000)
-					x = (I32val >= 1000000) ? 7 : 6;
-				else
-					x = 5;
+				if (I32val >= 100000)		x = (I32val >= 1000000) ? 7 : 6;
+				else						x = 5;
 			}
 	    } else {
-		    if (I32val >= 100)
-		    	x = (I32val >= 1000) ? 4 : 3;
-		    else
-		    	x = (I32val >= 10) ? 2 : 1;
+		    if (I32val >= 100)				x = (I32val >= 1000) ? 4 : 3;
+		    else							x = (I32val >= 10) ? 2 : 1;
 	    }
 	}
 	return x + ((x - 1) / 3);
@@ -229,46 +203,33 @@ int	xDigitsInU32(u32_t U32val, bool grouping) {
 	int x;
 	if (U32val >= 10000) {
 		if (U32val >= 10000000) {
-	        if (U32val >= 100000000)
-	        	x = (U32val >= 1000000000)? 10 : 9;
-	        else
-	        	x = 8;
+	        if (U32val >= 100000000)	x = (U32val >= 1000000000)? 10 : 9;
+			else						x = 8;
 		} else {
-			if (U32val >= 100000)
-				x = (U32val >= 1000000) ? 7 : 6;
-			else
-				x = 5;
+			if (U32val >= 100000)		x = (U32val >= 1000000) ? 7 : 6;
+			else						x = 5;
 		}
     } else {
-        if (U32val >= 100)
-        	x = (U32val >= 1000) ? 4 : 3;
-        else
-        	x = (U32val >= 10) ? 2 : 1;
+        if (U32val >= 100)				x = (U32val >= 1000) ? 4 : 3;
+        else							x = (U32val >= 10) ? 2 : 1;
     }
     return x + ((x - 1) / 3);
 }
 
 int	xDigitsInU64(u64_t U64val, bool grouping) {
 	int x;
-	if (U64val <= UINT32_MAX)
-		return xDigitsInU32((u32_t) U64val, grouping);
+	if (U64val <= UINT32_MAX)						return xDigitsInU32((u32_t) U64val, grouping);
 	if (U64val >= 100000000000000ULL) {
 		if (U64val >= 100000000000000000ULL) {
-			if (U64val >= 1000000000000000000ULL)
-				x = (U64val >= 10000000000000000000ULL) ? 20  : 19;
-			else
-				x = 18;
+			if (U64val >= 1000000000000000000ULL)	x = (U64val >= 10000000000000000000ULL) ? 20  : 19;
+			else									x = 18;
 		} else {
-			if (U64val >= 1000000000000000ULL)
-				x = (U64val >= 10000000000000000ULL) ? 17 : 16;
-			else
-				x = 15;
+			if (U64val >= 1000000000000000ULL)		x = (U64val >= 10000000000000000ULL) ? 17 : 16;
+			else									x = 15;
 		}
 	} else {
-		if (U64val >= 1000000000000ULL)
-			x = (U64val > 10000000000000ULL) ? 14 : 13;
-		else
-			x = (U64val >= 100000000000ULL) ? 12 : 11;
+		if (U64val >= 1000000000000ULL)				x = (U64val > 10000000000000ULL) ? 14 : 13;
+		else										x = (U64val >= 100000000000ULL) ? 12 : 11;
 	}
 	return x + ((x - 1) / 3);
 }
@@ -324,27 +285,24 @@ ba_t * pvBitArrayCreate(size_t Count, size_t Size) {
 }
 
 void xBitArrayDelete(ba_t * psBA) {
-	IF_myASSERT(debugPARAM, halMemorySRAM(psBA));
 	memset(psBA, 0, sizeof(ba_t) + psBA->ByteSize);
 	free(psBA);
 }
 
 int	xBitArraySet(ba_t * psBA, int baI, u8_t baV) {
-	if (baI >= psBA->Count || baV > psBA->Mask)
-		return erFAILURE;
-	u8_t	Xidx = baI / psBA->Fields;
-	u8_t	Sidx = baI % psBA->Fields;
+	if (baI >= psBA->Count || baV > psBA->Mask) return erFAILURE;
+	u8_t Xidx = baI / psBA->Fields;
+	u8_t Sidx = baI % psBA->Fields;
 	u8_t Mask = psBA->Mask << Sidx;
-	psBA->pvBA[Xidx]	&= ~Mask;						// Remove THIS field bits
-	psBA->pvBA[Xidx]	|= (baV << Sidx);				// add in new THIS field bits
+	psBA->pvBA[Xidx] &= ~Mask;							// Remove THIS field bits
+	psBA->pvBA[Xidx] |= (baV << Sidx);					// add in new THIS field bits
 	return erSUCCESS;
 }
 
 int	xBitArrayGet(ba_t * psBA, int baI) {
-	if (baI >= psBA->Count)
-		return erFAILURE;
-	u8_t	Xidx = baI / psBA->Fields;
-	u8_t	Sidx = baI % psBA->Fields;
+	if (baI >= psBA->Count) return erFAILURE;
+	u8_t Xidx = baI / psBA->Fields;
+	u8_t Sidx = baI % psBA->Fields;
 	u8_t Mask = psBA->Mask << Sidx;
 	u8_t u8Val = psBA->pvBA[Xidx] & (Mask << Sidx);	// strip out OTHER field bits
 	return u8Val >> Sidx;								// return THIS field value in LSB(s)

@@ -2,7 +2,7 @@
 
 #pragma	once
 
-#include "x_time.h"				// time x_definitions
+#include "timeX.h"				// time x_definitions
 
 #include <stdarg.h>
 #include <stddef.h>

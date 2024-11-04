@@ -1,4 +1,4 @@
-// x_terminal.h
+// terminalX.h
 
 #pragma once
 

@@ -1,4 +1,4 @@
-// x_utilities.h - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// utilitiesX.h - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #pragma once
 

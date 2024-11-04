@@ -1,7 +1,7 @@
 // x_errors_events.c
 
 #include <netdb.h>
-#include "x_errors_events.h"
+#include "errors_events.h"
 #include "definitions.h"
 
 const eTable_t ErrorTable[] = {
