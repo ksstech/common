@@ -47,6 +47,37 @@ const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
 
 // ######################################## global functions #######################################
 
+int	xReadString(int sd, char * pcBuf, size_t Size, bool bEcho) {
+	u8_t Idx = 0, cChr;
+	while (1) {
+		int iRV = read(sd, &cChr, sizeof(cChr));
+		if (iRV == 1) {
+			if (cChr == CHR_CR) {						// end of input
+				pcBuf[Idx] = 0;
+				write(sd, strNL, strlen(strNL));
+				break;
+			} else if (cChr == CHR_BS) {				// correct typo
+				if (Idx > 0) --Idx;						// if anything in buffer, step back 1 char
+				else cChr = CHR_BEL;					// else buffer empty, ring the bell..
+			} else if (Idx < (Size-1)) {				// space left in buffer ?
+				if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) pcBuf[Idx++] = cChr;	// yes, if valid char store in buffer
+				else cChr = 0;							// else mark invalid
+			} else {									// buffer is full
+				break;									// go test what you have...
+			}
+			if (cChr != CHR_NUL) {
+				if (cChr == CHR_BS)		write(sd, cBS, sizeof(cBS));
+				else {
+					if (bEcho == 0)		cChr = CHR_ASTERISK;
+					write(sd, &cChr, sizeof(cChr));
+				}
+			}
+		} else if ((iRV == erFAILURE) && (errno != EAGAIN)) return erFAILURE;
+		vTaskDelay(50);
+	}
+	return Idx;
+}
+
 #if 0
 
 static int ch_saved ;
