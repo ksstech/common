@@ -169,9 +169,6 @@ seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
 
 seconds_t xTimeReport(tm_t *psTM);
 
-inline u32_t u32TS_Seconds(u64_t TS) { return (u32_t) (TS / (u64_t) MICROS_IN_SECOND); }
-inline u32_t u32TS_FracMillis(u64_t TS) { return (u32_t) ((TS%MICROS_IN_SECOND)/MICROS_IN_MILLISEC); }
-
 /**
  * @brief	Convert 64_t timestamp to u32_t seconds value
  * @return	u32_t seconds value
