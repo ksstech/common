@@ -318,19 +318,16 @@ int main() {
 #define	mask4B						0x0F
 #define	mask8B						0xFF
 
-#if (buildNEW_CODE > 0)
 #define	maskGET1B(f,i,s)			((f >> ((i)*1)) & mask1B)
 #define	maskGET2B(f,i,s)			((f >> ((i)*2)) & mask2B)
 #define	maskGET3B(f,i,s)			((f >> ((i)*3)) & mask3B)
 #define	maskGET4B(f,i,s)			((f >> ((i)*4)) & mask4B)
 #define	maskGET8B(f,i,s)			((f >> ((i)*8)) & mask8B)
-#else
-#define	maskGET1B(f,i,s)			(((s)f >> ((i)*1)) & (s)mask1B)
-#define	maskGET2B(f,i,s)			(((s)f >> ((i)*2)) & (s)mask2B)
-#define	maskGET3B(f,i,s)			(((s)f >> ((i)*3)) & (s)mask3B)
-#define	maskGET4B(f,i,s)			(((s)f >> ((i)*4)) & (s)mask4B)
-#define	maskGET8B(f,i,s)			(((s)f >> ((i)*8)) & (s)mask8B)
-#endif
+//#define	maskGET1B(f,i,s)			(((s)f >> ((i)*1)) & (s)mask1B)
+//#define	maskGET2B(f,i,s)			(((s)f >> ((i)*2)) & (s)mask2B)
+//#define	maskGET3B(f,i,s)			(((s)f >> ((i)*3)) & (s)mask3B)
+//#define	maskGET4B(f,i,s)			(((s)f >> ((i)*4)) & (s)mask4B)
+//#define	maskGET8B(f,i,s)			(((s)f >> ((i)*8)) & (s)mask8B)
 
 #define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<((i)*1); f&=~m; f|=((((s)x)<<((i)*1))&m);}
 #define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<((i)*2); f&=~m; f|=((((s)x)<<((i)*2))&m);}
