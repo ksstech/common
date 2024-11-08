@@ -195,7 +195,7 @@ seconds_t xTimeCalcSeconds(tm_t *psTM, int fElapsed) {
  * @return	Timestamp as seconds
  */
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
-	return xTimeStampAsSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight;
+	return xTimeStampSeconds(psTSZ->usecs) + psTSZ->pTZ->timezone + (int) psTSZ->pTZ->daylight;
 }
 
 seconds_t xTimeReport(tm_t *psTM) {
