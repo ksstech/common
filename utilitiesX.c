@@ -44,8 +44,7 @@ void vUtilPrintCharacterSet(void) {
  */
 u64_t mac2int(u8_t * hwaddr) {
 	u64_t iRV = 0;
-	for (int i = 5; i >= 0; --i)
-		iRV |= (u64_t) *hwaddr++ << (BITS_IN_BYTE * i);
+	for (int i = 5; i >= 0; --i) iRV |= (u64_t) *hwaddr++ << (BITS_IN_BYTE * i);
 	return iRV;
 }
 
@@ -54,10 +53,7 @@ u64_t mac2int(u8_t * hwaddr) {
  * @param[in] mac u64_t mac address
  * @param[out] hwaddr hex mac address
  */
-void int2mac(u64_t mac, u8_t * hwaddr) {
-	for (s8_t i = 5; i >= 0; --i)
-		*hwaddr++ = mac >> (BITS_IN_BYTE * i);
-}
+void int2mac(u64_t mac, u8_t * hwaddr) { for (s8_t i = 5; i >= 0; --i) *hwaddr++ = mac >> (BITS_IN_BYTE * i); }
 
 void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) {
 	wprintfx(NULL, "MemDump:\r\n%#'+hhY", Size, *pMemAddr);
