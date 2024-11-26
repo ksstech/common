@@ -84,6 +84,8 @@ enum {
 	erNO_SPACE,
 	erNO_MEM,
 	erTABLE_FULL,
+	erISR_BLOCK,
+	erINV_NUM_BITS,
 	// Insert additional application error codes above here
 
 	// tftp client

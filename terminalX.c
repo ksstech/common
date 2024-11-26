@@ -211,9 +211,16 @@ void vTermWinTleCursor(void) {
 void xTermShowCurRowYColX(i16_t RowY, i16_t ColX) {
 	#define fmtCURSOR_DISP setCURSOR_SAVE termCSI "%d;%dH [%d,%d] " setCURSOR_REST
 	char Buffer[32];
-	if (RowY == 0) RowY = sTI.MaxY;						// default to bottom row
-	if (ColX == 0) ColX = sTI.MaxX - 15;				// bit back from right border
-	snprintfx(Buffer, sizeof(Buffer), fmtCURSOR_DISP, RowY, ColX, sTI.CurY, sTI.CurX);
+	if (RowY > sTI.MaxY)	RowY = sTI.MaxY;
+	else if (RowY == 0)		RowY = sTI.MaxY;
+	else if (RowY == -1)	RowY = sTI.MaxY / 2;		// Middle line/row
+	else if (RowY < -1)		RowY = 1;
+	int iRV = xDigitsInU32(sTI.CurY, 0) + xDigitsInU32(sTI.CurX, 0) + 5; 
+	if (ColX > sTI.MaxX)	ColX = sTI.MaxX;
+	else if (ColX == 0)		ColX = sTI.MaxX-iRV;		// furthest right without wrap	
+	else if (ColX == -1)	ColX = ((sTI.MaxX-iRV)/2);	// center justified	
+	else if (ColX < -1)		ColX = 1;	
+	iRV = snprintfx(Buffer, sizeof(Buffer), fmtCURSOR_DISP, RowY, ColX, sTI.CurY, sTI.CurX);
 	xTermPuts(Buffer, termBUILD_CTRL(1, 1, termWAIT_MS));
 }
 
