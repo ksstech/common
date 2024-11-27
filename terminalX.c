@@ -49,7 +49,7 @@ void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
 /**
  * @brief	Check column and adjust column & row if required
  */
-void vTermCheckCursor(void) {
+static void vTermCheckCursor(void) {
 	if (sTI.CurX >= sTI.MaxX) {
 		sTI.CurX = 1;
 		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
