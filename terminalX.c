@@ -14,7 +14,7 @@
 // ###################################### Global variables #########################################
 
 static terminfo_t sTI = {
-	.CurX = 1, .CurY = 1, .SavX = 1, .SavY = 1,
+	.mux = NULL, .CurX = 1, .CurY = 1, .SavX = 1, .SavY = 1,
 	.MaxX = TERMINAL_DFLT_X, .MaxY = TERMINAL_DFLT_Y, .Tabs = TERMINAL_DFLT_TAB,
 };
 
@@ -57,6 +57,7 @@ void vTermCheckCursor(void) {
 }
 
 void xTermProcessChr(int cChr) {
+	xRtosSemaphoreTake(&sTI.mux, portMAX_DELAY);
 	switch(cChr) {
 	case CHR_BS:
 		--sTI.CurX;
@@ -91,6 +92,7 @@ void xTermProcessChr(int cChr) {
 		}
 		break;
 	}
+	xRtosSemaphoreGive(&sTI.mux);
 }
 
 int xTermPuts(char * pBuf, termctrl_t Ctrl) {

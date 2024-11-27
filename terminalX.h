@@ -54,10 +54,9 @@ extern "C" {
 
 // ####################################### structures ##############################################
 
-typedef union {
-	struct __attribute__((packed)) {
-		i16_t CurX, CurY, SavX, SavY, MaxX, MaxY, Tabs;
-	};
+typedef struct __attribute__((packed)) terminfo_t {
+	SemaphoreHandle_t mux;
+	i16_t CurX, CurY, SavX, SavY, MaxX, MaxY, Tabs;
 } terminfo_t;
 
 typedef struct __attribute__((packed)) termctrl_t {
