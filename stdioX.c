@@ -3,6 +3,7 @@
 #include "stdioX.h"
 #include "FreeRTOS_Support.h"
 #include "errors_events.h"
+#include "hal_memory.h"
 
 #include <string.h>
 #include <unistd.h>
@@ -47,32 +48,58 @@ const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
 
 // ######################################## global functions #######################################
 
-int	xReadString(int sd, char * pcBuf, size_t Size, bool bEcho) {
+int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	u8_t Idx = 0, cChr;
+#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+	bool CRflag = 0;
+#endif
+	if (sd < 0 || halMemoryRAM(pcBuf) == 0) return erINV_PARA;
+	if (Size < 2) return erINV_SIZE;
 	while (1) {
 		int iRV = read(sd, &cChr, sizeof(cChr));
 		if (iRV == 1) {
-			if (cChr == CHR_CR) {						// end of input
+		#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+			if (cChr == CHR_CR) {						// ALMOST end of input
+				CRflag = 1;								// set flag but do not store in buffer or adjust count
+
+			} else if (cChr == CHR_LF) {				// now at end of string
 				pcBuf[Idx] = 0;
 				write(sd, strNL, strlen(strNL));
 				break;
-			} else if (cChr == CHR_BS) {				// correct typo
+			}
+		#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_CR == 1)
+			if (cChr == CHR_CR) {						// end of input
+				pcBuf[Idx] = 0;							// discard CR, terminate string in buffer
+				write(sd, strNL, strlen(strNL));
+				break;
+			}
+		#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_LF == 1)
+			if (cChr == CHR_LF) {						// end of input
+				pcBuf[Idx] = 0;
+				write(sd, strNL, strlen(strNL));
+				break;
+			}
+		#else
+			#error "Need to define the line ending character(s)"
+		#endif
+			else if (cChr == CHR_BS) {					// correct typo
 				if (Idx > 0) --Idx;						// if anything in buffer, step back 1 char
 				else cChr = CHR_BEL;					// else buffer empty, ring the bell..
+				write(sd, cBS, sizeof(cBS));
 			} else if (Idx < (Size-1)) {				// space left in buffer ?
-				if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) pcBuf[Idx++] = cChr;	// yes, if valid char store in buffer
-				else cChr = 0;							// else mark invalid
+				if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
+					pcBuf[Idx++] = cChr;				// yes, if valid char store in buffer
+					if (bHide == 0) cChr = CHR_ASTERISK;
+					write(sd, &cChr, sizeof(cChr));
+				} else cChr = 0;						// else mark invalid
 			} else {									// buffer is full
 				break;									// go test what you have...
 			}
-			if (cChr != CHR_NUL) {
-				if (cChr == CHR_BS)		write(sd, cBS, sizeof(cBS));
-				else {
-					if (bEcho == 0)		cChr = CHR_ASTERISK;
-					write(sd, &cChr, sizeof(cChr));
-				}
-			}
-		} else if ((iRV == erFAILURE) && (errno != EAGAIN)) return erFAILURE;
+		} else {
+			// nothing read, what now?
+			if (iRV == erFAILURE && errno != EAGAIN) return erFAILURE;
+			// fall through, wait a bit and try again...
+		}
 		vTaskDelay(50);
 	}
 	return Idx;
