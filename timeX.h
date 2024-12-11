@@ -181,7 +181,9 @@ static inline u32_t __attribute__((always_inline)) xTimeStampMillis(u64_t Timest
  * @brief	Convert u32_t seconds & microseconds values to u64_t timestamp
  * @return	u64_t timestamp representing the seconds & microseconds combined
 */
-inline u64_t xTimeMakeTimeStamp(u32_t Sec, u32_t uSec) { return ((u64_t) Sec * (u64_t) MICROS_IN_SECOND) + (u64_t) uSec; }
+inline u64_t xTimeMakeTimeStamp(u32_t Sec, u32_t uSec) {
+	return ((u64_t) Sec * (u64_t) MICROS_IN_SECOND) + (u64_t) uSec; 
+}
 
 void xTimeTest(void);
 
