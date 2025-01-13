@@ -34,7 +34,14 @@ const eTable_t ErrorTable[] = {
 	TABLE_ENTRY_INT(erACT_BLOCKED,		"Chan BLOCKED"),
 };
 
+// ####################################### Private Variables #######################################
+
 static int LastError;
+
+// ####################################### Global Variables ########################################
+
+u32_t ErrLine;
+char *	ErrPtr;
 
 int	ErrorSet(int eCode) { return LastError = eCode; }
 
