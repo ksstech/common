@@ -71,7 +71,7 @@ void xTermProcessChr(int cChr) {
 		vTermCheckCursor();
 		break;
 	case CHR_LF:
-		#if (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1 || CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
 			sTI.CurX = 1;
 		#endif
 		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
@@ -81,7 +81,7 @@ void xTermProcessChr(int cChr) {
 		break;
 	case CHR_CR:
 		sTI.CurX = 1;
-		#if (CONFIG_LIBC_STDOUT_LINE_ENDING_CR == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1 || CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
 			if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
 		#endif
 		break;

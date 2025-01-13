@@ -51,17 +51,17 @@ extern "C" {
 
 #define getDEVICE_ATTR	termCSI "0c"
 
-#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
+#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
 	#define TST_STDIN_TERM(cChr) (cChr == CHR_CR || cChr == CHR_LF)
 	#define termSTDIN_TERM	CHR_CR
-#elif (CONFIG_LIBC_STDIN_LINE_ENDING_CR == 1)
+#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_CR == 1)
 	#define TST_STDIN_TERM(cChr) (cChr == CHR_CR)
 	#define termSTDIN_TERM	CHR_CR
-#elif (CONFIG_LIBC_STDIN_LINE_ENDING_LF == 1)
+#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_LF == 1)
 	#define TST_STDIN_TERM(cChr) (cChr == CHR_LF)
 	#define termSTDIN_TERM	CHR_LF
 #else
-	#error "Invlid STDIN line termination"
+	#error "Invalid STDIN line termination"
 #endif
 
 // ####################################### structures ##############################################
