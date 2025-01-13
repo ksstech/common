@@ -1,12 +1,21 @@
 // x_utilities.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
-#include <string.h>
-
+#include "hal_platform.h"
+#include "hal_memory.h"
 #include "errors_events.h"
 #include "FreeRTOS_Support.h"
 #include "printfx.h"
-#include "terminalX.h"
 #include "utilitiesX.h"
+
+#include <string.h>
+
+// ###################################### Local build macros #######################################
+
+#define	debugFLAG					0xF000
+#define	debugTIMING					(debugFLAG_GLOBAL & debugFLAG & 0x1000)
+#define	debugTRACK					(debugFLAG_GLOBAL & debugFLAG & 0x2000)
+#define	debugPARAM					(debugFLAG_GLOBAL & debugFLAG & 0x4000)
+#define	debugRESULT					(debugFLAG_GLOBAL & debugFLAG & 0x8000)
 
 // #################################################################################################
 
@@ -18,6 +27,8 @@ const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size) {
 	}
 	return NULL;
 }
+
+#include "terminalX.h"
 
 void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 };
@@ -33,7 +44,8 @@ void vShowActivity(int i) {
 
 void vUtilPrintCharacterSet(void) {
 	u8_t Buffer[256];
-	for (int cChr = 0; cChr < sizeof(Buffer); cChr++) Buffer[cChr] = cChr;
+	for (int cChr = 0; cChr < sizeof(Buffer); cChr++)
+		Buffer[cChr] = cChr;
 	wprintfx(NULL, "%!'+hhY", sizeof(Buffer), Buffer);
 }
 
@@ -44,7 +56,8 @@ void vUtilPrintCharacterSet(void) {
  */
 u64_t mac2int(u8_t * hwaddr) {
 	u64_t iRV = 0;
-	for (int i = 5; i >= 0; --i) iRV |= (u64_t) *hwaddr++ << (BITS_IN_BYTE * i);
+	for (int i = 5; i >= 0; --i)
+		iRV |= (u64_t) *hwaddr++ << (BITS_IN_BYTE * i);
 	return iRV;
 }
 
@@ -53,7 +66,10 @@ u64_t mac2int(u8_t * hwaddr) {
  * @param[in] mac u64_t mac address
  * @param[out] hwaddr hex mac address
  */
-void int2mac(u64_t mac, u8_t * hwaddr) { for (s8_t i = 5; i >= 0; --i) *hwaddr++ = mac >> (BITS_IN_BYTE * i); }
+void int2mac(u64_t mac, u8_t * hwaddr) {
+	for (s8_t i = 5; i >= 0; --i)
+		*hwaddr++ = mac >> (BITS_IN_BYTE * i);
+}
 
 void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) {
 	wprintfx(NULL, "MemDump:\r\n%#'+hhY", Size, *pMemAddr);
@@ -302,4 +318,22 @@ int	xBitArrayGet(ba_t * psBA, int baI) {
 	u8_t Mask = psBA->Mask << Sidx;
 	u8_t u8Val = psBA->pvBA[Xidx] & (Mask << Sidx);	// strip out OTHER field bits
 	return u8Val >> Sidx;								// return THIS field value in LSB(s)
+}
+
+// #################################### audit buffer support #######################################
+
+#include "syslog.h"
+
+report_t * psAuditBufCreate(void) {
+	report_t * psR = (report_t *) calloc(1, sizeof(report_t) + SL_MAX_LEN_MESSAGE);
+	psR->pcBuf = psR->pvAlloc = (char *) psR + sizeof(report_t);
+	psR->size = SL_MAX_LEN_MESSAGE;
+	return psR;
+}
+
+void vAuditBufDestroy(report_t * psR, bool flag) {
+	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pvAlloc == (void *)psR + sizeof(report_t));
+	// If requested and something in the Audit buffer, log to host...
+	if (flag && psR->size != SL_MAX_LEN_MESSAGE) SL_LOG(SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING), "%s", psR->pvAlloc);	
+	free(psR);
 }

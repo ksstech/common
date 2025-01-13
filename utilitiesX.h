@@ -10,7 +10,6 @@ extern "C" {
 
 // ########################################### Macros ##############################################
 
-
 // ########################################## Structures ###########################################
 
 typedef struct ba_t {									// 1/2/4 bit field array
@@ -124,6 +123,18 @@ ba_t * pvBitArrayCreate(size_t Count, size_t Size) ;
 void xBitArrayDelete(ba_t * psBA) ;
 int	xBitArraySet(ba_t * psBA, int baI, u8_t baV) ;
 int	xBitArrayGet(ba_t * psBA, int baI) ;
+
+// #################################### audit buffer support #######################################
+
+report_t * psAuditBufCreate(void);
+
+/**
+ * @brief	
+ * @param[in]	psr - pointer to report structure
+ * @param[in]	flag - 1=anything there, log it
+ * @return		NULL
+ */
+void vAuditBufDestroy(report_t * psR, bool flag);
 
 #ifdef __cplusplus
 }
