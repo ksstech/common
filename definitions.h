@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "sdkconfig.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -77,7 +76,7 @@ extern "C" {
 #define	CHR_R_ANGLED				0x3E		// >
 #define	CHR_QUESTION				0x3F		// ?
 #define	CHR_AT_SIGN					0x40		// @
-// Uppercase A-Z
+/* Uppercase A-Z */
 #define	CHR_A						0x41		// Cursor UP
 #define	CHR_B						0x42		// Cursor DOWN
 #define	CHR_C						0x43
@@ -110,7 +109,7 @@ extern "C" {
 #define	CHR_CARET					0x5E		// '^'
 #define	CHR_UNDERSCORE				0x5F		// '_'
 #define	CHR_GRAVE					0x60		// '`'
-// Lowercase a-z
+/* Lowercase a-z */
 #define	CHR_a						0x61
 #define	CHR_b						0x62
 #define	CHR_c						0x63
@@ -143,7 +142,7 @@ extern "C" {
 #define	CHR_TILDE					0x7E		// '~'
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
-// Linux = LF, macOS = CR,  Win = CRLF
+/* Linux = LF, macOS = CR,  Win = CRLF */
 #if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
 	#define	strNL					"\r\n"
 	#define	strNLx2					"\r\n\n"
@@ -232,37 +231,6 @@ extern "C" {
 #define	BASE10						10
 #define	BASE16						16
 
-/**
-#include <stdio.h>
-#include <stddef.h>
-#include <stdint.h>
-
-// Get the name of a type
-#define typename(x) _Generic((x),                     							  \
-                                                                                  \
-        _Bool: "_Bool",                  unsigned char: "unsigned char",          \
-         char: "char",                     signed char: "signed char",            \
-    short int: "short int",         unsigned short int: "unsigned short int",     \
-          int: "int",                     unsigned int: "unsigned int",           \
-     long int: "long int",           unsigned long int: "unsigned long int",      \
-long long int: "long long int", unsigned long long int: "unsigned long long int", \
-        float: "float",                         double: "double",                 \
-  long double: "long double",                   char *: "pointer to char",        \
-       void *: "pointer to void",                int *: "pointer to int",         \
-      default: "other")
-
-#define fmt "%20s is '%s'\n"
-int main() {
-
-  size_t s; ptrdiff_t p; intmax_t i; int ai[3] = {0}; return printf( fmt fmt fmt fmt fmt fmt fmt fmt,
-
-     "size_t", typename(s),               "ptrdiff_t", typename(p),     
-   "intmax_t", typename(i),      "character constant", typename('0'),
- "0x7FFFFFFF", typename(0x7FFFFFFF),     "0xFFFFFFFF", typename(0xFFFFFFFF),
-"0x7FFFFFFFU", typename(0x7FFFFFFFU),  "array of int", typename(ai));
-}
-*/
-
 // true/false range tests
 #define INRANGE(x,y,z)				(((y) >= (x)) && ((y) <= (z)) ? 1 : 0)
 #define	BETWEEN(x,y,z)				(((y) >  (x)) && ((y) <  (z)) ? 1 : 0)
@@ -297,8 +265,8 @@ int main() {
 #define	IF_EXEC_5(T,F,a,b,c,d,e)	if (T) { do { F(a,b,c,d,e); } while (0); }
 #define	IF_EXEC_6(T,F,a,b,c,d,e,f)	if (T) { do { F(a,b,c,d,e,f); } while (0); }
 
-// ##################### macros to create variable width 8/16/32/64 bit masks ######################
-/* a is the starting bit number 0 -> 7/15/31/63
+/* ##################### macros to create variable width 8/16/32/64 bit masks ######################
+ * a is the starting bit number 0 -> 7/15/31/63
  * b is the ending bit number 0 -> 7/15/31/63
  * a: 0->xFF, 1->xFE, 2->xFC, 3->xF8, 4->xF0, 5->xE0, 6->xC0, 7->x80
  * b: 0->x01, 1->x03, 2->x07, 4->x0F, 4->x1F, 5->x3F, 6->x7F, 7->xFF
@@ -309,25 +277,27 @@ int main() {
 #define BIT_MASK32(a,b)				((0xFFFFFFFF >> (31-(b))) & ~((1UL << (a))-1))
 #define BIT_MASK64(a,b)				((0xFFFFFFFFFFFFFFFF >> (63-(b))) & ~((1ULL << (a))-1))
 
-// ################################## variable bit field flags #####################################
-
-// Based on 32/64bit variables, support primarily 1/2/4 bit sized flags
+/* ################################## variable bit field flags #####################################
+ * Based on 32/64bit variables, support primarily 1/2/3/4/8 bit sized flags */
 #define	mask1B						0x01
 #define	mask2B						0x03
 #define	mask3B						0x07
 #define	mask4B						0x0F
 #define	mask8B						0xFF
 
-#define	maskGET1B(f,i,s)			((f >> ((i)*1)) & mask1B)
-#define	maskGET2B(f,i,s)			((f >> ((i)*2)) & mask2B)
-#define	maskGET3B(f,i,s)			((f >> ((i)*3)) & mask3B)
-#define	maskGET4B(f,i,s)			((f >> ((i)*4)) & mask4B)
-#define	maskGET8B(f,i,s)			((f >> ((i)*8)) & mask8B)
-//#define	maskGET1B(f,i,s)			(((s)f >> ((i)*1)) & (s)mask1B)
-//#define	maskGET2B(f,i,s)			(((s)f >> ((i)*2)) & (s)mask2B)
-//#define	maskGET3B(f,i,s)			(((s)f >> ((i)*3)) & (s)mask3B)
-//#define	maskGET4B(f,i,s)			(((s)f >> ((i)*4)) & (s)mask4B)
-//#define	maskGET8B(f,i,s)			(((s)f >> ((i)*8)) & (s)mask8B)
+#if 1
+	#define	maskGET1B(f,i,s)		((f >> ((i)*1)) & mask1B)
+	#define	maskGET2B(f,i,s)		((f >> ((i)*2)) & mask2B)
+	#define	maskGET3B(f,i,s)		((f >> ((i)*3)) & mask3B)
+	#define	maskGET4B(f,i,s)		((f >> ((i)*4)) & mask4B)
+	#define	maskGET8B(f,i,s)		((f >> ((i)*8)) & mask8B)
+#else
+	#define	maskGET1B(f,i,s)		((s) f >> ((i)*1)) & (s) mask1B)
+	#define	maskGET2B(f,i,s)		((s) f >> ((i)*2)) & (s) mask2B)
+	#define	maskGET3B(f,i,s)		((s) f >> ((i)*3)) & (s) mask3B)
+	#define	maskGET4B(f,i,s)		((s) f >> ((i)*4)) & (s) mask4B)
+	#define	maskGET8B(f,i,s)		((s) f >> ((i)*8)) & (s) mask8B)
+#endif
 
 #define	maskSET1B(f,i,x,s)			{s m=(s)mask1B<<((i)*1); f&=~m; f|=((((s)x)<<((i)*1))&m);}
 #define	maskSET2B(f,i,x,s)			{s m=(s)mask2B<<((i)*2); f&=~m; f|=((((s)x)<<((i)*2))&m);}
@@ -466,10 +436,13 @@ https://riptutorial.com/cplusplus/example/3527/macros
 #define LSC( { "key" : "value", "num1" : 12345 } ) ;
 */
 
-#define LSC(...) #__VA_ARGS__
+#define LSC(...) 					#__VA_ARGS__
 
-#define sizeofMACRO(test) (( !!(test) )*2-1)
-#define DUMB_STATIC_ASSERT(test) typedef char assertion_on_mystruct[sizeofMACRO(test)]
+#define sizeofMACRO(test)			(( !!(test) )*2-1)
+#define DUMB_STATIC_ASSERT(test)	typedef char assertion_on_mystruct[sizeofMACRO(test)]
+
+#define _HEADER_EXISTS(file)		__HEADER_EXISTS(file)
+#define __HEADER_EXISTS(file)		defined(__has_include) && __has_include(file)
 
 // ########################################### Bit masks ##########################################
 
@@ -608,13 +581,71 @@ enum {								// ANSI standard terminal colors
 	colourBG_WHITE,										// 40 + 7 = 47
 };
 
+// ######################################### Play area #############################################
+
 #ifdef __cplusplus
 }
 #endif
 
 #if 0
 
-/*
+#include <stdio.h>
+#include <stddef.h>
+#include <stdint.h>
+
+// Get the name of a type
+#define typename(x) _Generic((x),                     							  \
+                                                                                  \
+        _Bool: "_Bool",                  unsigned char: "unsigned char",          \
+         char: "char",                     signed char: "signed char",            \
+    short int: "short int",         unsigned short int: "unsigned short int",     \
+          int: "int",                     unsigned int: "unsigned int",           \
+     long int: "long int",           unsigned long int: "unsigned long int",      \
+long long int: "long long int", unsigned long long int: "unsigned long long int", \
+        float: "float",                         double: "double",                 \
+  long double: "long double",                   char *: "pointer to char",        \
+       void *: "pointer to void",                int *: "pointer to int",         \
+      default: "other")
+
+#define fmt "%20s is '%s'\n"
+int main() {
+
+  size_t s; ptrdiff_t p; intmax_t i; int ai[3] = {0}; return printf( fmt fmt fmt fmt fmt fmt fmt fmt,
+
+     "size_t", typename(s),               "ptrdiff_t", typename(p),     
+   "intmax_t", typename(i),      "character constant", typename('0'),
+ "0x7FFFFFFF", typename(0x7FFFFFFF),     "0xFFFFFFFF", typename(0xFFFFFFFF),
+"0x7FFFFFFFU", typename(0x7FFFFFFFU),  "array of int", typename(ai));
+}
+
+#define _CHECK_VAL(OPT)			\
+	#ifndef val##OPT			\
+		#define val##OPT "\0"	\
+	#endif
+
+#define _CHECK_MES(OPT)			\
+	#ifndef mes##OPT			\
+		#define mes##OPT "\0"	\
+	#endif
+
+#define	CREATE_UNDEF(OPT)	\
+	_CHECK_VAL(OPT)			\
+	_CHECK_VAL(OPT)
+
+#define _CHECK_VAL(OPT)					\
+	#ifndef CONCAT2(val,OPT)			\
+		#define CONCAT2(val,OPT) "\0"	\
+	#endif
+
+#define _CHECK_MES(OPT)					\
+	#ifndef CONCAT2(mes,OPT)			\
+		#define CONCAT2(mes,OPT) "\0"	\
+	#endif
+
+#define	CREATE_UNDEF(OPT)	\
+	_CHECK_VAL(OPT)			\
+	_CHECK_VAL(OPT)
+
 	General purpose static assert.
 
 	Works in/out -side of scope:
@@ -623,7 +654,7 @@ enum {								// ANSI standard terminal colors
 		{
 			STATIC_ASSERT(sizeof(int)==4);
 		}
-*/
+
 #define STATIC_ASSERT(X)			STATIC_ASSERT2(X,__LINE__)
 
 /*
