@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "definitions.h"
 #include "stddef.h"
 #include "stdbool.h"
 

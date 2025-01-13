@@ -1,5 +1,6 @@
-// x_stdio.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// x_stdio.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
+#include "hal_platform.h"
 #include "stdioX.h"
 #include "FreeRTOS_Support.h"
 #include "errors_events.h"
@@ -48,6 +49,57 @@ const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
 
 // ######################################## global functions #######################################
 
+#if 1
+int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
+	u8_t Idx = 0, cChr;
+#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+	bool CRflag = 0;
+#endif
+	if (sd < 0 || halMemoryRAM(pcBuf) == 0) return erINV_PARA;
+	if (Size < 2) return erINV_SIZE;
+	while (1) {
+		int iRV = read(sd, &cChr, sizeof(cChr));
+		if (iRV != 1) {				// nothing read, what now?
+			if (iRV == erFAILURE && errno != EAGAIN) return erFAILURE;
+			vTaskDelay(50);								// wait a bit ...
+			continue;									// and try again...
+		}
+	#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+		if (cChr == CHR_CR) {						// ALMOST end of input
+			CRflag = 1;								// set flag but do not store in buffer or adjust count
+		} else if (cChr == CHR_LF)					// now at end of string
+	#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_CR == 1)
+		if (cChr == CHR_CR)
+	#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_LF == 1)
+		if (cChr == CHR_LF)
+	#endif
+		{
+			pcBuf[Idx] = 0;
+			write(sd, strNL, strlen(strNL));
+			break;
+		} else if (cChr == CHR_BS) {					// correct typo
+			if (Idx > 0) {
+				--Idx;								// if anything in buffer, step back 1 char
+				write(sd, cBS, sizeof(cBS));
+			} else {
+				cChr = CHR_BEL;						// else buffer empty, ring the bell..
+				write(sd, &cChr, sizeof(cChr));
+			}
+		} else if (Idx < (Size-1)) {				// space left in buffer ?
+			// only printable characters stored in buffer, control chars just echo'd
+			if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
+				pcBuf[Idx++] = cChr;				// yes, if valid char store in buffer
+				if (bHide == 0)						// show char in clear?
+					cChr = CHR_ASTERISK;			// no, replace with '*'
+			}
+			write(sd, &cChr, sizeof(cChr));			// echo [modified] character
+		} else {									// buffer is full
+			break;									// go test what you have...
+		}
+	}
+	return Idx;
+}
+#else
 int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	u8_t Idx = 0, cChr;
 #if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
@@ -104,6 +156,7 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	}
 	return Idx;
 }
+#endif
 
 #if 0
 
