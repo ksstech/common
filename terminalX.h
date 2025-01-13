@@ -50,7 +50,19 @@ extern "C" {
 #define setCLRDSP_ALL	termCSI "2J"
 
 #define getDEVICE_ATTR	termCSI "0c"
-//#define xterm
+
+#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
+	#define TST_STDIN_TERM(cChr) (cChr == CHR_CR || cChr == CHR_LF)
+	#define termSTDIN_TERM	CHR_CR
+#elif (CONFIG_LIBC_STDIN_LINE_ENDING_CR == 1)
+	#define TST_STDIN_TERM(cChr) (cChr == CHR_CR)
+	#define termSTDIN_TERM	CHR_CR
+#elif (CONFIG_LIBC_STDIN_LINE_ENDING_LF == 1)
+	#define TST_STDIN_TERM(cChr) (cChr == CHR_LF)
+	#define termSTDIN_TERM	CHR_LF
+#else
+	#error "Invlid STDIN line termination"
+#endif
 
 // ####################################### structures ##############################################
 
@@ -68,7 +80,6 @@ typedef struct __attribute__((packed)) termctrl_t {
 } termctrl_t;
 
 // ###################################### Public variables #########################################
-
 
 // ###################################### Public functions #########################################
 
