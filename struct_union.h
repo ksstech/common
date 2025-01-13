@@ -2,7 +2,7 @@
 
 #pragma	once
 
-#include "timeX.h"				// time x_definitions
+#include "timeX.h"
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -12,30 +12,8 @@ extern "C" {
 #endif
 
 // ########################################### Macros ##############################################
-// ######################################## enumerations ###########################################
 
-typedef enum {
-	epSCALE_NANO	= -3,
-	epSCALE_MICRO	= -2,
-	epSCALE_MILLI	= -1,
-	epSCALE_NONE	= 0,
-	epSCALE_KILO	= 1,
-	epSCALE_MEGA	= 2,
-	epSCALE_GIGA	= 3,
-} ep_scale_t;
-
-enum {								// {flags}{counter}
-	maskCOUNT	= 0x007FFFFF,		// counter value or mask
-	mfbCOUNT	= (1 << 23),		// Prefix 23x LSB uCount
-	mfbCOLOR	= (1 << 24),		// Use colours where applicable
-	mfbPRIOX	= (1 << 25),
-	mfbSTATE	= (1 << 26),
-	mfbSTACK	= (1 << 27),
-	mfbCORE		= (1 << 28),
-	mfbXTRAS	= (1 << 29),
-	mfbNL		= (1 << 30),		// PostFix 'n'
-	mfbRT		= (1 << 31),		// prefix RunTime
-};
+// ######################################## Enumerations ###########################################
 
 // ############################# common complex data types/ structures #############################
 
