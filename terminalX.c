@@ -111,7 +111,7 @@ int	xTermGets(char * pBuf, size_t Size, int Match, termctrl_t Ctrl) {
 	TickType_t tNow = 0, tStart = xTaskGetTickCount();
 	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	do {
-		int __real_getchar(void); iRV = __real_getchar();
+		iRV = getchar();
 		if (iRV != EOF) {
 			pBuf[Len++] = iRV;
 			if (Len == Size || iRV == Match) break;
