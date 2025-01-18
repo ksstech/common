@@ -444,6 +444,9 @@ https://riptutorial.com/cplusplus/example/3527/macros
 #define _HEADER_EXISTS(file)		__HEADER_EXISTS(file)
 #define __HEADER_EXISTS(file)		defined(__has_include) && __has_include(file)
 
+#define DEFINED_VALUE(sym,val)		_DEFINED_VALUE(sym,val)
+#define _DEFINED_VALUE(sym,val)		defined (sym) && ( sym == val )
+
 // ########################################### Bit masks ##########################################
 
 enum {								// 32bit bit masks
