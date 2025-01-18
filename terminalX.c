@@ -99,7 +99,7 @@ int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	int iRV = 0;
 	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	while (*pBuf) {
-		__real_putchar(*pBuf++);
+		WRAP_PUTCHAR(*pBuf++);		// call __wrap_ version if defined else __real_
 		++iRV;
 	}
 	if (Ctrl.Unlock) halUartUnLock();
