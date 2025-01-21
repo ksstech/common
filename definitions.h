@@ -250,6 +250,10 @@ extern "C" {
 #define	MORETHAN1of3(x,y,z)		((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((x+y+z)==1)) ? 0 : 1
 #define	MORETHAN1of4(w,x,y,z)	((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((w+x+y+z)==1)) ? 0 : 1
 
+#define DEFINED_4OF4(w,x,y,z)	((!defined(w) || !defined(x) || !defined(y) || !defined(z)) ? 0 : 1)
+#define DEFINED_3OF3(x,y,z)		((!defined(x) || !defined(y) || !defined(z)) ? 0 : 1)
+#define DEFINED_2OF2(x,y)		((!defined(x) || !defined(y)) ? 1 : 0)
+
 #define	POWER_OF_10(x)			((x) == 1 || (x) == 10 || (x) == 100 || (x) == 1000 ||	(x) == 10000 || (x) == 100000 ||	\
 								(x) == 1000000 || (x) == 10000000 || (x) == 100000000 || (x) == 1000000000 ||		\
 								(x) == 10000000000 || (x) == 100000000000 ? 1 : 0)
@@ -441,8 +445,8 @@ https://riptutorial.com/cplusplus/example/3527/macros
 #define sizeofMACRO(test)			(( !!(test) )*2-1)
 #define DUMB_STATIC_ASSERT(test)	typedef char assertion_on_mystruct[sizeofMACRO(test)]
 
-#define _HEADER_EXISTS(file)		__HEADER_EXISTS(file)
-#define __HEADER_EXISTS(file)		defined(__has_include) && __has_include(file)
+#define _HEADER_EXISTS(file)		defined(__has_include) && __has_include(file)
+#define HEADER_EXISTS(file)			_HEADER_EXISTS(file)
 
 #define DEFINED_VALUE(sym,val)		_DEFINED_VALUE(sym,val)
 #define _DEFINED_VALUE(sym,val)		defined (sym) && ( sym == val )
