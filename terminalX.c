@@ -11,6 +11,7 @@
 // ##################################### MACRO definitions #########################################
 
 // ######################################## Enumerations ###########################################
+
 // ###################################### Global variables #########################################
 
 static terminfo_t sTI = {
@@ -63,7 +64,8 @@ void xTermProcessChr(int cChr) {
 		--sTI.CurX;
 		if (sTI.CurX == 0) {
 			sTI.CurX = sTI.MaxX;
-			if (sTI.CurY > 1) --sTI.CurY;
+			if (sTI.CurY > 1)
+				--sTI.CurY;
 		}
 		break;
 	case CHR_TAB:
@@ -74,7 +76,8 @@ void xTermProcessChr(int cChr) {
 		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1 || CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
 			sTI.CurX = 1;
 		#endif
-		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
+		if (sTI.CurY < sTI.MaxY)
+			++sTI.CurY;
 		break;
 	case CHR_FF:
 		sTI.CurX = sTI.CurY = 1;
@@ -82,7 +85,8 @@ void xTermProcessChr(int cChr) {
 	case CHR_CR:
 		sTI.CurX = 1;
 		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1 || CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
-			if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
+			if (sTI.CurY < sTI.MaxY)
+				++sTI.CurY;
 		#endif
 		break;
 	default:
@@ -97,31 +101,37 @@ void xTermProcessChr(int cChr) {
 
 int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	int iRV = 0;
-	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
+	if (Ctrl.Lock)
+		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	while (*pBuf) {
 		WRAP_PUTCHAR(*pBuf++);		// call __wrap_ version if defined else __real_
 		++iRV;
 	}
-	if (Ctrl.Unlock) halUartUnLock();
+	if (Ctrl.Unlock)
+		halUartUnLock();
 	return iRV;
 }
 
 int	xTermGets(char * pBuf, size_t Size, int Match, termctrl_t Ctrl) { 
 	int iRV, Len = 0;
 	TickType_t tNow = 0, tStart = xTaskGetTickCount();
-	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
+	if (Ctrl.Lock)
+		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	do {
 		iRV = getchar();
 		if (iRV != EOF) {
 			pBuf[Len++] = iRV;
-			if (Len == Size || iRV == Match) break;
+			if (Len == Size || iRV == Match)
+				break;
 			continue;
 		}
 		taskYIELD();
 		tNow = xTaskGetTickCount() - tStart;
 	} while (tNow < pdMS_TO_TICKS(Ctrl.Wait));
-	if (Len < (Size - 1)) pBuf[Len] = CHR_NUL;
-	if (Ctrl.Unlock) halUartUnLock();
+	if (Len < (Size - 1))
+		pBuf[Len] = CHR_NUL;
+	if (Ctrl.Unlock)
+		halUartUnLock();
 	return Len;
 }
 
@@ -229,7 +239,8 @@ void xTermShowCurRowYColX(i16_t RowY, i16_t ColX) {
 int _xTermReadRowYColX(char * pReq, i16_t * pRowY, i16_t * pColX) {
 	char Buffer[16];
 	int iRV = xTermQuery(pReq, Buffer, sizeof(Buffer), 'R');
-	if (iRV < 6) return erFAILURE;
+	if (iRV < 6)
+		return erFAILURE;
 	iRV = sscanf(Buffer, termCSI "%hu;%huR", pRowY, pColX);
 //	PX("[iRV=%d  RowY=%d  ColX=%d]" strNL, iRV, *pRowY, *pColX);
 	return iRV;
