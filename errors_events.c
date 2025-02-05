@@ -32,6 +32,7 @@ const eTable_t ErrorTable[] = {
 	TABLE_ENTRY_INT(erACT_INV_CH,		"Chan out of range "),
 	TABLE_ENTRY_INT(erACT_NOT_CFG,		"Chan NOT configured"),
 	TABLE_ENTRY_INT(erACT_BLOCKED,		"Chan BLOCKED"),
+	TABLE_ENTRY_INT(erSUCCESS,			"Success"),
 };
 
 // ####################################### Private Variables #######################################
@@ -49,10 +50,15 @@ int	ErrorGet(void) { return LastError; }
 
 const char * pcStrError(int eCode) {
 #if LWIP_DNS_API_DEFINE_ERRORS	/* https://sourceware.org/glibc/wiki/NameResolver */
-	if (INRANGE(EPERM, eCode, ENOTRECOVERABLE) || INRANGE(EAI_NONAME, eCode, TRY_AGAIN))	return strerror(eCode);
+	if (INRANGE(EPERM, eCode, ENOTRECOVERABLE) || INRANGE(EAI_NONAME, eCode, TRY_AGAIN))
+		return strerror(eCode);
 #else
-	if (INRANGE(EPERM, eCode, ENOTRECOVERABLE) || INRANGE(EAI_NONAME, eCode, EAI_AGAIN))	return strerror(eCode);
+	if (INRANGE(EPERM, eCode, ENOTRECOVERABLE) || INRANGE(EAI_NONAME, eCode, EAI_AGAIN))
+		return strerror(eCode);
 #endif
-	for (int i = 0; i < NO_MEM(ErrorTable); i++) if (eCode == ErrorTable[i].code) return ErrorTable[i].pMess;
+	for (int i = 0; i < NO_MEM(ErrorTable); i++) {
+		if (eCode == ErrorTable[i].code)
+			return ErrorTable[i].pMess;
+	}
 	return esp_err_to_name(eCode);
 }
