@@ -1,4 +1,4 @@
-// terminalX.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// terminalX.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
 #include "hal_stdio.h"
