@@ -118,7 +118,7 @@ int	xTermGets(char * pBuf, size_t Size, int Match, termctrl_t Ctrl) {
 	if (Ctrl.Lock)
 		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	do {
-		iRV = getchar();
+		iRV = fgetc(stdin);
 		if (iRV != EOF) {
 			pBuf[Len++] = iRV;
 			if (Len == Size || iRV == Match)
