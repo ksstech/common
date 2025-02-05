@@ -255,18 +255,6 @@ int xTermIdentify(void) {
 	return xTermQuery(getDEVICE_ATTR, Buffer, sizeof(Buffer), 'c');
 }
 
-int xTermAttached(void) {
-	if ((configCONSOLE_UART >= 0) && halUART_RxFifoUsed(configCONSOLE_UART) == 0) {
-		halUART_Flush(configCONSOLE_UART);				// nothing to read, ensure TX buffer is empty
-		putchar(CHR_ENQ);
-		for (int i = 0; i < 5; ++i) {
-			vTaskDelay(pdMS_TO_TICKS(1));				// wait a short while for a response
-			if (getchar() == CHR_ENQ) return 1;
-		}
-	}
-	return 0;
-}
-
 // ##################################### functional tests ##########################################
 
 void vTermTestCode(void) {
