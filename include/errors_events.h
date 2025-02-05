@@ -57,8 +57,6 @@ enum {
 	erINV_SCALE,
 	erINV_UNIT,
 	erINV_SIZE,
-//	erINV_SSID,
-//	erINV_PSWD,
     erINV_CREDLEN,
 	erINV_APNUM,
 	erINV_COMMAND,
