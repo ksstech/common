@@ -104,7 +104,7 @@ int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	if (Ctrl.Lock)
 		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	while (*pBuf) {
-		WRAP_PUTCHAR(*pBuf++);		// call __wrap_ version if defined else __real_
+		fputc(*pBuf++, stdout);
 		++iRV;
 	}
 	if (Ctrl.Unlock)
