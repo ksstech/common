@@ -48,6 +48,8 @@ char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
 
 void vTermAttrib(u8_t a1, u8_t a2) {
 	char Buffer[sizeof("E[yyy;xxxH0")];
+	if (pcTermAttrib(Buffer, a1, a2) != Buffer)
+		xTermPuts(Buffer, termBUILD_CTRL(1,1,termWAIT_MS));
 }
 
 char * pcTermLocate(char * pBuf, i16_t RowY, i16_t ColX) {
