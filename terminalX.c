@@ -14,90 +14,10 @@
 
 // ###################################### Global variables #########################################
 
-static terminfo_t sTI = {
-	.mux = NULL, .CurX = 1, .CurY = 1, .SavX = 1, .SavY = 1,
-	.MaxX = TERMINAL_DFLT_X, .MaxY = TERMINAL_DFLT_Y, .Tabs = TERMINAL_DFLT_TAB,
-};
-
 // ################################# Terminal (VT100) support routines #############################
-//	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-//	http://docs.smoe.org/oreilly/unix_lib/upt/ch05_05.htm
-//	http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
 
-inline int xTermGetCurColX(void) { return sTI.CurX; };
-inline int xTermGetCurRowY(void) { return sTI.CurY; };
-
-inline int xTermGetMaxColX(void) { return sTI.MaxX; };
-inline int xTermGetMaxRowY(void) { return sTI.MaxY; };
-
-inline void vTermPushCurRowYColX(void) { sTI.SavY = sTI.CurY; sTI.SavX = sTI.CurX; }
-inline void vTermPullCurRowYColX(void) { sTI.CurY = sTI.SavY; sTI.CurX = sTI.SavX; }
-inline void vTermSetCurRowYColX(i16_t RowY, i16_t ColX) { sTI.CurY = RowY; sTI.CurX = ColX; };
-
-inline void vTermPushMaxRowYColX(void) { sTI.SavY = sTI.MaxY; sTI.SavX = sTI.MaxX; }
-inline void vTermPullMaxRowYColX(void) { sTI.MaxY = sTI.SavY; sTI.MaxX = sTI.SavX; }
-inline void vTermSetMaxRowYColX(i16_t RowY, i16_t ColX) { sTI.MaxY = RowY; sTI.MaxX = ColX; };
-
-void vTermSetSize(u16_t RowY, u16_t ColX) {
-    if (RowY && ColX) {
-	    sTI.MaxY = (RowY < TERMINAL_MAX_Y) ? RowY : TERMINAL_DFLT_Y;
-    	sTI.MaxX = (ColX < TERMINAL_MAX_X) ? ColX : TERMINAL_DFLT_X;
-    }
-}
 
 void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
-
-/**
- * @brief	Check column and adjust column & row if required
- */
-static void vTermCheckCursor(void) {
-	if (sTI.CurX >= sTI.MaxX) {
-		sTI.CurX = 1;
-		if (sTI.CurY < sTI.MaxY) ++sTI.CurY;
-	}
-}
-
-void xTermProcessChr(int cChr) {
-	xRtosSemaphoreTake(&sTI.mux, portMAX_DELAY);
-	switch(cChr) {
-	case CHR_BS:
-		--sTI.CurX;
-		if (sTI.CurX == 0) {
-			sTI.CurX = sTI.MaxX;
-			if (sTI.CurY > 1)
-				--sTI.CurY;
-		}
-		break;
-	case CHR_TAB:
-		sTI.CurX = u32RoundUP(sTI.CurX, sTI.Tabs);
-		vTermCheckCursor();
-		break;
-	case CHR_LF:
-		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1 || CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
-			sTI.CurX = 1;
-		#endif
-		if (sTI.CurY < sTI.MaxY)
-			++sTI.CurY;
-		break;
-	case CHR_FF:
-		sTI.CurX = sTI.CurY = 1;
-		break;
-	case CHR_CR:
-		sTI.CurX = 1;
-		#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1 || CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
-			if (sTI.CurY < sTI.MaxY)
-				++sTI.CurY;
-		#endif
-		break;
-	default:
-		if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
-			++sTI.CurX;
-			vTermCheckCursor();
-		}
-		break;
-	}
-	xRtosSemaphoreGive(&sTI.mux);
-}
 
 int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	int iRV = 0;
@@ -110,34 +30,6 @@ int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	if (Ctrl.Unlock)
 		halUartUnLock();
 	return iRV;
-}
-
-int	xTermGets(char * pBuf, size_t Size, int Match, termctrl_t Ctrl) { 
-	int iRV, Len = 0;
-	TickType_t tNow = 0, tStart = xTaskGetTickCount();
-	if (Ctrl.Lock)
-		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
-	do {
-		iRV = fgetc(stdin);
-		if (iRV != EOF) {
-			pBuf[Len++] = iRV;
-			if (Len == Size || iRV == Match)
-				break;
-			continue;
-		}
-		taskYIELD();
-		tNow = xTaskGetTickCount() - tStart;
-	} while (tNow < pdMS_TO_TICKS(Ctrl.Wait));
-	if (Len < (Size - 1))
-		pBuf[Len] = CHR_NUL;
-	if (Ctrl.Unlock)
-		halUartUnLock();
-	return Len;
-}
-
-int xTermQuery(char * pccQuery, char * pBuf, size_t Size, int Match) {
-	xTermPuts(pccQuery, termBUILD_CTRL(1, 0, termWAIT_MS));
-	return xTermGets(pBuf, Size, Match, termBUILD_CTRL(0, 1, 500));
 }
 
 char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
@@ -234,25 +126,6 @@ void xTermShowCurRowYColX(i16_t RowY, i16_t ColX) {
 	else if (ColX < -1)		ColX = 1;	
 	iRV = snprintfx(Buffer, sizeof(Buffer), fmtCURSOR_DISP, RowY, ColX, sTI.CurY, sTI.CurX);
 	xTermPuts(Buffer, termBUILD_CTRL(1, 1, termWAIT_MS));
-}
-
-int _xTermReadRowYColX(char * pReq, i16_t * pRowY, i16_t * pColX) {
-	char Buffer[16];
-	int iRV = xTermQuery(pReq, Buffer, sizeof(Buffer), 'R');
-	if (iRV < 6)
-		return erFAILURE;
-	iRV = sscanf(Buffer, termCSI "%hu;%huR", pRowY, pColX);
-//	PX("[iRV=%d  RowY=%d  ColX=%d]" strNL, iRV, *pRowY, *pColX);
-	return iRV;
-}
-
-int xTermReadCurRowYColX(void) { return _xTermReadRowYColX(getCURSOR_POS, &sTI.CurY, &sTI.CurX); }
-
-void xTermReadMaxRowYColX(void) { _xTermReadRowYColX(getCURSOR_MAX, &sTI.MaxY, &sTI.MaxX); }
-
-int xTermIdentify(void) {
-	char Buffer[16];
-	return xTermQuery(getDEVICE_ATTR, Buffer, sizeof(Buffer), 'c');
 }
 
 // ##################################### functional tests ##########################################

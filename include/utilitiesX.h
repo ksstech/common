@@ -110,8 +110,8 @@ u32_t u32RoundUP(u32_t u32V, u32_t u32P);
 
 /**
  * @brief	Increment the value and return the modulus/wrapped result
- * @param	V32 - value to be incremented
- * @param	L32 - limit to be used for wrapping
+ * @param	X32val - value to be incremented
+ * @param	X32lim - limit to be used for wrapping
  * @return	modulus of the incremented value
  */
 inline __attribute__((always_inline)) u32_t u32IncrementWrap(u32_t U32val, u32_t U32lim) { ++U32val; return U32val % U32lim; }

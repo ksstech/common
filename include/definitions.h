@@ -279,9 +279,9 @@ extern "C" {
 /* ##################### macros to create variable width 8/16/32/64 bit masks ######################
  * a is the starting bit number 0 -> 7/15/31/63
  * b is the ending bit number 0 -> 7/15/31/63
- * a: 0->xFF, 1->xFE, 2->xFC, 3->xF8, 4->xF0, 5->xE0, 6->xC0, 7->x80
- * b: 0->x01, 1->x03, 2->x07, 4->x0F, 4->x1F, 5->x3F, 6->x7F, 7->xFF
- * m: 0,0->x01  0,1->0x03  0,4->x1F  3,4->x18  4,7->xF0  5,5->x20  5,7->xE0  6,7->xC0  7,7->x80
+ * a: 0->xFF	1->xFE		2->xFC		3->xF8		4->xF0		5->xE0		6->xC0		7->x80
+ * b: 0->x01	1->x03		2->x07		4->x0F		4->x1F		5->x3F		6->x7F		7->xFF
+ * m: 0,0->x01 	0,1->0x03	1,2->x06	2,3->x0C	3,4->x18	4,5->x30	5,6->x60	6,7->xC0  7,7->x80
  */
 #define BIT_MASK8(a,b)				(u8_t) ((u8_t)(0xFF >> (7-(b))) & ~((u8_t)(0x01 << (a))-1))
 #define BIT_MASK16(a,b)				((0xFFFF >> (15-(b))) & ~((0x0001 << (a))-1))
