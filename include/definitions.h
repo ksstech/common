@@ -328,6 +328,9 @@ extern "C" {
 #define maskLOW16(x)				((x) & 0x0000FFFF)
 #define maskLOW24(x)				((x) & 0x00FFFFFF)
 
+#define MSWofU64(U64)				((u32_t)(U64 >> 32))
+#define LSWofU64(U64)				((u32_t)(U64 & BIT_MASK64(0,31)))
+		
 #define	VERSION(Va,Vb,Vc,Vd)		((Va << 24) | (Vb << 16) | (Vc << 8) | Vd)
 
 // https://stackoverflow.com/questions/3553296/c-sizeof-single-struct-member
