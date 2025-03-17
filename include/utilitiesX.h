@@ -1,4 +1,4 @@
-// utilitiesX.h - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// utilitiesX.h - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #pragma once
 
@@ -56,10 +56,10 @@ u64_t u64pow(u32_t base, u32_t exp) ;
 
 /**
  * @brief	Calculate number of trailing 0's in U32 value
- * @param	U32val value to evaluate
+ * @param	u32V value to evaluate
  * @return	number of trailing 0's
  */
-int u32Trailing0(u32_t U32val) ;
+int u32Trailing0(u32_t u32V) ;
 
 /**
  * @brief	Calculate number of trailing 0's in U64 value
@@ -70,19 +70,19 @@ int u64Trailing0(u64_t U64val) ;
 
 /**
  * @brief	Calculate number of digits (including sign) in I32 value
- * @param	I32val - value of which length (number of digits) is to be calculated
+ * @param	i32V - value of which length (number of digits) is to be calculated
  * @param	grouping - 1 if number of digits calculated should include SI separators
  * @return	number of digits that value (if  printed) would consist of
  */
-int	xDigitsInI32(i32_t I32val, bool grouping);
+int	xDigitsInI32(i32_t i32V, bool grouping);
 
 /**
  * @brief	Calculate number of digits in U32 value
- * @param	U32val - value of which length (number of digits) is to be calculated
+ * @param	u32V - value of which length (number of digits) is to be calculated
  * @param	grouping - 1 if number of digits calculated should include SI separators
  * @return	number of digits that value (if  printed) would consist of
  */
-int	xDigitsInU32(u32_t U32val, bool grouping);
+int	xDigitsInU32(u32_t u32V, bool grouping);
 
 /**
  * @brief	Calculate number of digits in U64 value
@@ -96,26 +96,28 @@ int	xU32ToDecStr(u32_t Value, char *);
 
 /**
  * @brief	Round VAL up or down to closest multiple of MULT
- * @param
- * @return
+ * @param[in]	u32V value to be rounded down/up
+ * @param[in]	u32M roundup multiple
+ * @return	value after rounded up and adjusted
  */
-u32_t u32Round(u32_t u32V, u32_t u32P);
+u32_t u32Round(u32_t u32V, u32_t u32M);
 
 /**
  * @brief	Round VAL up to closest multiple of MULT
- * @param
- * @return
+ * @param[in]	u32V value to be rounded up
+ * @param[in]	u32M roundup multiple
+ * @return	value after rounded up and adjusted
  */
-u32_t u32RoundUP(u32_t u32V, u32_t u32P);
+u32_t u32RoundUP(u32_t u32V, u32_t u32M);
 
 /**
  * @brief	Increment the value and return the modulus/wrapped result
- * @param	X32val - value to be incremented
- * @param	X32lim - limit to be used for wrapping
+ * @param	x32V - value to be incremented
+ * @param	x32L - limit to be used for wrapping
  * @return	modulus of the incremented value
  */
-inline __attribute__((always_inline)) u32_t u32IncrementWrap(u32_t U32val, u32_t U32lim) { ++U32val; return U32val % U32lim; }
-inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t I32val, i32_t I32lim) { ++I32val; return I32val % I32lim; }
+inline __attribute__((always_inline)) u32_t u32IncrementWrap(u32_t u32V, u32_t u32L) { ++u32V; return u32V % u32L; }
+inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t i32V, i32_t i32L) { ++i32V; return i32V % i32L; }
 
 // ################################### 1/2/4 bit field array support ###############################
 

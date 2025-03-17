@@ -170,91 +170,93 @@ u64_t u64pow(u32_t base, u32_t exp) {
 	return res;
 }
 
-int u32Trailing0(u32_t U32val) {
+int u32Trailing0(u32_t u32V) {
 	int iRV = 0;
-	while (U32val > 0) {
-		if (U32val % 10) break;
+	while (u32V > 0) {
+		if (u32V % 10) break;
 		++iRV;
-		U32val /= 10;
+		u32V /= 10;
 	}
 	return iRV;
 }
 
-int u64Trailing0(u64_t U64val) {
+int u64Trailing0(u64_t u64V) {
 	int iRV = 0;
-	while (U64val > 0) {
-		if (U64val % 10) break;
+	while (u64V > 0) {
+		if (u64V % 10)
+			break;
 		++iRV;
-		U64val /= 10;
+		u64V /= 10;
 	}
 	return iRV;
 }
 
-int	xDigitsInI32(i32_t I32val, bool grouping) {
+int	xDigitsInI32(i32_t i32V, bool grouping) {
 	int x;
-	if (I32val == INT32_MIN)				x = 10 + 1;
+	if (i32V == INT32_MIN)				x = 10 + 1;
 	else {	// if value is negative, and '-' counts as a digit....
-		if (I32val < 0)						return xDigitsInI32(-I32val, grouping) + 1;
-		if (I32val >= 10000) {
-			if (I32val >= 10000000) {
-		        if (I32val >= 100000000)	x = (I32val >= 1000000000) ? 10 : 9;
-		        else						x = 8;
+		if (i32V < 0)
+			return xDigitsInI32(-i32V, grouping) + 1;
+		if (i32V >= 10000) {
+			if (i32V >= 10000000) {
+		        if (i32V >= 100000000)	x = (i32V >= 1000000000) ? 10 : 9;
+		        else					x = 8;
 			} else {
-				if (I32val >= 100000)		x = (I32val >= 1000000) ? 7 : 6;
-				else						x = 5;
+				if (i32V >= 100000)		x = (i32V >= 1000000) ? 7 : 6;
+				else					x = 5;
 			}
 	    } else {
-		    if (I32val >= 100)				x = (I32val >= 1000) ? 4 : 3;
-		    else							x = (I32val >= 10) ? 2 : 1;
+		    if (i32V >= 100)			x = (i32V >= 1000) ? 4 : 3;
+		    else						x = (i32V >= 10) ? 2 : 1;
 	    }
 	}
 	return x + ((x - 1) / 3);
 }
 
-int	xDigitsInU32(u32_t U32val, bool grouping) {
+int	xDigitsInU32(u32_t u32V, bool grouping) {
 	int x;
-	if (U32val >= 10000) {
-		if (U32val >= 10000000) {
-	        if (U32val >= 100000000)	x = (U32val >= 1000000000)? 10 : 9;
-			else						x = 8;
+	if (u32V >= 10000) {
+		if (u32V >= 10000000) {
+	        if (u32V >= 100000000)	x = (u32V >= 1000000000)? 10 : 9;
+			else					x = 8;
 		} else {
-			if (U32val >= 100000)		x = (U32val >= 1000000) ? 7 : 6;
-			else						x = 5;
+			if (u32V >= 100000)		x = (u32V >= 1000000) ? 7 : 6;
+			else					x = 5;
 		}
     } else {
-        if (U32val >= 100)				x = (U32val >= 1000) ? 4 : 3;
-        else							x = (U32val >= 10) ? 2 : 1;
+        if (u32V >= 100)			x = (u32V >= 1000) ? 4 : 3;
+        else						x = (u32V >= 10) ? 2 : 1;
     }
     return x + ((x - 1) / 3);
 }
 
-int	xDigitsInU64(u64_t U64val, bool grouping) {
+int	xDigitsInU64(u64_t u64V, bool grouping) {
 	int x;
-	if (U64val <= UINT32_MAX)						return xDigitsInU32((u32_t) U64val, grouping);
-	if (U64val >= 100000000000000ULL) {
-		if (U64val >= 100000000000000000ULL) {
-			if (U64val >= 1000000000000000000ULL)	x = (U64val >= 10000000000000000000ULL) ? 20  : 19;
-			else									x = 18;
+	if (u64V <= UINT32_MAX)						return xDigitsInU32((u32_t) u64V, grouping);
+	if (u64V >= 100000000000000ULL) {
+		if (u64V >= 100000000000000000ULL) {
+			if (u64V >= 1000000000000000000ULL)	x = (u64V >= 10000000000000000000ULL) ? 20  : 19;
+			else								x = 18;
 		} else {
-			if (U64val >= 1000000000000000ULL)		x = (U64val >= 10000000000000000ULL) ? 17 : 16;
-			else									x = 15;
+			if (u64V >= 1000000000000000ULL)	x = (u64V >= 10000000000000000ULL) ? 17 : 16;
+			else								x = 15;
 		}
 	} else {
-		if (U64val >= 1000000000000ULL)				x = (U64val > 10000000000000ULL) ? 14 : 13;
-		else										x = (U64val >= 100000000000ULL) ? 12 : 11;
+		if (u64V >= 1000000000000ULL)			x = (u64V > 10000000000000ULL) ? 14 : 13;
+		else									x = (u64V >= 100000000000ULL) ? 12 : 11;
 	}
 	return x + ((x - 1) / 3);
 }
 
-int	xU32ToDecStr(u32_t U32val, char * pBuf) {
+int	xU32ToDecStr(u32_t u32V, char * pBuf) {
 	int	Len = 0;
-	if (U32val) {
+	if (u32V) {
 		u32_t iTemp, Div = 1000000000UL;
 		do {
-			iTemp = U32val / Div;
+			iTemp = u32V / Div;
 			if (iTemp != 0 || Len > 0) {
 				*pBuf++	= iTemp + CHR_0;
-				U32val -= iTemp * Div;
+				u32V -= iTemp * Div;
 				++Len;
 			}
 			Div /= 10;
@@ -267,15 +269,15 @@ int	xU32ToDecStr(u32_t U32val, char * pBuf) {
 	return Len;
 }
 
-u32_t u32Round(u32_t U32val, u32_t Mult) {
-	u32_t Frac = U32val % Mult;
-	U32val -= Frac;
-	return (Frac >= (Mult / 2)) ? (U32val + Mult) : U32val;
+u32_t u32Round(u32_t u32V, u32_t u32M) {
+	u32_t Frac = u32V % u32M;
+	u32V -= Frac;
+	return (Frac >= (u32M / 2)) ? (u32V + u32M) : u32V;
 }
 
-u32_t u32RoundUP(u32_t U32val, u32_t Mult) {
-	U32val += (Mult - 1);
-	return (U32val < Mult) ? Mult : (U32val - (U32val % Mult));
+u32_t u32RoundUP(u32_t u32V, u32_t u32M) {
+	u32V += (u32M - 1);
+	return (u32V < u32M) ? u32M : (u32V - (u32V % u32M));
 }
 
 // ################################### 1/2/4 bit field array support ###############################
