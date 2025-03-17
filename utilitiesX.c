@@ -304,7 +304,8 @@ void xBitArrayDelete(ba_t * psBA) {
 }
 
 int	xBitArraySet(ba_t * psBA, int baI, u8_t baV) {
-	if (baI >= psBA->Count || baV > psBA->Mask) return erFAILURE;
+	if (baI >= psBA->Count || baV > psBA->Mask)
+		return erFAILURE;
 	u8_t Xidx = baI / psBA->Fields;
 	u8_t Sidx = baI % psBA->Fields;
 	u8_t Mask = psBA->Mask << Sidx;
@@ -314,7 +315,8 @@ int	xBitArraySet(ba_t * psBA, int baI, u8_t baV) {
 }
 
 int	xBitArrayGet(ba_t * psBA, int baI) {
-	if (baI >= psBA->Count) return erFAILURE;
+	if (baI >= psBA->Count)
+		return erFAILURE;
 	u8_t Xidx = baI / psBA->Fields;
 	u8_t Sidx = baI % psBA->Fields;
 	u8_t Mask = psBA->Mask << Sidx;
@@ -336,6 +338,7 @@ report_t * psAuditBufCreate(void) {
 void vAuditBufDestroy(report_t * psR, bool flag) {
 	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pvAlloc == (void *)psR + sizeof(report_t));
 	// If requested and something in the Audit buffer, log to host...
-	if (flag && psR->size != SL_MAX_LEN_MESSAGE) SL_LOG(SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING), "%s", psR->pvAlloc);	
+	if (flag && psR->size != SL_MAX_LEN_MESSAGE)
+		SL_LOG(SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING), "%s", psR->pvAlloc);	
 	free(psR);
 }
