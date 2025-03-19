@@ -265,6 +265,8 @@ extern "C" {
 								(x) == 1000000 || (x) == 10000000 || (x) == 100000000 || (x) == 1000000000 ||		\
 								(x) == 10000000000 || (x) == 100000000000 ? 1 : 0)
 
+#define CNTR(T,V)					{ static u32_t V=0; if (T) ++V; else { PT(toSTR(V) "=%lu" strNL, V); V=0; } }
+
 #define	SWAP(v1, v2, t)				{t vx = v1; v1 = v2; v2 = vx; }
 
 #define	IF_EXEC(T,C)				if (T) { do { C; } while (0); }
