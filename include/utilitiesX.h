@@ -3,6 +3,7 @@
 #pragma once
 
 #include "struct_union.h"
+#include "report.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -4,7 +4,7 @@
 #include "hal_memory.h"
 #include "errors_events.h"
 #include "FreeRTOS_Support.h"
-#include "printfx.h"
+#include "report.h"
 #include "utilitiesX.h"
 
 #include <string.h>

@@ -1,7 +1,7 @@
 // timeX.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
-#include "printfx.h"
+#include "report.h"
 #include "string_general.h"
 #include "timeX.h"
 #include "errors_events.h"
