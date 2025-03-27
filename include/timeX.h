@@ -2,8 +2,10 @@
 
 #pragma once
 
-#include	<time.h>									// struct tm
-#include	"definitions.h"								// no nested includes
+#include "report.h"
+#include "definitions.h"
+
+#include <time.h>
 
 #ifdef __cplusplus
 extern "C" {
