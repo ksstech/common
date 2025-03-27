@@ -147,7 +147,7 @@ extern "C" {
 
 // calculate different EPOCH timestamps
 
-#define COMPUTE_TS_I32UNIX(yr, mon, day, hr, min, sec)				\
+#define COMPUTE_TS_I32UNIX(yr, mon, day, hr, min, sec)			\
 	( (sec) + 													\
 	( (min) * SECONDS_IN_MINUTE ) +								\
 	( (hr) * SECONDS_IN_HOUR) +									\
