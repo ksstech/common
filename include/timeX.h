@@ -167,7 +167,7 @@ void xTimeGMTime(seconds_t, tm_t *, int);
 seconds_t xTimeCalcSeconds(tm_t *, int);
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
 
-seconds_t xTimeReport(tm_t *psTM);
+seconds_t xTimeReport(struct report_t * psR, tm_t *psTM);
 
 /**
  * @brief	Convert 64_t timestamp to u32_t seconds value
