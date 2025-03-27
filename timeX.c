@@ -1,7 +1,6 @@
 // timeX.c - Copyright (c) 2014-24 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
-#include "report.h"
 #include "string_general.h"
 #include "timeX.h"
 #include "errors_events.h"
@@ -222,36 +221,36 @@ void xTimeTest(void) {
 
 #if		(timexEPOCH_SELECTED == timexEPOCH_U32NTP)
 	sTSZtemp.usecs = xTimeMakeTimeStamp(SECONDS_IN_EPOCH_PAST, 0);
-	wprintfx(NULL, "1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("1900-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.unit = CurSecs.unit;
-	wprintfx(NULL, "1968-01-20 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("1968-01-20 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.usecs = xTimeMakeTimeStamp(SECONDS_IN_EPOCH_FUTURE, 0);
-	wprintfx(NULL, "2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("2036-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_I32UNIX)
 	sTSZtemp.usecs = xTimeMakeTimeStamp(SECONDS_IN_EPOCH_PAST, 0);
-	wprintfx(NULL, "1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.usecs	= xTimeMakeTimeStamp(946684799, 0);
-	wprintfx(NULL, "1999-12-31 23:59:59.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("1999-12-31 23:59:59.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.usecs += MICROS_IN_SECOND;
-	wprintfx(NULL, "2000-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("2000-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.usecs = xTimeMakeTimeStamp(SECONDS_IN_EPOCH_FUTURE, 0);
-	wprintfx(NULL, "2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("2038-01-19 03:14:07.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 #elif	(timexEPOCH_SELECTED == timexEPOCH_U32UNIX)
 	sTSZtemp.usecs = xTimeMakeTimeStamp(SECONDS_IN_EPOCH_PAST, 0);
-	wprintfx(NULL, "1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("1970-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.usecs	= xTimeMakeTimeStamp(315532800, 0);
-	wprintfx(NULL, "1980-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("1980-01-01 00:00:00.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 	sTSZtemp.usecs = xTimeMakeTimeStamp(SECONDS_IN_EPOCH_FUTURE, 0);
-	wprintfx(NULL, "2106-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
+	PX("2106-02-07 06:28:15.000Z (+00.00 UTC) = %Z\r\n", &sTSZtemp);
 
 #endif
 }

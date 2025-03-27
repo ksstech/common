@@ -46,7 +46,7 @@ void vUtilPrintCharacterSet(void) {
 	u8_t Buffer[256];
 	for (int cChr = 0; cChr < sizeof(Buffer); cChr++)
 		Buffer[cChr] = cChr;
-	wprintfx(NULL, "%!'+hhY", sizeof(Buffer), Buffer);
+	PX("%!'+hhY", sizeof(Buffer), Buffer);
 }
 
 /**
@@ -72,7 +72,7 @@ void int2mac(u64_t mac, u8_t * hwaddr) {
 }
 
 void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) {
-	wprintfx(NULL, "MemDump:\r\n%#'+hhY", Size, *pMemAddr);
+	PX("MemDump:\r\n%#'+hhY", Size, *pMemAddr);
 	*pMemAddr = (cChr == CHR_PLUS) ? (*pMemAddr + Size) : (cChr == CHR_MINUS) ? (*pMemAddr - Size) : *pMemAddr;
 }
 
