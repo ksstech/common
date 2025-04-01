@@ -330,7 +330,7 @@ int	xBitArrayGet(ba_t * psBA, int baI) {
 
 report_t * psAuditBufCreate(void) {
 	report_t * psR = (report_t *) calloc(1, sizeof(report_t) + SL_MAX_LEN_MESSAGE);
-	psR->pcBuf = psR->pvAlloc = (char *) psR + sizeof(report_t);
+	psR->pvArg = psR->pvAlloc = (char *) psR + sizeof(report_t);
 	psR->size = SL_MAX_LEN_MESSAGE;
 	return psR;
 }
