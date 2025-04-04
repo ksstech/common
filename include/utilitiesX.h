@@ -129,15 +129,19 @@ int	xBitArrayGet(ba_t * psBA, int baI) ;
 
 // #################################### audit buffer support #######################################
 
-report_t * psAuditBufCreate(void);
+/**
+ * @brief	allocate SL_MAX_LEN_MESSAGE buffer and initialise report_t structure with related values
+ * @return  pointer to the allocated * initialized buffer
+ */
+report_t * psAuditOpen(void);
 
 /**
- * @brief	
- * @param[in]	psr - pointer to report structure
+ * @brief	if used, log buffer content to console and/or host then free allocated memory
+ * @param[in]	psR - pointer to report structure
  * @param[in]	flag - 1=anything there, log it
  * @return		NULL
  */
-void vAuditBufDestroy(report_t * psR, bool flag);
+void vAuditClose(report_t * psR, bool flag);
 
 #ifdef __cplusplus
 }

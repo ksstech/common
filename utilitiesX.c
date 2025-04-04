@@ -326,16 +326,16 @@ int	xBitArrayGet(ba_t * psBA, int baI) {
 
 // #################################### audit buffer support #######################################
 
-#include "syslog.h"
+#include "syslog.h" 
 
-report_t * psAuditBufCreate(void) {
+report_t * psAuditOpen(void) {
 	report_t * psR = (report_t *) calloc(1, sizeof(report_t) + SL_MAX_LEN_MESSAGE);
 	psR->pvArg = psR->pvAlloc = (char *) psR + sizeof(report_t);
 	psR->size = SL_MAX_LEN_MESSAGE;
 	return psR;
 }
 
-void vAuditBufDestroy(report_t * psR, bool flag) {
+void vAuditClose(report_t * psR, bool flag) {
 	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pvAlloc == (void *)psR + sizeof(report_t));
 	// If requested and something in the Audit buffer, log to host...
 	if (flag && psR->size != SL_MAX_LEN_MESSAGE)
