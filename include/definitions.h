@@ -143,17 +143,17 @@ extern "C" {
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
 /* Linux = LF, macOS = CR,  Win = CRLF */
-#if (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CRLF == 1)
+#if (CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
 	#define	strNL					"\r\n"
 	#define	strNLx2					"\r\n\n"
-#elif (CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF == 1)
+#elif (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1)
 	#define	strNL					"\n"
 	#define	strNLx2					"\n\n"
-#elif (CONFIG_NEWLIB_STDOUT_LINE_ENDING_CR == 1)
+#elif (CONFIG_LIBC_STDOUT_LINE_ENDING_CR == 1)
 	#define	strNL					"\r"
 	#define	strNLx2					"\r\r"
 #else
-	#error "CONFIG_NEWLIB_STDOUT_LINE_ENDING_LF/CRLF not defined"
+	#error "CONFIG_LIBC_STDOUT_LINE_ENDING_LF/CRLF not defined"
 #endif
 
 #define strNUL  					(char *) ""

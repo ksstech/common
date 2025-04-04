@@ -52,7 +52,7 @@ const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
 #if 1
 int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	u8_t Idx = 0, cChr;
-#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 	bool CRflag = 0;
 #endif
 	if (sd < 0 || halMemoryRAM(pcBuf) == 0) return erINV_PARA;
@@ -64,13 +64,13 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 			vTaskDelay(50);								// wait a bit ...
 			continue;									// and try again...
 		}
-	#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+	#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 		if (cChr == CHR_CR) {						// ALMOST end of input
 			CRflag = 1;								// set flag but do not store in buffer or adjust count
 		} else if (cChr == CHR_LF)					// now at end of string
-	#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_CR == 1)
+	#elif (CONFIG_LIBC_STDIN_LINE_ENDING_CR == 1)
 		if (cChr == CHR_CR)
-	#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_LF == 1)
+	#elif (CONFIG_LIBC_STDIN_LINE_ENDING_LF == 1)
 		if (cChr == CHR_LF)
 	#endif
 		{
@@ -102,7 +102,7 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 #else
 int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	u8_t Idx = 0, cChr;
-#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 	bool CRflag = 0;
 #endif
 	if (sd < 0 || halMemoryRAM(pcBuf) == 0) return erINV_PARA;
@@ -110,7 +110,7 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	while (1) {
 		int iRV = read(sd, &cChr, sizeof(cChr));
 		if (iRV == 1) {
-		#if (CONFIG_NEWLIB_STDIN_LINE_ENDING_CRLF == 1)
+		#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 			if (cChr == CHR_CR) {						// ALMOST end of input
 				CRflag = 1;								// set flag but do not store in buffer or adjust count
 
@@ -119,13 +119,13 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 				write(sd, strNL, strlen(strNL));
 				break;
 			}
-		#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_CR == 1)
+		#elif (CONFIG_LIBC_STDIN_LINE_ENDING_CR == 1)
 			if (cChr == CHR_CR) {						// end of input
 				pcBuf[Idx] = 0;							// discard CR, terminate string in buffer
 				write(sd, strNL, strlen(strNL));
 				break;
 			}
-		#elif (CONFIG_NEWLIB_STDIN_LINE_ENDING_LF == 1)
+		#elif (CONFIG_LIBC_STDIN_LINE_ENDING_LF == 1)
 			if (cChr == CHR_LF) {						// end of input
 				pcBuf[Idx] = 0;
 				write(sd, strNL, strlen(strNL));
