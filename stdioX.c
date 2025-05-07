@@ -1,6 +1,5 @@
 // x_stdio.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
-#include "hal_platform.h"
 #include "stdioX.h"
 #include "FreeRTOS_Support.h"
 #include "errors_events.h"
