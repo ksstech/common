@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "report.h"
 #include "definitions.h"
 
 #include <time.h>
@@ -168,8 +167,6 @@ char * xTimeGetMonthName(int);
 void xTimeGMTime(seconds_t, tm_t *, int);
 seconds_t xTimeCalcSeconds(tm_t *, int);
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
-
-seconds_t xTimeReport(report_t * psR, tm_t *psTM);
 
 /**
  * @brief	Convert 64_t timestamp to u32_t seconds value
