@@ -36,6 +36,8 @@ typedef struct ba_t {									// 1/2/4 bit field array
 const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size);
 
 void vShowActivity(int i);
+void vShowSpin(void);
+void vShowSpinWait(void);
 
 void vUtilPrintCharacterSet(void);
 

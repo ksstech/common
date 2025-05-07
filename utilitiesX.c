@@ -42,6 +42,19 @@ void vShowActivity(int i) {
 	}
 }
 
+void vShowSpin(void) {
+	static u8_t Index = 0;
+	RP("%c\x08", CHR_SPACE + Index++);
+	Index %= 96;
+}
+
+void vShowSpinWait(void) {
+	while (getchar() == EOF) {
+		vShowSpin();
+		vTaskDelay(100);
+	}
+}
+
 void vUtilPrintCharacterSet(void) {
 	u8_t Buffer[256];
 	for (int cChr = 0; cChr < sizeof(Buffer); cChr++)
