@@ -1,8 +1,7 @@
 // timeX.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
-#include "hal_platform.h"
-#include "string_general.h"
 #include "timeX.h"
+#include "string_general.h"
 #include "errors_events.h"
 
 #include <string.h>
@@ -212,6 +211,10 @@ seconds_t xTimeReport(tm_t *psTM) {
 
 //	http://www.timeanddate.com/countdown/to?p0=198&year=1900&month=1&day=1&hour=0&min=0&sec=0
 
+#if 0
+
+#include "printf.h"
+
 void xTimeTest(void) {
 #if		(timexTZTYPE_SELECTED == timexTZTYPE_POINTER)
 	tz_t	sTZ = {	.daylight = 0, .timezone = 0, .pcTZName = "Africa/Johannesburg", .pcDSTName = "South Africa Standard Time" };
@@ -257,3 +260,5 @@ void xTimeTest(void) {
 	PX("2106-02-07 06:28:15.000Z (+0.00 UTC) = %Z" strNL, &sTSZtemp);
 #endif
 }
+
+#endif
