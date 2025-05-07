@@ -146,14 +146,12 @@ extern "C" {
 #if (CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
 	#define	strNL					"\r\n"
 	#define	strNLx2					"\r\n\n"
-#elif (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1)
-	#define	strNL					"\n"
-	#define	strNLx2					"\n\n"
 #elif (CONFIG_LIBC_STDOUT_LINE_ENDING_CR == 1)
 	#define	strNL					"\r"
 	#define	strNLx2					"\r\r"
-#else
-	#error "CONFIG_LIBC_STDOUT_LINE_ENDING_LF/CRLF not defined"
+#else		// default (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1)
+	#define	strNL					"\n"
+	#define	strNLx2					"\n\n"
 #endif
 
 #define strNUL  					(char *) ""
