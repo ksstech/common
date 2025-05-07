@@ -14,13 +14,13 @@ extern "C" {
 // ########################################## Structures ###########################################
 
 typedef struct ba_t {									// 1/2/4 bit field array
-	u8_t * pvBA ;
-	size_t ByteSize ;
-	size_t Count ;
-	u8_t BitSize ;									// size (in bits) of each entry
-	u8_t Fields ;
-	u8_t Mask ;
-	u8_t Spare ;
+	u8_t * pvBA;
+	size_t ByteSize;
+	size_t Count;
+	u8_t BitSize;									// size (in bits) of each entry
+	u8_t Fields;
+	u8_t Mask;
+	u8_t Spare;
 } ba_t;
 
 // #################################################################################################
@@ -35,14 +35,15 @@ typedef struct ba_t {									// 1/2/4 bit field array
  */
 const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size);
 
-void vShowActivity(int i) ;
-void vUtilPrintCharacterSet(void) ;
+void vShowActivity(int i);
 
-u64_t mac2int(u8_t * hwaddr) ;
-void int2mac(u64_t mac, u8_t * hwaddr) ;
-void MemDump(u8_t ** pMemAddr, int cChr, size_t Size) ;
+void vUtilPrintCharacterSet(void);
 
-void xGenerateUUID(char * pBuf) ;
+u64_t mac2int(u8_t * hwaddr);
+void int2mac(u64_t mac, u8_t * hwaddr);
+void MemDump(u8_t ** pMemAddr, int cChr, size_t Size);
+
+void xGenerateUUID(char * pBuf);
 
 void vBuildRandomSXX(u8_t * pu8, int len, int set);
 void vBuildRandomStr(u8_t * pu8, int len, int set);
@@ -52,22 +53,22 @@ x16_t xBuildRandomX16(void);
 x32_t xBuildRandomX32(void);
 x64_t xBuildRandomX64(void);
 
-u32_t u32pow(u32_t base, u32_t exp) ;
-u64_t u64pow(u32_t base, u32_t exp) ;
+u32_t u32pow(u32_t base, u32_t exp);
+u64_t u64pow(u32_t base, u32_t exp);
 
 /**
  * @brief	Calculate number of trailing 0's in U32 value
  * @param	u32V value to evaluate
  * @return	number of trailing 0's
  */
-int u32Trailing0(u32_t u32V) ;
+int u32Trailing0(u32_t u32V);
 
 /**
  * @brief	Calculate number of trailing 0's in U64 value
  * @param	U64val value to evaluate
  * @return	number of trailing 0's
  */
-int u64Trailing0(u64_t U64val) ;
+int u64Trailing0(u64_t U64val);
 
 /**
  * @brief	Calculate number of digits (including sign) in I32 value
@@ -122,10 +123,10 @@ inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t i32V, i32_t i
 
 // ################################### 1/2/4 bit field array support ###############################
 
-ba_t * pvBitArrayCreate(size_t Count, size_t Size) ;
-void xBitArrayDelete(ba_t * psBA) ;
-int	xBitArraySet(ba_t * psBA, int baI, u8_t baV) ;
-int	xBitArrayGet(ba_t * psBA, int baI) ;
+ba_t * pvBitArrayCreate(size_t Count, size_t Size);
+void xBitArrayDelete(ba_t * psBA);
+int	xBitArraySet(ba_t * psBA, int baI, u8_t baV);
+int	xBitArrayGet(ba_t * psBA, int baI);
 
 // #################################### audit buffer support #######################################
 
