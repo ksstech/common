@@ -646,9 +646,9 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
 
-#define fmt "%20s is '%s'\n"
-int main() {
+#define fmt "%20s is '%s'" strNL
 
+int main() {
   size_t s; ptrdiff_t p; intmax_t i; int ai[3] = {0}; return printf( fmt fmt fmt fmt fmt fmt fmt fmt,
 
      "size_t", typename(s),               "ptrdiff_t", typename(p),     
