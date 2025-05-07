@@ -343,15 +343,15 @@ int	xBitArrayGet(ba_t * psBA, int baI) {
 
 report_t * psAuditOpen(void) {
 	report_t * psR = (report_t *) calloc(1, sizeof(report_t) + SL_MAX_LEN_MESSAGE);
-	psR->pvArg = psR->pvAlloc = (char *) psR + sizeof(report_t);
+	psR->pcBuf = psR->pcAlloc = (char *) psR + sizeof(report_t);
 	psR->size = SL_MAX_LEN_MESSAGE;
 	return psR;
 }
 
 void vAuditClose(report_t * psR, bool flag) {
-	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pvAlloc == (void *)psR + sizeof(report_t));
+	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pcAlloc == (void *)psR + sizeof(report_t));
 	// If requested and something in the Audit buffer, log to host...
 	if (flag && psR->size != SL_MAX_LEN_MESSAGE)
-		SL_LOG(SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING), "%s", psR->pvAlloc);	
+		SL_LOG(SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING), "%s", psR->pcAlloc);	
 	free(psR);
 }
