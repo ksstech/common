@@ -175,7 +175,7 @@ seconds_t xTimeReport(report_t * psR, tm_t *psTM);
  * @brief	Convert 64_t timestamp to u32_t seconds value
  * @return	u32_t seconds value
  */
-inline u32_t __attribute__((always_inline)) xTimeStampSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / MICROS_IN_SECOND); }
+u32_t xTimeStampSeconds(u64_t Timestamp);
 
 /**
  * @brief	Calculate the u32_t mSec component of a 64_t timestamp
@@ -193,7 +193,7 @@ inline u32_t __attribute__((always_inline)) xTimeStampSeconds(u64_t Timestamp) {
  * @brief	Convert u32_t seconds & microseconds values to u64_t timestamp
  * @return	u64_t timestamp representing the seconds & microseconds combined
  */
-inline u64_t xTimeMakeTimeStamp(u32_t Sec, u32_t uSec) { return ((u64_t) Sec * (u64_t) MICROS_IN_SECOND) + (u64_t) uSec; }
+u64_t xTimeMakeTimeStamp(u32_t Sec, u32_t uSec);
 
 void xTimeTest(void);
 

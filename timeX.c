@@ -198,6 +198,10 @@ seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
 }
 
 seconds_t xTimeReport(report_t * psR, tm_t *psTM) {
+u32_t xTimeStampSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / MICROS_IN_SECOND); }
+
+u64_t xTimeMakeTimeStamp(u32_t Sec, u32_t uSec) { return ((u64_t) Sec * (u64_t) MICROS_IN_SECOND) + (u64_t) uSec; }
+
 	seconds_t sRV = xTimeCalcSeconds(psTM, 0);
 	report(psR, "%d/%02d/%02d %d:%02d:%02d DoW=%d DoY=%d (%lu)\r\n", psTM->tm_year+1970, psTM->tm_mon+1,
 		psTM->tm_mday, psTM->tm_hour, psTM->tm_min, psTM->tm_sec, psTM->tm_wday, psTM->tm_yday, sRV);
