@@ -606,20 +606,6 @@ enum {								// ANSI standard terminal colors
 	colourBG_WHITE,										// 40 + 7 = 47
 };
 
-/*		Typ	8	16	32	64
-Siz			0	1	2	3
-Uxx		0	X	X	X	X
-Ixx		1	X	X	X	X
-Fxx		2			X	X
-Sxx		3	X
-*/
-
-typedef enum  __attribute__((packed)) cvi_e { cvU08,cvU16,cvU32,cvU64,cvI08,cvI16,cvI32,cvI64,cvF32,cvF64,cvSXX,cvXXX,cvINV=15 }cvi_e;
-
-typedef enum   __attribute__((packed)) vs_e { vs08B, vs16B, vs32B, vs64B } vs_e;
-
-typedef enum   __attribute__((packed)) vf_e { vfUXX, vfIXX, vfFXX, vfSXX } vf_e;
-
 // ######################################### Play area #############################################
 
 #ifdef __cplusplus
