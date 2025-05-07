@@ -2,6 +2,8 @@
 
 #pragma	once
 
+#include "definitions.h"
+
 #include <errno.h>
 #include "esp_err.h"
 
@@ -12,6 +14,46 @@ extern "C" {
 // ########################################### Macros ##############################################
 
 #define	TABLE_ENTRY_INT(c,m)		{ .code=c, .pMess=m }
+
+#define	MARK_M(M)					{ ErrLine = __LINE__; ErrPtr = M; }
+#define	MARK_MX(M,X)				{ MARK_M(M); iRV = X; }
+#define	MARK_MP(M,P)				{ MARK_M(M); pcRV = P; }
+
+#define	BREAK_M(M)					{ MARK_M(M); break; }
+#define	BREAK_X(X)					{ iRV = X; break; }
+#define	BREAK_MX(M,X)				{ MARK_M(M); iRV = X; break; }
+
+#define	RETURN_M(M)					{ MARK)M(M); return;
+#define	RETURN_X(X)					return X;
+#define	RETURN_MX(M,X)				{ MARK_M(M); return X; }
+#define	RETURN_MP(M,P)				{ MARK_M(M); return P; }
+
+#define	EXIT_M(M)					{ MARK_M(M); goto exit; }
+#define	EXIT_X(X)					{ iRV = X; goto exit; }
+#define	EXIT_MX(M,X)				{ MARK_M(M); iRV = X; goto exit; }
+#define	EXIT_MP(M,P)				{ MARK_M(M); pcRV = P; goto exit; }
+
+#define	IF_MARK_M(C,M)				if (C) MARK_M(M)
+#define	IF_MARK_MX(C,M,X)			if (C) MARK_MX(M,X)
+#define	IF_MARK_MP(C,M,P)			if (C) MARK_MP(M,P)
+
+#define IF_EXIT(C)					if (C) goto exit;
+#define IF_GOTO_L(C,L)				if (C) goto L;
+#define IF_EXIT_M(C,M)				if (C) EXIT_M(M)
+#define IF_EXIT_X(C,X)				if (C) { iRV = X; goto exit; }
+#define IF_EXIT_MX(C,M,X)			if (C) EXIT_MX(M,X)
+#define IF_EXIT_MP(C,M,P)			if (C) EXIT_MP(M,P)
+
+#define IF_RETURN(C)				if (C) return;
+#define IF_RETURN_X(C,X)			if (C) RETURN_X(X)
+#define IF_RETURN_M(C,M)			if (C) RETURN_M(X)
+#define IF_RETURN_MX(C,M,X)			if (C) RETURN_MX(M,X)
+#define IF_RETURN_MP(C,M,P)			if (C) RETURN_MP(M,P)
+
+#define IF_BREAK(C)					if (C) break
+#define IF_BREAK_M(C,M)				if (C) BREAK_M(M)
+#define IF_BREAK_X(C,X)				if (C) BREAK_X(X)
+#define IF_BREAK_MX(C,M,X)			if (C) BREAK_MX(M,X)
 
 /* ###################################### MBED error codes #########################################
  *	High level error codes
@@ -110,6 +152,8 @@ typedef struct {
 
 // ################################### Global/public variable(s) ###################################
 
+extern u32_t ErrLine;
+extern char * ErrPtr;
 
 // ################################### Global/public functions #####################################
 
