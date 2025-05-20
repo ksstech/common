@@ -123,6 +123,15 @@ u32_t u32RoundUP(u32_t u32V, u32_t u32M);
 inline __attribute__((always_inline)) u32_t u32IncrementWrap(u32_t u32V, u32_t u32L) { ++u32V; return u32V % u32L; }
 inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t i32V, i32_t i32L) { ++i32V; return i32V % i32L; }
 
+
+i32_t i32ScaleValue(i32_t Val, i32_t R1lo, i32_t R1hi, i32_t R2lo, i32_t R2hi);
+
+u32_t u32ScaleValue(u32_t Val, u32_t R1lo, u32_t R1hi, u32_t R2lo, u32_t R2hi);
+
+inline i32_t i32Fit2Range(i32_t Val, i32_t Lo, i32_t Hi) { return (Val <= Lo) ? Lo : (Val >= Hi) ? Hi : Val; }
+
+inline u32_t u32Fit2Range(u32_t Val, u32_t Lo, u32_t Hi) { return (Val <= Lo) ? Lo : (Val >= Hi) ? Hi : Val; }
+
 // ################################### 1/2/4 bit field array support ###############################
 
 ba_t * pvBitArrayCreate(size_t Count, size_t Size);

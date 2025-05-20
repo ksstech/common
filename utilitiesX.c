@@ -12,6 +12,7 @@
 // ###################################### Local build macros #######################################
 
 #define	debugFLAG					0xF000
+#define	debugSCALE					(debugFLAG & 0x0001)
 #define	debugTIMING					(debugFLAG_GLOBAL & debugFLAG & 0x1000)
 #define	debugTRACK					(debugFLAG_GLOBAL & debugFLAG & 0x2000)
 #define	debugPARAM					(debugFLAG_GLOBAL & debugFLAG & 0x4000)
@@ -291,6 +292,25 @@ u32_t u32Round(u32_t u32V, u32_t u32M) {
 u32_t u32RoundUP(u32_t u32V, u32_t u32M) {
 	u32V += (u32M - 1);
 	return (u32V < u32M) ? u32M : (u32V - (u32V % u32M));
+}
+
+// ################################# Fetch / Store / Convert support ###############################
+
+i32_t i32ScaleValue(i32_t Val, i32_t R1lo, i32_t R1hi, i32_t R2lo, i32_t R2hi) {
+	IF_myASSERT(debugPARAM, (R1hi > R1lo) && (R1lo <= Val) && (Val <= R1hi) && (R2lo != R2hi));
+	f64_t Factor = ((Val - R1lo) == 0ULL) ? 0.0 : ((double)R1hi - (double)R1lo ) / ( (double)Val - (double)R1lo);
+	f64_t Newval = (Factor == 0.0) ? (double)R2lo :  (double)R2lo + ((double)R2hi - (double)R2lo ) / Factor;
+	IF_PX(debugSCALE, "i32_t Val=%'ld R1: %'ld -> %'ld  R2: %'ld -> %'ld Fact=%'f New=%'ld" strNL,
+			Val, R1lo, R1hi, R2lo, R2hi, Factor, (i32_t) Newval);
+	return (i32_t) Newval;
+}
+
+u32_t u32ScaleValue(u32_t Val, u32_t R1lo, u32_t R1hi, u32_t R2lo, u32_t R2hi) {
+	IF_myASSERT(debugPARAM, (R1hi > R1lo) && (R1lo <= Val) && (Val <= R1hi) && (R2lo != R2hi));
+	double Factor = ((Val - R1lo) == 0ULL) ? 0.0 : ((double)R1hi - (double)R1lo ) / ( (double)Val - (double)R1lo );
+	double Newval = (Factor == 0.0) ? (double)R2lo : (double)R2lo + ((double)R2hi - (double)R2lo ) / Factor;
+	IF_PX(debugSCALE, "u32_t Val=%'lu R1: %'lu -> %'lu  R2: %'lu -> %'lu Fact=%'f New=%'lu" strNL, Val, R1lo, R1hi, R2lo, R2hi, Factor, (u32_t) Newval);
+	return (u32_t) Newval;
 }
 
 // ################################### 1/2/4 bit field array support ###############################
