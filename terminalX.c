@@ -22,14 +22,12 @@ void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
 
 int xTermPuts(char * pBuf, termctrl_t Ctrl) {
 	int iRV = 0;
-	if (Ctrl.Lock)
-		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
+//	if (Ctrl.Lock) halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
 	while (*pBuf) {
 		fputc(*pBuf++, stdout);
 		++iRV;
 	}
-	if (Ctrl.Unlock)
-		halUartUnLock();
+//	if (Ctrl.Unlock) halUartUnLock();
 	return iRV;
 }
 
