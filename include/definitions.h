@@ -259,9 +259,9 @@ extern "C" {
 /*#define DEFINED_2OF2(x,y)		((!defined(x) || !defined(y)) ? 0 : 1) */
 #define DEFINED_2OF2(x,y)		((defined(x) + defined(y)) == 2) ? 1 : 0
 
-#define	POWER_OF_10(x)			((x) == 1 || (x) == 10 || (x) == 100 || (x) == 1000 ||	(x) == 10000 || (x) == 100000 ||	\
-								(x) == 1000000 || (x) == 10000000 || (x) == 100000000 || (x) == 1000000000 ||		\
-								(x) == 10000000000 || (x) == 100000000000 ? 1 : 0)
+#define	POWER_OF_10(x)				((x) == 1 || (x) == 10 || (x) == 100 || (x) == 1000 ||	(x) == 10000 ||		\
+									 (x) == 100000 || (x) == 1000000 || (x) == 10000000 || (x) == 100000000 ||	\
+									 (x) == 1000000000 || (x) == 10000000000 || (x) == 100000000000 ? 1 : 0)
 
 #define CNTR(T,V)					{ static u32_t V=0; if (T) ++V; else { PT(toSTR(V) "=%lu" strNL, V); V=0; } }
 
@@ -464,8 +464,8 @@ https://riptutorial.com/cplusplus/example/3527/macros
 #define _HEADER_EXISTS(file)		defined(__has_include) && __has_include(file)
 #define HEADER_EXISTS(file)			_HEADER_EXISTS(file)
 
-#define DEFINED_VALUE(sym,val)		_DEFINED_VALUE(sym,val)
 #define _DEFINED_VALUE(sym,val)		defined (sym) && ( sym == val )
+#define DEFINED_VALUE(sym,val)		_DEFINED_VALUE(sym,val)
 
 // ########################################### Bit masks ##########################################
 
