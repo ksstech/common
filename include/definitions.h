@@ -244,20 +244,17 @@ extern "C" {
 
 /* Used to check build configuration where only 1 of 2 or 3 option may be selected
  * does not yet work correctly if a negative number is used in a definition */
-#define	MORETHAN1of2(x,y)		((x==0 || x==1) && (y==0 || y==1) && ((x+y)==1)) ? 0 : 1
-#define	SUM_Xof2(x,y)			((x==0 || x==1) && (y==0 || y==1)) ? (x+y) : 0
-#define	MORETHAN1of3(x,y,z)		((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((x+y+z)==1)) ? 0 : 1
-#define	SUM_Xof3(x,y,z)			((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) ? (x+y+z) : 0
-#define	MORETHAN1of4(w,x,y,z)	((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((w+x+y+z)==1)) ? 0 : 1
-#define	SUM_Xof4(w,x,y,z)		((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) ? (w+x+y+z) : 0
+#define	MORETHAN1of2(x,y)			((x==0 || x==1) && (y==0 || y==1) && ((x+y)==1)) ? 0 : 1
+#define	MORETHAN1of3(x,y,z)			((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((x+y+z)==1)) ? 0 : 1
+#define	MORETHAN1of4(w,x,y,z)		((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1) && ((w+x+y+z)==1)) ? 0 : 1
 
-#define DEFINED_4OF4(w,x,y,z)	((!defined(w) || !defined(x) || !defined(y) || !defined(z)) ? 0 : 1)
+#define	SUM_Xof2(x,y)				((x==0 || x==1) && (y==0 || y==1)) ? (x+y) : 0
+#define	SUM_Xof3(x,y,z)				((x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1)) ? (x+y+z) : 0
+#define	SUM_Xof4(w,x,y,z)			((w==0 || w==1) && (x==0 || x==1) && (y==0 || y==1) && (z==0 || z==1)) ? (w+x+y+z) : 0
 
-/*#define DEFINED_3OF3(x,y,z)		((!defined(x) || !defined(y) || !defined(z)) ? 0 : 1) */
-#define DEFINED_3OF3(x,y,z)		((defined(x) + defined(y) + defined(z)) == 3) ? 1 : 0
-
-/*#define DEFINED_2OF2(x,y)		((!defined(x) || !defined(y)) ? 0 : 1) */
-#define DEFINED_2OF2(x,y)		((defined(x) + defined(y)) == 2) ? 1 : 0
+#define DEFINED_2OF2(x,y)			(((defined(x) + defined(y)) == 2) ? 1 : 0)
+#define DEFINED_3OF3(x,y,z)			(((defined(x) + defined(y) + defined(z)) == 3) ? 1 : 0)
+#define DEFINED_4OF4(w,x,y,z)		(((defined(w) + defined(x) + defined(y) + defined(z)) == 4) ? 1 : 0)
 
 #define	POWER_OF_10(x)				((x) == 1 || (x) == 10 || (x) == 100 || (x) == 1000 ||	(x) == 10000 ||		\
 									 (x) == 100000 || (x) == 1000000 || (x) == 10000000 || (x) == 100000000 ||	\
