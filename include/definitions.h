@@ -348,6 +348,8 @@ extern "C" {
 
 #define	debugAPPL_PLACE				"I'm LOST!!\n"
 
+#define CHECK_ONCE(mes, ...)		{ static bool b=0; if (!b) { PX(mes, ##__VA_ARGS__); b= 1; } }
+
 // ######################################## delimiter strings ######################################
 
 #define	sepSPACE					" "
