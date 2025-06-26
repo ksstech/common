@@ -293,13 +293,13 @@ extern "C" {
 #define	mask4B						0x0F
 #define	mask8B						0xFF
 
-#if 1
+#if 0								/* ignores size/cast, works with u16/32/64 */
 	#define	maskGET1B(f,i,s)		((f >> ((i) * 1)) & 0x001UL)
 	#define	maskGET2B(f,i,s)		((f >> ((i) * 2)) & 0x003UL)
 	#define	maskGET3B(f,i,s)		((f >> ((i) * 3)) & 0x007UL)
 	#define	maskGET4B(f,i,s)		((f >> ((i) * 4)) & 0x00FUL)
 	#define	maskGET8B(f,i,s)		((f >> ((i) * 8)) & 0x0FFUL)
-#elif 0
+#elif 1
 	#define	maskGET1B(f,i,s)		((s) ((s)f >> ((s)(i) * 1)) & (s)mask1B)
 	#define	maskGET2B(f,i,s)		((s) ((s)f >> ((s)(i) * 2)) & (s)mask2B)
 	#define	maskGET3B(f,i,s)		((s) ((s)f >> ((s)(i) * 3)) & (s)mask3B)
