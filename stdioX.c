@@ -421,7 +421,7 @@ int		__fgetc (FILE * stream) {
 			FF_UNSET(stream, FF_UNGETC) ;			// yes, flag as empty
 			return ch_saved ;						// and re-return last character
 		}
-		ch_saved = getchar_stdin() ; 				// nothing there, read & save as last char
+		ch_saved = halSTDIO_GetChar_stdin() ; 		// nothing there, read & save as last char
 		putchar(ch_saved);							// echo to STDOUT
     	return ch_saved ;							// and return...
 	}
@@ -536,7 +536,7 @@ int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
 
     switch (fh) {
     case FH_STDIN:										// what about looping until full len has been read
-    	ch = getchar_stdin();							// what about BS if not 1st char in buffer, do BR + SPC + BS
+    	ch = halSTDIO_GetChar_stdin();					// what about BS if not 1st char in buffer, do BR + SPC + BS
     	if (ch < 0) {
     		return ((int)(len | 0x80000000U)) ;
     	}

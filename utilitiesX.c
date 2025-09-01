@@ -6,6 +6,7 @@
 #include "FreeRTOS_Support.h"
 #include "report.h"
 #include "utilitiesX.h"
+#include "stdioX.h"
 
 #include <string.h>
 
@@ -50,7 +51,7 @@ void vShowSpin(void) {
 }
 
 void vShowSpinWait(void) {
-	while (getchar() == EOF) {
+	while (halSTDIO_GetChar() == EOF) {
 		vShowSpin();
 		vTaskDelay(100);
 	}
