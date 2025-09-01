@@ -1,9 +1,12 @@
-// x_stdio.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// stdioX.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "stdioX.h"
 #include "FreeRTOS_Support.h"
 #include "errors_events.h"
 #include "hal_memory.h"
+#include "hal_usart.h"
+#include "syslog.h"
+#include "utilitiesX.h"
 
 #include <string.h>
 #include <unistd.h>
@@ -28,6 +31,8 @@
 
 // ###################################### BUILD : CONFIG definitions ###############################
 
+// ######################################## Enumerations ###########################################
+
 // ###################################### Private constants ########################################
 
 const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
@@ -45,6 +50,151 @@ const char cBS[3] = { CHR_BS, CHR_SPACE, CHR_BS };
 #endif
 
 // ###################################### Global variables #########################################
+
+terminfo_t sTI = {
+	.mux = NULL, .CurX = 1, .CurY = 1, .SavX = 1, .SavY = 1,
+	.MaxX = TERMINAL_DFLT_X, .MaxY = TERMINAL_DFLT_Y, .Tabs = TERMINAL_DFLT_TAB,
+};
+
+static int TermType = 0;								// 0=unknown, -1=Error, rest = type
+
+// ################################ Low level Terminal IO support ##################################
+
+int serial_read_terminal_type(int fd) {
+	char caType[16];
+	serial_write_string(fd, getDEVICE_ATTR);			// send query string
+	int iRV = serial_read_string_match(fd, caType, sizeof(caType), 'c');
+	if (iRV < 5 || OUTSIDE(CHR_0, caType[3], CHR_9))	// invalid response 
+		return erFAILURE;
+	if (caType[4] == CHR_SEMICOLON) {
+		if (caType[3] == CHR_1) {						// VT100/101
+			return (caType[5] == CHR_2) ? 100 : (caType[5] == CHR_0) ? 101 : erFAILURE;
+		} else if (caType[3] == CHR_4 && caType[5] == CHR_6) {	// VT132
+			return 132;
+		} else {
+			return erFAILURE;
+		}
+	} else if (caType[4] == CHR_c) {					// VT102/131
+		return (caType[3] == CHR_6) ? 102 : (caType[3] == CHR_7) ? 131 : erFAILURE;
+	} else if (caType[5] == CHR_SEMICOLON) {
+		if (caType[3] == CHR_1 && caType[4] == CHR_2) {	// VT125
+			return 125;
+		} else if (caType[3] == CHR_6) {				// VT 220/320/420/520
+			return (caType[4] == CHR_2) ? 220 : (caType[4] == CHR_3) ? 320 :
+					(caType[4] == CHR_4) ? 420 : (caType[4] == CHR_5) ? 520 : erFAILURE;
+		}
+	}
+	return erFAILURE;
+}
+
+int serial_get_terminal_type(void) { return TermType; }
+
+int serial_query_cursor(int fd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
+	char caType[16];
+	serial_write_string(fd, pcStr);						// send query string
+	int iRV = serial_read_string_match(fd, caType, sizeof(caType), 'R');
+	if (iRV < 6)
+		return erFAILURE;
+	return sscanf(caType, termCSI "%hu;%huR", pRowY, pColX);
+}
+
+int serial_query_cursor_now(int fd) {
+	return serial_query_cursor(fd, getCURSOR_POS,  &sTI.CurY, &sTI.CurX);
+}
+
+int serial_query_cursor_max(int fd) {
+	return serial_query_cursor(fd, getCURSOR_MAX,  &sTI.MaxY, &sTI.MaxX);
+}
+
+// ################################# Generic terminal IO support ###################################
+
+int stdio_get_cur_colX(terminfo_t * psTI) { return psTI->CurX; };
+int stdio_get_sav_colX(terminfo_t * psTI) { return psTI->SavX; };
+int stdio_get_max_colX(terminfo_t * psTI) { return psTI->MaxX; };
+
+int stdio_get_cur_rowY(terminfo_t * psTI) { return psTI->CurY; };
+int stdio_get_sav_rowY(terminfo_t * psTI) { return psTI->SavY; };
+int stdio_get_max_rowY(terminfo_t * psTI) { return psTI->MaxY; };
+
+void stdio_push_cur_rowY_colX(terminfo_t * psTI) { psTI->SavY = psTI->CurY; psTI->SavX = psTI->CurX; }
+void stdio_push_max_rowY_colX(terminfo_t * psTI) { psTI->SavY = psTI->MaxY; psTI->SavX = psTI->MaxX; }
+
+void stdio_set_cur_rowY_colX(terminfo_t * psTI, i16_t RowY, i16_t ColX) { psTI->CurY = RowY; psTI->CurX = ColX; };
+void stdio_set_max_rowY_colX(terminfo_t * psTI, i16_t RowY, i16_t ColX) { psTI->MaxY = RowY; psTI->MaxX = ColX; };
+
+void stdio_pull_cur_rowY_colX(terminfo_t * psTI) { psTI->CurY = psTI->SavY; psTI->CurX = psTI->SavX; }
+void stdio_pull_max_rowY_colX(terminfo_t * psTI) { psTI->MaxY = psTI->SavY; psTI->MaxX = psTI->SavX; }
+
+//	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+//	http://docs.smoe.org/oreilly/unix_lib/upt/ch05_05.htm
+//	http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
+
+/**
+ * @brief	Check column and adjust column & row if required
+ * @param[in]	psTI pointer to terminal status structure to be updated
+ */
+ static void stdio_check_cursor(terminfo_t * psTI) {
+	if (psTI->CurX >= psTI->MaxX) {
+		psTI->CurX = 1;
+		if (psTI->CurY < psTI->MaxY)
+			++psTI->CurY;
+	}
+}
+
+void stdio_update_cursor(terminfo_t * psTI, int cChr) {
+	BaseType_t btRV = xRtosSemaphoreTake(&psTI->mux, portMAX_DELAY);
+	switch(cChr) {
+	case CHR_BS: {
+		--psTI->CurX;
+		if (psTI->CurX == 0) {
+			psTI->CurX = psTI->MaxX;
+			if (psTI->CurY > 1)
+				--psTI->CurY;
+		}
+		break;
+	}
+	case CHR_TAB: {
+		psTI->CurX = u32RoundUP(psTI->CurX, psTI->Tabs);
+		stdio_check_cursor(psTI);
+		break;
+	}
+	case CHR_LF: {
+		#if (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+			psTI->CurX = 1;
+		#endif
+		if (psTI->CurY < psTI->MaxY)
+			++psTI->CurY;
+		break;
+	}
+	case CHR_FF: {
+		psTI->CurX = psTI->CurY = 1;
+		break;
+	}
+	case CHR_CR: {
+		psTI->CurX = 1;
+		#if (CONFIG_LIBC_STDOUT_LINE_ENDING_CR == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+			if (psTI->CurY < psTI->MaxY)
+				++psTI->CurY;
+		#endif
+		break;
+	}
+	default:
+		if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
+			++psTI->CurX;
+			stdio_check_cursor(psTI);
+		}
+		break;
+	}
+	if (btRV == pdTRUE)
+		xRtosSemaphoreGive(&psTI->mux);
+}
+
+void stdio_set_size(terminfo_t * psTI, u16_t RowY, u16_t ColX) {
+    if (RowY && ColX) {
+	    psTI->MaxY = (RowY < TERMINAL_MAX_Y) ? RowY : TERMINAL_DFLT_Y;
+    	psTI->MaxX = (ColX < TERMINAL_MAX_X) ? ColX : TERMINAL_DFLT_X;
+    }
+}
 
 // ######################################## global functions #######################################
 
@@ -99,6 +249,153 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 		}
 	}
 	return Idx;
+}
+
+// ################################# Terminal (VT100) support routines #############################
+
+void vTermGetInfo(terminfo_t * psTI) { memcpy(psTI, &sTI, sizeof(terminfo_t)); }
+
+ssize_t xStdioWriteS(char * pBuf) {
+	ssize_t sRV = write(STDOUT_FILENO, pBuf, strlen(pBuf));
+	if (sRV < 0)
+		return xSyslogError(__FUNCTION__, errno);
+	return sRV;
+}
+
+ssize_t xStdioWriteSctrl(char * pBuf, termctrl_t Ctrl) {
+	if (Ctrl.Lock)
+		halUartLock(pdMS_TO_TICKS(Ctrl.Wait));
+	int iRV = xStdioWriteS(pBuf);
+	if (Ctrl.Unlock)
+		halUartUnLock();
+	return iRV;
+}
+
+char * pcTermAttrib(char * pBuf, u8_t a1, u8_t a2) {
+	if (a1 <= colourBG_WHITE) {							// as long as valid
+		pBuf = stpcpy(pBuf, termCSI);					// MUST process 1st param
+		pBuf += xU32ToDecStr(a1, pBuf);
+		if (INRANGE(attrBRIGHT, a2, colourBG_WHITE)) {	// 2nd param is optional
+			*pBuf++ = CHR_SEMICOLON;
+			pBuf += xU32ToDecStr(a2, pBuf);
+		}
+		*pBuf++ = CHR_m;
+	}
+	*pBuf = 0;											// terminate
+	return pBuf;
+}
+
+void vTermAttrib(u8_t a1, u8_t a2) {
+	char Buffer[sizeof("E[yyy;xxxH0")];
+	if (pcTermAttrib(Buffer, a1, a2) != Buffer)
+		xStdioWriteS(Buffer);
+}
+
+char * pcTermLocate(char * pBuf, i16_t RowY, i16_t ColX) {
+	if (RowY && ColX) {
+		pBuf = stpcpy(pBuf, termCSI);
+		pBuf += xU32ToDecStr(RowY, pBuf);
+		*pBuf++	= CHR_SEMICOLON;
+		pBuf += xU32ToDecStr(ColX, pBuf);
+		*pBuf++	= CHR_H;
+		sTI.CurY = (RowY % sTI.MaxY) + 1;
+		sTI.CurX = (ColX % sTI.MaxX) + 1;
+	}
+	*pBuf = 0;
+	return pBuf;
+}
+
+void vTermLocate(i16_t RowY, i16_t ColX) {
+	char Buffer[sizeof("\e[yyy;xxxH\0")];
+	if (pcTermLocate(Buffer, RowY, ColX) != Buffer)
+		xStdioWriteS(Buffer);
+}
+
+ssize_t xTermLocatePuts(i16_t RowY, i16_t ColX, char * pBuf) {
+	vTermLocate(RowY, ColX);
+	return xStdioWriteS(pBuf);
+}
+
+void vTermCursorSave(void) { xStdioWriteS(setCURSOR_SAVE); }
+
+void vTermCursorBack(void) { xStdioWriteS(setCURSOR_REST); }
+
+void vTermClear2EOL(void) { xStdioWriteS(setCLRLIN_RIGHT); }
+
+void vTermClear2BOL(void) { xStdioWriteS(setCLRLIN_LEFT); }
+
+void vTermClearline(void) { xStdioWriteS(setCLRLIN_ALL); }
+
+void vTermClearScreen(void) { xStdioWriteS(setCLRDSP_ALL); }
+
+void vTermHome(void) { 
+	xStdioWriteS(setCURSOR_HOME);
+	sTI.CurX = sTI.CurY = 1;
+}
+
+void vTermClearHome(void) { vTermClearScreen(); vTermHome(); }
+
+ssize_t xTermOpSysCom(char * pBuf) {
+	xStdioWriteSctrl(termOSC, termBUILD_CTRL(1, 0, termWAIT_MS));
+	int iRV = xStdioWriteSctrl(pBuf, termBUILD_CTRL(0, 0, 0));
+	xStdioWriteSctrl(termST, termBUILD_CTRL(0, 1, 0));
+	return iRV;
+}
+
+ssize_t xTermWinTleCursor(void) {
+	char Buffer[16];
+	char * pBuf = Buffer;
+	pBuf = stpcpy(pBuf, "0;R=");
+	pBuf += xU32ToDecStr(sTI.CurY, pBuf);
+	pBuf = stpcpy(pBuf, " C=");
+	pBuf += xU32ToDecStr(sTI.CurX, pBuf);
+	return xTermOpSysCom(Buffer);
+}
+
+ssize_t xTermShowCurRowYColX(i16_t RowY, i16_t ColX) {
+	char Buffer[32];
+	// scale requested RowY to fit in range of terminal height
+	if (RowY > sTI.MaxY)	RowY = sTI.MaxY;
+	else if (RowY == 0)		RowY = sTI.MaxY;
+	else if (RowY == -1)	RowY = sTI.MaxY / 2;		// Middle line/row
+	else if (RowY < -1)		RowY = 1;
+	// scale requested ColX to fit in range of terminal width
+	int iRV = xDigitsInU32(sTI.CurY, 0) + xDigitsInU32(sTI.CurX, 0) + 5;
+	if (ColX > sTI.MaxX)	ColX = sTI.MaxX;
+	else if (ColX == 0)		ColX = sTI.MaxX-iRV;		// furthest right without wrap	
+	else if (ColX == -1)	ColX = ((sTI.MaxX-iRV)/2);	// center justified	
+	else if (ColX < -1)		ColX = 1;
+	// build the combined save/display/restore string
+	#define fmtCURSOR_DISP setCURSOR_SAVE termCSI "%d;%dH [%d,%d] " setCURSOR_REST
+	iRV = snprintfx(Buffer, sizeof(Buffer), fmtCURSOR_DISP, RowY, ColX, sTI.CurY, sTI.CurX);
+	return xStdioWriteS(Buffer);
+}
+
+// ##################################### functional tests ##########################################
+
+void vTermTestCode(void) {
+	xStdioWriteS("Waiting to clear the screen...");
+	vTermClearHome();
+	vTermLocate(5, 5);
+	xStdioWriteS("Normal text at 5,5");
+
+	vTermLocate(7, 7);
+	vTermAttrib(attrRESET, colourFG_WHITE);
+	xStdioWriteS("White text on Black background at 7,7");
+
+	vTermLocate(9, 9);
+	vTermAttrib(attrREV_ON, attrULINE_ON);
+	xStdioWriteS("Normal underlined text at 9,9");
+
+	vTaskDelay(5000);
+	vTermLocate(9, 19);
+	xStdioWriteS("!!! OVERPRINTED TEXT !!!");
+
+	vTaskDelay(5000);
+	vTermLocate(9, 25);
+	vTermClear2EOL();
+
+	vTermAttrib(attrRESET, 0);
 }
 
 #if 0
