@@ -1,4 +1,4 @@
-// x_utilities.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// utilitiesX.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
 #include "hal_memory.h"
@@ -29,8 +29,6 @@ const char * pcFindValueMatch(u8_t Value, const char * pcBuf, size_t Size) {
 	}
 	return NULL;
 }
-
-#include "terminalX.h"
 
 void vShowActivity(int i) {
 	static char caActivity[] = { '0', '0', '0', '0', 0 };
