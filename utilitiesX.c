@@ -49,7 +49,7 @@ void vShowSpin(void) {
 }
 
 void vShowSpinWait(void) {
-	while (halSTDIO_GetChar() == EOF) {
+	while (xStdioGetC(STDIN_FILENO) < 1) {
 		vShowSpin();
 		vTaskDelay(100);
 	}
