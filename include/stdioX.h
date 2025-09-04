@@ -1,4 +1,4 @@
-// x_stdio.h - Copyright (c) 2014-24 Andre M Maree / KSS Technologies (Pty) Ltd.
+// stdioX.h - Copyright (c) 2014-24 Andre M Maree / KSS Technologies (Pty) Ltd.
 
 #pragma once
 
@@ -10,8 +10,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-// ###################################### BUILD : CONFIG definitions ##############################
 
 // ##################################### MACRO definitions #########################################
 
@@ -77,8 +75,6 @@ typedef struct __attribute__((packed)) termctrl_t {
 
 // ###################################### Public variables #########################################
 
-extern terminfo_t sTI;
-
 // ################################ Low level Terminal IO support ##################################
 
 /**
@@ -132,7 +128,8 @@ void vStdioPullMaxRowYColX(terminfo_t * psTI);
 /**
  * @brief	Update row and/or column tracking values based on the specific character being processed
  * @param[in]	psTI pointer to terminal status structure to be updated
- * @param[in]	iChr character to be processed
+ * @param[in]	pBuf pointer to buffer containing characters to be processed
+ * @param[in]	Size number of characters in the buffer to be processed
  */
 void vStdioUpdateCursor(terminfo_t * psTI, char * pBuf, size_t Size);
 
@@ -187,6 +184,7 @@ void vTermGetInfo(terminfo_t * psTermInfo) ;
  * @return	Number of characters processed or negative error code
  */
 ssize_t xStdioWriteS(char * pBuf);
+
 ssize_t xStdioWriteSctrl(char * pBuf, termctrl_t Ctrl);
 
 /**
