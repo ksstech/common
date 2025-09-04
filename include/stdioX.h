@@ -88,13 +88,13 @@ extern terminfo_t sTI;
  * @note	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
  * @note	1B	5B	3F	31	3B	32	63	"\e[?1;2c"	idf.py, Serial, Xterm/VT100/Linux emulation all same
  */
-int serial_read_terminal_type(int fd);
+int xStdioReadTerminalType(int fd);
 
 /**
  * @brief
  * @return
  */
-int serial_get_terminal_type(void);
+int xStdioGetTerminalType(void);
 
 /**
  * @brief		Request, receive and parse current cursor location in a single lock/unlock operation
@@ -112,46 +112,69 @@ int serial_query_cursor_max(int fd);
 
 // ################################ Generic terminal IO support #################################
 
-int stdio_get_cur_colX(terminfo_t * psTI);
-int stdio_get_sav_colX(terminfo_t * psTI);
-int stdio_get_max_colX(terminfo_t * psTI);
+int xStdioGetCurColX(terminfo_t * psTI);
+int xStdioGetSavColX(terminfo_t * psTI);
+int xStdioGetMaxColX(terminfo_t * psTI);
 
-int stdio_get_cur_rowY(terminfo_t * psTI);
-int stdio_get_sav_rowY(terminfo_t * psTI);
-int stdio_get_max_rowY(terminfo_t * psTI);
+int xStdioGetCurRowY(terminfo_t * psTI);
+int xStdioGetSavRowY(terminfo_t * psTI);
+int xStdioGetWaxRowY(terminfo_t * psTI);
 
-void stdio_push_cur_rowY_colX(terminfo_t * psTI);
-void stdio_push_max_rowY_colX(terminfo_t * psTI);
+void vStdioPushCurRowYColX(terminfo_t * psTI);
+void vStdioPushMaxRowYColX(terminfo_t * psTI);
 
-void stdio_set_cur_rowY_colX(terminfo_t * psTI, i16_t RowY, i16_t ColX);
-void stdio_set_max_rowY_colX(terminfo_t * psTI, i16_t RowY, i16_t ColX);
+void vStdioSetCurRowYColX(terminfo_t * psTI, i16_t RowY, i16_t ColX);
+void vStdioSetMaxRowYColX(terminfo_t * psTI, i16_t RowY, i16_t ColX);
 
-void stdio_pull_cur_rowY_colX(terminfo_t * psTI);
-void stdio_pull_max_rowY_colX(terminfo_t * psTI);
+void vStdioPullCurRowYColX(terminfo_t * psTI);
+void vStdioPullMaxRowYColX(terminfo_t * psTI);
 
 /**
  * @brief	Update row and/or column tracking values based on the specific character being processed
  * @param[in]	psTI pointer to terminal status structure to be updated
  * @param[in]	iChr character to be processed
  */
-void stdio_update_cursor(terminfo_t * psTI, int iChr);
+void vStdioUpdateCursor(terminfo_t * psTI, char * pBuf, size_t Size);
 
 /**
  * @brief	set terminal row & column size (0 = reset to default)
  * @param[in]	Rows - number of rows/lines
  * @param[in]	Columns - number of columns
  */
-void stdio_set_size(terminfo_t * psTI, u16_t Rows, u16_t Columns) ;
+void vStdioSetSize(terminfo_t * psTI, u16_t Rows, u16_t Columns) ;
 
 // #################################### Global/public functions ####################################
 
-/// @brief		read a termianted text string from a file and store it into the buffer provided
-/// @param[in]	sd - handle of file to be read from
-/// @param[in]	pcBuf - buffer to store the text string read into
-/// @param[in]	Size - size of the buffer ie maximum string length
-/// @param[in]	bEcho - flag indicating whether the contents read should be echoed
-/// @return 	number of characters read & stored in buffer
-int	xReadString(int sd, char * pcBuf, size_t Size, bool bEcho);
+int xStdioRead(int sd, char * pBuf, size_t Size);
+
+/**
+ * @brief		read a terminated text string from a file and store it into the buffer provided
+ * @param[in]	sd - handle of file to be read from
+ * @param[in]	pcBuf - buffer to store the text string read into
+ * @param[in]	Size - size of the buffer ie maximum string length
+ * @param[in]	bEcho - flag indicating whether the contents read should be echoed
+ * @return 	number of characters read & stored in buffer
+ */
+int	xStdioGetString(int sd, char * pBuf, size_t Size, bool bHide);
+
+/**
+ * @brief		read a terminated text string from a stream and store it into the buffer provided
+ * @param[in]	sd - stream to be read from
+ * @param[in]	pcBuf - buffer to store the text string read into
+ * @param[in]	Size - size of the buffer ie maximum string length
+ * @return 	number of characters read & stored in buffer
+ */
+int xStdioGetS(int fd, char * pcStr, size_t Size);
+
+int xStdioGetC(int fd);
+
+int xStdioWrite(int fd, char * pBuf, size_t Size);
+
+int xStdioPutS(int fd, char * pcStr);
+
+int xStdioPutC(int fd, int iChr);
+
+void xStdioPutHex(int fd, char * pcStr);
 
 /**
  * @brief
