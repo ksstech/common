@@ -78,6 +78,18 @@ typedef struct __attribute__((packed)) termctrl_t {
 // ################################ Low level Terminal IO support ##################################
 
 /**
+ * @brief		input a string directly from UART/terminal channel specified
+ * @param[in]	fd UART/USB channel to use
+ * @param[in]	pcStr pointer to buffer to store characters
+ * @param[in]	Len size of buffer
+ * @param[in]	Match character/key to be treated as end-of-string
+ * @return		number of characters in the buffer, terminator (if there) excluded
+ */
+int xStdioReadStringMatchUnlocked(int fd, char * pcStr, size_t Len, int Match);
+
+int xStdioReadStringMatch(int fd, char * pcStr, size_t Len, int Match);
+
+/**
  * @brief
  * @param[in]	fd UART/USB number 
  * @return
@@ -92,6 +104,8 @@ int xStdioReadTerminalType(int fd);
  */
 int xStdioGetTerminalType(void);
 
+int xStdioSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX);
+
 /**
  * @brief		Request, receive and parse current cursor location in a single lock/unlock operation
  * @param[in]	fd UART/USB number 
@@ -105,6 +119,18 @@ int xStdioSyncCursorNow(int fd, terminfo_t * psTI);
  * @return
  */
 int xStdioSyncCursorMax(int fd, terminfo_t * psTI);
+
+/**
+ * @brief		set the current UART/USB console status
+ * @param[in]	state 0=inactive, 1=active
+ */
+void vStdioConsoleSetStatus(bool state);
+
+/**
+ * @brief		obtain current console UART/USB status 
+ * @return		0=inactive, 1=active
+ */
+bool vStdioConsoleGetStatus(void);
 
 // ################################ Generic terminal IO support #################################
 
