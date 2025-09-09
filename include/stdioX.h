@@ -1,4 +1,4 @@
-// stdioX.h - Copyright (c) 2014-24 Andre M Maree / KSS Technologies (Pty) Ltd.
+// stdioX.h
 
 #pragma once
 
