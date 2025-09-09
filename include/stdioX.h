@@ -97,14 +97,14 @@ int xStdioGetTerminalType(void);
  * @param[in]	fd UART/USB number 
  * @return		Number of parameters parsed (should be 2) or erFAILURE if incomplete/malformed packet
  */
-int serial_query_cursor_now(int fd);
+int xStdioSyncCursorNow(int fd, terminfo_t * psTI);
 
 /**
  * @brief		Determine current terminal window size by locating to 999,999 and reading actual value
  * @param[in]	fd UART/USB number 
  * @return
  */
-int serial_query_cursor_max(int fd);
+int xStdioSyncCursorMax(int fd, terminfo_t * psTI);
 
 // ################################ Generic terminal IO support #################################
 
