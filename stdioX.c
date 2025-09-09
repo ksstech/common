@@ -57,13 +57,43 @@ terminfo_t sTI = {
 };
 
 static int TermType = 0;								// 0=unknown, -1=Error, rest = type
+static bool uart_active = 0;							// console active (during period < TIMEOUT)
 
 // ################################ Low level Terminal IO support ##################################
 
-int serial_read_terminal_type(int fd) {
+int xStdioReadStringMatchUnlocked(int sd, char * pcStr, size_t Len, int Match) {
+	TickType_t tNow = 0, tStart = xTaskGetTickCount();
+	int Count = 0;
+	char cChr;
+	do {
+		if (read(sd, &cChr, 1) == 1) {
+			pcStr[Count++] = cChr;
+			if (Count == Len || cChr == Match)			// buffer full or match found?
+				break;									// get out of here
+		} else {
+			taskYIELD();
+			tNow = xTaskGetTickCount() - tStart;
+		}
+	} while (tNow < pdMS_TO_TICKS(500));
+	if (Count < (Len - 1))								// if less than buffer size
+		pcStr[Count] = CHR_NUL;							// add terminator
+	return Count;
+}
+
+int xStdioReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
+	BaseType_t btRV = pdFALSE;
+	if (sd == stdioCONSOLE_DEV)
+		btRV = halUartLock(portMAX_DELAY);
+	int Count = xStdioReadStringMatchUnlocked(sd, pcStr, Len, Match);
+	if (btRV == pdTRUE)
+		halUartUnLock();
+	return Count;
+}
+
+int xStdioReadTerminalType(int sd) {
 	char caType[16];
-	serial_write_string(fd, getDEVICE_ATTR);			// send query string
-	int iRV = serial_read_string_match(fd, caType, sizeof(caType), 'c');
+	write(sd, getDEVICE_ATTR, strlen(getDEVICE_ATTR));
+	int iRV = xStdioReadStringMatchUnlocked(sd, caType, sizeof(caType), 'c');
 	if (iRV < 5 || OUTSIDE(CHR_0, caType[3], CHR_9))	// invalid response 
 		return erFAILURE;
 	if (caType[4] == CHR_SEMICOLON) {
@@ -87,43 +117,28 @@ int serial_read_terminal_type(int fd) {
 	return erFAILURE;
 }
 
-int serial_get_terminal_type(void) { return TermType; }
+int xStdioGetTerminalType(void) { return TermType; }
 
-int serial_query_cursor(int fd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
+int xStdioSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
 	char caType[16];
-	serial_write_string(fd, pcStr);						// send query string
-	int iRV = serial_read_string_match(fd, caType, sizeof(caType), 'R');
+	xStdioPutS(sd, pcStr);						// send query string
+	int iRV = xStdioReadStringMatch(sd, caType, sizeof(caType), 'R');
 	if (iRV < 6)
 		return erFAILURE;
 	return sscanf(caType, termCSI "%hu;%huR", pRowY, pColX);
 }
 
-int serial_query_cursor_now(int fd) {
-	return serial_query_cursor(fd, getCURSOR_POS,  &sTI.CurY, &sTI.CurX);
+int xStdioSyncCursorNow(int sd, terminfo_t * psTI) {
+	if (psTI == NULL)
+		psTI = &sTI;
+	return xStdioSyncCursor(sd, getCURSOR_POS,  &psTI->CurY, &psTI->CurX);
 }
 
-int serial_query_cursor_max(int fd) {
-	return serial_query_cursor(fd, getCURSOR_MAX,  &sTI.MaxY, &sTI.MaxX);
+int xStdioSyncCursorMax(int sd, terminfo_t * psTI) {
+	if (psTI == NULL)
+		psTI = &sTI;
+	return xStdioSyncCursor(sd, getCURSOR_MAX,  &psTI->MaxY, &psTI->MaxX);
 }
-
-// ################################# Generic terminal IO support ###################################
-
-int stdio_get_cur_colX(terminfo_t * psTI) { return psTI->CurX; };
-int stdio_get_sav_colX(terminfo_t * psTI) { return psTI->SavX; };
-int stdio_get_max_colX(terminfo_t * psTI) { return psTI->MaxX; };
-
-int stdio_get_cur_rowY(terminfo_t * psTI) { return psTI->CurY; };
-int stdio_get_sav_rowY(terminfo_t * psTI) { return psTI->SavY; };
-int stdio_get_max_rowY(terminfo_t * psTI) { return psTI->MaxY; };
-
-void stdio_push_cur_rowY_colX(terminfo_t * psTI) { psTI->SavY = psTI->CurY; psTI->SavX = psTI->CurX; }
-void stdio_push_max_rowY_colX(terminfo_t * psTI) { psTI->SavY = psTI->MaxY; psTI->SavX = psTI->MaxX; }
-
-void stdio_set_cur_rowY_colX(terminfo_t * psTI, i16_t RowY, i16_t ColX) { psTI->CurY = RowY; psTI->CurX = ColX; };
-void stdio_set_max_rowY_colX(terminfo_t * psTI, i16_t RowY, i16_t ColX) { psTI->MaxY = RowY; psTI->MaxX = ColX; };
-
-void stdio_pull_cur_rowY_colX(terminfo_t * psTI) { psTI->CurY = psTI->SavY; psTI->CurX = psTI->SavX; }
-void stdio_pull_max_rowY_colX(terminfo_t * psTI) { psTI->MaxY = psTI->SavY; psTI->MaxX = psTI->SavX; }
 
 //	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 //	http://docs.smoe.org/oreilly/unix_lib/upt/ch05_05.htm
@@ -133,7 +148,7 @@ void stdio_pull_max_rowY_colX(terminfo_t * psTI) { psTI->MaxY = psTI->SavY; psTI
  * @brief	Check column and adjust column & row if required
  * @param[in]	psTI pointer to terminal status structure to be updated
  */
- static void stdio_check_cursor(terminfo_t * psTI) {
+ static void vStdioCheckCursor(terminfo_t * psTI) {
 	if (psTI->CurX >= psTI->MaxX) {
 		psTI->CurX = 1;
 		if (psTI->CurY < psTI->MaxY)
@@ -141,64 +156,88 @@ void stdio_pull_max_rowY_colX(terminfo_t * psTI) { psTI->MaxY = psTI->SavY; psTI
 	}
 }
 
-void stdio_update_cursor(terminfo_t * psTI, int cChr) {
+void vStdioUpdateCursor(terminfo_t * psTI, char * pBuf, size_t Size) {
 	BaseType_t btRV = xRtosSemaphoreTake(&psTI->mux, portMAX_DELAY);
-	switch(cChr) {
-	case CHR_BS: {
-		--psTI->CurX;
-		if (psTI->CurX == 0) {
-			psTI->CurX = psTI->MaxX;
-			if (psTI->CurY > 1)
-				--psTI->CurY;
+	while (Size--) {
+		char cChr = *pBuf++;
+		switch(cChr) {
+		case CHR_BS: {
+			--psTI->CurX;
+			if (psTI->CurX == 0) {
+				psTI->CurX = psTI->MaxX;
+				if (psTI->CurY > 1)
+					--psTI->CurY;
+			}
+			break;
 		}
-		break;
-	}
-	case CHR_TAB: {
-		psTI->CurX = u32RoundUP(psTI->CurX, psTI->Tabs);
-		stdio_check_cursor(psTI);
-		break;
-	}
-	case CHR_LF: {
-		#if (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
-			psTI->CurX = 1;
-		#endif
-		if (psTI->CurY < psTI->MaxY)
-			++psTI->CurY;
-		break;
-	}
-	case CHR_FF: {
-		psTI->CurX = psTI->CurY = 1;
-		break;
-	}
-	case CHR_CR: {
-		psTI->CurX = 1;
-		#if (CONFIG_LIBC_STDOUT_LINE_ENDING_CR == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+		case CHR_TAB: {
+			psTI->CurX = u32RoundUP(psTI->CurX, psTI->Tabs);
+			vStdioCheckCursor(psTI);
+			break;
+		}
+		case CHR_LF: {
+			#if (CONFIG_LIBC_STDOUT_LINE_ENDING_LF == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+				psTI->CurX = 1;
+			#endif
 			if (psTI->CurY < psTI->MaxY)
 				++psTI->CurY;
-		#endif
-		break;
-	}
-	default:
-		if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
-			++psTI->CurX;
-			stdio_check_cursor(psTI);
+			break;
 		}
-		break;
+		case CHR_FF: {
+			psTI->CurX = psTI->CurY = 1;
+			break;
+		}
+		case CHR_CR: {
+			psTI->CurX = 1;
+			#if (CONFIG_LIBC_STDOUT_LINE_ENDING_CR == 1 || CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
+				if (psTI->CurY < psTI->MaxY)
+					++psTI->CurY;
+			#endif
+			break;
+		}
+		default:
+			if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
+				++psTI->CurX;
+				vStdioCheckCursor(psTI);
+			}
+			break;
+		}
 	}
 	if (btRV == pdTRUE)
 		xRtosSemaphoreGive(&psTI->mux);
 }
 
-void stdio_set_size(terminfo_t * psTI, u16_t RowY, u16_t ColX) {
+void vStdioSetSize(terminfo_t * psTI, u16_t RowY, u16_t ColX) {
     if (RowY && ColX) {
 	    psTI->MaxY = (RowY < TERMINAL_MAX_Y) ? RowY : TERMINAL_DFLT_Y;
     	psTI->MaxX = (ColX < TERMINAL_MAX_X) ? ColX : TERMINAL_DFLT_X;
     }
 }
 
+void vStdioConsoleSetStatus(bool state) { uart_active = state; }
+
+bool bStdioConsoleGetStatus(void) { return uart_active; }
+
 // ######################################## global functions #######################################
 
-int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
+int xStdioRead(int sd, char * pBuf, size_t Size) {
+	if (halMemoryRAM(pBuf) == 0)
+		return erINV_PARA;
+	int iRV = read(sd, pBuf, Size);
+	if (sd == STDIN_FILENO && iRV > 0) {
+		if (uart_active == 0) {
+			#if (stdioBUILD_TERMIO == 1)
+				TermType = xStdioReadTerminalType(sd);
+				xStdioSyncCursorNow(sd, NULL);
+				xStdioSyncCursorMax(sd, NULL);
+			#endif
+			vStdioConsoleSetStatus(1);
+		}
+	}
+	return iRV;
+}
+
+int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	u8_t Idx = 0, cChr;
 #if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 	bool CRflag = 0;
@@ -218,7 +257,8 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 		if (cChr == CHR_CR) {							// ALMOST end of input
 			CRflag = 1;									// set flag but do not store in buffer or adjust count
-		} else if (cChr == CHR_LF)						// now at end of string
+		} else
+		if (cChr == CHR_LF)								// now at end of string
 	#elif (CONFIG_LIBC_STDIN_LINE_ENDING_CR == 1)
 		if (cChr == CHR_CR)
 	#elif (CONFIG_LIBC_STDIN_LINE_ENDING_LF == 1)
@@ -249,6 +289,46 @@ int	xReadString(int sd, char * pcBuf, size_t Size, bool bHide) {
 		}
 	}
 	return Idx;
+}
+
+int xStdioGetS(int sd, char * pcStr, size_t Size) { return xStdioGetString(sd, pcStr, Size, 0); }
+
+int xStdioGetC(int sd) {
+	char cChr = 0;
+	int iRV = xStdioRead(sd, &cChr, 1);
+	return (iRV == 1) ? cChr : iRV;
+}
+
+int xStdioWrite(int sd, char * pBuf, size_t Size) {
+#if (appWRAP_STDIO == 1)
+	if (sd == STDOUT_FILENO && uart_active == 0) {	// destined for STDOUT & console UART inactive ?
+		return xStdOutBufWrite(pBuf, Size);			// save to buffer
+	} else {
+		int iRV = write(sd, pBuf, Size);
+		if (iRV)
+			vStdioUpdateCursor(&sTI, pBuf, iRV);	// update cursor tracking
+		return iRV;
+	}
+#else
+	return write(sd, pBuf, Size);
+#endif
+}
+
+int xStdioPutS(int sd, char * pcStr) { return xStdioWrite(sd, pcStr, strlen(pcStr)); }
+
+int xStdioPutC(int sd, int iChr) {
+	char cChr = iChr;
+	return xStdioWrite(sd, &cChr, 1) == 1 ? iChr : erFAILURE; 
+}
+
+void xStdioPutHex(int sd, char * pcStr) {
+	char caXlate[16] = "0123456789ABCDEF";
+	while(*pcStr) {
+		xStdioPutC(sd, caXlate[*pcStr >> 4]);
+		xStdioPutC(sd, caXlate[*pcStr++ & 0xF]);
+		xStdioPutC(sd, ' ');
+	}
+	xStdioPutS(sd, strNL);
 }
 
 // ################################# Terminal (VT100) support routines #############################
@@ -371,6 +451,62 @@ ssize_t xTermShowCurRowYColX(i16_t RowY, i16_t ColX) {
 	return xStdioWriteS(Buffer);
 }
 
+// ################################# Generic terminal IO support ###################################
+
+int xStdioGetCurColX(terminfo_t * psTI) { return psTI ? psTI->CurX : sTI.CurX; }
+
+int xStdioGet_savColX(terminfo_t * psTI) { return psTI ? psTI->SavX : sTI.SavX; }
+
+int xStdioGetMaxColX(terminfo_t * psTI) { return psTI ? psTI->MaxX : sTI.MaxX; };
+
+int xStdioGetCurRowY(terminfo_t * psTI) { return psTI ? psTI->CurY : sTI.CurY; }
+
+int xStdioGet_savRowY(terminfo_t * psTI) { return psTI ? psTI->SavY : sTI.SavY; }
+
+int xStdioGetMaxRowY(terminfo_t * psTI) { return psTI ? psTI->MaxY : sTI.MaxY; }
+
+void vStdioPushCurRowYColX(terminfo_t * psTI) {
+	if (psTI == NULL)
+		psTI = &sTI;
+	psTI->SavY = psTI->CurY;
+	psTI->SavX = psTI->CurX;
+}
+
+void vStdioPushMaxRowYColX(terminfo_t * psTI) {
+	if (psTI == NULL)
+		psTI = &sTI;
+	psTI->SavY = psTI->MaxY;
+	psTI->SavX = psTI->MaxX; 
+}
+
+void vStdioSetCurRowYColX(terminfo_t * psTI, i16_t RowY, i16_t ColX) {
+	if (psTI == NULL)
+		psTI = &sTI;
+	psTI->CurY = RowY;
+	psTI->CurX = ColX;
+}
+
+void vStdioSetMaxRowYColX(terminfo_t * psTI, i16_t RowY, i16_t ColX) {
+	if (psTI == NULL)
+		psTI = &sTI;
+	psTI->MaxY = RowY;
+	psTI->MaxX = ColX;
+}
+
+void vStdioPullCurRowYColX(terminfo_t * psTI) { 
+	if (psTI == NULL)
+		psTI = &sTI;
+	psTI->CurY = psTI->SavY; 
+	psTI->CurX = psTI->SavX;
+}
+
+void vStdioPullMaxRowYColX(terminfo_t * psTI) { 
+	if (psTI == NULL)
+		psTI = &sTI;
+	psTI->MaxY = psTI->SavY; 
+	psTI->MaxX = psTI->SavX;
+}
+
 // ##################################### functional tests ##########################################
 
 void vTermTestCode(void) {
@@ -397,197 +533,3 @@ void vTermTestCode(void) {
 
 	vTermAttrib(attrRESET, 0);
 }
-
-#if 0
-
-static int ch_saved ;
-
-/**
-   Obtains the next character (if present) as an uint8_t converted to
-   an int, from the input stream pointed to by stream, and advances the
-   associated file position indicator (if defined).
-  \param[in] stream  Stream handle
-  \return    The next character from the input stream pointed to by stream.
-             If the stream is at end-of-file, the end-of-file indicator is
-             set and fgetc returns EOF. If a read error occurs, the error
-             indicator is set and fgetc returns EOF.
-*/
-int		__fgetc (FILE * stream) {
-	if (stream == 0) {
-		return EOF ;
-	}
-	if (stream == stdin) {
-		if (FF_STCHK(stream, FF_UNGETC)) {			// yes, do we have an ungetc'd char ?
-			FF_UNSET(stream, FF_UNGETC) ;			// yes, flag as empty
-			return ch_saved ;						// and re-return last character
-		}
-		ch_saved = halSTDIO_GetChar_stdin() ; 		// nothing there, read & save as last char
-		putchar(ch_saved);							// echo to STDOUT
-    	return ch_saved ;							// and return...
-	}
-#if		(buildSTDIO_FILEIO == 1)
-	uint8_t cChr ;
-	#if	defined(ESP_PLATFORM)
-	if (_read(stream->_file, &cChr, 1, 0) == 1) {
-		return cChr ;
-	}
-	#else
-	if (_read(stream->fd, &cChr, 1, 0) == 1) {
-		return cChr ;
-	}
-	#endif
-#endif
-	return EOF ;
-}
-
-/**
-	Returns the last error code (if any) for a specific file pointer
-*/
-//int		_ferror(FILE * stream) { return (EOF) ; }
-
-/**
- * _flock() -  simple bit flag based file un/locking
- */
-#define	configSTDIO_LOCK_INTERVAL		5
-
-int		_flock(FILE * stream, int mSec) {
-	int32_t	xTicks = pdMS_TO_TICKS(mSec) ;
-	while (FF_STCHK(stream, FF_LOCFILE) == true) {
-		if ((xTicks <= 0) ||
-			(xTaskGetSchedulerState() == taskSCHEDULER_NOT_STARTED)) {
-			return erFAILURE ;
-		} else {
-			vTaskDelay(pdMS_TO_TICKS(configSTDIO_LOCK_INTERVAL)) ;
-			xTicks -= configSTDIO_LOCK_INTERVAL ;
-		}
-	}
-	FF_SET(stream, FF_LOCFILE) ;
-	return erSUCCESS ;
-}
-
-/**
- * _funlock() -  simple bit flag based file un/locking
- */
-int		_funlock(FILE * stream) {
-	if (FF_STCHK(stream, FF_LOCFILE) == true) {
-		FF_UNSET(stream, FF_LOCFILE) ;
-		return erSUCCESS ;
-	}
-	return erFAILURE ;
-}
-
-/**
-   The function __backspace() is used by the scanf family of functions, and must
-   be re-implemented if you retarget the stdio arrangements at the fgetc() level.
-  \param[in] stream  Stream handle
-  \return    The value returned by __backspace() is either 0 (success) or EOF
-             (failure). It returns EOF only if used incorrectly, for example,
-             if no characters have been read from the stream. When used
-             correctly, __backspace() must always return 0, because the scanf
-             family of functions do not check the error return.
-*/
-int		__backspace(FILE * stream) {
-	if (stream == stdin) {
-		if (FF_STCHK(stream, FF_UNGETC)) {				// already have 1 ungetc'd saved ?
-			return EOF ;
-		}
-		FF_SET(stream, FF_UNGETC) ;						// set flag to indicate ungetc'c
-		return 0 ;
-	}
-	return EOF ;
-}
-
-int 	_open (const char * name, int openmode) {
-	if (name == NULL) {
-		return EOF ;
-	}
-	if (name[0] == CHR_COLON) {
-		if (strcmp(name, ":STDIN") == 0) {
-			return (FH_STDIN) ;
-		}
-		if (strcmp(name, ":STDOUT") == 0) {
-			return (FH_STDOUT) ;
-		}
-		if (strcmp(name, ":STDERR") == 0) {
-			return (FH_STDERR) ;
-		}
-		return EOF ;
-	}
-#if		(buildSTDIO_FILEIO == 1)
-	myASSERT(0) ;
-#endif
-	return (0);
-}
-int		_close (int fh) {
-	switch (fh) {
-	case FH_STDIN:
-	case FH_STDOUT:
-	case FH_STDERR:
-		return (0) ;
-	}
-#if		(buildSTDIO_FILEIO == 1)
-	myASSERT(0) ;
-#endif
-	return (0);
-}
-int 	_read (int fh, uint8_t * buf, uint32_t len, int mode) {
-	int		ch ;
-	(void) mode ;
-
-    switch (fh) {
-    case FH_STDIN:										// what about looping until full len has been read
-    	ch = halSTDIO_GetChar_stdin();					// what about BS if not 1st char in buffer, do BR + SPC + BS
-    	if (ch < 0) {
-    		return ((int)(len | 0x80000000U)) ;
-    	}
-    	*buf++ = (uint8_t) ch ;
-		putchar(ch_saved);								// echo to STDOUT
-    	len--;
-    	return ((int)(len)) ;
-    case FH_STDOUT:
-    case FH_STDERR:
-    	return (EOF) ;
-    }
-#if		(buildSTDIO_FILEIO == 1)
-	myASSERT(0) ;
-#endif
-	return (0);
-}
-int 	_istty (int fh) {
-	switch (fh) {
-    case FH_STDIN:
-    case FH_STDOUT:
-    case FH_STDERR:
-    	return (1);
-	}
-	return (0);
-}
-int 	_seek (int fh, long pos) {
-	switch (fh) {
-    case FH_STDIN:
-    case FH_STDOUT:
-    case FH_STDERR:
-    	return (EOF);
-	}
-#if		(buildSTDIO_FILEIO == 1)
-	myASSERT(0) ;
-#endif
-	return (0);
-}
-long 	_flen (int fh) {
-	switch (fh) {
-    case FH_STDIN:
-    case FH_STDOUT:
-    case FH_STDERR:
-    	return (0);
-	}
-#if		(buildSTDIO_FILEIO == 1)
-	myASSERT(0) ;
-#endif
-	return (0);
-}
-
-int 	_ensure(int fh) { return 0 ; /* success*/ }
-
-int 	_tmpnam(char * name, int sig, unsigned maxlen) { return 0 ; /* fail, not supported*/ }
-#endif
