@@ -13,7 +13,7 @@ extern "C" {
 
 // ##################################### MACRO definitions #########################################
 
-#define stdioBUILD_TERMIO			0						// build terminal IO support
+#define stdioBUILD_TERMIO			1						// build terminal IO support
 
 #define	TERMINAL_DFLT_X				160
 #define	TERMINAL_DFLT_Y				48
