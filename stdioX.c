@@ -1,5 +1,6 @@
 // stdioX.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
+#include "hal_platform.h"
 #include "stdioX.h"
 #include "FreeRTOS_Support.h"
 #include "errors_events.h"
@@ -82,7 +83,7 @@ int xStdioReadStringMatchUnlocked(int sd, char * pcStr, size_t Len, int Match) {
 
 int xStdioReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
 	BaseType_t btRV = pdFALSE;
-	if (sd == stdioCONSOLE_DEV)
+	if (sd == configCONSOLE_UART)
 		btRV = halUartLock(portMAX_DELAY);
 	int Count = xStdioReadStringMatchUnlocked(sd, pcStr, Len, Match);
 	if (btRV == pdTRUE)
