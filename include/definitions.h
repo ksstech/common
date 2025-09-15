@@ -460,9 +460,6 @@ https://riptutorial.com/cplusplus/example/3527/macros
 #define sizeofMACRO(test)			(( !!(test) )*2-1)
 #define DUMB_STATIC_ASSERT(test)	typedef char assertion_on_mystruct[sizeofMACRO(test)]
 
-#define _HEADER_EXISTS(file)		defined(__has_include) && __has_include(file)
-#define HEADER_EXISTS(file)			_HEADER_EXISTS(file)
-
 #define _DEFINED_VALUE(sym,val)		defined (sym) && ( sym == val )
 #define DEFINED_VALUE(sym,val)		_DEFINED_VALUE(sym,val)
 
