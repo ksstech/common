@@ -301,7 +301,7 @@ int xStdioGetC(int sd) {
 }
 
 int xStdioWrite(int sd, char * pBuf, size_t Size) {
-#if (appWRAP_STDIO == 1)
+#if (cmakeWRAP_STDIO == 1)
 	if (sd == STDOUT_FILENO && uart_active == 0) {	// destined for STDOUT & console UART inactive ?
 		return xStdOutBufWrite(pBuf, Size);			// save to buffer
 	} else {
