@@ -145,7 +145,7 @@ void vStdioConsoleSetStatus(bool state);
  * @brief		obtain current console UART/USB status 
  * @return		0=inactive, 1=active
  */
-bool vStdioConsoleGetStatus(void);
+bool bStdioConsoleGetStatus(void);
 
 // ################################ Generic terminal IO support #################################
 
