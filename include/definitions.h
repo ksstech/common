@@ -142,6 +142,23 @@ extern "C" {
 #define	CHR_TILDE					0x7E		// '~'
 #define	CHR_DEL						0x7F		// c-8 = non printing !!!!
 
+// Special graphics symbols from extended ASCII set
+#define CHR_BULLET					'\x95'		// 149
+#define CHR_YEN						'\xA5'		// 165
+#define CHR_MU						'\xB5'		// 181
+#define CHR_1_4						'\xBC'		// 188
+#define CHR_HALF					'\xBD'		// 189
+#define CHR_3_4						'\xBE'		// 190
+#define CHR_FULLBLOCK				'\xDB'		// 219
+#define CHR_SIGMA					'\xE2'		// 226
+#define CHR_PI						'\xE3'		// 227
+#define CHR_TAU						'\xE4'		// 228
+#define CHR_MICRO					'\xE6'		// 230
+#define CHR_INFINITY				'\xF0'		// 240
+#define CHR_PLUSMINUS				'\xF1'		// 241
+#define CHR_DEGREE					'\xF8'		// 248
+#define CHR_OHMS					'\xF9'		// 249
+
 /* Linux = LF, macOS = CR,  Win = CRLF */
 #if (CONFIG_LIBC_STDOUT_LINE_ENDING_CRLF == 1)
 	#define	strNL					"\r\n"
