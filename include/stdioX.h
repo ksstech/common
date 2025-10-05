@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "FreeRTOS_SUpport.h"
+#include "FreeRTOS_Support.h"
 
 #include "stddef.h"
 #include "stdbool.h"
