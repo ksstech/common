@@ -9,6 +9,7 @@
 #include "syslog.h"
 #include "utilitiesX.h"
 
+
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>
@@ -62,7 +63,84 @@ static bool uart_active = 0;							// console active (during period < TIMEOUT)
 
 // ################################ Low level Terminal IO support ##################################
 
-int xStdioReadStringMatchUnlocked(int sd, char * pcStr, size_t Len, int Match) {
+#include "esp_rom_sys.h"
+#include "esp_rom_uart.h"
+
+#ifdef CONFIG_ESP_CONSOLE_USB_CDC_SUPPORT_ETS_PRINTF
+#include "usb_console.h"
+
+/* Used as an output function by esp_rom_printf.
+ * The LF->CRLF replacement logic replicates the one in esp_rom_uart_putc.
+ * Not static to allow placement into IRAM by ldgen.
+ */
+void esp_usb_console_write_char(char c){
+    char cr = '\r';
+    char lf = '\n';
+
+    if (c == lf) {
+        esp_usb_console_write_buf(&cr, 1);
+        esp_usb_console_write_buf(&lf, 1);
+    } else if (c == '\r') {
+    } else {
+        esp_usb_console_write_buf(&c, 1);
+    }
+}
+
+/**
+ * @brief	Switch the low level output channel
+ * @param[in]	eCh channel to switch to:
+ */
+void vStdioSelectChannel(int eCh) {
+	IF_myASSERT(debugPARAM, OUTSIDE(0, eCh, CONFIG_SOC_UART_NUM));
+	int NewCh;
+	void (*NewHdlr)(char);
+	switch (eCh) {
+	#if defined(CONFIG_ESP_ROM_USB_OTG_NUM)
+		case -1:
+			NewCh = CONFIG_ESP_ROM_USB_OTG_NUM; 
+			NewHdlr = &esp_usb_console_write_char;
+			break;
+	#elif defined(CONFIG_ESP_ROM_USB_SERIAL_DEVICE_NUM)
+		case -1:
+			NewCh = CONFIG_ESP_ROM_USB_SERIAL_DEVICE_NUM; 
+			NewHdlr = &esp_usb_console_write_char;
+			break;
+	#endif
+	#if defined(CONFIG_SOC_UART_NUM) && (CONFIG_SOC_UART_NUM > 0)
+		case 0: 
+			NewCh = 1;									// Ch 1 by default connected to UART0
+			NewHdlr = esp_rom_output_putc; 
+			break;	
+		#if (CONFIG_SOC_UART_NUM > 1)
+		case 1: 
+			NewCh = 2; 
+			NewHdlr = esp_rom_output_putc; 
+			break;
+		#endif
+		#if (CONFIG_SOC_UART_NUM > 2)
+		case 2:
+			NewCh = 3; 
+			NewHdlr = esp_rom_output_putc;
+			break;
+		#endif
+	#endif
+		default: assert(0);
+	}
+    esp_rom_output_set_as_console(NewCh);
+	//esp_rom_install_channel_putc(1, NewHdlr);
+}
+#endif
+
+/**
+ * @brief		input a string directly from UART/terminal channel specified
+ * @param[in]	fd UART/USB channel to use
+ * @param[in]	pcStr pointer to buffer to store characters
+ * @param[in]	Len size of buffer
+ * @param[in]	Match character/key to be treated as end-of-string
+ * @return		number of characters in the buffer, terminator (if there) excluded
+ */
+static int xStdioReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
+	IF_myASSERT(debugPARAM, sd != STDOUT_FILENO && sd != STDERR_FILENO);
 	TickType_t tNow = 0, tStart = xTaskGetTickCount();
 	int Count = 0;
 	char cChr;
@@ -81,20 +159,18 @@ int xStdioReadStringMatchUnlocked(int sd, char * pcStr, size_t Len, int Match) {
 	return Count;
 }
 
-int xStdioReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
-	BaseType_t btRV = pdFALSE;
-	if (sd == configCONSOLE_UART)
-		btRV = halUartLock(portMAX_DELAY);
-	int Count = xStdioReadStringMatchUnlocked(sd, pcStr, Len, Match);
-	if (btRV == pdTRUE)
-		halUartUnLock();
-	return Count;
-}
-
-int xStdioReadTerminalType(int sd) {
+/**
+ * @brief
+ * @param[in]	fd UART/USB number 
+ * @return
+ * @note	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
+ * @note	1B	5B	3F	31	3B	32	63	"\e[?1;2c"	idf.py, Serial, Xterm/VT100/Linux emulation all same
+ */
+static int xStdioReadTerminalType(int sd) {
 	char caType[16];
-	write(sd, getDEVICE_ATTR, strlen(getDEVICE_ATTR));
-	int iRV = xStdioReadStringMatchUnlocked(sd, caType, sizeof(caType), 'c');
+	int sdWR = (sd == STDIN_FILENO) ? STDOUT_FILENO : sd;
+	write(sdWR, getDEVICE_ATTR, strlen(getDEVICE_ATTR));
+	int iRV = xStdioReadStringMatch(sd, caType, sizeof(caType), 'c');
 	if (iRV < 5 || OUTSIDE(CHR_0, caType[3], CHR_9))	// invalid response 
 		return erFAILURE;
 	if (caType[4] == CHR_SEMICOLON) {
@@ -122,7 +198,8 @@ int xStdioGetTerminalType(void) { return TermType; }
 
 int xStdioSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
 	char caType[16];
-	xStdioPutS(sd, pcStr);						// send query string
+	int sdWR = (sd == STDIN_FILENO) ? STDOUT_FILENO : sd;
+	xStdioPutS(sdWR, pcStr);						// send query string
 	int iRV = xStdioReadStringMatch(sd, caType, sizeof(caType), 'R');
 	if (iRV < 6)
 		return erFAILURE;

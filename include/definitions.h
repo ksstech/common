@@ -362,7 +362,8 @@ extern "C" {
 
 #define	debugAPPL_PLACE				"I'm LOST!!\n"
 
-#define CHECK_ONCE(mes, ...)		{ static bool b=0; if (!b) { PX(mes, ##__VA_ARGS__); b= 1; } }
+#define CHECK_ONCE(mes, ...)		{ static bool b=0; if (!b) { RP(mes, ##__VA_ARGS__); b= 1; } }
+#define IF_CHECK_ONCE(T, mes, ...)	{ static bool b=0; if (T && (b == 0)) { RP(mes, ##__VA_ARGS__); b=1; } }
 
 // ######################################## delimiter strings ######################################
 

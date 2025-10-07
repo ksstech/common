@@ -93,27 +93,6 @@ typedef struct __attribute__((packed)) termctrl_t {
 // ################################ Low level Terminal IO support ##################################
 
 /**
- * @brief		input a string directly from UART/terminal channel specified
- * @param[in]	fd UART/USB channel to use
- * @param[in]	pcStr pointer to buffer to store characters
- * @param[in]	Len size of buffer
- * @param[in]	Match character/key to be treated as end-of-string
- * @return		number of characters in the buffer, terminator (if there) excluded
- */
-int xStdioReadStringMatchUnlocked(int fd, char * pcStr, size_t Len, int Match);
-
-int xStdioReadStringMatch(int fd, char * pcStr, size_t Len, int Match);
-
-/**
- * @brief
- * @param[in]	fd UART/USB number 
- * @return
- * @note	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
- * @note	1B	5B	3F	31	3B	32	63	"\e[?1;2c"	idf.py, Serial, Xterm/VT100/Linux emulation all same
- */
-int xStdioReadTerminalType(int fd);
-
-/**
  * @brief
  * @return
  */
