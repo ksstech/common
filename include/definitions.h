@@ -316,13 +316,19 @@ extern "C" {
 	#define	maskGET3B(f,i,s)		((f >> ((i) * 3)) & 0x007UL)
 	#define	maskGET4B(f,i,s)		((f >> ((i) * 4)) & 0x00FUL)
 	#define	maskGET8B(f,i,s)		((f >> ((i) * 8)) & 0x0FFUL)
-#elif 1
+#elif 0
 	#define	maskGET1B(f,i,s)		((s) ((s)f >> ((s)(i) * 1)) & (s)mask1B)
 	#define	maskGET2B(f,i,s)		((s) ((s)f >> ((s)(i) * 2)) & (s)mask2B)
 	#define	maskGET3B(f,i,s)		((s) ((s)f >> ((s)(i) * 3)) & (s)mask3B)
 	#define	maskGET4B(f,i,s)		((s) ((s)f >> ((s)(i) * 4)) & (s)mask4B)
 	#define	maskGET8B(f,i,s)		((s) ((s)f >> ((s)(i) * 8)) & (s)mask8B)
-#else
+#elif 1
+	#define	maskGET1B(f,i,s)		((u8_t) ((s)f >> ((i) * 1)) & mask1B)
+	#define	maskGET2B(f,i,s)		((u8_t) ((s)f >> ((i) * 2)) & mask2B)
+	#define	maskGET3B(f,i,s)		((u8_t) ((s)f >> ((i) * 3)) & mask3B)
+	#define	maskGET4B(f,i,s)		((u8_t) ((s)f >> ((i) * 4)) & mask4B)
+	#define	maskGET8B(f,i,s)		((u8_t) ((s)f >> ((i) * 8)) & mask8B)
+#elif 0
 	#define	maskGET1B(f,i,s)		((s) ((f >> ( (i) * 1)) & (s) mask1B))
 	#define	maskGET2B(f,i,s)		((s) ((f >> ( (i) * 2)) & (s) mask2B))
 	#define	maskGET3B(f,i,s)		((s) ((f >> ( (i) * 3)) & (s) mask3B))
