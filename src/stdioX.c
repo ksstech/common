@@ -194,8 +194,6 @@ static int xStdioDirectReadTerminalType(int sd) {
 	return erFAILURE;
 }
 
-int xStdioGetTerminalType(void) { return TermType; }
-
 static int xStdioDirectSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
 	char caType[16];
 	int sdWR = (sd == STDIN_FILENO) ? STDOUT_FILENO : sd;
@@ -221,6 +219,8 @@ int xStdioSyncCursorMax(int sd, terminfo_t * psTI) {
 //	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 //	http://docs.smoe.org/oreilly/unix_lib/upt/ch05_05.htm
 //	http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.12.html#gets
+
+int xStdioGetTerminalType(void) { return TermType; }
 
 /**
  * @brief	Check column and adjust column & row if required
