@@ -98,8 +98,6 @@ typedef struct __attribute__((packed)) termctrl_t {
  */
 int xStdioGetTerminalType(void);
 
-int xStdioSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX);
-
 /**
  * @brief		Request, receive and parse current cursor location in a single lock/unlock operation
  * @param[in]	fd UART/USB number 
