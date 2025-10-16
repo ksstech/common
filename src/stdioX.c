@@ -139,7 +139,7 @@ void vStdioSelectChannel(int eCh) {
  * @param[in]	Match character/key to be treated as end-of-string
  * @return		number of characters in the buffer, terminator (if there) excluded
  */
-static int xStdioReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
+static int xStdioDirectReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
 	IF_myASSERT(debugPARAM, sd != STDOUT_FILENO && sd != STDERR_FILENO);
 	TickType_t tNow = 0, tStart = xTaskGetTickCount();
 	int Count = 0;
@@ -166,11 +166,11 @@ static int xStdioReadStringMatch(int sd, char * pcStr, size_t Len, int Match) {
  * @note	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
  * @note	1B	5B	3F	31	3B	32	63	"\e[?1;2c"	idf.py, Serial, Xterm/VT100/Linux emulation all same
  */
-static int xStdioReadTerminalType(int sd) {
+static int xStdioDirectReadTerminalType(int sd) {
 	char caType[16];
 	int sdWR = (sd == STDIN_FILENO) ? STDOUT_FILENO : sd;
-	write(sdWR, getDEVICE_ATTR, strlen(getDEVICE_ATTR));
-	int iRV = xStdioReadStringMatch(sd, caType, sizeof(caType), 'c');
+	write(sdWR, getDEVICE_ATTR, strlen(getDEVICE_ATTR));// MUST bypass the buffer
+	int iRV = xStdioDirectReadStringMatch(sd, caType, sizeof(caType), 'c');
 	if (iRV < 5 || OUTSIDE(CHR_0, caType[3], CHR_9))	// invalid response 
 		return erFAILURE;
 	if (caType[4] == CHR_SEMICOLON) {
@@ -196,11 +196,11 @@ static int xStdioReadTerminalType(int sd) {
 
 int xStdioGetTerminalType(void) { return TermType; }
 
-int xStdioSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
+static int xStdioDirectSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
 	char caType[16];
 	int sdWR = (sd == STDIN_FILENO) ? STDOUT_FILENO : sd;
-	xStdioPutS(sdWR, pcStr);						// send query string
-	int iRV = xStdioReadStringMatch(sd, caType, sizeof(caType), 'R');
+	write(sdWR, pcStr, strlen(pcStr));					// MUST bypass the buffer
+	int iRV = xStdioDirectReadStringMatch(sd, caType, sizeof(caType), 'R');
 	if (iRV < 6)
 		return erFAILURE;
 	return sscanf(caType, termCSI "%hu;%huR", pRowY, pColX);
@@ -209,13 +209,13 @@ int xStdioSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
 int xStdioSyncCursorNow(int sd, terminfo_t * psTI) {
 	if (psTI == NULL)
 		psTI = &sTI;
-	return xStdioSyncCursor(sd, getCURSOR_POS,  &psTI->CurY, &psTI->CurX);
+	return xStdioDirectSyncCursor(sd, getCURSOR_POS,  &psTI->CurY, &psTI->CurX);
 }
 
 int xStdioSyncCursorMax(int sd, terminfo_t * psTI) {
 	if (psTI == NULL)
 		psTI = &sTI;
-	return xStdioSyncCursor(sd, getCURSOR_MAX,  &psTI->MaxY, &psTI->MaxX);
+	return xStdioDirectSyncCursor(sd, getCURSOR_MAX,  &psTI->MaxY, &psTI->MaxX);
 }
 
 //	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
@@ -305,7 +305,7 @@ int xStdioRead(int sd, char * pBuf, size_t Size) {
 	if (sd == STDIN_FILENO && iRV > 0) {
 		if (uart_active == 0) {
 			#if (stdioBUILD_TERMIO == 1)
-				TermType = xStdioReadTerminalType(sd);
+				TermType = xStdioDirectReadTerminalType(sd);
 				xStdioSyncCursorNow(sd, NULL);
 				xStdioSyncCursorMax(sd, NULL);
 			#endif
