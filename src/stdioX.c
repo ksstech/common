@@ -1,14 +1,16 @@
-// stdioX.c - Copyright (c) 2014-25 Andre M. Maree / KSS Technologies (Pty) Ltd.
+// stdioX.c - Copyright (c) 2014-26 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
 #include "stdioX.h"
 #include "FreeRTOS_Support.h"
 #include "errors_events.h"
 #include "hal_memory.h"
+#if defined(ESP_PLATFORM) && __has_include("hal_stdio.h")
+	#include "hal_stdio.h"
+#endif
 #include "hal_usart.h"
 #include "syslog.h"
 #include "utilitiesX.h"
-
 
 #include <string.h>
 #include <unistd.h>
@@ -378,16 +380,18 @@ int xStdioGetC(int sd) {
 }
 
 int xStdioWrite(int sd, char * pBuf, size_t Size) {
-#if (cmakeWRAP_STDIO == 1)
+#if defined(ESP_PLATFORM) && (cmakeWRAP_STDIO == 1) && __has_include("hal_stdio.h")
 	if (sd == STDOUT_FILENO && uart_active == 0) {	// destined for STDOUT & console UART inactive ?
 		return xStdOutBufWrite(pBuf, Size);			// save to buffer
 	} else {
 		int iRV = write(sd, pBuf, Size);
-		if (iRV)
+		if (iRV) {
 			vStdioUpdateCursor(&sTI, pBuf, iRV);	// update cursor tracking
+		}
 		return iRV;
 	}
 #else
+	#warning "hal_stdio module not available, stdout buffer support not included"
 	return write(sd, pBuf, Size);
 #endif
 }
