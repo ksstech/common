@@ -3,7 +3,7 @@
 set( srcs "src/common-vars.c" "src/errors_events.c" "src/stdioX.c" "src/timeX.c" "src/utilitiesX.c" )
 set( include_dirs "include" )
 set( priv_include_dirs )
-set( requires "hal_esp32 stringsX" )
+set( requires "stringsX" )
 set( priv_requires )
 
 idf_component_register(
