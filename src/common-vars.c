@@ -59,14 +59,14 @@ const char * pccIndex2FormatFix64(cvi_e cvI, int Opt) { return (cvI == cvSXX) ? 
 
 const u8_t cvIndexSize[] = { vs08B, vs16B, vs32B, vs64B, vs08B, vs16B, vs32B, vs64B, vs32B, vs64B };
 vs_e xIndex2Size(cvi_e cvI) {
-	IF_myASSERT(debugTRACK, cvI < cvSXX);
+	IF_myASSERT(debugPARAM, cvI < cvSXX);
 	return cvIndexSize[cvI];
 }
 
 u32_t xIndex2Bytes(cvi_e cvI) { return (1UL << xIndex2Size(cvI)); }
 
 vf_e xIndex2Form(cvi_e cvI) {
-	IF_myASSERT(debugTRACK, cvI < cvXXX);
+	IF_myASSERT(debugPARAM, cvI < cvXXX);
 	return (cvI > cvF64) ? vfSXX : (cvI > cvI64) ? vfFXX : (cvI > cvU64) ? vfIXX : vfUXX;
 }
 
@@ -91,18 +91,18 @@ int	xFormField2Index(vf_e cvF, u8_t fS) {
 
 const u8_t cvIndexWidth[cvXXX]	= {	4,	6,	12,	21,	4,	6,	12,	21,	18,	21,	255 };
 u8_t xIndex2Width(cvi_e cvI) {
-	IF_myASSERT(debugTRACK, cvI < cvXXX);
+	IF_myASSERT(debugPARAM, cvI < cvXXX);
 	return cvIndexWidth[cvI];
 }
 
 const u8_t cvIndexSizeOf[cvXXX]	= {	1,	2,	4,	8,	1,	2,	4,	8,	4,	8,	255 };
 u8_t xIndex2Field(cvi_e cvI) {
-	IF_myASSERT(debugTRACK, cvI < cvXXX);
+	IF_myASSERT(debugPARAM, cvI < cvXXX);
 	return cvIndexSizeOf[cvI];
 }
 
 u8_t xIndexField2Field(cvi_e cvI, u8_t fS) {
-	IF_myASSERT(debugTRACK, cvI < cvXXX);
+	IF_myASSERT(debugPARAM, cvI < cvXXX);
 	return (cvI < cvSXX) ? xIndex2Field(cvI) : fS;
 }
 
@@ -128,7 +128,7 @@ x32_t x32ValueFetch(px_t px, cvi_e cvI) {
 	case cvI32: X32.i32 = *px.pi32; break;
 
 	case cvF32: X32.f32 = *px.pf32; break;
-	default: IF_myASSERT(debugTRACK,0); break;
+	default: IF_myASSERT(debugPARAM,0); break;
 	}
 	return X32;
 }
@@ -148,7 +148,7 @@ x64_t x64ValueFetch(px_t px, cvi_e cvI) {
 
 	case cvF32: X64.f64 = *px.pf32; break;
 	case cvF64: X64.f64 = *px.pf64; break;
-	default: IF_myASSERT(debugTRACK,0); break;
+	default: IF_myASSERT(debugPARAM,0); break;
 	}
 	return X64;
 }
@@ -208,7 +208,7 @@ x32_t x32ValueConvert(px_t pxSrc, cvi_e cvIS, px_t pxDst, cvi_e cvID, u8_t Scale
 		} else if (vfDst == vfFXX) {					// -> F32
 			X32.f32 = (vfSrc == vfUXX) ? X32.u32 : X32.i32;
 		} else {
-			IF_myASSERT(debugTRACK, 0);
+			IF_myASSERT(debugPARAM, 0);
 		}
 	}
 	vx32ValueStore(X32, pxDst, cvID);
@@ -229,7 +229,7 @@ x64_t x64ValueConvert(px_t pxSrc, cvi_e cvIS, px_t pxDst, cvi_e cvID) {
 		} else if (vfDst == vfFXX) {					// -> F64
 			X64.f64 = (vfSrc == vfUXX) ? X64.u64 : X64.i64;
 		} else {
-			IF_myASSERT(debugTRACK, 0);
+			IF_myASSERT(debugPARAM, 0);
 		}
 	}
 	vx64ValueStore(X64, pxDst, cvID);
