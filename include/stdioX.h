@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "FreeRTOS_Support.h"
-
 #include "stddef.h"
 #include "stdbool.h"
 #include "stdio.h"

@@ -1,14 +1,15 @@
 // stdioX.c - Copyright (c) 2014-26 Andre M. Maree / KSS Technologies (Pty) Ltd.
 
 #include "hal_platform.h"
-#include "stdioX.h"
-#include "FreeRTOS_Support.h"
-#include "errors_events.h"
+
 #include "hal_memory.h"
 #if defined(ESP_PLATFORM) && __has_include("hal_stdio.h")
 	#include "hal_stdio.h"
 #endif
 #include "hal_usart.h"
+
+#include "errors_events.h"
+#include "stdioX.h"
 #include "syslog.h"
 #include "utilitiesX.h"
 
