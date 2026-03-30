@@ -121,8 +121,8 @@ u32_t u32RoundUP(u32_t u32V, u32_t u32M);
  * @return	modulus of the incremented value
  */
 inline __attribute__((always_inline)) u32_t u32IncrementWrap(u32_t u32V, u32_t u32L) { ++u32V; return u32V % u32L; }
-inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t i32V, i32_t i32L) { ++i32V; return i32V % i32L; }
 
+inline __attribute__((always_inline)) i32_t i32IncrementWrap(i32_t i32V, i32_t i32L) { ++i32V; return i32V % i32L; }
 
 i32_t i32ScaleValue(i32_t Val, i32_t R1lo, i32_t R1hi, i32_t R2lo, i32_t R2hi);
 
