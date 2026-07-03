@@ -146,7 +146,7 @@ enum {
 // ####################################### Structures ##############################################
 
 typedef struct {
-	int code;
+	esp_err_t code;
 	const char * pMess;
 } eTable_t;
 
