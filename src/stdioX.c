@@ -318,20 +318,23 @@ int xStdioRead(int sd, char * pBuf, size_t Size) {
 	return iRV;
 }
 
-int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bHide) {
+int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bEcho, u32_t msTO) {
 	u8_t Idx = 0, cChr;
 #if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
 	bool CRflag = 0;
 #endif
 	if (sd < 0 || halMemoryRAM(pcBuf) == 0)
 		return erINV_PARA;
-	if (Size < 2) 
+	if (Size < 2)
 		return erINV_SIZE;
+	TickType_t tDL = xTaskGetTickCount() + pdMS_TO_TICKS(msTO);	// only consulted if msTO > 0
 	while (1) {
 		int iRV = read(sd, &cChr, sizeof(cChr));
 		if (iRV != 1) {									// nothing read, what now?
 			if (iRV == erFAILURE && errno != EAGAIN)
 				return erFAILURE;
+			if (msTO && (i32_t) (xTaskGetTickCount() - tDL) >= 0)
+				return erTIMEOUT;						// caller set a budget, and it expired
 			vTaskDelay(50);								// wait a bit ...
 			continue;									// and try again...
 		}
@@ -361,7 +364,7 @@ int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bHide) {
 			// only printable characters stored in buffer, control chars just echo'd
 			if (INRANGE(CHR_SPACE, cChr, CHR_TILDE)) {
 				pcBuf[Idx++] = cChr;					// yes, if valid char store in buffer
-				if (bHide == 0)							// show char in clear?
+				if (bEcho == 0)							// show char in clear?
 					cChr = CHR_ASTERISK;				// no, replace with '*'
 			}
 			write(sd, &cChr, sizeof(cChr));				// echo [modified] character
@@ -372,7 +375,7 @@ int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bHide) {
 	return Idx;
 }
 
-int xStdioGetS(int sd, char * pcStr, size_t Size) { return xStdioGetString(sd, pcStr, Size, 0); }
+int xStdioGetS(int sd, char * pcStr, size_t Size) { return xStdioGetString(sd, pcStr, Size, 0, 0); }
 
 int xStdioGetC(int sd) {
 	char cChr = 0;

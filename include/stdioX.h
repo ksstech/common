@@ -167,9 +167,10 @@ int xStdioRead(int sd, char * pBuf, size_t Size);
  * @param[in]	pcBuf - buffer to store the text string read into
  * @param[in]	Size - size of the buffer ie maximum string length
  * @param[in]	bEcho - flag indicating whether the contents read should be echoed
- * @return 	number of characters read & stored in buffer
+ * @param[in]	msTO - max time to wait for the line to complete, 0 = wait forever
+ * @return 	number of characters read & stored in buffer, or erTIMEOUT
  */
-int	xStdioGetString(int sd, char * pBuf, size_t Size, bool bHide);
+int	xStdioGetString(int sd, char * pBuf, size_t Size, bool bEcho, u32_t msTO);
 
 /**
  * @brief		read a terminated text string from a stream and store it into the buffer provided
