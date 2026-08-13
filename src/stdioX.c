@@ -320,9 +320,6 @@ int xStdioRead(int sd, char * pBuf, size_t Size) {
 
 int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bEcho, u32_t msTO) {
 	u8_t Idx = 0, cChr;
-#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
-	bool CRflag = 0;
-#endif
 	if (sd < 0 || halMemoryRAM(pcBuf) == 0)
 		return erINV_PARA;
 	if (Size < 2)
@@ -338,17 +335,16 @@ int	xStdioGetString(int sd, char * pcBuf, size_t Size, bool bEcho, u32_t msTO) {
 			vTaskDelay(50);								// wait a bit ...
 			continue;									// and try again...
 		}
-	#if (CONFIG_LIBC_STDIN_LINE_ENDING_CRLF == 1)
-		if (cChr == CHR_CR) {							// ALMOST end of input
-			CRflag = 1;									// set flag but do not store in buffer or adjust count
-		} else
-		if (cChr == CHR_LF)								// now at end of string
-	#elif (CONFIG_LIBC_STDIN_LINE_ENDING_CR == 1)
-		if (cChr == CHR_CR)
-	#elif (CONFIG_LIBC_STDIN_LINE_ENDING_LF == 1)
-		if (cChr == CHR_LF)
-	#endif
-		{
+		if (cChr == CHR_NUL)							// telnet sends CR NUL for a bare CR,
+			continue;									//  never data, so swallow it anywhere
+		/* Terminate on the FIRST CR or LF, then ignore a terminator that is still LEADING when the
+		 * next string is read. Order agnostic, so CR, LF, CR+LF, LF+CR and CR+NUL all behave the
+		 * same, and no sdkconfig knob is involved. Sockets only: read() returns the raw NVT bytes,
+		 * whereas the UART VFS has already translated per CONFIG_LIBC_STDIN_LINE_ENDING, so STDIN
+		 * never sees a pair and an empty console line must still return empty. */
+		if (cChr == CHR_CR || cChr == CHR_LF) {
+			if (Idx == 0 && sd != STDIN_FILENO)
+				continue;								// trailing half of the PREVIOUS line
 			pcBuf[Idx] = 0;
 			write(sd, strNL, strlen(strNL));
 			break;
