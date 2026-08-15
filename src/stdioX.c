@@ -169,6 +169,7 @@ static int xStdioDirectReadStringMatch(int sd, char * pcStr, size_t Len, int Mat
  * @note	https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
  * @note	1B	5B	3F	31	3B	32	63	"\e[?1;2c"	idf.py, Serial, Xterm/VT100/Linux emulation all same
  */
+#if (stdioBUILD_TERMIO == 1)						// sole caller is xStdioRead(), gated the same way
 static int xStdioDirectReadTerminalType(int sd) {
 	char caType[16];
 	int sdWR = (sd == STDIN_FILENO) ? STDOUT_FILENO : sd;
@@ -196,6 +197,7 @@ static int xStdioDirectReadTerminalType(int sd) {
 	}
 	return erFAILURE;
 }
+#endif
 
 static int xStdioDirectSyncCursor(int sd, char * pcStr, i16_t * pRowY, i16_t * pColX) {
 	char caType[16];
@@ -307,10 +309,10 @@ int xStdioRead(int sd, char * pBuf, size_t Size) {
 	int iRV = read(sd, pBuf, Size);
 	if (sd == STDIN_FILENO && iRV > 0) {
 		if (uart_active == 0) {
-			#if (stdioBUILD_TERMIO == 1)
-				TermType = xStdioDirectReadTerminalType(sd);
-				xStdioSyncCursorNow(sd, NULL);
-				xStdioSyncCursorMax(sd, NULL);
+			#if (stdioBUILD_TERMIO == 1)						// Via Wireguard VPN
+				TermType = xStdioDirectReadTerminalType(sd);	// 88.2 / 198 / 334mS
+				xStdioSyncCursorNow(sd, NULL);					// 96.7 / 181 / 281mS
+				xStdioSyncCursorMax(sd, NULL);					// 224 / 299 / 499mS
 			#endif
 			vStdioConsoleSetStatus(1);
 		}
