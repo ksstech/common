@@ -67,7 +67,11 @@ static bool uart_active = 0;							// console active (during period < TIMEOUT)
 // ################################ Low level Terminal IO support ##################################
 
 #include "esp_rom_sys.h"
-#include "esp_rom_uart.h"
+#if __has_include("esp_rom_serial_output.h")
+	#include "esp_rom_serial_output.h"			// esp_rom_output_* home; esp_rom_uart.h deprecated
+#else
+	#include "esp_rom_uart.h"					// pre-5.3 name
+#endif
 
 #ifdef CONFIG_ESP_CONSOLE_USB_CDC_SUPPORT_ETS_PRINTF
 #include "usb_console.h"
@@ -393,8 +397,7 @@ int xStdioWrite(int sd, char * pBuf, size_t Size) {
 		return iRV;
 	}
 #else
-	#warning "hal_stdio module not available, stdout buffer support not included"
-	return write(sd, pBuf, Size);
+	return write(sd, pBuf, Size);				// no hal_stdio: plain write, a supported fallback
 #endif
 }
 
