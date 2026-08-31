@@ -409,7 +409,7 @@ int xStdioPutC(int sd, int iChr) {
 }
 
 void xStdioPutHex(int sd, char * pcStr) {
-	char caXlate[16] = "0123456789ABCDEF";
+	const char caXlate[] = "0123456789ABCDEF";	// [] not [16]: room for the NUL (gcc14 error)
 	while(*pcStr) {
 		xStdioPutC(sd, caXlate[*pcStr >> 4]);
 		xStdioPutC(sd, caXlate[*pcStr++ & 0xF]);
