@@ -169,6 +169,12 @@ seconds_t xTimeCalcSeconds(tm_t *, int);
 seconds_t xTimeCalcLocalTimeSeconds(tsz_t *);
 
 /**
+ * @brief	Convert a civil GMT date/time (libc tm convention, tm_year = years since 1900)
+ *			to epoch seconds. No TZ, no DST - newlib has no timegm(). Valid 1970..2105.
+ */
+u32_t xTimeCivil2UTC(const tm_t * psTM);
+
+/**
  * @brief	Convert 64_t timestamp to u32_t seconds value
  * @return	u32_t seconds value
  */

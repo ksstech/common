@@ -199,6 +199,15 @@ seconds_t xTimeCalcLocalTimeSeconds(tsz_t * psTSZ) {
 
 u32_t xTimeStampSeconds(u64_t Timestamp) { return (u32_t) (Timestamp / MICROS_IN_SECOND); }
 
+/* Deliberately NOT xTimeCalcSeconds(): its tm_year base follows YEAR_BASE_MIN (1900 or 1970 by
+ * build config), not the libc convention strptime() produces. Days-from-civil, no TZ, no DST. */
+u32_t xTimeCivil2UTC(const tm_t * psTM) {
+	u32_t y = psTM->tm_year + 1900, m = psTM->tm_mon + 1;
+	if (m <= 2) { --y; m += 12; }
+	u32_t days = 365UL * y + y / 4 - y / 100 + y / 400 + (153UL * (m - 3) + 2) / 5 + psTM->tm_mday - 719469UL;
+	return (days * SECONDS_IN_DAY) + (psTM->tm_hour * SECONDS_IN_HOUR) + (psTM->tm_min * SECONDS_IN_MINUTE) + psTM->tm_sec;
+}
+
 u64_t xTimeMakeTimeStamp(u32_t Sec, u32_t uSec) { return ((u64_t) Sec * (u64_t) MICROS_IN_SECOND) + (u64_t) uSec; }
 
 seconds_t xTimeReport(tm_t *psTM) {
