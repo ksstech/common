@@ -367,7 +367,7 @@ report_t * psAuditOpen(void) {
 	return psR;
 }
 
-int vAuditClose(report_t * psR, bool flag) {
+int xAuditClose(report_t * psR, bool flag) {
 	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pcAlloc == (void *)psR + sizeof(report_t));
 	// If requested and something in the Audit buffer, log to host...
 	int iRV = 0;										// 0 = NOT delivered, caller must not disarm

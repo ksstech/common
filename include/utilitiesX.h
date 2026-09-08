@@ -154,7 +154,7 @@ report_t * psAuditOpen(void);
  * @return		1 if the message reached the host or the offline queue, else 0 - the caller must
  *				NOT mark the audit done on 0, or a dropped report is lost until the next upgrade
  */
-int vAuditClose(report_t * psR, bool flag);
+int xAuditClose(report_t * psR, bool flag);
 
 #ifdef __cplusplus
 }
