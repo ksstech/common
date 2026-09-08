@@ -367,10 +367,13 @@ report_t * psAuditOpen(void) {
 	return psR;
 }
 
-void vAuditClose(report_t * psR, bool flag) {
+int vAuditClose(report_t * psR, bool flag) {
 	IF_myASSERT(debugPARAM, halMemoryRAM(psR) && psR->pcAlloc == (void *)psR + sizeof(report_t));
 	// If requested and something in the Audit buffer, log to host...
-	if (flag && psR->size != SL_MAX_LEN_MESSAGE)
-		SL_LOG(SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING), "%s", psR->pcAlloc);	
+	int iRV = 0;										// 0 = NOT delivered, caller must not disarm
+	int Pri = SL_PRI(SL_FAC_LOGAUDIT, SL_SEV_WARNING);	// SL_LOG discards the status, so call vSyslog
+	if (flag && psR->size != SL_MAX_LEN_MESSAGE && (Pri & 7) <= SL_LEV_MAX)	// guard as SL_LOG does
+		iRV = vSyslog(Pri, __FUNCTION__, "%s", psR->pcAlloc);
 	free(psR);
+	return iRV;
 }

@@ -151,9 +151,10 @@ report_t * psAuditOpen(void);
  * @brief	if used, log buffer content to console and/or host then free allocated memory
  * @param[in]	psR - pointer to report structure
  * @param[in]	flag - 1=anything there, log it
- * @return		NULL
+ * @return		1 if the message reached the host or the offline queue, else 0 - the caller must
+ *				NOT mark the audit done on 0, or a dropped report is lost until the next upgrade
  */
-void vAuditClose(report_t * psR, bool flag);
+int vAuditClose(report_t * psR, bool flag);
 
 #ifdef __cplusplus
 }
