@@ -43,176 +43,28 @@ typedef	union ver_t {				// Version numbers
 } ver_t;
 DUMB_STATIC_ASSERT(sizeof(ver_t) == 4);
 
-typedef struct __attribute__((packed)) ioset_t {		// 1/2/3/4/8 bit option variables
-	union {							// 1-bit option variables
-		struct __attribute__((packed)) {
-			u8_t B1_0	: 1 ;
-			u8_t B1_1	: 1 ;
-			u8_t B1_2	: 1 ;
-			u8_t B1_3	: 1 ;
-			u8_t B1_4	: 1 ;
-			u8_t B1_5	: 1 ;
-			u8_t B1_6	: 1 ;
-			u8_t B1_7	: 1 ;
-			u8_t B1_8	: 1 ;
-			u8_t B1_9	: 1 ;
-			u8_t B1_10	: 1 ;
-			u8_t B1_11	: 1 ;
-			u8_t B1_12	: 1 ;
-			u8_t B1_13	: 1 ;
-			u8_t B1_14	: 1 ;
-			u8_t B1_15	: 1 ;
-			u8_t B1_16	: 1 ;
-			u8_t B1_17	: 1 ;
-			u8_t B1_18	: 1 ;
-			u8_t B1_19	: 1 ;
-			u8_t B1_20	: 1 ;
-			u8_t B1_21	: 1 ;
-			u8_t B1_22	: 1 ;
-			u8_t B1_23	: 1 ;
-			u8_t B1_24	: 1 ;
-			u8_t B1_25	: 1 ;
-			u8_t B1_26	: 1 ;
-			u8_t B1_27	: 1 ;
-			u8_t B1_28	: 1 ;
-			u8_t B1_29	: 1 ;
-			u8_t B1_30	: 1 ;
-			u8_t B1_31	: 1 ;
-			u8_t B1_32	: 1 ;
-			u8_t B1_33	: 1 ;
-			u8_t B1_34	: 1 ;
-			u8_t B1_35	: 1 ;
-			u8_t B1_36	: 1 ;
-			u8_t B1_37	: 1 ;
-			u8_t B1_38	: 1 ;
-			u8_t B1_39	: 1 ;
-			u8_t B1_40	: 1 ;
-			u8_t B1_41	: 1 ;
-			u8_t B1_42	: 1 ;
-			u8_t B1_43	: 1 ;
-			u8_t B1_44	: 1 ;
-			u8_t B1_45	: 1 ;
-			u8_t B1_46	: 1 ;
-			u8_t B1_47	: 1 ;
-			u8_t B1_48	: 1 ;
-			u8_t B1_49	: 1 ;
-			u8_t B1_50	: 1 ;
-			u8_t B1_51	: 1 ;
-			u8_t B1_52	: 1 ;
-			u8_t B1_53	: 1 ;
-			u8_t B1_54	: 1 ;
-			u8_t B1_55	: 1 ;
-			u8_t B1_56	: 1 ;
-			u8_t B1_57	: 1 ;
-			u8_t B1_58	: 1 ;
-			u8_t B1_59	: 1 ;
-			u8_t B1_60	: 1 ;
-			u8_t B1_61	: 1 ;
-			u8_t B1_62	: 1 ;
-			u8_t B1_63	: 1 ;
-		};
-		u64_t ioB1;
-	};
-	union {							// 2-bit option variables
-		struct __attribute__((packed)) {
-			u8_t B2_0	: 2 ;
-			u8_t B2_1	: 2 ;
-			u8_t B2_2	: 2 ;
-			u8_t B2_3	: 2 ;
-			u8_t B2_4	: 2 ;
-			u8_t B2_5	: 2 ;
-			u8_t B2_6	: 2 ;
-			u8_t B2_7	: 2 ;
-			u8_t B2_8	: 2 ;
-			u8_t B2_9	: 2 ;
-			u8_t B2_10	: 2 ;
-			u8_t B2_11	: 2 ;
-			u8_t B2_12	: 2 ;
-			u8_t B2_13	: 2 ;
-			u8_t B2_14	: 2 ;
-			u8_t B2_15	: 2 ;
-			u8_t B2_16	: 2 ;
-			u8_t B2_17	: 2 ;
-			u8_t B2_18	: 2 ;
-			u8_t B2_19	: 2 ;
-			u8_t B2_20	: 2 ;
-			u8_t B2_21	: 2 ;
-			u8_t B2_22	: 2 ;
-			u8_t B2_23	: 2 ;
-			u8_t B2_24	: 2 ;
-			u8_t B2_25	: 2 ;
-			u8_t B2_26	: 2 ;
-			u8_t B2_27	: 2 ;
-			u8_t B2_28	: 2 ;
-			u8_t B2_29	: 2 ;
-			u8_t B2_30	: 2 ;
-			u8_t B2_31	: 2 ;
-		};
-		u64_t ioB2;
-	};
-	union {							// 3-bit option variables
-		struct __attribute__((packed)) {
-			u16_t B3_0	: 3 ;
-			u16_t B3_1	: 3 ;
-			u16_t B3_2	: 3 ;
-			u16_t B3_3	: 3 ;
-			u16_t B3_4	: 3 ;
-			u16_t B3_5	: 3 ;
-			u16_t B3_6	: 3 ;
-			u16_t B3_7	: 3 ;
-			u16_t B3_8	: 3 ;
-			u16_t B3_9	: 3 ;
-			u16_t B3_10	: 3 ;
-			u16_t B3_11	: 3 ;
-			u16_t B3_12	: 3 ;
-			u16_t B3_13	: 3 ;
-			u16_t B3_14	: 3 ;
-			u16_t B3_15	: 3 ;
-			u16_t B3_16	: 3 ;
-			u16_t B3_17	: 3 ;
-			u16_t B3_18	: 3 ;
-			u16_t B3_19	: 3 ;
-			u16_t B3_20	: 3 ;
-			u16_t B3_xx	: 1 ;
-		};
-		u64_t ioB3;
-	};
-	union {							// 4-bit option variables
-		struct __attribute__((packed)) {
-			u8_t B4_0	: 4 ;
-			u8_t B4_1	: 4 ;
-			u8_t B4_2	: 4 ;
-			u8_t B4_3	: 4 ;
-			u8_t B4_4	: 4 ;
-			u8_t B4_5	: 4 ;
-			u8_t B4_6	: 4 ;
-			u8_t B4_7	: 4 ;
-			u8_t B4_8	: 4 ;
-			u8_t B4_9	: 4 ;
-			u8_t B4_10	: 4 ;
-			u8_t B4_11	: 4 ;
-			u8_t B4_12	: 4 ;
-			u8_t B4_13	: 4 ;
-			u8_t B4_14	: 4 ;
-			u8_t B4_15	: 4 ;
-		};
-		u64_t ioB4;
-	};
-	union {							// 8-bit option variables (added at end)
-		struct __attribute__((packed)) {
-			u8_t B8_0;
-			u8_t B8_1;
-			u8_t B8_2;
-			u8_t B8_3;
-			u8_t B8_4;
-			u8_t B8_5;
-			u8_t B8_6;
-			u8_t B8_7;
-		};
-		u64_t ioB8;
-	};
+/* 1/2/3/4/8-bit option variables, sized at compile time (options_size.h). Each width is a little-endian byte array:
+ * option n of a width occupies bits [n * width, n * width + width - 1] counted from bit 0 of byte 0 - the same bit
+ * positions the former u64_t unions gave (byte 0 = least significant byte), so the full set is byte-identical to
+ * the old layout and existing NVS blobs read unchanged. Access only through options.c (xOptionGet/xOptionSet). */
+typedef struct __attribute__((packed)) ioset_t {
+#if (optB1_BYTES > 0)
+	u8_t ioB1[optB1_BYTES];							// 1-bit options
+#endif
+#if (optB2_BYTES > 0)
+	u8_t ioB2[optB2_BYTES];							// 2-bit options
+#endif
+#if (optB3_BYTES > 0)
+	u8_t ioB3[optB3_BYTES];							// 3-bit options (top bit of the last byte unused at 21)
+#endif
+#if (optB4_BYTES > 0)
+	u8_t ioB4[optB4_BYTES];							// 4-bit options
+#endif
+#if (optB8_BYTES > 0)
+	u8_t ioB8[optB8_BYTES];							// 8-bit options
+#endif
 } ioset_t;
-DUMB_STATIC_ASSERT(sizeof(ioset_t) == 40);
+DUMB_STATIC_ASSERT(sizeof(ioset_t) == optBYTES);
 
 //#pragma GCC diagnostic ignored "-Wpacked-bitfield-compat"
 //#pragma GCC diagnostic pop
