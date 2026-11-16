@@ -391,7 +391,7 @@ int xStdioWrite(int sd, char * pBuf, size_t Size) {
 		return xStdOutBufWrite(pBuf, Size);			// save to buffer
 	} else {
 		int iRV = write(sd, pBuf, Size);
-		if (iRV) {
+		if (iRV > 0) {								// -1 (USB console, no host) must not reach the size_t parameter
 			vStdioUpdateCursor(&sTI, pBuf, iRV);	// update cursor tracking
 		}
 		return iRV;
